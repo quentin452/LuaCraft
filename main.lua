@@ -1,15 +1,9 @@
-function love.load()
+function love.load() end
 
-end
-
-function love.update(dt)
-
-end
+function love.update(dt) end
 
 function love.draw()
-    love.graphics.print('Hello World!', 1280, 720)
+	love.graphics.print("Hello World!", 1280, 720)
 end
 
-function love.keypressed(Pkey)
-
-end
+function love.keypressed(Pkey) end
