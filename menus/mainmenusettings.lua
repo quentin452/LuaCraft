@@ -10,6 +10,16 @@ _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object se
 local vsync = love.window.getVSync()
 
 function drawMainMenuSettings()
+	if not _MainMenuSettings then
+		_MainMenuSettings = {}
+		_MainMenuSettings.x = 50
+		_MainMenuSettings.y = 50
+		_MainMenuSettings.title = "Settings"
+		_MainMenuSettings.choice = {}
+		_MainMenuSettings.choice[1] = "Enable Vsync?"
+		_MainMenuSettings.choice[2] = "Exiting to main menu"
+		_MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
+	end
 	local w, h = love.graphics.getDimensions()
 	local scaleX = w / mainMenuSettingsBackground:getWidth()
 	local scaleY = h / mainMenuSettingsBackground:getHeight()
@@ -45,6 +55,16 @@ function drawMainMenuSettings()
 end
 
 function keysinitMainMenuSettings(k)
+	if not _MainMenuSettings then
+		_MainMenuSettings = {}
+		_MainMenuSettings.x = 50
+		_MainMenuSettings.y = 50
+		_MainMenuSettings.title = "Settings"
+		_MainMenuSettings.choice = {}
+		_MainMenuSettings.choice[1] = "Enable Vsync?"
+		_MainMenuSettings.choice[2] = "Exiting to main menu"
+		_MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
+	end
 	if type(_MainMenuSettings.choice) == "table" and _MainMenuSettings.selection then
 		if k == "s" then
 			if _MainMenuSettings.selection < #_MainMenuSettings.choice then
@@ -64,4 +84,8 @@ function keysinitMainMenuSettings(k)
 			end
 		end
 	end
+end
+
+function destroyMainMenuSettings()
+	_MainMenuSettings = nil
 end

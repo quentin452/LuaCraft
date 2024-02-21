@@ -10,6 +10,16 @@ _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object
 local vsync = love.window.getVSync()
 
 function drawPlayingMenuSettings()
+	if not _PlayingGameSettings then
+		_PlayingGameSettings = {}
+		_PlayingGameSettings.x = 50
+		_PlayingGameSettings.y = 50
+		_PlayingGameSettings.title = "Settings"
+		_PlayingGameSettings.choice = {}
+		_PlayingGameSettings.choice[1] = "Enable Vsync?"
+		_PlayingGameSettings.choice[2] = "Exiting to game"
+		_PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
+	end
 	local w, h = love.graphics.getDimensions()
 	local scaleX = w / playinggamesettings:getWidth()
 	local scaleY = h / playinggamesettings:getHeight()
@@ -66,4 +76,8 @@ function keysinitPlayingMenuSettings(k)
 			end
 		end
 	end
+end
+
+function destroyPlayingGameSettings()
+	_PlayingGameSettings = nil
 end
