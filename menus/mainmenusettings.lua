@@ -77,6 +77,6 @@ function keysinitMainMenuSettings(k)
 		end
 	end
 	if enableProfiler then
-        ProFi:checkMemory(2, "Premier profil")
+        ProFi:checkMemory(2, "Second profil")
     end
 end

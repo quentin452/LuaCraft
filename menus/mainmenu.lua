@@ -43,7 +43,7 @@ function drawMainMenu()
 	--posY = posY + lineHeight
 	--drawColorString("   [%3Retour%0] Valider", _Mainmenu.x, posY)
 	if enableProfiler then
-        ProFi:checkMemory(3, "Premier profil")
+        ProFi:checkMemory(3, "Troisième profil")
     end
 end
 
@@ -70,6 +70,6 @@ function keysinitMainMenu(k)
 		end
 	end
 	if enableProfiler then
-        ProFi:checkMemory(4, "Premier profil")
+        ProFi:checkMemory(4, "4eme profil")
     end
 end
