@@ -52,8 +52,8 @@ function drawMainMenuSettings()
 	--posY = posY + lineHeight
 	--drawColorString("   [%3Retour%0] Valider", _MainMenuSettings.x, posY)
 	if enableProfiler then
-        ProFi:checkMemory(1, "Premier profil")
-    end
+		ProFi:checkMemory(1, "Premier profil")
+	end
 end
 
 function keysinitMainMenuSettings(k)
@@ -73,10 +73,11 @@ function keysinitMainMenuSettings(k)
 			elseif _MainMenuSettings.selection == 2 then
 			elseif _MainMenuSettings.selection == 11 then
 				gamestate = "MainMenu"
+				_MainMenuSettings.selection = 0
 			end
 		end
 	end
 	if enableProfiler then
-        ProFi:checkMemory(2, "Second profil")
-    end
+		ProFi:checkMemory(2, "Second profil")
+	end
 end
