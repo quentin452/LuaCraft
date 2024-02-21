@@ -12,8 +12,11 @@ require("scenes/gamescene")
 require("menus/mainmenu")
 
 gamestate = 0
+_font = nil
+mainMenuBackground = 0
 
 function love.load()
+    mainMenuBackground = love.graphics.newImage("assets/backgrounds/MainMenuBackground.png")
 	scene(GameScene())
 end
 
@@ -74,7 +77,7 @@ function love.mousemoved(x, y, dx, dy)
 end
 
 function love.keypressed(k)
-	if _Mainmenu.selection ~= 0 and _Mainmenu.choice ~= 0 and type(_Mainmenu.choice) == "table" then
+	if type(_Mainmenu.choice) == "table" and _Mainmenu.selection and _Mainmenu.choice then
 		if k == "s" then
 			if _Mainmenu.selection < #_Mainmenu.choice then
 				_Mainmenu.selection = _Mainmenu.selection + 1
@@ -84,11 +87,15 @@ function love.keypressed(k)
 				_Mainmenu.selection = _Mainmenu.selection - 1
 			end
 		elseif k == "return" then
-			if _Mainmenu.selection == 1 and type(_Mainmenu.choice) == "table" then
+			if _Mainmenu.selection == 1 then
 				_Mainmenu.choice = 1
 				gamestate = "PlayingGame"
 				_font = love.graphics.newFont(15)
 				love.graphics.setFont(_font)
+			elseif _Mainmenu.selection == 3 then
+				_Mainmenu.choice = 3
+				gamestate = "Exiting"
+				love.event.push("quit")
 			end
 		end
 	end

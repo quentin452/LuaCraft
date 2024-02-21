@@ -3,15 +3,15 @@ require("things/usefull")
 _Mainmenu = {}
 _Mainmenu.x = 50
 _Mainmenu.y = 50
-_Mainmenu.title = "Voxel3DGame"
+_Mainmenu.title = "LuaCraft"
 _Mainmenu.choice = {}
 _Mainmenu.choice[1] = "%2Play Game%0"
 _Mainmenu.choice[2] = "Settings"
 _Mainmenu.choice[3] = "Exit"
 _Mainmenu.selection = 1
-_font = nil
 
 function drawMainMenu()
+	love.graphics.draw(mainMenuBackground, 0, 0)
 	_font = love.graphics.newFont(25)
 	love.graphics.setFont(_font)
 	-- Main menu rendering code here
