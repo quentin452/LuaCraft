@@ -11,7 +11,12 @@ _Mainmenu.choice[3] = "Exit"
 _Mainmenu.selection = 1
 
 function drawMainMenu()
-	love.graphics.draw(mainMenuBackground, 0, 0)
+	local w, h = love.graphics.getDimensions()
+	local scaleX = w / mainMenuBackground:getWidth()
+	local scaleY = h / mainMenuBackground:getHeight()
+
+	love.graphics.draw(mainMenuBackground, 0, 0, 0, scaleX, scaleY)
+
 	_font = love.graphics.newFont(25)
 	love.graphics.setFont(_font)
 	-- Main menu rendering code here
