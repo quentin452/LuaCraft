@@ -4,9 +4,7 @@ _PlayingGameSettings.y = 50
 _PlayingGameSettings.title = "Settings"
 _PlayingGameSettings.choice = {}
 _PlayingGameSettings.choice[1] = "Enable Vsync?"
-_PlayingGameSettings.choice[2] =
-	"Enable Profi Profiler?(normally if he is enabled he will make report.txt in root folder of the game)"
-_PlayingGameSettings.choice[3] = "Exiting to game"
+_PlayingGameSettings.choice[2] = "Exiting to game"
 _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 local vsync = love.window.getVSync()
@@ -61,8 +59,6 @@ function keysinitPlayingMenuSettings(k)
 				vsync = not vsync
 				love.window.setVSync(vsync)
 			elseif _PlayingGameSettings.selection == 2 then
-				setProfiler(not enableProfiler)
-			elseif _PlayingGameSettings.selection == 3 then
 				gamestate = "PlayingGame"
 				_PlayingGameSettings.selection = 0
 				_font = love.graphics.newFont(15)

@@ -29,17 +29,7 @@ mainMenuSettingsBackground = nil
 gameplayingpausemenu = nil
 playinggamesettings = nil
 
-enableProfiler = false
-
-function setProfiler(enabled)
-    enableProfiler = enabled
-    if enableProfiler then
-        ProFi:start()
-    else
-        ProFi:stop()
-        ProFi:writeReport("report.txt")
-    end
-end
+enableProfiler = true
 
 gameSceneInstance = nil
 
