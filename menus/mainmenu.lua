@@ -42,6 +42,9 @@ function drawMainMenu()
 	--drawColorString("   [%3Fleches%0] Move the Selection", _Mainmenu.x, posY)
 	--posY = posY + lineHeight
 	--drawColorString("   [%3Retour%0] Valider", _Mainmenu.x, posY)
+	if enableProfiler then
+        ProFi:checkMemory(3, "Premier profil")
+    end
 end
 
 function keysinitMainMenu(k)
@@ -66,4 +69,7 @@ function keysinitMainMenu(k)
 			end
 		end
 	end
+	if enableProfiler then
+        ProFi:checkMemory(4, "Premier profil")
+    end
 end

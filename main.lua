@@ -13,13 +13,18 @@ require("menus/mainmenu")
 require("menus/mainmenusettings")
 require("hud/gamehud")
 require("things/usefull")
-
+ProFi = require("ProFi")
 gamestate = "MainMenu"
 _font = nil
 mainMenuBackground = nil
 mainMenuSettingsBackground = nil
 
+enableProfiler = false
+
 function love.load()
+	if enableProfiler then
+		ProFi:start()
+	end
 	mainMenuBackground = love.graphics.newImage("assets/backgrounds/MainMenuBackground.png")
 	mainMenuSettingsBackground = love.graphics.newImage("assets/backgrounds/Mainmenusettingsbackground.png")
 	scene(GameScene())
@@ -45,6 +50,10 @@ function love.draw()
 		drawMainMenuSettings()
 	else
 		drawMainMenu()
+	end
+	if enableProfiler then
+		ProFi:stop()
+		ProFi:writeReport("report.txt")
 	end
 end
 
@@ -73,4 +82,10 @@ end
 function love.resize(w, h)
 	g3d.camera.aspectRatio = w / h
 	g3d.camera.updateProjectionMatrix()
+end
+
+function love.quit()
+	if enableProfiler then
+		ProFi:writeReport("report.txt")
+	end
 end
