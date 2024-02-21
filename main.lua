@@ -29,7 +29,7 @@ mainMenuSettingsBackground = nil
 gameplayingpausemenu = nil
 playinggamesettings = nil
 
-enableProfiler = true
+enableProfiler = false
 
 gameSceneInstance = nil
 
