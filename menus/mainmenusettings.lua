@@ -4,7 +4,8 @@ _MainMenuSettings.y = 50
 _MainMenuSettings.title = "Settings"
 _MainMenuSettings.choice = {}
 _MainMenuSettings.choice[1] = "Enable Vsync?"
-_MainMenuSettings.choice[2] = "Exiting to main menu"
+_MainMenuSettings.choice[2] = "Enable Profi Profiler?(normally if he is enabled he will make report.txt in root folder of the game)"
+_MainMenuSettings.choice[3] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 local vsync = love.window.getVSync()
@@ -59,6 +60,8 @@ function keysinitMainMenuSettings(k)
 				vsync = not vsync
 				love.window.setVSync(vsync)
 			elseif _MainMenuSettings.selection == 2 then
+				setProfiler(not enableProfiler)
+			elseif _MainMenuSettings.selection == 3 then
 				gamestate = "MainMenu"
 				_MainMenuSettings.selection = 0
 			end
