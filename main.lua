@@ -36,22 +36,18 @@ function removeUnusedMenus()
 	if gamestate ~= "MainMenu" then
 		if _Mainmenu then
 			destroyMainMenu()
-			print("destroyMainMenu")
 		end
 	elseif gamestate ~= "MainMenuSettings" then
 		if _MainMenuSettings then
 			destroyMainMenuSettings()
-			print("destroyMainMenuSettings")
 		end
 	elseif gamestate ~= "GamePausing" then
 		if _GamePlayingPauseMenu then
 			destroyPlayingPauseMenu()
-			print("destroyPlayingPauseMenu")
 		end
 	elseif gamestate ~= "PlayingGameSettings" then
 		if _PlayingGameSettings then
 			destroyPlayingGameSettings()
-			print("destroyPlayingGameSettings")
 		end
 	end
 end

@@ -19,7 +19,6 @@ function drawMainMenu()
 		_Mainmenu.choice[2] = "Settings"
 		_Mainmenu.choice[3] = "Exit"
 		_Mainmenu.selection = 1
-		print("force mainmenu init")
 	end
 	local w, h = love.graphics.getDimensions()
 	local scaleX = w / mainMenuBackground:getWidth()
