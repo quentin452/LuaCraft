@@ -14,7 +14,9 @@ _MainMenuSettings.choice[8] = "NONE"
 _MainMenuSettings.choice[9] = "NONE"
 _MainMenuSettings.choice[10] = "NONE"
 _MainMenuSettings.choice[11] = "Exiting to main menu"
-_MainMenuSettings.selection = 1
+_MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
+
+local vsync = love.window.getVSync()
 
 function drawMainMenuSettings()
 	local w, h = love.graphics.getDimensions()
@@ -63,6 +65,8 @@ function keysinitMainMenuSettings(k)
 			end
 		elseif k == "return" then
 			if _MainMenuSettings.selection == 1 then
+				vsync = not vsync
+				love.window.setVSync(vsync)
 			elseif _MainMenuSettings.selection == 2 then
 			elseif _MainMenuSettings.selection == 11 then
 				gamestate = "MainMenu"

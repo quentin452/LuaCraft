@@ -6,7 +6,7 @@ _Mainmenu.choice = {}
 _Mainmenu.choice[1] = "%2Play Game%0"
 _Mainmenu.choice[2] = "Settings"
 _Mainmenu.choice[3] = "Exit"
-_Mainmenu.selection = 1
+_Mainmenu.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawMainMenu()
 	local w, h = love.graphics.getDimensions()
