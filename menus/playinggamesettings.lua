@@ -61,6 +61,8 @@ function keysinitPlayingMenuSettings(k)
 			elseif _PlayingGameSettings.selection == 2 then
 				gamestate = "PlayingGame"
 				_PlayingGameSettings.selection = 0
+				_font = love.graphics.newFont(15)
+				love.graphics.setFont(_font)
 			end
 		end
 	end
