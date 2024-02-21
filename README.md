@@ -1,4 +1,4 @@
-# LuaCraft
+# Voxel3DEngine
 Minecraft Like written in Lua using Love2D
 
 # Embeddedt libraries
