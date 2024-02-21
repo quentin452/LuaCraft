@@ -6,7 +6,7 @@ _Mainmenu.choice = {}
 _Mainmenu.choice[1] = "%2Play Game%0"
 _Mainmenu.choice[2] = "Settings"
 _Mainmenu.choice[3] = "Exit"
-_Mainmenu.selection = 0 -- initialize to 0 to prevent unwanted object selection
+_Mainmenu.selection = 1
 
 function drawMainMenu()
 	local w, h = love.graphics.getDimensions()
@@ -42,9 +42,6 @@ function drawMainMenu()
 	--drawColorString("   [%3Fleches%0] Move the Selection", _Mainmenu.x, posY)
 	--posY = posY + lineHeight
 	--drawColorString("   [%3Retour%0] Valider", _Mainmenu.x, posY)
-	if enableProfiler then
-        ProFi:checkMemory(3, "Troisième profil")
-    end
 end
 
 function keysinitMainMenu(k)
@@ -69,7 +66,4 @@ function keysinitMainMenu(k)
 			end
 		end
 	end
-	if enableProfiler then
-        ProFi:checkMemory(4, "4eme profil")
-    end
 end

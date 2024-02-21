@@ -6,7 +6,7 @@ function love.conf(t)
 	t.console = false -- Ouvrir une console (boolean, Windows seulement)
 	t.accelerometerjoystick = true -- Activer l'accéléromètre sur iOS et Android en l'exposant comme un joystick (boolean)
 	t.externalstorage = false -- True pour enregistrer les fichiers (et lire depuis le répertoire de sauvegarde) dans un stockage externe sur Android (booléen)
-	t.gammacorrect = false -- Activer le rendu de correction gamma, lorsqu'il est pris en charge par le système (booléen)
+	t.gammacorrect = true -- Activer le rendu de correction gamma, lorsqu'il est pris en charge par le système (booléen)
 
 	t.audio.mixwithsystem = true -- Continue à jouer la musique de fond lors de l'ouverture de LOVE (booléen, iOS et Android seulement)
 

@@ -2,22 +2,32 @@ lg = love.graphics
 lg.setDefaultFilter("nearest")
 io.stdout:setvbuf("no")
 
+--dependencies
 g3d = require("libs/g3d")
 lume = require("libs/lume")
 Object = require("libs/classic")
 scene = require("libs/scene")
-
-require("things/chunk")
+--scenes
 require("scenes/gamescene")
+--menus
 require("menus/mainmenu")
 require("menus/mainmenusettings")
+require("menus/gameplayingpausemenu")
+require("menus/playinggamesettings")
+--HUD
 require("hud/gamehud")
+--things
 require("things/usefull")
+require("things/chunk")
+--profiling
 ProFi = require("ProFi")
+
 gamestate = "MainMenu"
 _font = nil
 mainMenuBackground = nil
 mainMenuSettingsBackground = nil
+gameplayingpausemenu = nil
+playinggamesettings = nil
 
 enableProfiler = false
 
@@ -27,6 +37,8 @@ function love.load()
 	end
 	mainMenuBackground = love.graphics.newImage("assets/backgrounds/MainMenuBackground.png")
 	mainMenuSettingsBackground = love.graphics.newImage("assets/backgrounds/Mainmenusettingsbackground.png")
+	gameplayingpausemenu = love.graphics.newImage("assets/backgrounds/gameplayingpausemenu.png")
+	playinggamesettings = love.graphics.newImage("assets/backgrounds/playinggamesettings.png")
 	scene(GameScene())
 end
 
@@ -40,6 +52,9 @@ function love.update(dt)
 end
 
 function love.draw()
+	if gamestate == "GamePausing" then
+		drawGamePlayingPauseMenu()
+	end
 	if gamestate == "PlayingGame" then
 		local scene = scene()
 		if scene.draw then
@@ -48,8 +63,10 @@ function love.draw()
 		end
 	elseif gamestate == "MainMenuSettings" then
 		drawMainMenuSettings()
-	else
+	elseif gamestate == "MainMenu" then
 		drawMainMenu()
+	elseif gamestate == "PlayingGameSettings" then
+		drawPlayingMenuSettings()
 	end
 	if enableProfiler then
 		ProFi:stop()
@@ -73,9 +90,16 @@ function love.keypressed(k)
 	if gamestate == "MainMenuSettings" then
 		keysinitMainMenuSettings(k)
 	end
-	--TODO FOR REMOVAL
-	if k == "escape" then
-		love.event.push("quit")
+	if gamestate == "PlayingGame" then
+		if k == "escape" then
+			gamestate = "GamePausing"
+		end
+	end
+	if gamestate == "GamePausing" then
+		keysinitGamePlayingPauseMenu(k)
+	end
+	if gamestate == "PlayingGameSettings" then
+		keysinitPlayingMenuSettings(k)
 	end
 end
 

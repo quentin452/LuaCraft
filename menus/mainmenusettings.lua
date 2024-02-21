@@ -4,16 +4,7 @@ _MainMenuSettings.y = 50
 _MainMenuSettings.title = "Settings"
 _MainMenuSettings.choice = {}
 _MainMenuSettings.choice[1] = "Enable Vsync?"
-_MainMenuSettings.choice[2] = "NONE"
-_MainMenuSettings.choice[3] = "NONE"
-_MainMenuSettings.choice[4] = "NONE"
-_MainMenuSettings.choice[5] = "NONE"
-_MainMenuSettings.choice[6] = "NONE"
-_MainMenuSettings.choice[7] = "NONE"
-_MainMenuSettings.choice[8] = "NONE"
-_MainMenuSettings.choice[9] = "NONE"
-_MainMenuSettings.choice[10] = "NONE"
-_MainMenuSettings.choice[11] = "Exiting to main menu"
+_MainMenuSettings.choice[2] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 local vsync = love.window.getVSync()
@@ -51,9 +42,6 @@ function drawMainMenuSettings()
 	--drawColorString("   [%3Fleches%0] Move the Selection", _MainMenuSettings.x, posY)
 	--posY = posY + lineHeight
 	--drawColorString("   [%3Retour%0] Valider", _MainMenuSettings.x, posY)
-	if enableProfiler then
-		ProFi:checkMemory(1, "Premier profil")
-	end
 end
 
 function keysinitMainMenuSettings(k)
@@ -71,13 +59,9 @@ function keysinitMainMenuSettings(k)
 				vsync = not vsync
 				love.window.setVSync(vsync)
 			elseif _MainMenuSettings.selection == 2 then
-			elseif _MainMenuSettings.selection == 11 then
 				gamestate = "MainMenu"
 				_MainMenuSettings.selection = 0
 			end
 		end
-	end
-	if enableProfiler then
-		ProFi:checkMemory(2, "Second profil")
 	end
 end
