@@ -2,7 +2,7 @@ function love.conf(t)
 	t.window.depth = 16
 	t.identity = nil -- Le nom du répertoire de sauvegarde (string)
 	t.appendidentity = false -- Rechercher des fichiers dans le répertoire source avant le répertoire de sauvegarde (booléen)
-	t.version = "11.0" -- La version de LÖVE pour laquelle ce jeu a été fait (string)
+	t.version = "11.5" -- La version de LÖVE pour laquelle ce jeu a été fait (string)
 	t.console = false -- Ouvrir une console (boolean, Windows seulement)
 	t.accelerometerjoystick = true -- Activer l'accéléromètre sur iOS et Android en l'exposant comme un joystick (boolean)
 	t.externalstorage = false -- True pour enregistrer les fichiers (et lire depuis le répertoire de sauvegarde) dans un stockage externe sur Android (booléen)
