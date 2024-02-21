@@ -9,17 +9,6 @@ _Mainmenu.choice[3] = "Exit"
 _Mainmenu.selection = 1
 
 function drawMainMenu()
-	if not _Mainmenu then
-		_Mainmenu = {}
-		_Mainmenu.x = 50
-		_Mainmenu.y = 50
-		_Mainmenu.title = "LuaCraft"
-		_Mainmenu.choice = {}
-		_Mainmenu.choice[1] = "%2Play Game%0"
-		_Mainmenu.choice[2] = "Settings"
-		_Mainmenu.choice[3] = "Exit"
-		_Mainmenu.selection = 1
-	end
 	local w, h = love.graphics.getDimensions()
 	local scaleX = w / mainMenuBackground:getWidth()
 	local scaleY = h / mainMenuBackground:getHeight()

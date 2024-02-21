@@ -7,19 +7,7 @@ _MainMenuSettings.choice[1] = "Enable Vsync?"
 _MainMenuSettings.choice[2] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
-local vsync = love.window.getVSync()
-
 function drawMainMenuSettings()
-	if not _MainMenuSettings then
-		_MainMenuSettings = {}
-		_MainMenuSettings.x = 50
-		_MainMenuSettings.y = 50
-		_MainMenuSettings.title = "Settings"
-		_MainMenuSettings.choice = {}
-		_MainMenuSettings.choice[1] = "Enable Vsync?"
-		_MainMenuSettings.choice[2] = "Exiting to main menu"
-		_MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
-	end
 	local w, h = love.graphics.getDimensions()
 	local scaleX = w / mainMenuSettingsBackground:getWidth()
 	local scaleY = h / mainMenuSettingsBackground:getHeight()
@@ -44,7 +32,14 @@ function drawMainMenuSettings()
 		else
 			marque = "   "
 		end
-		drawColorString(marque .. "" .. _MainMenuSettings.choice[n], _MainMenuSettings.x, posY)
+
+		local choiceText = _MainMenuSettings.choice[n]
+		if n == 1 and globalVSync then
+			choiceText = choiceText .. " X"
+		end
+
+		drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
+
 		posY = posY + lineHeight
 	end
 
@@ -55,16 +50,6 @@ function drawMainMenuSettings()
 end
 
 function keysinitMainMenuSettings(k)
-	if not _MainMenuSettings then
-		_MainMenuSettings = {}
-		_MainMenuSettings.x = 50
-		_MainMenuSettings.y = 50
-		_MainMenuSettings.title = "Settings"
-		_MainMenuSettings.choice = {}
-		_MainMenuSettings.choice[1] = "Enable Vsync?"
-		_MainMenuSettings.choice[2] = "Exiting to main menu"
-		_MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
-	end
 	if type(_MainMenuSettings.choice) == "table" and _MainMenuSettings.selection then
 		if k == "s" then
 			if _MainMenuSettings.selection < #_MainMenuSettings.choice then
@@ -76,8 +61,8 @@ function keysinitMainMenuSettings(k)
 			end
 		elseif k == "return" then
 			if _MainMenuSettings.selection == 1 then
-				vsync = not vsync
-				love.window.setVSync(vsync)
+				globalVSync = not globalVSync
+				love.window.setVSync(globalVSync)
 			elseif _MainMenuSettings.selection == 2 then
 				gamestate = "MainMenu"
 				_MainMenuSettings.selection = 0

@@ -7,19 +7,7 @@ _PlayingGameSettings.choice[1] = "Enable Vsync?"
 _PlayingGameSettings.choice[2] = "Exiting to game"
 _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
-local vsync = love.window.getVSync()
-
 function drawPlayingMenuSettings()
-	if not _PlayingGameSettings then
-		_PlayingGameSettings = {}
-		_PlayingGameSettings.x = 50
-		_PlayingGameSettings.y = 50
-		_PlayingGameSettings.title = "Settings"
-		_PlayingGameSettings.choice = {}
-		_PlayingGameSettings.choice[1] = "Enable Vsync?"
-		_PlayingGameSettings.choice[2] = "Exiting to game"
-		_PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
-	end
 	local w, h = love.graphics.getDimensions()
 	local scaleX = w / playinggamesettings:getWidth()
 	local scaleY = h / playinggamesettings:getHeight()
@@ -44,7 +32,14 @@ function drawPlayingMenuSettings()
 		else
 			marque = "   "
 		end
-		drawColorString(marque .. "" .. _PlayingGameSettings.choice[n], _PlayingGameSettings.x, posY)
+
+		local choiceText = _PlayingGameSettings.choice[n]
+		if n == 1 and globalVSync then
+			choiceText = choiceText .. " X"
+		end
+
+		drawColorString(marque .. "" .. choiceText, _PlayingGameSettings.x, posY)
+
 		posY = posY + lineHeight
 	end
 
@@ -66,8 +61,8 @@ function keysinitPlayingMenuSettings(k)
 			end
 		elseif k == "return" then
 			if _PlayingGameSettings.selection == 1 then
-				vsync = not vsync
-				love.window.setVSync(vsync)
+				globalVSync = not globalVSync
+				love.window.setVSync(globalVSync)
 			elseif _PlayingGameSettings.selection == 2 then
 				gamestate = "PlayingGame"
 				_PlayingGameSettings.selection = 0

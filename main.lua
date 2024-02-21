@@ -32,25 +32,7 @@ gameSceneInstance = nil
 
 enableProfiler = false
 
-function removeUnusedMenus()
-	if gamestate ~= "MainMenu" then
-		if _Mainmenu then
-			destroyMainMenu()
-		end
-	elseif gamestate ~= "MainMenuSettings" then
-		if _MainMenuSettings then
-			destroyMainMenuSettings()
-		end
-	elseif gamestate ~= "GamePausing" then
-		if _GamePlayingPauseMenu then
-			destroyPlayingPauseMenu()
-		end
-	elseif gamestate ~= "PlayingGameSettings" then
-		if _PlayingGameSettings then
-			destroyPlayingGameSettings()
-		end
-	end
-end
+globalVSync = love.window.getVSync()
 
 function love.load()
 	if enableProfiler then
@@ -66,7 +48,6 @@ function love.load()
 end
 
 function love.update(dt)
-	removeUnusedMenus()
 	if gamestate == "PlayingGame" then
 		if gameSceneInstance and gameSceneInstance.update then
 			gameSceneInstance:update(dt)
