@@ -29,7 +29,7 @@ mainMenuSettingsBackground = nil
 gameplayingpausemenu = nil
 playinggamesettings = nil
 
-enableProfiler = false
+enableProfiler = true
 
 gameSceneInstance = nil
 
@@ -74,10 +74,6 @@ function love.draw()
 	elseif gamestate == "PlayingGameSettings" then
 		drawPlayingMenuSettings()
 	end
-	if enableProfiler then
-		ProFi:stop()
-		ProFi:writeReport("report.txt")
-	end
 end
 
 function love.mousemoved(x, y, dx, dy)
@@ -111,10 +107,4 @@ end
 function love.resize(w, h)
 	g3d.camera.aspectRatio = w / h
 	g3d.camera.updateProjectionMatrix()
-end
-
-function love.quit()
-	if enableProfiler then
-		ProFi:writeReport("report.txt")
-	end
 end
