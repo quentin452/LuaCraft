@@ -321,3 +321,11 @@ function GameScene:requestRemesh(chunk, first)
         table.insert(self.remeshQueue, chunk)
     end
 end
+
+function GameScene:destroy()
+    self.thingList = nil
+    self.chunkMap = nil
+    self.remeshQueue = nil
+    self.chunkCreationsThisFrame = nil
+    gameSceneInstance = nil
+end

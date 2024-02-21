@@ -31,6 +31,8 @@ playinggamesettings = nil
 
 enableProfiler = false
 
+gameSceneInstance = nil
+
 function love.load()
 	if enableProfiler then
 		ProFi:start()
@@ -39,14 +41,15 @@ function love.load()
 	mainMenuSettingsBackground = love.graphics.newImage("assets/backgrounds/Mainmenusettingsbackground.png")
 	gameplayingpausemenu = love.graphics.newImage("assets/backgrounds/gameplayingpausemenu.png")
 	playinggamesettings = love.graphics.newImage("assets/backgrounds/playinggamesettings.png")
-	scene(GameScene())
+
+	--gameSceneInstance = GameScene()
+	--scene(gameSceneInstance)
 end
 
 function love.update(dt)
 	if gamestate == "PlayingGame" then
-		local scene = scene()
-		if scene.update then
-			scene:update(dt)
+		if gameSceneInstance and gameSceneInstance.update then
+			gameSceneInstance:update(dt)
 		end
 	end
 end
@@ -56,9 +59,12 @@ function love.draw()
 		drawGamePlayingPauseMenu()
 	end
 	if gamestate == "PlayingGame" then
-		local scene = scene()
-		if scene.draw then
-			scene:draw()
+		if not gameSceneInstance then
+			gameSceneInstance = GameScene()
+			scene(gameSceneInstance)
+		end
+		if gameSceneInstance and gameSceneInstance.draw then
+			gameSceneInstance:draw()
 			drawF3MainGame()
 		end
 	elseif gamestate == "MainMenuSettings" then
@@ -76,9 +82,8 @@ end
 
 function love.mousemoved(x, y, dx, dy)
 	if gamestate == "PlayingGame" then
-		local scene = scene()
-		if scene.mousemoved then
-			scene:mousemoved(x, y, dx, dy)
+		if gameSceneInstance and gameSceneInstance.mousemoved then
+			gameSceneInstance:mousemoved(x, y, dx, dy)
 		end
 	end
 end

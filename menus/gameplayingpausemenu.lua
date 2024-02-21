@@ -61,7 +61,7 @@ function keysinitGamePlayingPauseMenu(k)
 			elseif _GamePlayingPauseMenu.selection == 2 then
 				gamestate = "PlayingGameSettings"
 			elseif _GamePlayingPauseMenu.selection == 3 then
-				-- scene():destroy() TODO FIXME
+				gameSceneInstance:destroy()
 				gamestate = "MainMenu"
 				_GamePlayingPauseMenu.selection = 0
 			end
