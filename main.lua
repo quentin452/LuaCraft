@@ -9,14 +9,16 @@ scene = require("libs/scene")
 
 require("things/chunk")
 require("scenes/gamescene")
-require("scenes/mainmenuscene")
+require("menus/mainmenu")
+
+gamestate = 0
 
 function love.load()
 	scene(GameScene())
 end
 
 function love.update(dt)
-	if _Mainmenu.selection == 1 and _Mainmenu.choice == 1 then
+	if gamestate == "PlayingGame" then
 		local scene = scene()
 		if scene.update then
 			scene:update(dt)
@@ -25,7 +27,7 @@ function love.update(dt)
 end
 
 function love.draw()
-	if _Mainmenu.selection == 1 and _Mainmenu.choice == 1 then
+	if gamestate == "PlayingGame" then
 		local scene = scene()
 		if scene.draw then
 			scene:draw()
@@ -84,12 +86,15 @@ function love.keypressed(k)
 		elseif k == "return" then
 			if _Mainmenu.selection == 1 and type(_Mainmenu.choice) == "table" then
 				_Mainmenu.choice = 1
+				gamestate = "PlayingGame"
+				_font = love.graphics.newFont(15)
+				love.graphics.setFont(_font)
 			end
 		end
 	end
-	--if k == "escape" then
-	--	love.event.push("quit")
-	--end
+	if k == "escape" then
+		love.event.push("quit")
+	end
 end
 
 function love.resize(w, h)
