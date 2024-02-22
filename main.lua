@@ -29,7 +29,7 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --2 : profiling some times
 --3 : exiting game
 --4 : open a CMD on Jprofiler (SRC)
---5 : use this command : love . LuaCraft prof.mpack and you will see the viewer
+--5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
 
 gamestate = "MainMenu"
 _font = nil
@@ -81,6 +81,8 @@ function renderdistanceSetting()
 end
 
 function love.load()
+	_JPROFILER.push("frame")
+	_JPROFILER.push("Mainload")
 	love.filesystem.setIdentity("LuaCraft")
 	if globalRenderDistance == nil then
 		-- Read the config file
@@ -130,6 +132,8 @@ function love.load()
 			end
 		end
 	end
+	_JPROFILER.pop("Mainload")
+	_JPROFILER.pop("frame")
 end
 
 function love.update(dt)
