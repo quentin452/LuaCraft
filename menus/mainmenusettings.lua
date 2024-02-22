@@ -4,7 +4,8 @@ _MainMenuSettings.y = 50
 _MainMenuSettings.title = "Settings"
 _MainMenuSettings.choice = {}
 _MainMenuSettings.choice[1] = "Enable Vsync?"
-_MainMenuSettings.choice[2] = "Exiting to main menu"
+_MainMenuSettings.choice[2] = "Render Distance"
+_MainMenuSettings.choice[3] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawMainMenuSettings()
@@ -40,7 +41,12 @@ function drawMainMenuSettings()
 				choiceText = choiceText .. " X"
 			end
 		end
-
+		if n == 2 then
+			local renderdistancevalue = love.filesystem.read("config.conf"):match("renderdistance=(%d)")
+			if renderdistancevalue then
+				choiceText = choiceText .. " " .. globalRenderDistance
+			end
+		end
 		drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
 
 		posY = posY + lineHeight
@@ -64,8 +70,11 @@ function keysinitMainMenuSettings(k)
 			end
 		elseif k == "return" then
 			if _MainMenuSettings.selection == 1 then
-				toggleVSync() 
+				toggleVSync()
 			elseif _MainMenuSettings.selection == 2 then
+				renderdistanceSetting()
+				print(globalRenderDistance)
+			elseif _MainMenuSettings.selection == 3 then
 				gamestate = "MainMenu"
 				_MainMenuSettings.selection = 0
 			end

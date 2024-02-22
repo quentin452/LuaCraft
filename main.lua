@@ -42,14 +42,59 @@ enableProfiler = false
 
 globalVSync = love.window.getVSync()
 
+globalRenderDistance = nil -- Valeur par défaut
+
 function toggleVSync()
 	globalVSync = not globalVSync
 	love.window.setVSync(globalVSync and 1 or 0)
-	love.filesystem.write("config.conf", "vsync=" .. (globalVSync and "1" or "0"))
+
+	-- Load current contents of config.conf file
+	local content, size = love.filesystem.read("config.conf")
+
+	-- Update vsync value in content
+	content = content:gsub("vsync=%d", "vsync=" .. (globalVSync and "1" or "0"))
+
+	-- Rewrite config.conf file with updated content
+	love.filesystem.write("config.conf", content)
+end
+
+function renderdistanceSetting()
+	-- Load current contents of config.conf file
+	local content, size = love.filesystem.read("config.conf")
+
+	-- Increment the value of globalRenderDistance by 5
+	globalRenderDistance = globalRenderDistance + 5
+
+	-- Check if the value exceeds 25, reduce it to 5
+	if globalRenderDistance > 25 then
+		globalRenderDistance = 5
+	end
+
+	-- Update renderdistance value in content using regular expression
+	content = content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
+
+	-- Rewrite config.conf file with updated content
+	love.filesystem.write("config.conf", content)
 end
 
 function love.load()
 	love.filesystem.setIdentity("LuaCraft")
+	if globalRenderDistance == nil then
+		-- Read the config file
+		local content = love.filesystem.read("config.conf")
+
+		-- Extract value
+		local renderDistance = tonumber(content:match("renderdistance=(%d+)")) -- Make sure the key is lowercase "renderdistance"
+
+		-- If no value in file, use default value
+		if not renderDistance then
+			renderDistance = 5
+		end
+
+		-- Set global variable
+		globalRenderDistance = renderDistance
+	end
+
 	if enableProfiler then
 		ProFi:start()
 	end
@@ -60,9 +105,25 @@ function love.load()
 
 	if love.filesystem.getInfo("config.conf") then
 		local content, size = love.filesystem.read("config.conf")
+
 		local vsyncValue = content:match("vsync=(%d)")
 		if vsyncValue then
 			love.window.setVSync(tonumber(vsyncValue))
+		end
+
+		local renderdistanceValue = content:match("renderdistance=(%d)")
+
+		if not renderdistanceValue then
+			-- The renderdistance value does not exist, add the default value of 5
+			renderdistanceValue = "5"
+
+			-- Add the new line in the config.conf file only if it does not already exist
+			if not content:match("renderdistance=") then
+				content = content .. "\nrenderdistance=" .. renderdistanceValue
+
+				-- Update config.conf file with new value
+				love.filesystem.write("config.conf", content)
+			end
 		end
 	end
 end

@@ -4,7 +4,8 @@ _PlayingGameSettings.y = 50
 _PlayingGameSettings.title = "Settings"
 _PlayingGameSettings.choice = {}
 _PlayingGameSettings.choice[1] = "Enable Vsync?"
-_PlayingGameSettings.choice[2] = "Exiting to game"
+_PlayingGameSettings.choice[2] = "Render Distance"
+_PlayingGameSettings.choice[3] = "Exiting to game"
 _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawPlayingMenuSettings()
@@ -41,7 +42,12 @@ function drawPlayingMenuSettings()
 				choiceText = choiceText .. " X"
 			end
 		end
-
+		if n == 2 then
+			local renderdistancevalue = love.filesystem.read("config.conf"):match("renderdistance=(%d)")
+			if renderdistancevalue then
+				choiceText = choiceText .. " " .. globalRenderDistance
+			end
+		end
 		drawColorString(marque .. "" .. choiceText, _PlayingGameSettings.x, posY)
 
 		posY = posY + lineHeight
@@ -67,6 +73,9 @@ function keysinitPlayingMenuSettings(k)
 			if _PlayingGameSettings.selection == 1 then
 				toggleVSync()
 			elseif _PlayingGameSettings.selection == 2 then
+				renderdistanceSetting()
+				print(globalRenderDistance)
+			elseif _PlayingGameSettings.selection == 3 then
 				gamestate = "PlayingGame"
 				_PlayingGameSettings.selection = 0
 				_font = love.graphics.newFont(15)

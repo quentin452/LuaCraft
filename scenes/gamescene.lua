@@ -1,15 +1,13 @@
 GameScene = Object:extend()
 local size
 local threadpool = {}
--- load up some threads so that chunk meshing won't block the main thread
+-- chargez quelques threads afin que le meshing du chunk ne bloque pas le thread principal
 for i = 1, 8 do
 	threadpool[i] = love.thread.newThread("libs/chunkremesh.lua")
 end
 local threadchannels = {}
 local texturepack = lg.newImage("assets/texturepack.png")
 local wasLeftDown, wasRightDown, rightDown, leftDown
-
-renderDistance = 5
 
 -- create the mesh for the block cursor
 local blockCursor, blockCursorVisible
@@ -144,8 +142,8 @@ function GameScene:update(dt)
 
 	-- generate a "bubble" of loaded chunks around the camera
 	_JPROFILER.push("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
-	local bubbleWidth = renderDistance
-	local bubbleHeight = math.floor(renderDistance * 0.75)
+	local bubbleWidth = globalRenderDistance
+	local bubbleHeight = math.floor(globalRenderDistance * 0.75)
 	local creationLimit = 1
 	self.chunkCreationsThisFrame = 0
 	for r = 0, bubbleWidth do
@@ -359,8 +357,8 @@ function GameScene:draw()
 				+ (chunk.z - g3d.camera.position[3]) ^ 2
 		)
 
-		if dist <= renderDistance * Chunk.size then
-			-- Draw chunks only in the render distance 
+		if dist <= globalRenderDistance * Chunk.size then
+			-- Draw chunks only in the render distance
 			chunk:draw()
 		end
 	end
