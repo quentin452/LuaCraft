@@ -21,7 +21,7 @@ require("things/usefull")
 require("things/chunk")
 --profiling
 ProFi = require("ProFi")
-PROF_CAPTURE = true
+PROF_CAPTURE = false
 prof = require("libs/jprofiler/jprof")
 
 gamestate = "MainMenu"
