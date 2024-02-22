@@ -5,8 +5,8 @@ Minecraft Like written in Lua using Love2D
 
 Penlight : https://github.com/lunarmodules/Penlight
 
-g3d : https://github.com/groverburger/g3d
+g3d : https://github.com/quentin452/g3d
 
-# Voxel Engine
+# Voxel Engine code : 
 
 g3d_voxel : https://github.com/groverburger/g3d_voxel/tree/master/lib
