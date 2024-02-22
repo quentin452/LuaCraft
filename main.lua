@@ -21,6 +21,8 @@ require("things/usefull")
 require("things/chunk")
 --profiling
 ProFi = require("ProFi")
+PROF_CAPTURE = true
+prof = require("libs/jprofiler/jprof")
 
 gamestate = "MainMenu"
 _font = nil
@@ -35,6 +37,7 @@ enableProfiler = false
 globalVSync = love.window.getVSync()
 
 function love.load()
+	love.filesystem.setIdentity("LuaCraft")
 	if enableProfiler then
 		ProFi:start()
 	end
@@ -48,11 +51,15 @@ function love.load()
 end
 
 function love.update(dt)
+	prof.push("frame")
+	prof.push("update")
 	if gamestate == "PlayingGame" then
 		if gameSceneInstance and gameSceneInstance.update then
 			gameSceneInstance:update(dt)
 		end
 	end
+	prof.pop("update")
+	prof.pop("frame")
 end
 
 function love.draw()
@@ -60,6 +67,8 @@ function love.draw()
 		drawGamePlayingPauseMenu()
 	end
 	if gamestate == "PlayingGame" then
+		prof.push("frame")
+		prof.push("PlayingGame")
 		if not gameSceneInstance then
 			gameSceneInstance = GameScene()
 			scene(gameSceneInstance)
@@ -68,13 +77,18 @@ function love.draw()
 			gameSceneInstance:draw()
 			drawF3MainGame()
 		end
+		prof.pop("PlayingGame")
+		prof.pop("frame")
 	elseif gamestate == "MainMenuSettings" then
 		drawMainMenuSettings()
 	elseif gamestate == "MainMenu" then
+		prof.push("frame")
 		drawMainMenu()
+		prof.pop("frame")
 	elseif gamestate == "PlayingGameSettings" then
 		drawPlayingMenuSettings()
 	end
+	prof.write("prof.mpack")
 end
 
 function love.mousemoved(x, y, dx, dy)
@@ -108,4 +122,8 @@ end
 function love.resize(w, h)
 	g3d.camera.aspectRatio = w / h
 	g3d.camera.updateProjectionMatrix()
+end
+
+function love.quit()
+	prof.write("prof.mpack")
 end
