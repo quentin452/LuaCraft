@@ -36,12 +36,12 @@ local function closestPointOnLineSegment(
 	y,
 	z -- source point
 )
-	prof.push("closestPointOnLineSegment")
+	_JPROFILER.push("closestPointOnLineSegment")
 
 	local ab_x, ab_y, ab_z = b_x - a_x, b_y - a_y, b_z - a_z
 	local t = vectorDotProduct(x - a_x, y - a_y, z - a_z, ab_x, ab_y, ab_z) / (ab_x ^ 2 + ab_y ^ 2 + ab_z ^ 2)
 	t = math.min(1, math.max(0, t))
-	prof.pop("closestPointOnLineSegment")
+	_JPROFILER.pop("closestPointOnLineSegment")
 	return a_x + t * ab_x, a_y + t * ab_y, a_z + t * ab_z
 end
 
@@ -73,7 +73,7 @@ local function triangleRay(
 	dir_y,
 	dir_z
 )
-	prof.push("triangleRay")
+	_JPROFILER.push("triangleRay")
 
 	-- cache these variables for efficiency
 	local e11, e12, e13 = fastSubtract(tri_1_x, tri_1_y, tri_1_z, tri_0_x, tri_0_y, tri_0_z)
@@ -118,7 +118,7 @@ local function triangleRay(
 			n_y,
 			n_z
 	end
-	prof.pop("triangleRay")
+	_JPROFILER.pop("triangleRay")
 end
 
 -- detects a collision between a triangle and a sphere
@@ -143,7 +143,7 @@ local function triangleSphere(
 	src_z,
 	radius
 )
-	prof.push("triangleSphere")
+	_JPROFILER.push("triangleSphere")
 
 	-- recalculate surface normal of this triangle
 	local side1_x, side1_y, side1_z = tri_1_x - tri_0_x, tri_1_y - tri_0_y, tri_1_z - tri_0_z
@@ -244,7 +244,7 @@ local function triangleSphere(
 
 		return vectorMagnitude(n_x, n_y, n_z), itx_x, itx_y, itx_z, n_x, n_y, n_z
 	end
-	prof.pop("triangleSphere")
+	_JPROFILER.pop("triangleSphere")
 end
 
 -- finds the closest point on the triangle from the source point given
@@ -268,7 +268,7 @@ local function trianglePoint(
 	src_y,
 	src_z
 )
-	prof.push("trianglePoint")
+	_JPROFILER.push("trianglePoint")
 
 	-- recalculate surface normal of this triangle
 	local side1_x, side1_y, side1_z = tri_1_x - tri_0_x, tri_1_y - tri_0_y, tri_1_z - tri_0_z
@@ -359,7 +359,7 @@ local function trianglePoint(
 
 		return vectorMagnitude(n_x, n_y, n_z), itx_x, itx_y, itx_z, n_x, n_y, n_z
 	end
-	prof.pop("trianglePoint")
+	_JPROFILER.pop("trianglePoint")
 end
 
 -- finds the collision point between a triangle and a capsule
@@ -397,7 +397,7 @@ local function triangleCapsule(
 	capn_z,
 	radius
 )
-	prof.push("triangleCapsule")
+	_JPROFILER.push("triangleCapsule")
 
 	-- find the normal of this triangle
 	-- tbd if necessary, this sometimes fixes weird edgecases
@@ -449,7 +449,7 @@ local function triangleCapsule(
 	-- find the closest point on the capsule line to the reference point
 	local c_x, c_y, c_z = closestPointOnLineSegment(a_x, a_y, a_z, b_x, b_y, b_z, ref_x, ref_y, ref_z)
 
-	prof.pop("triangleCapsule")
+	_JPROFILER.pop("triangleCapsule")
 
 	-- do a sphere cast from that closest point to the triangle and return the result
 	return triangleSphere(
@@ -479,7 +479,7 @@ end
 
 -- runs a given intersection function on all of the triangles made up of a given vert table
 local function findClosest(self, verts, func, ...)
-    prof.push("findClosest")
+	_JPROFILER.push("findClosest")
 
 	-- declare the variables that will be returned by the function
 	local finalLength, where_x, where_y, where_z, norm_x, norm_y, norm_z
@@ -539,7 +539,7 @@ local function findClosest(self, verts, func, ...)
 		norm_x, norm_y, norm_z = vectorNormalize(norm_x, norm_y, norm_z)
 	end
 
-    prof.pop("findClosest")
+	_JPROFILER.pop("findClosest")
 
 	-- return all the information in a standardized way
 	return finalLength, where_x, where_y, where_z, norm_x, norm_y, norm_z
@@ -547,7 +547,7 @@ end
 
 -- runs a given intersection function on all of the triangles made up of a given vert table
 local function findAny(self, verts, func, ...)
-    prof.push("findAny")
+	_JPROFILER.push("findAny")
 
 	-- cache references to this model's properties for efficiency
 	local translation_x, translation_y, translation_z, scale_x, scale_y, scale_z = 0, 0, 0, 1, 1, 1
@@ -592,7 +592,7 @@ local function findAny(self, verts, func, ...)
 			return true
 		end
 	end
-    prof.pop("findAny")
+	_JPROFILER.pop("findAny")
 
 	return false
 end
@@ -602,31 +602,31 @@ end
 ----------------------------------------------------------------------------------------------------
 
 function collisions.rayIntersection(verts, transform, src_x, src_y, src_z, dir_x, dir_y, dir_z)
-    prof.push("collisions.rayIntersection")
-    prof.pop("collisions.rayIntersection")
+	_JPROFILER.push("collisions.rayIntersection")
+	_JPROFILER.pop("collisions.rayIntersection")
 	return findClosest(transform, verts, triangleRay, src_x, src_y, src_z, dir_x, dir_y, dir_z)
 end
 
 function collisions.isPointInside(verts, transform, x, y, z)
-    prof.push("collisions.isPointInside")
-    prof.pop("collisions.isPointInside")
+	_JPROFILER.push("collisions.isPointInside")
+	_JPROFILER.pop("collisions.isPointInside")
 	return findAny(transform, verts, triangleRay, x, y, z, 0, 0, 1)
 end
 
 function collisions.sphereIntersection(verts, transform, src_x, src_y, src_z, radius)
-    prof.push("collisions.sphereIntersection")
-    prof.pop("collisions.sphereIntersection")
+	_JPROFILER.push("collisions.sphereIntersection")
+	_JPROFILER.pop("collisions.sphereIntersection")
 	return findClosest(transform, verts, triangleSphere, src_x, src_y, src_z, radius)
 end
 
 function collisions.closestPoint(verts, transform, src_x, src_y, src_z)
-    prof.push("collisions.closestPoint")
-    prof.pop("collisions.closestPoint")
+	_JPROFILER.push("collisions.closestPoint")
+	_JPROFILER.pop("collisions.closestPoint")
 	return findClosest(transform, verts, trianglePoint, src_x, src_y, src_z)
 end
 
 function collisions.capsuleIntersection(verts, transform, tip_x, tip_y, tip_z, base_x, base_y, base_z, radius)
-    prof.push("collisions.capsuleIntersection")
+	_JPROFILER.push("collisions.capsuleIntersection")
 
 	-- the normal vector coming out the tip of the capsule
 	local norm_x, norm_y, norm_z = vectorNormalize(tip_x - base_x, tip_y - base_y, tip_z - base_z)
@@ -636,7 +636,7 @@ function collisions.capsuleIntersection(verts, transform, tip_x, tip_y, tip_z, b
 	local a_x, a_y, a_z = base_x + norm_x * radius, base_y + norm_y * radius, base_z + norm_z * radius
 	local b_x, b_y, b_z = tip_x - norm_x * radius, tip_y - norm_y * radius, tip_z - norm_z * radius
 
-    prof.pop("collisions.capsuleIntersection")
+	_JPROFILER.pop("collisions.capsuleIntersection")
 
 	return findClosest(
 		transform,

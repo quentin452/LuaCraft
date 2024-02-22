@@ -25,7 +25,7 @@ local zoneStack = { nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, 
 local profData = {}
 local netBuffer = nil
 local profEnabled = true
--- profMem keeps track of the amount of memory allocated by prof.push/prof.pop
+-- profMem keeps track of the amount of memory allocated by _JPROFILER.push/_JPROFILER.pop
 -- which is then subtracted from collectgarbage("count"),
 -- to measure the jprof-less (i.e. "real") memory consumption
 local profMem = 0
@@ -98,7 +98,7 @@ if PROF_CAPTURE then
 		if name then
 			assert(
 				zoneStack[#zoneStack] == name,
-				("(jprof) Top of zone stack, does not match the zone passed to prof.pop ('%s', on top: '%s')!"):format(
+				("(jprof) Top of zone stack, does not match the zone passed to _JPROFILER.pop ('%s', on top: '%s')!"):format(
 					name,
 					zoneStack[#zoneStack]
 				)
@@ -126,7 +126,7 @@ if PROF_CAPTURE then
 		assert(#zoneStack == 0, "(jprof) Zone stack is not empty")
 
 		if not profData then
-			print("(jprof) No profiling data saved (probably because you called prof.connect())")
+			print("(jprof) No profiling data saved (probably because you called _JPROFILER.connect())")
 		else
 			local file, msg = love.filesystem.newFile(filename, "w")
 			assert(file, msg)

@@ -32,7 +32,7 @@ model.shader = g3d.shader
 -- a model must be given a .obj file or equivalent lua table, and a texture
 -- translation, rotation, and scale are all 3d vectors and are all optional
 local function newModel(verts, texture, translation, rotation, scale)
-	--prof.push("model.newModel")
+	--_JPROFILER.push("model.newModel")
 	local self = setmetatable({}, model)
 
 	-- if verts is a string, use it as a path to a .obj file
@@ -57,7 +57,7 @@ local function newModel(verts, texture, translation, rotation, scale)
 		scale = { scale, scale, scale }
 	end
 	self:setTransform(translation or { 0, 0, 0 }, rotation or { 0, 0, 0 }, scale or { 1, 1, 1 })
---	prof.pop("model.newModel")
+	--	_JPROFILER.pop("model.newModel")
 	return self
 end
 

@@ -25,7 +25,7 @@ local matrix = {}
 matrix.__index = matrix
 
 local function newMatrix()
-	--prof.push("newMatrix")
+	--_JPROFILER.push("newMatrix")
 
 	local self = setmetatable({}, matrix)
 
@@ -34,7 +34,7 @@ local function newMatrix()
 	self[5], self[6], self[7], self[8] = 0, 1, 0, 0
 	self[9], self[10], self[11], self[12] = 0, 0, 1, 0
 	self[13], self[14], self[15], self[16] = 0, 0, 0, 1
-	----prof.pop("newMatrix")
+	----_JPROFILER.pop("newMatrix")
 
 	return self
 end
@@ -42,8 +42,8 @@ end
 -- automatically converts a matrix to a string
 -- for printing to console and debugging
 function matrix:__tostring()
-	--prof.push("matrix:__tostring")
-	--prof.pop("matrix:__tostring")
+	--_JPROFILER.push("matrix:__tostring")
+	--_JPROFILER.pop("matrix:__tostring")
 	return ("%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f"):format(unpack(self))
 end
 
@@ -56,7 +56,7 @@ end
 -- returns a transformation matrix
 -- translation, rotation, and scale are all 3d vectors
 function matrix:setTransformationMatrix(translation, rotation, scale)
-	--prof.push("matrix:setTransformationMatrix")
+	--_JPROFILER.push("matrix:setTransformationMatrix")
 
 	-- translations
 	self[4] = translation[1]
@@ -88,7 +88,7 @@ function matrix:setTransformationMatrix(translation, rotation, scale)
 
 	-- fourth row is not used, just set it to the fourth row of the identity matrix
 	self[13], self[14], self[15], self[16] = 0, 0, 0, 1
-	--prof.pop("matrix:setTransformationMatrix")
+	--_JPROFILER.pop("matrix:setTransformationMatrix")
 end
 
 -- returns a perspective projection matrix
@@ -96,7 +96,7 @@ end
 -- all arguments are scalars aka normal numbers
 -- aspectRatio is defined as window width divided by window height
 function matrix:setProjectionMatrix(fov, near, far, aspectRatio)
-	--prof.push("matrix:setProjectionMatrix")
+	--_JPROFILER.push("matrix:setProjectionMatrix")
 
 	local top = near * math.tan(fov / 2)
 	local bottom = -top
@@ -111,7 +111,7 @@ function matrix:setProjectionMatrix(fov, near, far, aspectRatio)
 	self[5], self[6], self[7], self[8] = 0, 2 * near * tbDiffInv, (top + bottom) * tbDiffInv, 0
 	self[9], self[10], self[11], self[12] = 0, 0, -(far + near) * fnDiffInv, -2 * far * near * fnDiffInv
 	self[13], self[14], self[15], self[16] = 0, 0, -1, 0
-	--prof.pop("matrix:setProjectionMatrix")
+	--_JPROFILER.pop("matrix:setProjectionMatrix")
 end
 
 -- returns an orthographic projection matrix
@@ -119,7 +119,7 @@ end
 -- all arguments are scalars aka normal numbers
 -- aspectRatio is defined as window width divided by window height
 function matrix:setOrthographicMatrix(fov, size, near, far, aspectRatio)
-	--prof.push("matrix:setOrthographicMatrix")
+	--_JPROFILER.push("matrix:setOrthographicMatrix")
 
 	local top = size * math.tan(fov / 2)
 	local bottom = -top
@@ -134,13 +134,13 @@ function matrix:setOrthographicMatrix(fov, size, near, far, aspectRatio)
 	self[5], self[6], self[7], self[8] = 0, 2 * tbDiffInv, 0, -(top + bottom) * tbDiffInv
 	self[9], self[10], self[11], self[12] = 0, 0, -2 * fnDiffInv, -(far + near) * fnDiffInv
 	self[13], self[14], self[15], self[16] = 0, 0, 0, 1
-	--prof.pop("matrix:setOrthographicMatrix")
+	--_JPROFILER.pop("matrix:setOrthographicMatrix")
 end
 
 -- returns a view matrix
 -- eye, target, and up are all 3d vectors
 function matrix:setViewMatrix(eye, target, up)
-	--prof.push("matrix:setViewMatrix")
+	--_JPROFILER.push("matrix:setViewMatrix")
 
 	local z1, z2, z3 = vectorNormalize(eye[1] - target[1], eye[2] - target[2], eye[3] - target[3])
 	local x1, x2, x3 = vectorNormalize(vectorCrossProduct(up[1], up[2], up[3], z1, z2, z3))
@@ -150,7 +150,7 @@ function matrix:setViewMatrix(eye, target, up)
 	self[5], self[6], self[7], self[8] = y1, y2, y3, -vectorDotProduct(y1, y2, y3, eye[1], eye[2], eye[3])
 	self[9], self[10], self[11], self[12] = z1, z2, z3, -vectorDotProduct(z1, z2, z3, eye[1], eye[2], eye[3])
 	self[13], self[14], self[15], self[16] = 0, 0, 0, 1
-	--prof.pop("matrix:setViewMatrix")
+	--_JPROFILER.pop("matrix:setViewMatrix")
 end
 
 return newMatrix

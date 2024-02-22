@@ -28,29 +28,29 @@ c3 = 0.5
 
 -- Function to clamp a value between a minimum and maximum
 function clamp(n, min, max)
-	--prof.push("ChunkClamp")
+	--_JPROFILER.push("ChunkClamp")
 	if min < max then
 		return math.min(math.max(n, min), max)
 	end
-	--prof.pop("ChunkClamp")
+	--_JPROFILER.pop("ChunkClamp")
 	return math.min(math.max(n, max), min)
 end
 
 -- Function to map a value from one range to another
 function map(n, start1, stop1, start2, stop2, withinBounds)
-	--	prof.push("Chunkmap")
+	--	_JPROFILER.push("Chunkmap")
 	local newval = (n - start1) / (stop1 - start1) * (stop2 - start2) + start2
 
 	if not withinBounds then
 		return newval
 	end
-	--prof.pop("Chunkmap")
+	--_JPROFILER.pop("Chunkmap")
 	return clamp(newval, start2, stop2)
 end
 
 -- Function to retrieve the block at the specified coordinates
 function getBlock(pointer, x, y, z)
-	--prof.push("ChunkgetBlock")
+	--_JPROFILER.push("ChunkgetBlock")
 	local i = x + size * y + size * size * z
 
 	-- Check neighboring chunks if the block is outside the current chunk
@@ -72,12 +72,12 @@ function getBlock(pointer, x, y, z)
 	if z < 0 then
 		return n6p and getBlock(n6p, x % size, y % size, z % size) or -1
 	end
-	--	prof.pop("ChunkgetBlock")
+	--	_JPROFILER.pop("ChunkgetBlock")
 	return pointer[i]
 end
 
 -- Count the number of faces to be generated
---prof.push("ChunkCountFacesToBeGenerated")
+--_JPROFILER.push("ChunkCountFacesToBeGenerated")
 facecount = 0
 size = 16
 for x = 0, size - 1 do
@@ -106,10 +106,10 @@ for x = 0, size - 1 do
 		end
 	end
 end
---prof.pop("ChunkCountFacesToBeGenerated")
+--_JPROFILER.pop("ChunkCountFacesToBeGenerated")
 
 -- Define the structure of a vertex
---prof.push("ChunkVertexDataStructure")
+--_JPROFILER.push("ChunkVertexDataStructure")
 ffi.cdef([[
     struct vertex {
         float x, y, z;
@@ -118,7 +118,7 @@ ffi.cdef([[
         uint8_t r, g, b, a;
     }
 ]])
---prof.pop("ChunkVertexDataStructure")
+--_JPROFILER.pop("ChunkVertexDataStructure")
 
 -- Calculate the total number of vertices required
 count = facecount * 6
@@ -131,7 +131,7 @@ if count > 0 then
 	datapointer = ffi.cast("struct vertex *", data:getFFIPointer())
 	-- Index for iterating through the vertex data
 	dataindex = 0
-	--	prof.push("ChunkaddFace")
+	--	_JPROFILER.push("ChunkaddFace")
 
 	-- Function to add a face to the vertex data
 	function addFace(x, y, z, mx, my, mz, u, v, c)
@@ -153,10 +153,10 @@ if count > 0 then
 			dataindex = dataindex + 1
 		end
 	end
-	--	prof.pop("ChunkaddFace")
+	--	_JPROFILER.pop("ChunkaddFace")
 
 	-- Iterate through each block to generate faces
-	----	prof.push("ChunkIterateOnEachBlockToGenerateFaces")
+	----	_JPROFILER.push("ChunkIterateOnEachBlockToGenerateFaces")
 	for x = 0, size - 1 do
 		for y = 0, size - 1 do
 			for z = 0, size - 1 do
@@ -183,15 +183,15 @@ if count > 0 then
 			end
 		end
 	end
-	--prof.pop("ChunkIterateOnEachBlockToGenerateFaces")
+	--_JPROFILER.pop("ChunkIterateOnEachBlockToGenerateFaces")
 
 	-- Push the generated vertex data to the main thread via the communication channel
-	--	prof.push("ChunkPushGeneratedVertexData")
+	--	_JPROFILER.push("ChunkPushGeneratedVertexData")
 	love.thread.getChannel(channel):push({ data = data, count = count })
---	prof.pop("ChunkPushGeneratedVertexData")
+--	_JPROFILER.pop("ChunkPushGeneratedVertexData")
 else
 	-- If no vertices are generated, push nil data to the main thread
-	--	prof.push("ChunkNoVerticesareGenerated")
+	--	_JPROFILER.push("ChunkNoVerticesareGenerated")
 	love.thread.getChannel(channel):push({ data = nil, count = count })
-	--	prof.pop("ChunkNoVerticesareGenerated")
+	--	_JPROFILER.pop("ChunkNoVerticesareGenerated")
 end

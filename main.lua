@@ -22,7 +22,7 @@ require("things/chunk")
 --profiling
 ProFi = require("ProFi")
 PROF_CAPTURE = false
-prof = require("libs/jprofiler/jprof")
+_JPROFILER = require("libs/jprofiler/jprof")
 --profs instruction
 --1 : enable PROF_CAPTURE to enable profiler
 --2 : profiling some times
@@ -57,29 +57,29 @@ function love.load()
 end
 
 function love.update(dt)
-	prof.push("frame")
-	prof.push("MainUpdate")
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MainUpdate")
 	if gamestate == "PlayingGame" then
 		if gameSceneInstance and gameSceneInstance.update then
 			gameSceneInstance:update(dt)
 		end
 	end
-	prof.pop("MainUpdate")
-	prof.pop("frame")
+	_JPROFILER.pop("MainUpdate")
+	_JPROFILER.pop("frame")
 end
 
 function love.draw()
-	prof.push("frame")
-	prof.push("MainDraw")
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MainDraw")
 
 	if gamestate == "GamePausing" then
-		prof.push("drawGamePlayingPauseMenu")
+		_JPROFILER.push("drawGamePlayingPauseMenu")
 		drawGamePlayingPauseMenu()
-		prof.pop("drawGamePlayingPauseMenu")
+		_JPROFILER.pop("drawGamePlayingPauseMenu")
 	end
 
 	if gamestate == "PlayingGame" then
-		prof.push("DrawGameScene")
+		_JPROFILER.push("DrawGameScene")
 		if not gameSceneInstance then
 			gameSceneInstance = GameScene()
 			scene(gameSceneInstance)
@@ -88,57 +88,57 @@ function love.draw()
 			gameSceneInstance:draw()
 			drawF3MainGame()
 		end
-		prof.pop("DrawGameScene")
+		_JPROFILER.pop("DrawGameScene")
 	end
 
 	if gamestate == "MainMenuSettings" then
-		prof.push("drawMainMenuSettings")
+		_JPROFILER.push("drawMainMenuSettings")
 		drawMainMenuSettings()
-		prof.pop("drawMainMenuSettings")
+		_JPROFILER.pop("drawMainMenuSettings")
 	end
 
 	if gamestate == "MainMenu" then
-		prof.push("drawMainMenu")
+		_JPROFILER.push("drawMainMenu")
 		drawMainMenu()
-		prof.pop("drawMainMenu")
+		_JPROFILER.pop("drawMainMenu")
 	end
 
 	if gamestate == "PlayingGameSettings" then
-		prof.push("drawPlayingMenuSettings")
+		_JPROFILER.push("drawPlayingMenuSettings")
 		drawPlayingMenuSettings()
-		prof.pop("drawPlayingMenuSettings")
+		_JPROFILER.pop("drawPlayingMenuSettings")
 	end
 
-	prof.pop("MainDraw")
-	prof.pop("frame")
+	_JPROFILER.pop("MainDraw")
+	_JPROFILER.pop("frame")
 end
 
 function love.mousemoved(x, y, dx, dy)
-	prof.push("frame")
-	prof.push("Mainmousemoved")
+	_JPROFILER.push("frame")
+	_JPROFILER.push("Mainmousemoved")
 	if gamestate == "PlayingGame" then
-		prof.push("mousemovedDuringGamePlaying")
+		_JPROFILER.push("mousemovedDuringGamePlaying")
 		if gameSceneInstance and gameSceneInstance.mousemoved then
 			gameSceneInstance:mousemoved(x, y, dx, dy)
 		end
-		prof.pop("mousemovedDuringGamePlaying")
+		_JPROFILER.pop("mousemovedDuringGamePlaying")
 	end
-	prof.pop("Mainmousemoved")
-	prof.pop("frame")
+	_JPROFILER.pop("Mainmousemoved")
+	_JPROFILER.pop("frame")
 end
 
 function love.keypressed(k)
-	prof.push("frame")
-	prof.push("MainKeypressed")
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MainKeypressed")
 	if gamestate == "MainMenu" then
-		prof.push("keysinitMainMenu")
+		_JPROFILER.push("keysinitMainMenu")
 		keysinitMainMenu(k)
-		prof.pop("keysinitMainMenu")
+		_JPROFILER.pop("keysinitMainMenu")
 	end
 	if gamestate == "MainMenuSettings" then
-		prof.push("keysinitMainMenuSettings")
+		_JPROFILER.push("keysinitMainMenuSettings")
 		keysinitMainMenuSettings(k)
-		prof.pop("keysinitMainMenuSettings")
+		_JPROFILER.pop("keysinitMainMenuSettings")
 	end
 	if gamestate == "PlayingGame" then
 		if k == "escape" then
@@ -146,28 +146,28 @@ function love.keypressed(k)
 		end
 	end
 	if gamestate == "GamePausing" then
-		prof.push("keysinitGamePlayingPauseMenu")
+		_JPROFILER.push("keysinitGamePlayingPauseMenu")
 		keysinitGamePlayingPauseMenu(k)
-		prof.pop("keysinitGamePlayingPauseMenu")
+		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
 	end
 	if gamestate == "PlayingGameSettings" then
-		prof.push("keysinitPlayingMenuSettings")
+		_JPROFILER.push("keysinitPlayingMenuSettings")
 		keysinitPlayingMenuSettings(k)
-		prof.pop("keysinitPlayingMenuSettings")
+		_JPROFILER.pop("keysinitPlayingMenuSettings")
 	end
-	prof.pop("MainKeypressed")
-	prof.pop("frame")
+	_JPROFILER.pop("MainKeypressed")
+	_JPROFILER.pop("frame")
 end
 
 function love.resize(w, h)
-	prof.push("frame")
-	prof.push("Mainresize")
+	_JPROFILER.push("frame")
+	_JPROFILER.push("Mainresize")
 	g3d.camera.aspectRatio = w / h
 	g3d.camera.updateProjectionMatrix()
-	prof.pop("Mainresize")
-	prof.pop("frame")
+	_JPROFILER.pop("Mainresize")
+	_JPROFILER.pop("frame")
 end
 
 function love.quit()
-	prof.write("prof.mpack")
+	_JPROFILER.write("_JPROFILER.mpack")
 end

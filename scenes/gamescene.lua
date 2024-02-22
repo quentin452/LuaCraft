@@ -70,28 +70,28 @@ function GameScene:init()
 end
 
 function GameScene:addThing(thing)
-	prof.push("GameScene:addThing")
+	_JPROFILER.push("GameScene:addThing")
 	if not thing then
 		return
 	end
 	table.insert(self.thingList, thing)
-	prof.pop("GameScene:addThing")
+	_JPROFILER.pop("GameScene:addThing")
 	return thing
 end
 
 function GameScene:removeThing(index)
-	prof.push("GameScene:removeThing")
+	_JPROFILER.push("GameScene:removeThing")
 	if not index then
 		return
 	end
 	local thing = self.thingList[index]
 	table.remove(self.thingList, index)
-	prof.pop("GameScene:removeThing")
+	_JPROFILER.pop("GameScene:removeThing")
 	return thing
 end
 
 local function updateChunk(self, x, y, z)
-	prof.push("updateChunk")
+	_JPROFILER.push("updateChunk")
 	x = x + math.floor(g3d.camera.position[1] / size)
 	y = y + math.floor(g3d.camera.position[2] / size)
 	z = z + math.floor(g3d.camera.position[3] / size)
@@ -111,14 +111,14 @@ local function updateChunk(self, x, y, z)
 		self:requestRemesh(self.chunkMap[("%d/%d/%d"):format(x, y, z + 1)])
 		self:requestRemesh(self.chunkMap[("%d/%d/%d"):format(x, y, z - 1)])
 	end
-	prof.pop("updateChunk")
+	_JPROFILER.pop("updateChunk")
 end
 
 function GameScene:update(dt)
-	prof.push("GameScene:update(ALL)")
+	_JPROFILER.push("GameScene:update(ALL)")
 	-- update all the things in the scene
 	-- remove the dead things
-	prof.push("GameScene:update(RemoveDeadThings)")
+	_JPROFILER.push("GameScene:update(RemoveDeadThings)")
 	local i = 1
 	while i <= #self.thingList do
 		local thing = self.thingList[i]
@@ -129,10 +129,10 @@ function GameScene:update(dt)
 			self:removeThing(i)
 		end
 	end
-	prof.pop("GameScene:update(RemoveDeadThings)")
+	_JPROFILER.pop("GameScene:update(RemoveDeadThings)")
 
 	-- collect mouse inputs
-	prof.push("GameScene:update(DIVERS)")
+	_JPROFILER.push("GameScene:update(DIVERS)")
 
 	wasLeftDown, wasRightDown = leftDown, rightDown
 	leftDown, rightDown = love.mouse.isDown(1), love.mouse.isDown(2)
@@ -140,10 +140,10 @@ function GameScene:update(dt)
 
 	self.updatedThisFrame = true
 	g3d.camera.firstPersonMovement(dt)
-	prof.pop("GameScene:update(DIVERS)")
+	_JPROFILER.pop("GameScene:update(DIVERS)")
 
 	-- generate a "bubble" of loaded chunks around the camera
-	prof.push("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
+	_JPROFILER.push("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 	local bubbleWidth = renderDistance
 	local bubbleHeight = math.floor(renderDistance * 0.75)
 	local creationLimit = 1
@@ -163,10 +163,10 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	prof.pop("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
+	_JPROFILER.pop("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 
 	-- count how many threads are being used right now
-	prof.push("GameScene:update(THREADSCOUNTS)")
+	_JPROFILER.push("GameScene:update(THREADSCOUNTS)")
 	local threadusage = 0
 	for _, thread in ipairs(threadpool) do
 		if thread:isRunning() then
@@ -176,10 +176,10 @@ function GameScene:update(dt)
 		local err = thread:getError()
 		assert(not err, err)
 	end
-	prof.pop("GameScene:update(THREADSCOUNTS)")
+	_JPROFILER.pop("GameScene:update(THREADSCOUNTS)")
 
 	-- listen for finished meshes on the thread channels
-	prof.push("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
+	_JPROFILER.push("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
 	for channel, chunk in pairs(threadchannels) do
 		local data = love.thread.getChannel(channel):pop()
 		if data then
@@ -197,9 +197,9 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	prof.pop("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
+	_JPROFILER.pop("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
 
-	prof.push("GameScene:update(REMESHTHECHUNKINQUEUE)")
+	_JPROFILER.push("GameScene:update(REMESHTHECHUNKINQUEUE)")
 	-- remesh the chunks in the queue
 	-- NOTE: if this happens multiple times in a frame, weird things can happen? idk why
 	if threadusage < #threadpool and #self.remeshQueue > 0 then
@@ -243,11 +243,11 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	prof.pop("GameScene:update(REMESHTHECHUNKINQUEUE)")
+	_JPROFILER.pop("GameScene:update(REMESHTHECHUNKINQUEUE)")
 	-- left click to destroy blocks
 	-- casts a ray from the camera five blocks in the look vector
 	-- finds the first intersecting block
-	prof.push("GameScene:update(LEFTCLICK)")
+	_JPROFILER.push("GameScene:update(LEFTCLICK)")
 	local vx, vy, vz = g3d.camera.getLookVector()
 	local x, y, z = g3d.camera.position[1], g3d.camera.position[2], g3d.camera.position[3]
 	local step = 0.1
@@ -298,9 +298,9 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	prof.pop("GameScene:update(LEFTCLICK)")
+	_JPROFILER.pop("GameScene:update(LEFTCLICK)")
 
-	prof.push("GameScene:update(RIGHTCLICK)")
+	_JPROFILER.push("GameScene:update(RIGHTCLICK)")
 	-- right click to place blocks
 	if rightClick and buildx then
 		local chunk = self:getChunkFromWorld(buildx, buildy, buildz)
@@ -331,9 +331,9 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	prof.pop("GameScene:update(RIGHTCLICK)")
+	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
 
-	prof.pop("GameScene:update(ALL)")
+	_JPROFILER.pop("GameScene:update(ALL)")
 end
 
 function GameScene:mousemoved(x, y, dx, dy)
@@ -341,7 +341,7 @@ function GameScene:mousemoved(x, y, dx, dy)
 end
 
 function GameScene:draw()
-	prof.push("GameScene:draw")
+	_JPROFILER.push("GameScene:draw")
 	lg.clear(lume.color("#4488ff"))
 
 	-- draw all the things in the scene
@@ -373,39 +373,39 @@ function GameScene:draw()
 		ProFi:stop()
 		ProFi:writeReport("report.txt")
 	end
-	prof.pop("GameScene:draw")
+	_JPROFILER.pop("GameScene:draw")
 end
 
 function GameScene:getChunkFromWorld(x, y, z)
-	prof.push("GameScene:getChunkFromWorld")
+	_JPROFILER.push("GameScene:getChunkFromWorld")
 	local floor = math.floor
-	prof.pop("GameScene:getChunkFromWorld")
+	_JPROFILER.pop("GameScene:getChunkFromWorld")
 	return self.chunkMap[("%d/%d/%d"):format(floor(x / size), floor(y / size), floor(z / size))]
 end
 
 function GameScene:getBlockFromWorld(x, y, z)
-	prof.push("GameScene:getBlockFromWorld")
+	_JPROFILER.push("GameScene:getBlockFromWorld")
 	local floor = math.floor
 	local chunk = self.chunkMap[("%d/%d/%d"):format(floor(x / size), floor(y / size), floor(z / size))]
 	if chunk then
 		return chunk:getBlock(x % size, y % size, z % size)
 	end
-	prof.pop("GameScene:getBlockFromWorld")
+	_JPROFILER.pop("GameScene:getBlockFromWorld")
 	return -1
 end
 
 function GameScene:setBlockFromWorld(x, y, z, value)
-	prof.push("GameScene:setBlockFromWorld")
+	_JPROFILER.push("GameScene:setBlockFromWorld")
 	local floor = math.floor
 	local chunk = self.chunkMap[("%d/%d/%d"):format(floor(x / size), floor(y / size), floor(z / size))]
 	if chunk then
 		chunk:setBlock(x % size, y % size, z % size, value)
 	end
-	prof.pop("GameScene:setBlockFromWorld")
+	_JPROFILER.pop("GameScene:setBlockFromWorld")
 end
 
 function GameScene:requestRemesh(chunk, first)
-	--prof.push("GameScene:requestRemesh")
+	--_JPROFILER.push("GameScene:requestRemesh")
 	-- don't add a nil chunk or a chunk that's already in the queue
 	if not chunk then
 		return
@@ -446,7 +446,7 @@ function GameScene:requestRemesh(chunk, first)
 	else
 		table.insert(self.remeshQueue, chunk)
 	end
-	--prof.pop("GameScene:requestRemesh")
+	--_JPROFILER.pop("GameScene:requestRemesh")
 end
 
 function GameScene:destroy()

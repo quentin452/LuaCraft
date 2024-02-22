@@ -6,7 +6,7 @@ local colorMap = {
 }
 
 function drawColorString(Pstring, Px, Py)
-	prof.push("drawColorString")
+	_JPROFILER.push("drawColorString")
 	local rx, ry = Px, Py
 	local defaultColor = { 255, 255, 255 }
 	local currentColor = defaultColor
@@ -31,5 +31,5 @@ function drawColorString(Pstring, Px, Py)
 		end
 	end
 
-	prof.pop("drawColorString")
+	_JPROFILER.pop("drawColorString")
 end

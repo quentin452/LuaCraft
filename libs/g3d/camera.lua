@@ -30,14 +30,14 @@ local fpsController = {
 
 -- read-only variables, can't be set by the end user
 function camera.getDirectionPitch()
-	prof.push("camera.getDirectionPitch")
-	prof.pop("camera.getDirectionPitch")
+	_JPROFILER.push("camera.getDirectionPitch")
+	_JPROFILER.pop("camera.getDirectionPitch")
 	return fpsController.direction, fpsController.pitch
 end
 
 -- convenient function to return the camera's normalized look vector
 function camera.getLookVector()
-	--prof.push("camera.getLookVector")
+	--_JPROFILER.push("camera.getLookVector")
 
 	local vx = camera.target[1] - camera.position[1]
 	local vy = camera.target[2] - camera.position[2]
@@ -48,13 +48,13 @@ function camera.getLookVector()
 	if length > 0 then
 		return vx / length, vy / length, vz / length
 	end
-	--prof.pop("camera.getLookVector")
+	--_JPROFILER.pop("camera.getLookVector")
 	return vx, vy, vz
 end
 
 -- give the camera a point to look from and a point to look towards
 function camera.lookAt(x, y, z, xAt, yAt, zAt)
-	prof.push("camera.lookAt")
+	_JPROFILER.push("camera.lookAt")
 
 	camera.position[1] = x
 	camera.position[2] = y
@@ -70,12 +70,12 @@ function camera.lookAt(x, y, z, xAt, yAt, zAt)
 
 	-- update the camera in the shader
 	camera.updateViewMatrix()
-	prof.pop("camera.lookAt")
+	_JPROFILER.pop("camera.lookAt")
 end
 
 -- move and rotate the camera, given a point and a direction and a pitch (vertical direction)
 function camera.lookInDirection(x, y, z, directionTowards, pitchTowards)
-	prof.push("camera.lookInDirection")
+	_JPROFILER.push("camera.lookInDirection")
 
 	camera.position[1] = x or camera.position[1]
 	camera.position[2] = y or camera.position[2]
@@ -98,26 +98,26 @@ function camera.lookInDirection(x, y, z, directionTowards, pitchTowards)
 
 	-- update the camera in the shader
 	camera.updateViewMatrix()
-	prof.pop("camera.lookInDirection")
+	_JPROFILER.pop("camera.lookInDirection")
 end
 
 -- recreate the camera's view matrix from its current values
 function camera.updateViewMatrix()
-	--prof.push("camera.updateViewMatrix")
+	--_JPROFILER.push("camera.updateViewMatrix")
 	camera.viewMatrix:setViewMatrix(camera.position, camera.target, camera.up)
-	--prof.pop("camera.updateViewMatrix")
+	--_JPROFILER.pop("camera.updateViewMatrix")
 end
 
 -- recreate the camera's projection matrix from its current values
 function camera.updateProjectionMatrix()
-	--	prof.push("camera.updateProjectionMatrix")
+	--	_JPROFILER.push("camera.updateProjectionMatrix")
 	camera.projectionMatrix:setProjectionMatrix(camera.fov, camera.nearClip, camera.farClip, camera.aspectRatio)
-	--prof.pop("camera.updateProjectionMatrix")
+	--_JPROFILER.pop("camera.updateProjectionMatrix")
 end
 
 -- recreate the camera's orthographic projection matrix from its current values
 function camera.updateOrthographicMatrix(size)
-	prof.push("camera.updateOrthographicMatrix")
+	_JPROFILER.push("camera.updateOrthographicMatrix")
 	camera.projectionMatrix:setOrthographicMatrix(
 		camera.fov,
 		size or 5,
@@ -125,13 +125,13 @@ function camera.updateOrthographicMatrix(size)
 		camera.farClip,
 		camera.aspectRatio
 	)
-	prof.pop("camera.updateOrthographicMatrix")
+	_JPROFILER.pop("camera.updateOrthographicMatrix")
 end
 
 -- simple first person camera movement with WASD
 -- put this local function in your love.update to use, passing in dt
 function camera.firstPersonMovement(dt)
-	prof.push("camera.firstPersonMovement")
+	_JPROFILER.push("camera.firstPersonMovement")
 	-- collect inputs
 	local moveX, moveY = 0, 0
 	local cameraMoved = false
@@ -171,12 +171,12 @@ function camera.firstPersonMovement(dt)
 	if cameraMoved then
 		camera.lookInDirection()
 	end
-	prof.pop("camera.firstPersonMovement")
+	_JPROFILER.pop("camera.firstPersonMovement")
 end
 
 -- use this in your love.mousemoved function, passing in the movements
 function camera.firstPersonLook(dx, dy)
-	prof.push("camera.firstPersonLook")
+	_JPROFILER.push("camera.firstPersonLook")
 
 	-- capture the mouse
 	love.mouse.setRelativeMode(true)
@@ -192,7 +192,7 @@ function camera.firstPersonLook(dx, dy)
 		fpsController.direction,
 		fpsController.pitch
 	)
-	prof.pop("camera.firstPersonLook")
+	_JPROFILER.pop("camera.firstPersonLook")
 end
 
 return camera

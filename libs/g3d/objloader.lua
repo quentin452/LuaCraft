@@ -9,8 +9,8 @@
 -- give path of file
 -- returns a lua table representation
 return function(path, uFlip, vFlip)
-	prof.push("frame")
-	prof.push("ObjLoader")
+	_JPROFILER.push("frame")
+	_JPROFILER.push("ObjLoader")
 	local positions, uvs, normals = {}, {}, {}
 	local result = {}
 
@@ -85,7 +85,7 @@ return function(path, uFlip, vFlip)
 			end
 		end
 	end
-	prof.pop("ObjLoader")
-	prof.pop("frame")
+	_JPROFILER.pop("ObjLoader")
+	_JPROFILER.pop("frame")
 	return result
 end
