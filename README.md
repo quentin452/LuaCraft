@@ -11,6 +11,8 @@ g3d_voxel : https://github.com/groverburger/g3d_voxel/tree/master/lib
 
 jprof : https://github.com/pfirsich/jprof
 
+ProFi : https://gist.github.com/perky/2838755
+
 # Recommanded love2d fork to use : 
 
 love2dfork : https://github.com/quentin452/love-experiments
