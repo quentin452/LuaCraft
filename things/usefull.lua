@@ -6,6 +6,7 @@ local colorMap = {
 }
 
 function drawColorString(Pstring, Px, Py)
+	prof.push("drawColorString")
 	local rx, ry = Px, Py
 	local defaultColor = { 255, 255, 255 }
 	local currentColor = defaultColor
@@ -29,5 +30,6 @@ function drawColorString(Pstring, Px, Py)
 			i = i + 1
 		end
 	end
-end
 
+	prof.pop("drawColorString")
+end

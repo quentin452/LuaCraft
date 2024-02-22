@@ -15,10 +15,10 @@
 --]]
 
 g3d = {
-    _VERSION     = "g3d 1.5.2",
-    _DESCRIPTION = "Simple and easy 3D engine for LÖVE.",
-    _URL         = "https://github.com/groverburger/g3d",
-    _LICENSE     = [[
+	_VERSION = "g3d 1.5.2",
+	_DESCRIPTION = "Simple and easy 3D engine for LÖVE.",
+	_URL = "https://github.com/groverburger/g3d",
+	_LICENSE = [[
         MIT License
 
         Copyright (c) 2022 groverburger
@@ -41,10 +41,9 @@ g3d = {
         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         SOFTWARE.
     ]],
-    path = ...,
-    shaderpath = (...):gsub("%.", "/") .. "/g3d.vert",
+	path = ...,
+	shaderpath = (...):gsub("%.", "/") .. "/g3d.vert",
 }
-
 -- the shader is what does the heavy lifting, displaying 3D meshes on your 2D monitor
 g3d.shader = love.graphics.newShader(g3d.shaderpath)
 g3d.newModel = require(g3d.path .. ".model")

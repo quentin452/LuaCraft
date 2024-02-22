@@ -44,6 +44,7 @@ function drawGamePlayingPauseMenu()
 end
 
 function keysinitGamePlayingPauseMenu(k)
+	prof.push("keysinitGamePlayingPauseMenu")
 	if type(_GamePlayingPauseMenu.choice) == "table" and _GamePlayingPauseMenu.selection then
 		if k == "s" then
 			if _GamePlayingPauseMenu.selection < #_GamePlayingPauseMenu.choice then
@@ -67,6 +68,7 @@ function keysinitGamePlayingPauseMenu(k)
 			end
 		end
 	end
+	prof.pop("keysinitGamePlayingPauseMenu")
 end
 function destroyPlayingPauseMenu()
 	_GamePlayingPauseMenu = nil
