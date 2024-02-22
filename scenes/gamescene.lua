@@ -1,7 +1,7 @@
 GameScene = Object:extend()
 local size
 local threadpool = {}
--- chargez quelques threads afin que le meshing du chunk ne bloque pas le thread principal
+-- load up some threads so that chunk meshing won't block the main thread
 for i = 1, 8 do
 	threadpool[i] = love.thread.newThread("libs/chunkremesh.lua")
 end
