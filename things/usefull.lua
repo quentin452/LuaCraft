@@ -33,3 +33,27 @@ function drawColorString(Pstring, Px, Py)
 
 	_JPROFILER.pop("drawColorString")
 end
+
+function setFont()
+	_JPROFILER.push("setFont")
+	if gamestate == "MainMenu" then
+		_font = love.graphics.newFont(25)
+	end
+	if gamestate == "MainMenuSettings" then
+		_font = love.graphics.newFont(25)
+	end
+	if gamestate == "WorldCreationMenu" then
+		_font = love.graphics.newFont(15)
+	end
+	if gamestate == "PlayingGame" then
+		_font = love.graphics.newFont(15)
+	end
+	if gamestate == "GamePausing" then
+		_font = love.graphics.newFont(25)
+	end
+	if gamestate == "PlayingGameSettings" then
+		_font = love.graphics.newFont(25)
+	end
+	love.graphics.setFont(_font)
+	_JPROFILER.pop("setFont")
+end

@@ -3,7 +3,7 @@ _Mainmenu.x = 50
 _Mainmenu.y = 50
 _Mainmenu.title = "LuaCraft"
 _Mainmenu.choice = {}
-_Mainmenu.choice[1] = "%2Play Game%0"
+_Mainmenu.choice[1] = "%2World Creation Menu%0"
 _Mainmenu.choice[2] = "Settings"
 _Mainmenu.choice[3] = "Exit"
 _Mainmenu.selection = 1
@@ -14,10 +14,6 @@ function drawMainMenu()
 	local scaleY = h / mainMenuBackground:getHeight()
 
 	love.graphics.draw(mainMenuBackground, 0, 0, 0, scaleX, scaleY)
-
-	_font = love.graphics.newFont(25)
-	love.graphics.setFont(_font)
-	-- Main menu rendering code here
 
 	local posY = _Mainmenu.y
 	local lineHeight = _font:getHeight("X")
@@ -56,9 +52,7 @@ function keysinitMainMenu(k)
 			end
 		elseif k == "return" then
 			if _Mainmenu.selection == 1 then
-				gamestate = "PlayingGame"
-				_font = love.graphics.newFont(15)
-				love.graphics.setFont(_font)
+				gamestate = "WorldCreationMenu"
 			elseif _Mainmenu.selection == 2 then
 				gamestate = "MainMenuSettings"
 			elseif _Mainmenu.selection == 3 then

@@ -14,9 +14,6 @@ function drawPlayingMenuSettings()
 	local scaleY = h / playinggamesettings:getHeight()
 
 	love.graphics.draw(playinggamesettings, 0, 0, 0, scaleX, scaleY)
-	_font = love.graphics.newFont(25)
-	love.graphics.setFont(_font)
-	-- Main menu rendering code here
 
 	local posY = _PlayingGameSettings.y
 	local lineHeight = _font:getHeight("X")
@@ -74,12 +71,9 @@ function keysinitPlayingMenuSettings(k)
 				toggleVSync()
 			elseif _PlayingGameSettings.selection == 2 then
 				renderdistanceSetting()
-				print(globalRenderDistance)
 			elseif _PlayingGameSettings.selection == 3 then
 				gamestate = "PlayingGame"
 				_PlayingGameSettings.selection = 0
-				_font = love.graphics.newFont(15)
-				love.graphics.setFont(_font)
 			end
 		end
 	end

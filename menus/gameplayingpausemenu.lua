@@ -14,9 +14,6 @@ function drawGamePlayingPauseMenu()
 	local scaleY = h / gameplayingpausemenu:getHeight()
 
 	love.graphics.draw(gameplayingpausemenu, 0, 0, 0, scaleX, scaleY)
-	_font = love.graphics.newFont(25)
-	love.graphics.setFont(_font)
-	-- Main menu rendering code here
 
 	local posY = _GamePlayingPauseMenu.y
 	local lineHeight = _font:getHeight("X")
@@ -57,8 +54,6 @@ function keysinitGamePlayingPauseMenu(k)
 		elseif k == "return" then
 			if _GamePlayingPauseMenu.selection == 1 then
 				gamestate = "PlayingGame"
-				_font = love.graphics.newFont(15)
-				love.graphics.setFont(_font)
 			elseif _GamePlayingPauseMenu.selection == 2 then
 				gamestate = "PlayingGameSettings"
 			elseif _GamePlayingPauseMenu.selection == 3 then

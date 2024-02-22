@@ -14,6 +14,7 @@ require("menus/mainmenu")
 require("menus/mainmenusettings")
 require("menus/gameplayingpausemenu")
 require("menus/playinggamesettings")
+require("menus/worldcreationmenu")
 --HUD
 require("hud/gamehud")
 --things
@@ -32,17 +33,19 @@ _JPROFILER = require("libs/jprofiler/jprof")
 
 gamestate = "MainMenu"
 _font = nil
+gameSceneInstance = nil
+globalRenderDistance = nil
+
+enableProfiler = false
+
+--Backgrounds
 mainMenuBackground = nil
 mainMenuSettingsBackground = nil
 gameplayingpausemenu = nil
 playinggamesettings = nil
-gameSceneInstance = nil
-
-enableProfiler = false
+worldCreationBackground = nil
 
 globalVSync = love.window.getVSync()
-
-globalRenderDistance = nil -- Valeur par défaut
 
 function toggleVSync()
 	globalVSync = not globalVSync
@@ -102,6 +105,7 @@ function love.load()
 	mainMenuSettingsBackground = love.graphics.newImage("assets/backgrounds/Mainmenusettingsbackground.png")
 	gameplayingpausemenu = love.graphics.newImage("assets/backgrounds/gameplayingpausemenu.png")
 	playinggamesettings = love.graphics.newImage("assets/backgrounds/playinggamesettings.png")
+	worldCreationBackground = love.graphics.newImage("assets/backgrounds/WorldCreationBackground.png")
 
 	if love.filesystem.getInfo("config.conf") then
 		local content, size = love.filesystem.read("config.conf")
@@ -143,13 +147,18 @@ end
 function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
+	setFont()
 
 	if gamestate == "GamePausing" then
 		_JPROFILER.push("drawGamePlayingPauseMenu")
 		drawGamePlayingPauseMenu()
 		_JPROFILER.pop("drawGamePlayingPauseMenu")
 	end
-
+	if gamestate == "WorldCreationMenu" then
+		_JPROFILER.push("drawWorldCreationMenu")
+		drawWorldCreationMenu()
+		_JPROFILER.pop("drawWorldCreationMenu")
+	end
 	if gamestate == "PlayingGame" then
 		_JPROFILER.push("DrawGameScene")
 		if not gameSceneInstance then
@@ -211,6 +220,11 @@ function love.keypressed(k)
 		_JPROFILER.push("keysinitMainMenuSettings")
 		keysinitMainMenuSettings(k)
 		_JPROFILER.pop("keysinitMainMenuSettings")
+	end
+	if gamestate == "WorldCreationMenu" then
+		_JPROFILER.push("keysInitWorldCreationMenu")
+		keysInitWorldCreationMenu(k)
+		_JPROFILER.pop("keysInitWorldCreationMenu")
 	end
 	if gamestate == "PlayingGame" then
 		if k == "escape" then
