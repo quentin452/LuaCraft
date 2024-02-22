@@ -9,7 +9,7 @@ local threadchannels = {}
 local texturepack = lg.newImage("assets/texturepack.png")
 local wasLeftDown, wasRightDown, rightDown, leftDown
 
-local renderDistance = 5
+renderDistance = 5
 
 -- create the mesh for the block cursor
 local blockCursor, blockCursorVisible
@@ -334,6 +334,7 @@ function GameScene:update(dt)
 	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
 
 	_JPROFILER.pop("GameScene:update(ALL)")
+	--TODO here add periodic chunk saving system
 end
 
 function GameScene:mousemoved(x, y, dx, dy)
@@ -350,14 +351,17 @@ function GameScene:draw()
 	end
 
 	lg.setColor(1, 1, 1)
-	for hash, chunk in pairs(self.chunkMap) do
-		chunk:draw()
+	for _, chunk in pairs(self.chunkMap) do
+		-- Calculate the distance between the chunk and the camera
+		local dist = math.sqrt(
+			(chunk.x - g3d.camera.position[1]) ^ 2
+				+ (chunk.y - g3d.camera.position[2]) ^ 2
+				+ (chunk.z - g3d.camera.position[3]) ^ 2
+		)
 
-		if self.updatedThisFrame then
-			chunk.frames = chunk.frames + 1
-			if chunk.frames > 100 then
-				chunk:destroy()
-			end
+		if dist <= renderDistance * Chunk.size then
+			-- Draw chunks only in the render distance 
+			chunk:draw()
 		end
 	end
 
@@ -420,22 +424,14 @@ function GameScene:requestRemesh(chunk, first)
 	local key5 = formatStr:format(x, y, z + 1)
 	local key6 = formatStr:format(x, y, z - 1)
 
-	if not self.chunkMap[key1] then
-		return
-	end
-	if not self.chunkMap[key2] then
-		return
-	end
-	if not self.chunkMap[key3] then
-		return
-	end
-	if not self.chunkMap[key4] then
-		return
-	end
-	if not self.chunkMap[key5] then
-		return
-	end
-	if not self.chunkMap[key6] then
+	if
+		not self.chunkMap[key1]
+		or not self.chunkMap[key2]
+		or not self.chunkMap[key3]
+		or not self.chunkMap[key4]
+		or not self.chunkMap[key5]
+		or not self.chunkMap[key6]
+	then
 		return
 	end
 

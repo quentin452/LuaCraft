@@ -43,30 +43,29 @@ enableProfiler = false
 globalVSync = love.window.getVSync()
 
 function toggleVSync()
-    globalVSync = not globalVSync
-    love.window.setVSync(globalVSync and 1 or 0)
-    love.filesystem.write("config.conf", "vsync=" .. (globalVSync and "1" or "0"))
+	globalVSync = not globalVSync
+	love.window.setVSync(globalVSync and 1 or 0)
+	love.filesystem.write("config.conf", "vsync=" .. (globalVSync and "1" or "0"))
 end
 
 function love.load()
-    love.filesystem.setIdentity("LuaCraft")
-    if enableProfiler then
-        ProFi:start()
-    end
-    mainMenuBackground = love.graphics.newImage("assets/backgrounds/MainMenuBackground.png")
-    mainMenuSettingsBackground = love.graphics.newImage("assets/backgrounds/Mainmenusettingsbackground.png")
-    gameplayingpausemenu = love.graphics.newImage("assets/backgrounds/gameplayingpausemenu.png")
-    playinggamesettings = love.graphics.newImage("assets/backgrounds/playinggamesettings.png")
+	love.filesystem.setIdentity("LuaCraft")
+	if enableProfiler then
+		ProFi:start()
+	end
+	mainMenuBackground = love.graphics.newImage("assets/backgrounds/MainMenuBackground.png")
+	mainMenuSettingsBackground = love.graphics.newImage("assets/backgrounds/Mainmenusettingsbackground.png")
+	gameplayingpausemenu = love.graphics.newImage("assets/backgrounds/gameplayingpausemenu.png")
+	playinggamesettings = love.graphics.newImage("assets/backgrounds/playinggamesettings.png")
 
-    if love.filesystem.getInfo("config.conf") then
-        local content, size = love.filesystem.read("config.conf")
-        local vsyncValue = content:match("vsync=(%d)")
-        if vsyncValue then
-            love.window.setVSync(tonumber(vsyncValue))
-        end
-    end
+	if love.filesystem.getInfo("config.conf") then
+		local content, size = love.filesystem.read("config.conf")
+		local vsyncValue = content:match("vsync=(%d)")
+		if vsyncValue then
+			love.window.setVSync(tonumber(vsyncValue))
+		end
+	end
 end
-
 
 function love.update(dt)
 	_JPROFILER.push("frame")
