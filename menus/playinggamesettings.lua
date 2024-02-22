@@ -34,8 +34,12 @@ function drawPlayingMenuSettings()
 		end
 
 		local choiceText = _PlayingGameSettings.choice[n]
-		if n == 1 and globalVSync then
-			choiceText = choiceText .. " X"
+		-- Ajout de la condition pour activer ou désactiver le "X"
+		if n == 1 then
+			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%d)")
+			if vsyncValue and tonumber(vsyncValue) == 1 then
+				choiceText = choiceText .. " X"
+			end
 		end
 
 		drawColorString(marque .. "" .. choiceText, _PlayingGameSettings.x, posY)
@@ -61,8 +65,7 @@ function keysinitPlayingMenuSettings(k)
 			end
 		elseif k == "return" then
 			if _PlayingGameSettings.selection == 1 then
-				globalVSync = not globalVSync
-				love.window.setVSync(globalVSync)
+				toggleVSync()
 			elseif _PlayingGameSettings.selection == 2 then
 				gamestate = "PlayingGame"
 				_PlayingGameSettings.selection = 0

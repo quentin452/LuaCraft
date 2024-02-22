@@ -34,8 +34,11 @@ function drawMainMenuSettings()
 		end
 
 		local choiceText = _MainMenuSettings.choice[n]
-		if n == 1 and globalVSync then
-			choiceText = choiceText .. " X"
+		if n == 1 then
+			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%d)")
+			if vsyncValue and tonumber(vsyncValue) == 1 then
+				choiceText = choiceText .. " X"
+			end
 		end
 
 		drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
@@ -61,8 +64,7 @@ function keysinitMainMenuSettings(k)
 			end
 		elseif k == "return" then
 			if _MainMenuSettings.selection == 1 then
-				globalVSync = not globalVSync
-				love.window.setVSync(globalVSync)
+				toggleVSync() 
 			elseif _MainMenuSettings.selection == 2 then
 				gamestate = "MainMenu"
 				_MainMenuSettings.selection = 0
