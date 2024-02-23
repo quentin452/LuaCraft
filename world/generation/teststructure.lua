@@ -1,7 +1,3 @@
---todo add StructureMap to prevent multiple structures getting generated at same place
-
-pillargeneratedatfixedposition = 0
-
 --TODO add documentation to make structures
 --TODO made mod loader....
 --TODO made a better structure (in the code) to make easier to register structures
@@ -30,22 +26,21 @@ end
 
 function generatePillarAtFixedPosition(scene, x, y, z, value)
 	_JPROFILER.push("GameScene:update(generatePillarAtFixedPosition)")
-	if pillargeneratedatfixedposition == 1 then
-		return
-	end
+
 	local size = y + 1
 	local floor = math.floor
 	local chunkX, chunkY, chunkZ = floor(x / size), floor(y / size), floor(z / size)
-	local chunk = scene.chunkMap[("%d/%d/%d"):format(chunkX, chunkY, chunkZ)]
+	local chunkKey = ("%d/%d/%d"):format(chunkX, chunkY, chunkZ)
+
+	local chunk = scene.chunkMap[chunkKey]
 
 	if chunk then
-		print("Chunk is present at", chunkX, chunkY, chunkZ)
 		for posZ = 0, size - 1 do
 			scene:setBlockFromWorld(x, y, z + posZ, value)
 		end
-	else
-		print("No chunk at", chunkX, chunkY, chunkZ)
+		local blockKey = ("%d/%d/%d"):format(x, y, z)
+		StructureMap[blockKey] = true
 	end
-	pillargeneratedatfixedposition = pillargeneratedatfixedposition + 1
+
 	_JPROFILER.pop("GameScene:update(generatePillarAtFixedPosition)")
 end

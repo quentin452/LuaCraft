@@ -329,11 +329,10 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	local chunkX, chunkY, chunkZ = floor(0 / size), floor(160 / size), floor(15 / size)
-	if isChunkFullyGenerated(self, chunkX, chunkY, chunkZ) then
-		generatePillarAtFixedPosition(self, 0, 160, 15, 1)
-	else
-		print("Chunk is not fully generated yet.")
+	--TODO remove this check
+	local chunkX, chunkY, chunkZ = floor(0 / size), floor(40 / size), floor(15 / size)
+	if isChunkFullyGenerated(self, chunkX, chunkY, chunkZ) and not isBlockLocationFullyGenerated( x, y, z) then
+		generatePillarAtFixedPosition(self, 0, 40, 15, 1)
 	end
 
 	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
@@ -342,8 +341,16 @@ function GameScene:update(dt)
 	--TODO here add periodic chunk saving system
 end
 
+StructureMap = {}
+
+function isBlockLocationFullyGenerated(x, y, z)
+	local blockKey = ("%d/%d/%d"):format(x, y, z)
+	return StructureMap[blockKey]
+end
+
 function isChunkFullyGenerated(scene, chunkX, chunkY, chunkZ)
-	local chunk = scene.chunkMap[("%d/%d/%d"):format(chunkX, chunkY, chunkZ)]
+	local chunk = scene:getChunkFromWorld(chunkX, chunkY, chunkZ)
+		and scene.chunkMap[("%d/%d/%d"):format(chunkX, chunkY, chunkZ)]
 	if chunk and chunk.data then
 		return true
 	else
