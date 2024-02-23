@@ -16,7 +16,7 @@ function drawPlayingMenuSettings()
 	love.graphics.draw(playinggamesettings, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _PlayingGameSettings.y
-	local lineHeight = _font:getHeight("X")
+	local lineHeight = font25:getHeight("X")
 
 	-- Title Screen
 	drawColorString(_PlayingGameSettings.title, _PlayingGameSettings.x, posY)

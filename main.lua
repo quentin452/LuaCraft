@@ -32,7 +32,6 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
 
 gamestate = "MainMenu"
-_font = nil
 gameSceneInstance = nil
 globalRenderDistance = nil
 

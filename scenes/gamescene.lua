@@ -146,21 +146,33 @@ function GameScene:update(dt)
 	local bubbleHeight = math.floor(globalRenderDistance * 0.75)
 	local creationLimit = 1
 	self.chunkCreationsThisFrame = 0
+
+	-- Precompute constants outside the loop
+	local pi2 = math.pi * 2
+	local halfPi = math.pi / 2
+
 	for r = 0, bubbleWidth do
-		for a = 0, math.pi * 2, math.pi * 2 / (8 * r) do
-			local h = math.floor(math.cos(r * (math.pi / 2) / bubbleWidth) * bubbleHeight + 0.5)
+		local cosR = math.cos(r * halfPi / bubbleWidth)
+		local h = math.floor(cosR * bubbleHeight + 0.5)
+
+		for a = 0, pi2, pi2 / (8 * r) do
+			local cosA, sinA = math.cos(a), math.sin(a)
+
 			for y = 0, h do
-				local x, z = math.floor(math.cos(a) * r + 0.5), math.floor(math.sin(a) * r + 0.5)
+				local x, z = math.floor(cosA * r + 0.5), math.floor(sinA * r + 0.5)
+
 				if y ~= 0 then
 					updateChunk(self, x, -y, z)
 				end
 				updateChunk(self, x, y, z)
+
 				if self.chunkCreationsThisFrame >= creationLimit then
 					break
 				end
 			end
 		end
 	end
+
 	_JPROFILER.pop("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 
 	-- count how many threads are being used right now
@@ -329,13 +341,14 @@ function GameScene:update(dt)
 			end
 		end
 	end
+	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
+	_JPROFILER.push("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
 	--TODO remove this check
 	local chunkX, chunkY, chunkZ = floor(0 / size), floor(40 / size), floor(15 / size)
-	if isChunkFullyGenerated(self, chunkX, chunkY, chunkZ) and not isBlockLocationFullyGenerated( x, y, z) then
+	if isChunkFullyGenerated(self, chunkX, chunkY, chunkZ) and not isBlockLocationFullyGenerated(x, y, z) then
 		generatePillarAtFixedPosition(self, 0, 40, 15, 1)
 	end
-
-	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
+	_JPROFILER.pop("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
 
 	_JPROFILER.pop("GameScene:update(ALL)")
 	--TODO here add periodic chunk saving system

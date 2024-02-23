@@ -15,7 +15,7 @@ function drawWorldCreationMenu()
 	love.graphics.draw(worldCreationBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _WorldCreationMenu.y
-	local lineHeight = _font:getHeight("X")
+	local lineHeight = font15:getHeight("X")
 
 	-- Title Screen
 	drawColorString(_WorldCreationMenu.title, _WorldCreationMenu.x, posY)

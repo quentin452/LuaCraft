@@ -1,3 +1,6 @@
+font25 = love.graphics.newFont(25)
+font15 = love.graphics.newFont(15)
+
 local colorMap = {
 	["0"] = { 255, 255, 255 }, -- white
 	["1"] = { 255, 0, 0 }, -- red
@@ -26,7 +29,17 @@ function drawColorString(Pstring, Px, Py)
 			i = i + 2 -- skip both '%' and the color digit
 		else
 			love.graphics.print(c, rx, ry)
-			rx = rx + _font:getWidth(c)
+			if
+				gamestate == "MainMenu"
+				or gamestate == "MainMenuSettings"
+				or gamestate == "GamePausing"
+				or gamestate == "PlayingGameSettings"
+			then
+				rx = rx + font25:getWidth(c)
+			end
+			if gamestate == "WorldCreationMenu" or gamestate == "PlayingGame" then
+				rx = rx + font15:getWidth(c)
+			end
 			i = i + 1
 		end
 	end
@@ -36,24 +49,16 @@ end
 
 function setFont()
 	_JPROFILER.push("setFont")
-	if gamestate == "MainMenu" then
-		_font = love.graphics.newFont(25)
+	if
+		gamestate == "MainMenu"
+		or gamestate == "MainMenuSettings"
+		or gamestate == "GamePausing"
+		or gamestate == "PlayingGameSettings"
+	then
+		love.graphics.setFont(font25)
 	end
-	if gamestate == "MainMenuSettings" then
-		_font = love.graphics.newFont(25)
+	if gamestate == "WorldCreationMenu" or gamestate == "PlayingGame" then
+		love.graphics.setFont(font15)
 	end
-	if gamestate == "WorldCreationMenu" then
-		_font = love.graphics.newFont(15)
-	end
-	if gamestate == "PlayingGame" then
-		_font = love.graphics.newFont(15)
-	end
-	if gamestate == "GamePausing" then
-		_font = love.graphics.newFont(25)
-	end
-	if gamestate == "PlayingGameSettings" then
-		_font = love.graphics.newFont(25)
-	end
-	love.graphics.setFont(_font)
 	_JPROFILER.pop("setFont")
 end

@@ -16,7 +16,7 @@ function drawMainMenu()
 	love.graphics.draw(mainMenuBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _Mainmenu.y
-	local lineHeight = _font:getHeight("X")
+	local lineHeight = font25:getHeight("X")
 
 	-- Title Screen
 	drawColorString(_Mainmenu.title, _Mainmenu.x, posY)

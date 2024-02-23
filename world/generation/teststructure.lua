@@ -2,6 +2,7 @@
 --TODO made mod loader....
 --TODO made a better structure (in the code) to make easier to register structures
 --TODO avoid inverting Y and Z axes (need to fix : https://github.com/quentin452/LuaCraft/issues/12)
+--TODO remove this check local chunkX, chunkY, chunkZ = floor(0 / size), floor(40 / size), floor(15 / size) in gamescene.lua
 
 --THIS METHOD IS CORECT
 function generatePillarEveryChunks(chunk, value)
