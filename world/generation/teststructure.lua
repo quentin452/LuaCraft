@@ -27,6 +27,8 @@ function generatePillarEveryChunks(chunk, value)
 end
 
 --THIS METHOD IS CORECT
+
+--TODO NEED TO FIX IF I CALL THE METHOD WITH third parameter at 16 the structure is not generated "generatePillarAtFixedPosition(self, 0, 16, 15, 1)""
 function generatePillarAtFixedPosition(scene, x, y, z, value)
 	_JPROFILER.push("GameScene:update(generatePillarAtFixedPosition)")
 	if pillargeneratedatfixedposition == 1 then
@@ -39,9 +41,12 @@ function generatePillarAtFixedPosition(scene, x, y, z, value)
 	local chunk = scene.chunkMap[("%d/%d/%d"):format(chunkX, chunkY, chunkZ)]
 
 	if chunk then
+		print("Chunk is present at", chunkX, chunkY, chunkZ)
 		for posZ = 0, size - 1 do
 			scene:setBlockFromWorld(x, y, z + posZ, value)
 		end
+	else
+		print("No chunk at", chunkX, chunkY, chunkZ)
 	end
 
 	--print("generatePillarAtFixedPosition", x, y, z)
