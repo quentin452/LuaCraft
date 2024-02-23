@@ -58,7 +58,8 @@ function keysinitGamePlayingPauseMenu(k)
 				gamestate = "PlayingGameSettings"
 			elseif _GamePlayingPauseMenu.selection == 3 then
 				--TODO here add chunk saving system before going to MainMenu
-				gameSceneInstance:destroy()
+				--GameScene:destroy()
+				resetGameScene() -- it seem this made nothing
 				gamestate = "MainMenu"
 				_GamePlayingPauseMenu.selection = 0
 			end

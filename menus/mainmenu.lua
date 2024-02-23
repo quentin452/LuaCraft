@@ -52,6 +52,7 @@ function keysinitMainMenu(k)
 			end
 		elseif k == "return" then
 			if _Mainmenu.selection == 1 then
+				_WorldCreationMenu.selection = 0 --prevent https://github.com/quentin452/LuaCraft/issues/9
 				gamestate = "WorldCreationMenu"
 			elseif _Mainmenu.selection == 2 then
 				gamestate = "MainMenuSettings"

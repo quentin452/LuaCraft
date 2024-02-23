@@ -1,7 +1,7 @@
 _WorldCreationMenu = {}
 _WorldCreationMenu.x = 50
 _WorldCreationMenu.y = 50
-_WorldCreationMenu.title = "Settings"
+_WorldCreationMenu.title = "World Creation Menu"
 _WorldCreationMenu.choice = {}
 _WorldCreationMenu.choice[1] = "Create World?"
 _WorldCreationMenu.choice[2] = "Exiting to main menu"

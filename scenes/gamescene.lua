@@ -450,3 +450,10 @@ function GameScene:destroy()
 	self.chunkCreationsThisFrame = nil
 	gameSceneInstance = nil
 end
+
+function resetGameScene()
+    if gameSceneInstance then
+        gameSceneInstance:destroy()
+        gameSceneInstance = nil
+    end
+end
