@@ -5,7 +5,7 @@ Chunk = Object:extend()
 Chunk.size = size
 
 --Structures
-require("world/generation/teststructure")
+require("src/world/generation/teststructure")
 
 function Chunk:new(x, y, z)
 	_JPROFILER.push("Chunk:new")

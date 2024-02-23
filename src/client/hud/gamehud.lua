@@ -1,6 +1,5 @@
 function drawF3MainGame()
-	local w, h = love.graphics.getDimensions()
-	local font = love.graphics.getFont()
+	local w = love.graphics.getDimensions()
 
 	local camX, camY, camZ = g3d.camera.position[1], g3d.camera.position[2], g3d.camera.position[3]
 	local fpsText = "FPS: " .. tostring(love.timer.getFPS())

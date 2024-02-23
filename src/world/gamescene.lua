@@ -7,7 +7,7 @@ for i = 1, 8 do
 	threadpool[i] = love.thread.newThread("libs/chunkremesh.lua")
 end
 local threadchannels = {}
-local texturepack = lg.newImage("assets/texturepack.png")
+local texturepack = lg.newImage("resources/assets/texturepack.png")
 local wasLeftDown, wasRightDown, rightDown, leftDown
 
 -- create the mesh for the block cursor
@@ -345,7 +345,7 @@ function GameScene:update(dt)
 	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
 	_JPROFILER.push("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
 
-	StructureGenFinal(self,size)
+	StructureGenFinal(self, size)
 
 	_JPROFILER.pop("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
 

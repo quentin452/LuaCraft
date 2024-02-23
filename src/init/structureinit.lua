@@ -1,4 +1,6 @@
 --TODO MADE STRUCTURE GENERATION INTO AN ANOTHER THREAD
+--TODO improve check like isChunkFullyGenerated , IsStructureIsGenerated (by using at the place a isChunkLoaded?????)
+--TODO PROBABLY IN CHUNK script i need to add a timer to avoid generating at infinit time caused by generateStructuresatRandomLocation????
 
 --THIS METHOD IS WORK CORRECTLY BUT HE GENERATE AT INFINITE TIME
 function generateStructuresatRandomLocation(scene, numStructures, value)
@@ -31,7 +33,7 @@ function isPlayerInRange(playerX, playerY, playerZ, structureX, structureY, stru
 end
 
 --THIS METHOD IS WORK CORRECTLY
-function generateStructuresInRange(scene)
+function generateStructuresInPlayerRange(scene)
 	_JPROFILER.push("GameScene:update(generateStructuresInRange)")
 	local playerX, playerY, playerZ = g3d.camera.position[1], g3d.camera.position[2], g3d.camera.position[3]
 
@@ -100,6 +102,6 @@ end
 
 function StructureGenFinal(scene,size)
     generateStructuresatFixedPositions(scene, size)
-	generateStructuresInRange(scene)
+	generateStructuresInPlayerRange(scene)
 	generateStructuresatRandomLocation(scene, 1, 1)
 end

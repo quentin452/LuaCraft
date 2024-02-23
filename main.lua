@@ -2,24 +2,24 @@ lg = love.graphics
 lg.setDefaultFilter("nearest")
 io.stdout:setvbuf("no")
 
---dependencies
+--libs
 g3d = require("libs/g3d")
 lume = require("libs/lume")
 Object = require("libs/classic")
 scene = require("libs/scene")
---scenes
-require("scenes/gamescene")
 --menus
-require("menus/mainmenu")
-require("menus/mainmenusettings")
-require("menus/gameplayingpausemenu")
-require("menus/playinggamesettings")
-require("menus/worldcreationmenu")
---HUD
-require("hud/gamehud")
---things
-require("things/usefull")
-require("things/chunk")
+require("src/menus/mainmenu")
+require("src/menus/mainmenusettings")
+require("src/menus/gameplayingpausemenu")
+require("src/menus/playinggamesettings")
+require("src/menus/worldcreationmenu")
+--client
+require("src/client/hud/gamehud")
+--utils
+require("src/utils/usefull")
+--world
+require("src/world/chunk")
+require("src/world/gamescene")
 --profiling
 ProFi = require("ProFi")
 PROF_CAPTURE = false
@@ -31,7 +31,7 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --4 : open a CMD on Jprofiler (SRC)
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
 --init
-require("init/structureinit")
+require("src/init/structureinit")
 
 gamestate = "MainMenu"
 gameSceneInstance = nil
@@ -104,11 +104,11 @@ function love.load()
 	if enableProfiler then
 		ProFi:start()
 	end
-	mainMenuBackground = love.graphics.newImage("assets/backgrounds/MainMenuBackground.png")
-	mainMenuSettingsBackground = love.graphics.newImage("assets/backgrounds/Mainmenusettingsbackground.png")
-	gameplayingpausemenu = love.graphics.newImage("assets/backgrounds/gameplayingpausemenu.png")
-	playinggamesettings = love.graphics.newImage("assets/backgrounds/playinggamesettings.png")
-	worldCreationBackground = love.graphics.newImage("assets/backgrounds/WorldCreationBackground.png")
+	mainMenuBackground = love.graphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
+	mainMenuSettingsBackground = love.graphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
+	gameplayingpausemenu = love.graphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
+	playinggamesettings = love.graphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
+	worldCreationBackground = love.graphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 
 	if love.filesystem.getInfo("config.conf") then
 		local content, size = love.filesystem.read("config.conf")
