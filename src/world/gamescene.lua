@@ -361,12 +361,10 @@ function IsStructureIsGenerated(x, y, z)
 end
 
 function isChunkFullyGenerated(scene, chunkX, chunkY, chunkZ)
-	_JPROFILER.push("isChunkFullyGenerated")
 	local chunkKey = ("%d/%d/%d"):format(chunkX, chunkY, chunkZ)
 	local chunk = scene.chunkMap[chunkKey]
 
 	if chunk and chunk.data then
-		_JPROFILER.pop("isChunkFullyGenerated")
 		return true
 	else
 		return false

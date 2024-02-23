@@ -4,9 +4,6 @@ local ffi = require("ffi")
 Chunk = Object:extend()
 Chunk.size = size
 
---Structures
-require("src/world/generation/teststructure")
-
 function Chunk:new(x, y, z)
 	_JPROFILER.push("Chunk:new")
 	self.data = {}

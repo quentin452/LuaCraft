@@ -20,6 +20,48 @@ require("src/utils/usefull")
 --world
 require("src/world/chunk")
 require("src/world/gamescene")
+--modloader
+require("src/modloader/structuremodloader")
+require("src/modloader/modloaderinit")
+require("src/modloader/functiontags")
+-- ModsRequireIteration
+-- Specify the path to the mods directory
+local modsDirectory = "mods/"
+
+-- Print debugging information
+print("Checking mods directory:", modsDirectory)
+
+-- Iterate over all items in the mods directory
+local items = love.filesystem.getDirectoryItems(modsDirectory)
+for _, item in ipairs(items) do
+	local fullPath = modsDirectory .. item
+
+	-- Print debugging information
+	print("Checking item:", fullPath)
+
+	-- Check if the item is a directory
+	if love.filesystem.getInfo(fullPath, "directory") then
+		-- Assuming you want to load mods from subdirectories
+		local modName = item
+		print("Attempting to load mod:", modName)
+
+		-- Load the mod
+		local success, mod = pcall(require, "mods." .. modName .. "." .. modName)
+
+		-- Check if the mod loaded successfully
+		if success then
+			print("Mod loaded successfully:", modName)
+			-- Assuming the mod has an initialization function
+			if mod.initialize then
+				mod.initialize()
+			end
+		else
+			print("Failed to load mod:", modName)
+			print("Error:", mod)
+		end
+	end
+end
+
 --profiling
 ProFi = require("ProFi")
 PROF_CAPTURE = false
@@ -32,7 +74,6 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
 --init
 require("src/init/structureinit")
-
 gamestate = "MainMenu"
 gameSceneInstance = nil
 globalRenderDistance = nil
@@ -84,6 +125,7 @@ end
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
+	ModLoaderInitALL()
 	love.filesystem.setIdentity("LuaCraft")
 	if globalRenderDistance == nil then
 		-- Read the config file

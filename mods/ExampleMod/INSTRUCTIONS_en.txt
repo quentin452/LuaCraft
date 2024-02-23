@@ -1,0 +1,17 @@
+-- MOD LOADER NOTICE: THIS SYNTAX IS CRUCIAL FOR ALL FUNCTIONS AND VARIABLES IN YOUR MOD.
+
+-- Follow this syntax to ensure naming consistency and avoid conflicts with other mods or the core game.
+-- If your mod is named "ExampleMod," use the following conventions:
+
+-- Prefix all your mod-specific variables with the mod name and an underscore.
+local ExampleMod_size
+
+-- Prefix all your mod-specific functions with the mod name and an underscore.
+function ExampleMod_generatesomething()
+   ExampleMod_size = 16
+end
+
+-- This naming convention helps maintain clarity, prevent naming clashes, and ensures a smooth integration
+-- with other parts of the game. You can call methods from the core game without the "ExampleMod_" prefix.
+
+--In Every mod you need to add at the root of the mod folder a main lua like you can see in ExampleMod.lua to init things
