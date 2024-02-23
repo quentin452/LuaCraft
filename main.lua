@@ -261,3 +261,12 @@ end
 function love.quit()
 	_JPROFILER.write("_JPROFILER.mpack")
 end
+
+function love.errhand(message)
+    print("Warning:", message)
+end
+
+function love.wrappederror(errormsg, trace)
+    print("Error:", errormsg)
+    print("Stack trace:", trace)
+end
