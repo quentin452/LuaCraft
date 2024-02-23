@@ -161,7 +161,6 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	generatePillarAtFixedPosition(self, 0, 0, 30, 1)
 	_JPROFILER.pop("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 
 	-- count how many threads are being used right now
@@ -330,10 +329,26 @@ function GameScene:update(dt)
 			end
 		end
 	end
+	local chunkX, chunkY, chunkZ = floor(0 / size), floor(160 / size), floor(15 / size)
+	if isChunkFullyGenerated(self, chunkX, chunkY, chunkZ) then
+		generatePillarAtFixedPosition(self, 0, 160, 15, 1)
+	else
+		print("Chunk is not fully generated yet.")
+	end
+
 	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
 
 	_JPROFILER.pop("GameScene:update(ALL)")
 	--TODO here add periodic chunk saving system
+end
+
+function isChunkFullyGenerated(scene, chunkX, chunkY, chunkZ)
+	local chunk = scene.chunkMap[("%d/%d/%d"):format(chunkX, chunkY, chunkZ)]
+	if chunk and chunk.data then
+		return true
+	else
+		return false
+	end
 end
 
 function GameScene:mousemoved(x, y, dx, dy)
