@@ -21,7 +21,7 @@ function Chunk:new(x, y, z)
 	self.inRemeshQueue = false
 
 	self:generateChunkData()
-
+	--generatePillarEveryChunks(scene, 1)
 	_JPROFILER.pop("Chunk:new")
 end
 
@@ -38,7 +38,6 @@ function Chunk:generateChunkData()
 
 	self.data = data
 	self.datapointer = datapointer
-	--generatePillarEveryChunks(self, 1)
 	_JPROFILER.pop("generateChunkData")
 end
 

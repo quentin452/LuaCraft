@@ -2,7 +2,6 @@
 --TODO made mod loader....
 --TODO made a better structure (in the code) to make easier to register structures
 --TODO avoid inverting Y and Z axes (need to fix : https://github.com/quentin452/LuaCraft/issues/12)
---TODO remove this check local chunkX, chunkY, chunkZ = floor(0 / size), floor(40 / size), floor(15 / size) in gamescene.lua
 
 --THIS METHOD IS CORECT
 function generatePillarEveryChunks(chunk, value)
@@ -23,8 +22,6 @@ function generatePillarEveryChunks(chunk, value)
 	_JPROFILER.pop("GameScene:update(generatePillarEveryChunks)")
 end
 
---THIS METHOD IS CORECT
-
 function generatePillarAtFixedPosition(scene, x, y, z, value)
 	_JPROFILER.push("GameScene:update(generatePillarAtFixedPosition)")
 
@@ -39,9 +36,30 @@ function generatePillarAtFixedPosition(scene, x, y, z, value)
 		for posZ = 0, size - 1 do
 			scene:setBlockFromWorld(x, y, z + posZ, value)
 		end
-		local blockKey = ("%d/%d/%d"):format(x, y, z)
-		StructureMap[blockKey] = true
 	end
 
 	_JPROFILER.pop("GameScene:update(generatePillarAtFixedPosition)")
+end
+
+function generatePillarAtRandomLocation(scene, value)
+	_JPROFILER.push("GameScene:update(generatePillarAtRandomLocation)")
+
+	local size = math.random(5, 10)
+	local x = math.random(0, 100)
+	local y = math.random(100, 200)
+	local z = math.random(0, 50)
+
+	local floor = math.floor
+	local chunkX, chunkY, chunkZ = floor(x / size), floor(y / size), floor(z / size)
+	local chunkKey = ("%d/%d/%d"):format(chunkX, chunkY, chunkZ)
+
+	local chunk = scene.chunkMap[chunkKey]
+
+	if chunk then
+		for posZ = 0, size - 1 do
+			scene:setBlockFromWorld(x, y, z + posZ, value)
+		end
+	end
+
+	_JPROFILER.pop("GameScene:update(generatePillarAtRandomLocation)")
 end

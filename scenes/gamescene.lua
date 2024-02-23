@@ -1,5 +1,6 @@
 GameScene = Object:extend()
 local size
+StructureMap = {}
 local threadpool = {}
 -- load up some threads so that chunk meshing won't block the main thread
 for i = 1, 8 do
@@ -343,28 +344,29 @@ function GameScene:update(dt)
 	end
 	_JPROFILER.pop("GameScene:update(RIGHTCLICK)")
 	_JPROFILER.push("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
-	--TODO remove this check
-	local chunkX, chunkY, chunkZ = floor(0 / size), floor(40 / size), floor(15 / size)
-	if isChunkFullyGenerated(self, chunkX, chunkY, chunkZ) and not isBlockLocationFullyGenerated(x, y, z) then
-		generatePillarAtFixedPosition(self, 0, 40, 15, 1)
-	end
+
+	StructureGenFinal(self,size)
+
 	_JPROFILER.pop("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
 
 	_JPROFILER.pop("GameScene:update(ALL)")
 	--TODO here add periodic chunk saving system
 end
 
-StructureMap = {}
-
-function isBlockLocationFullyGenerated(x, y, z)
+function IsStructureIsGenerated(x, y, z)
+	_JPROFILER.push("IsStructureIsGenerated")
 	local blockKey = ("%d/%d/%d"):format(x, y, z)
+	_JPROFILER.pop("IsStructureIsGenerated")
 	return StructureMap[blockKey]
 end
 
 function isChunkFullyGenerated(scene, chunkX, chunkY, chunkZ)
-	local chunk = scene:getChunkFromWorld(chunkX, chunkY, chunkZ)
-		and scene.chunkMap[("%d/%d/%d"):format(chunkX, chunkY, chunkZ)]
+	_JPROFILER.push("isChunkFullyGenerated")
+	local chunkKey = ("%d/%d/%d"):format(chunkX, chunkY, chunkZ)
+	local chunk = scene.chunkMap[chunkKey]
+
 	if chunk and chunk.data then
+		_JPROFILER.pop("isChunkFullyGenerated")
 		return true
 	else
 		return false

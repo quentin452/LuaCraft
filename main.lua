@@ -30,6 +30,8 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --3 : exiting game
 --4 : open a CMD on Jprofiler (SRC)
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
+--init
+require("init/structureinit")
 
 gamestate = "MainMenu"
 gameSceneInstance = nil
