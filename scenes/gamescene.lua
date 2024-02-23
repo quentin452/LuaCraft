@@ -161,6 +161,7 @@ function GameScene:update(dt)
 			end
 		end
 	end
+	generatePillarAtFixedPosition(self, 0, 0, 30, 1)
 	_JPROFILER.pop("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 
 	-- count how many threads are being used right now
@@ -452,8 +453,8 @@ function GameScene:destroy()
 end
 
 function resetGameScene()
-    if gameSceneInstance then
-        gameSceneInstance:destroy()
-        gameSceneInstance = nil
-    end
+	if gameSceneInstance then
+		gameSceneInstance:destroy()
+		gameSceneInstance = nil
+	end
 end
