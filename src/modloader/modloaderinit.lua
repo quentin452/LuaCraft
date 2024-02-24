@@ -15,22 +15,36 @@ end
 function InitStructureConfigurationNEW()
 	_JPROFILER.push("InitStructureConfigurationtest")
 
-	local randomLocationGenerators = getFunctionsByTag("generateStructuresatRandomLocation")
-	for _, func in ipairs(randomLocationGenerators) do
+	local generateStructuresatRandomLocation = getFunctionsByTag("generateStructuresatRandomLocation")
+	for _, func in ipairs(generateStructuresatRandomLocation) do
 		print("Random Location Generator found:", func)
 		Config:setRandomLocationStructureGenerator(func)
 	end
 
-	local fixedPositionGenerators = getFunctionsByTag("generateStructuresInPlayerRange")
-	for _, func in ipairs(fixedPositionGenerators) do
-		print("Fixed Position Generator found:", func)
-		Config:setFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical(func)
-	end
 
-	local fixedPositionGenerators = getFunctionsByTag("generateStructuresatFixedPositions")
-	for _, func in ipairs(fixedPositionGenerators) do
-		print("Fixed Position Generator found:", func)
-		Config:setFixedPositionStructureGeneratorisChunkFullyGeneratedTechnical(func)
+	local generateStructuresInPlayerRange = getFunctionsByTagWithXYZ("generateStructuresInPlayerRange")
+	for _, entry in ipairs(generateStructuresInPlayerRange) do
+		local func, params = entry.func, entry.params
+		print("Fixed Position Generator found:")
+		print("Function:", func)
+		print("Parameters:")
+		print("  x:", params.x)
+		print("  y:", params.y)
+		print("  z:", params.z)
+
+		Config:setFixedPositionStructureGeneratorUsingPlayerRangeWithXYZ(func, params.x, params.y, params.z)
+	end
+	local generateStructuresatFixedPositions = getFunctionsByTagWithXYZ("generateStructuresatFixedPositions")
+	for _, entry in ipairs(generateStructuresatFixedPositions) do
+		local func, params = entry.func, entry.params
+		print("Fixed Position Generator found:")
+		print("Function:", func)
+		print("Parameters:")
+		print("  x:", params.x)
+		print("  y:", params.y)
+		print("  z:", params.z)
+
+		Config:setFixedPositionStructureGeneratorUsingIsChunkFullyGeneratedWithXYZ(func, params.x, params.y, params.z)
 	end
 
 	_JPROFILER.pop("InitStructureConfigurationtest")

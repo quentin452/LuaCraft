@@ -1,3 +1,5 @@
+local floor = math.floor
+
 --TODO MADE STRUCTURE GENERATION INTO AN ANOTHER THREAD
 --TODO improve check like isChunkFullyGenerated , IsStructureIsGenerated (by using at the place a isChunkLoaded?????)
 --TODO PROBABLY IN CHUNK script i need to add a timer to avoid generating at infinit time caused by generateStructuresatRandomLocation????
@@ -35,31 +37,24 @@ end
 
 --THIS METHOD IS WORK CORRECTLY
 
-function generateStructuresInPlayerRange(scene)
+function generateStructuresInPlayerRange(scene, size)
 	_JPROFILER.push("GameScene:update(generateStructuresInPlayerRange)")
 	local playerX, playerY, playerZ = g3d.camera.position[1], g3d.camera.position[2], g3d.camera.position[3]
+	local generatorFunc, storedX, storedY, storedZ = Config:getFixedPositionStructureGeneratorUsingPlayerRangeWithXYZ()
 
-	local Pillars = {
-		{ x = 40, y = 40, z = 22 },
-		{ x = 40, y = 41, z = 22 },
-		{ x = 40, y = 42, z = 22 },
-	}
+	if
+		not IsStructureIsGenerated(storedX, storedY, storedZ)
+		and isPlayerInRange(playerX, playerY, playerZ, storedX, storedY, storedZ)
+	then
+		local chunkX, chunkY, chunkZ = floor(storedX / size), floor(storedY / size), floor(storedZ / size)
 
-	for _, Pillar in ipairs(Pillars) do
 		if
-			not IsStructureIsGenerated(Pillar.x, Pillar.y, Pillar.z)
-			and isPlayerInRange(playerX, playerY, playerZ, Pillar.x, Pillar.y, Pillar.z)
+			isChunkFullyGenerated(scene, chunkX, chunkY, chunkZ)
+			and not IsStructureIsGenerated(storedX, storedY, storedZ)
 		then
-			Config:getFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical()(
-				scene,
-				Pillar.x,
-				Pillar.y,
-				Pillar.z,
-				1
-			)
-			local blockKey = ("%d/%d/%d"):format(Pillar.x, Pillar.y, Pillar.z)
+			generatorFunc(scene, storedX, storedY, storedZ, 1)
+			local blockKey = ("%d/%d/%d"):format(storedX, storedY, storedZ)
 			StructureMap[blockKey] = true
-			print("Structure générée avec succès à la position :", Pillar.x, Pillar.y, Pillar.z)
 		end
 	end
 
@@ -70,44 +65,18 @@ end
 function generateStructuresatFixedPositions(scene, size)
 	_JPROFILER.push("generateStructuresatFixedPositions")
 
-	local floor = math.floor
+	local generatorFunc, storedX, storedY, storedZ =
+		Config:getFixedPositionStructureGeneratorUsingIsChunkFullyGeneratedWithXYZ()
 
-	local function generateStructureAtPosition(x, y, z)
-		-- Appel de la fonction associée à structureGenerator
-		Config:getFixedPositionStructureGeneratorIsChunkFullyGeneratedTechnical()(scene, x, y, z, 1)
-		local blockKey = ("%d/%d/%d"):format(x, y, z)
+	local chunkX, chunkY, chunkZ = floor(storedX / size), floor(storedY / size), floor(storedZ / size)
+
+	if
+		isChunkFullyGenerated(scene, chunkX, chunkY, chunkZ) and not IsStructureIsGenerated(storedX, storedY, storedZ)
+	then
+		generatorFunc(scene, storedX, storedY, storedZ, 1)
+		local blockKey = ("%d/%d/%d"):format(storedX, storedY, storedZ)
 		StructureMap[blockKey] = true
-		print("Structure générée avec succès à la position :", x, y, z)
-	end
-
-	local specificX1, specificY1, specificZ1 = 0, 20, 20
-	local chunkX1, chunkY1, chunkZ1 = floor(specificX1 / size), floor(specificY1 / size), floor(specificZ1 / size)
-
-	local specificX2, specificY2, specificZ2 = 0, 21, 20
-	local chunkX2, chunkY2, chunkZ2 = floor(specificX2 / size), floor(specificY2 / size), floor(specificZ2 / size)
-
-	local specificX3, specificY3, specificZ3 = 0, 22, 20
-	local chunkX3, chunkY3, chunkZ3 = floor(specificX3 / size), floor(specificY3 / size), floor(specificZ3 / size)
-
-	if
-		isChunkFullyGenerated(scene, chunkX1, chunkY1, chunkZ1)
-		and not IsStructureIsGenerated(specificX1, specificY1, specificZ1)
-	then
-		generateStructureAtPosition(specificX1, specificY1, specificZ1)
-	end
-
-	if
-		isChunkFullyGenerated(scene, chunkX2, chunkY2, chunkZ2)
-		and not IsStructureIsGenerated(specificX2, specificY2, specificZ2)
-	then
-		generateStructureAtPosition(specificX2, specificY2, specificZ2)
-	end
-
-	if
-		isChunkFullyGenerated(scene, chunkX3, chunkY3, chunkZ3)
-		and not IsStructureIsGenerated(specificX3, specificY3, specificZ3)
-	then
-		generateStructureAtPosition(specificX3, specificY3, specificZ3)
+		print("Structure générée avec succès à la position :", storedX, storedY, storedZ)
 	end
 
 	_JPROFILER.pop("generateStructuresatFixedPositions")
@@ -115,6 +84,6 @@ end
 
 function StructureGenFinal(scene, size)
 	generateStructuresatFixedPositions(scene, size)
-	generateStructuresInPlayerRange(scene)
+	generateStructuresInPlayerRange(scene, size)
 	generateStructuresatRandomLocation(scene, 1)
 end

@@ -14,19 +14,21 @@ end
 function Config:getRandomLocationStructureGenerator()
 	return self.randomLocationStructureGenerator or function() end
 end
+function Config:setFixedPositionStructureGeneratorUsingPlayerRangeWithXYZ(generatorFunc, x, y, z)
+	self.fixedPositionStructureGeneratorUsingPlayerRangeWithXYZ = { func = generatorFunc, x = x, y = y, z = z }
+end
+function Config:getFixedPositionStructureGeneratorUsingPlayerRangeWithXYZ()
+	local storedInfo = self.fixedPositionStructureGeneratorUsingPlayerRangeWithXYZ
 
-function Config:setFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical(generatorFunc)
-	self.fixedPositionStructureGeneratorInPlayerRenderDistanceTechnical = generatorFunc
+	return storedInfo.func, storedInfo.x, storedInfo.y, storedInfo.z
 end
 
-function Config:getFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical()
-	return self.fixedPositionStructureGeneratorInPlayerRenderDistanceTechnical or function() end
+function Config:setFixedPositionStructureGeneratorUsingIsChunkFullyGeneratedWithXYZ(generatorFunc, x, y, z)
+	self.fixedPositionStructureGeneratorisChunkFullyGeneratedTechnicalWithXYZ =
+		{ func = generatorFunc, x = x, y = y, z = z }
 end
+function Config:getFixedPositionStructureGeneratorUsingIsChunkFullyGeneratedWithXYZ()
+	local storedInfo = self.fixedPositionStructureGeneratorisChunkFullyGeneratedTechnicalWithXYZ
 
-function Config:setFixedPositionStructureGeneratorisChunkFullyGeneratedTechnical(generatorFunc)
-	self.fixedPositionStructureGeneratorisChunkFullyGeneratedTechnical = generatorFunc
-end
-
-function Config:getFixedPositionStructureGeneratorIsChunkFullyGeneratedTechnical()
-	return self.fixedPositionStructureGeneratorisChunkFullyGeneratedTechnical or function() end
+	return storedInfo.func, storedInfo.x, storedInfo.y, storedInfo.z
 end
