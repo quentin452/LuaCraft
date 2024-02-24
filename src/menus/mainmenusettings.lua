@@ -25,6 +25,10 @@ function drawMainMenuSettings()
 
 	-- Choices
 	local marque = ""
+	local vsyncValue = lovefilesystem.read("config.conf"):match("vsync=(%w+)")
+	local printValue = lovefilesystem.read("config.conf"):match("luacraftprint=(%w+)")
+	local renderdistancevalue = lovefilesystem.read("config.conf"):match("renderdistance=(%d)")
+
 	for n = 1, #_MainMenuSettings.choice do
 		if _MainMenuSettings.selection == n then
 			marque = "%1*%0 "
@@ -33,23 +37,16 @@ function drawMainMenuSettings()
 		end
 
 		local choiceText = _MainMenuSettings.choice[n]
-		if n == 1 then
-			local vsyncValue = lovefilesystem.read("config.conf"):match("vsync=(%w+)")
-			if vsyncValue and vsyncValue:lower() == "true" then
-				choiceText = choiceText .. " X"
-			end
+		if n == 1 and vsyncValue and vsyncValue:lower() == "true" then
+			choiceText = choiceText .. " X"
 		end
-		if n == 2 then
-			local printValue = lovefilesystem.read("config.conf"):match("luacraftprint=(%w+)")
-			if printValue and printValue:lower() == "true" then
-				choiceText = choiceText .. " X"
-			end
+
+		if n == 2 and printValue and printValue:lower() == "true" then
+			choiceText = choiceText .. " X"
 		end
-		if n == 3 then
-			local renderdistancevalue = lovefilesystem.read("config.conf"):match("renderdistance=(%d)")
-			if renderdistancevalue then
-				choiceText = choiceText .. " " .. globalRenderDistance
-			end
+
+		if n == 3 and renderdistancevalue then
+			choiceText = choiceText .. " " .. globalRenderDistance
 		end
 		drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
 
