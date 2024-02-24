@@ -71,8 +71,13 @@ local function updateChunk(self, x, y, z)
 	end
 	_JPROFILER.pop("updateChunk")
 end
-
+local RenderDistanceGotRefreshed = 0
 function GameScene:update(dt)
+	if RenderDistanceGotRefreshed == 0 then
+		--this is needed to prevent a bug introduced by this commit : 
+		refreshRenderDistance()
+		RenderDistanceGotRefreshed = 1
+	end
 	_JPROFILER.push("GameScene:update(ALL)")
 
 	-- update all the things in the scene

@@ -1,152 +1,219 @@
-globalRenderDistance = nil
+require("src/utils/filesystem")
 
 globalVSync = lovewindow.getVSync()
-local config
-function reloadConfig()
-	if not lovefilesystem.getInfo("config.conf") then
-		return
-	end
 
-	local content = lovefilesystem.read("config.conf")
+local function reloadConfig()
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
 
-	-- Mettez à jour globalVSync
-	local vsyncValue = content:match("vsync=(%w+)")
-	if vsyncValue then
-		globalVSync = vsyncValue:lower() == "true"
-		lovewindow.setVSync(globalVSync and 1 or 0)
-	end
+	if file_content then
+		local vsyncValue = file_content:match("vsync=(%w+)")
+		if vsyncValue then
+			globalVSync = vsyncValue:lower() == "true"
+			lovewindow.setVSync(globalVSync and 1 or 0)
+		end
 
-	-- Mettez à jour globalRenderDistance
-	-- local renderdistanceValue = content:match("renderdistance=(%d)")
-	-- if renderdistanceValue then
-	--     globalRenderDistance = tonumber(renderdistanceValue)
-	-- end
+		--  local renderdistanceValue = file_content:match("renderdistance=(%d+)")
+		-- globalRenderDistance = tonumber(renderdistanceValue) or 5
 
-	-- Mettez à jour EnableLuaCraftPrints
-	local printValue = content:match("luacraftprint=(%w+)")
-	if printValue then
-		EnableLuaCraftPrints = printValue:lower() == "true"
+		local printValue = file_content:match("LuaCraftPrintLoggingNormal=(%w+)")
+		EnableLuaCraftPrintLoggingNormalLogging = printValue:lower() == "true"
+
+		local printValue = file_content:match("LuaCraftWarnLogging=(%w+)")
+		EnableLuaCraftLoggingWarn = printValue:lower() == "true"
+
+		local printValue = file_content:match("LuaCraftErrorLogging=(%w+)")
+		EnableLuaCraftLoggingError = printValue:lower() == "true"
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
 end
+
 function toggleVSync()
 	globalVSync = not globalVSync
 	lovewindow.setVSync(globalVSync and 1 or 0)
 
-	-- Load current contents of config.conf file
-	local content = lovefilesystem.read("config.conf")
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
 
-	-- Update vsync value in content
-	content = content:gsub("vsync=%w+", "vsync=" .. (globalVSync and "true" or "false"))
+	if file_content then
+		file_content = file_content:gsub("vsync=%w+", "vsync=" .. (globalVSync and "true" or "false"))
 
-	-- Rewrite config.conf file with updated content
-	lovefilesystem.write("config.conf", content)
+		local file, error_message = io.open("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt", "w")
+		if file then
+			file:write(file_content)
+			file:close()
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+	end
+end
+function refreshRenderDistance()
+	local file_path = "C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt"
+
+	local file_content, error_message = customReadFile(file_path)
+
+	if file_content then
+		local current_renderdistance = tonumber(file_content:match("renderdistance=(%d+)")) or 0
+		globalRenderDistance = current_renderdistance
+		file_content = file_content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
+		local file, error_message = io.open(file_path, "w")
+		if file then
+			file:write(file_content)
+			file:close()
+			LuaCraftPrintLoggingNormal("Render distance refreshed successfully.")
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+	end
 end
 
 function renderdistanceSetting()
-	-- Load current contents of config.conf file
-	local content = lovefilesystem.read("config.conf")
+	local file_path = "C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt"
+	local file_content, error_message = customReadFile(file_path)
 
-	-- Increment the value of globalRenderDistance by 5
-	globalRenderDistance = globalRenderDistance + 5
+	if file_content then
+		local current_renderdistance = tonumber(file_content:match("renderdistance=(%d+)")) or 0
+		globalRenderDistance = current_renderdistance + 5
 
-	-- Check if the value exceeds 25, reduce it to 5
-	if globalRenderDistance > 25 then
-		globalRenderDistance = 5
-	end
-
-	-- Update renderdistance value in content using regular expression
-	content = content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
-
-	-- Rewrite config.conf file with updated content
-	lovefilesystem.write("config.conf", content)
-end
-
-function printSettings()
-	EnableLuaCraftPrints = not EnableLuaCraftPrints
-
-	-- Load current contents of config.conf file
-	local content = lovefilesystem.read("config.conf")
-
-	-- Update print value in content
-	local printValue = EnableLuaCraftPrints and "true" or "false"
-	content = content:gsub("luacraftprint=%w+", "luacraftprint=" .. printValue)
-
-	-- Rewrite config.conf file with updated content
-	lovefilesystem.write("config.conf", content)
-end
-
-function SettingsHandlingInit()
-	reloadConfig()
-	if globalRenderDistance == nil then
-		-- Read the config file
-		local content = lovefilesystem.read("config.conf")
-
-		-- Extract value
-		local renderDistance = tonumber(content:match("renderdistance=(%d+)")) -- Make sure the key is lowercase "renderdistance"
-
-		-- If no value in file, use default value
-		if not renderDistance then
-			renderDistance = 5
+		if globalRenderDistance > 25 then
+			globalRenderDistance = 5
 		end
 
-		-- Set global variable
-		globalRenderDistance = renderDistance
+		file_content = file_content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
+
+		local file, error_message = io.open(file_path, "w")
+		if file then
+			file:write(file_content)
+			file:close()
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+end
 
-	if lovefilesystem.getInfo("config.conf") then
-		local content = lovefilesystem.read("config.conf")
+function printNormalLoggingSettings()
+	EnableLuaCraftPrintLoggingNormalLogging = not EnableLuaCraftPrintLoggingNormalLogging
 
-		local vsyncValue = content:match("vsync=(%d)")
+	-- Load current contents of luacraftconfig.txt file
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+
+	if file_content then
+		-- Update print value in content
+		local printValue = EnableLuaCraftPrintLoggingNormalLogging and "true" or "false"
+		file_content = file_content:gsub("LuaCraftPrintLoggingNormal=%w+", "LuaCraftPrintLoggingNormal=" .. printValue)
+
+		-- Rewrite luacraftconfig.txt file with updated content
+		local file, error_message = io.open("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt", "w")
+		if file then
+			file:write(file_content)
+			file:close()
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+	end
+end
+function printWarnsSettings()
+	EnableLuaCraftLoggingWarn = not EnableLuaCraftLoggingWarn
+
+	-- Load current contents of luacraftconfig.txt file
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+
+	if file_content then
+		-- Update print value in content
+		local printValue = EnableLuaCraftLoggingWarn and "true" or "false"
+		file_content = file_content:gsub("LuaCraftWarnLogging=%w+", "LuaCraftWarnLogging=" .. printValue)
+
+		-- Rewrite luacraftconfig.txt file with updated content
+		local file, error_message = io.open("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt", "w")
+		if file then
+			file:write(file_content)
+			file:close()
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+	end
+end
+function printErrorsSettings()
+	EnableLuaCraftLoggingError = not EnableLuaCraftLoggingError
+
+	-- Load current contents of luacraftconfig.txt file
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+
+	if file_content then
+		-- Update print value in content
+		local printValue = EnableLuaCraftLoggingError and "true" or "false"
+		file_content = file_content:gsub("LuaCraftErrorLogging=%w+", "LuaCraftErrorLogging=" .. printValue)
+
+		-- Rewrite luacraftconfig.txt file with updated content
+		local file, error_message = io.open("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt", "w")
+		if file then
+			file:write(file_content)
+			file:close()
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+	end
+end
+function SettingsHandlingInit()
+	reloadConfig()
+
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	if file_content then
+		local vsyncValue = file_content:match("vsync=(%d)")
 		if vsyncValue then
 			lovewindow.setVSync(tonumber(vsyncValue))
 		end
 
-		local renderdistanceValue = content:match("renderdistance=(%d)")
-
-		local printValue = content:match("luacraftprint=(%d)")
-
-		if not renderdistanceValue then
-			-- The renderdistance value does not exist, add the default value of 5
-			renderdistanceValue = "5"
-
-			-- Add the new line in the config.conf file only if it does not already exist
-			if not content:match("renderdistance=") then
-				content = content .. "\nrenderdistance=" .. renderdistanceValue
-
-				-- Update config.conf file with new value
-				lovefilesystem.write("config.conf", content)
-			end
-		end
-
-		if not vsyncValue then
-			vsyncValue = 1
-			if not content:match("vsync=") then
-				content = content .. "\nvsync=" .. vsyncValue
-				lovefilesystem.write("config.conf", content)
-			end
-		end
-		if not printValue then
-			printValue = false
-			if not content:match("luacraftprint=") then
-				EnableLuaCraftPrints = false
-				content = content .. "\nluacraftprint=" .. tostring(printValue)
-				lovefilesystem.write("config.conf", content)
-			end
-		end
+		local renderdistanceValue = file_content:match("renderdistance=(%d)")
+		globalRenderDistance = tonumber(renderdistanceValue)
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
 end
-function getLuacraftPrintValue()
-	if not lovefilesystem.read("config.conf") then
-		return
+
+function getLuaCraftPrintLoggingNormalValue()
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	return file_content and file_content:match("LuaCraftPrintLoggingNormal=(%d)")
+end
+function getLuaCraftPrintLoggingWarnValue()
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	return file_content and file_content:match("LuaCraftErrorLogging=(%d)")
+end
+function getLuaCraftPrintLoggingErrorValue()
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	return file_content and file_content:match("LuaCraftWarnLogging=(%d)")
+end
+EnableLuaCraftPrintLoggingNormalLogging = getLuaCraftPrintLoggingNormalValue()
+
+function LuaCraftPrintLoggingNormal(...)
+	if EnableLuaCraftPrintLoggingNormalLogging then
+		print("[NORMAL LOGGING]", ...)
 	end
-	local content = lovefilesystem.read("config.conf")
-	print(content)
-	return content:match("luacraftprint=(%d)")
 end
 
-EnableLuaCraftPrints = getLuacraftPrintValue()
-function LuaCraftPrint(...)
-	if EnableLuaCraftPrints then
-		print(...)
+EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
+
+function LuaCraftWarnLogging(...)
+	if EnableLuaCraftLoggingWarn then
+		print("[WARN]", ...)
+	end
+end
+
+EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
+
+function LuaCraftErrorLogging(...)
+	if EnableLuaCraftLoggingError then
+		error(...)
 	end
 end

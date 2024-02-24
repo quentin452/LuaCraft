@@ -21,6 +21,7 @@ require("src/client/hud/gamehud")
 --utils
 require("src/utils/usefull")
 require("src/utils/settingshandling")
+require("src/utils/filesystem")
 --world
 require("src/world/chunk/chunk")
 require("src/world/scene/gamescenecore")
@@ -61,11 +62,12 @@ function love.load()
 	_JPROFILER.push("Mainload")
 	ModLoaderInitALL()
 	lovefilesystem.setIdentity("LuaCraft")
+	loadAndSaveLuaCraftFileSystem()
 	SettingsHandlingInit()
-
 	if enableProfiler then
 		ProFi:start()
 	end
+
 	mainMenuBackground = lovegraphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
 	mainMenuSettingsBackground = lovegraphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
 	gameplayingpausemenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")

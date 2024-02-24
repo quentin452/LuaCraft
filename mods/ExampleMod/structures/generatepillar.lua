@@ -17,7 +17,7 @@ function ExampleMod_generatePillarEveryChunks(chunk, value)
 		local pillarIndex = pillarX + size * pillarZ + size * size * pillarY
 		datapointer[pillarIndex] = value
 	end
-	--LuaCraftPrint("generatePillarEveryChunks" .. pillarX .. pillarYStart .. pillarZ)
+	--LuaCraftPrintLoggingNormal("generatePillarEveryChunks" .. pillarX .. pillarYStart .. pillarZ)
 	_JPROFILER.pop("GameScene:update(generatePillarEveryChunks)")
 end
 

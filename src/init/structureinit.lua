@@ -23,7 +23,7 @@ function generateStructuresatRandomLocation(scene, value)
 			structureGenerator(scene, value)
 			local blockKey = ("%d/%d/%d"):format(x, y, z)
 			StructureMap[blockKey] = true
-			LuaCraftPrint("Pilier généré avec succès à la position :", x, y, z)
+			LuaCraftPrintLoggingNormal("Pilier généré avec succès à la position :", x, y, z)
 			scene:requestRemesh(scene:getChunkFromWorld(x, y, z), true)
 		end
 	end
@@ -76,7 +76,7 @@ function generateStructuresatFixedPositions(scene, size)
 		generatorFunc(scene, storedX, storedY, storedZ, 1)
 		local blockKey = ("%d/%d/%d"):format(storedX, storedY, storedZ)
 		StructureMap[blockKey] = true
-		LuaCraftPrint("Structure générée avec succès à la position :", storedX, storedY, storedZ)
+		LuaCraftPrintLoggingNormal("Structure générée avec succès à la position :", storedX, storedY, storedZ)
 	end
 
 	_JPROFILER.pop("generateStructuresatFixedPositions")

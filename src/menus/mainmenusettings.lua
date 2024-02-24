@@ -4,9 +4,11 @@ _MainMenuSettings.y = 50
 _MainMenuSettings.title = "Settings"
 _MainMenuSettings.choice = {}
 _MainMenuSettings.choice[1] = "Enable Vsync?"
-_MainMenuSettings.choice[2] = "Enable Print Logging?"
-_MainMenuSettings.choice[3] = "Render Distance"
-_MainMenuSettings.choice[4] = "Exiting to main menu"
+_MainMenuSettings.choice[2] = "Enable Logging(no warn or errors)?"
+_MainMenuSettings.choice[3] = "Enable warns logging?"
+_MainMenuSettings.choice[4] = "Enable errors logging?"
+_MainMenuSettings.choice[5] = "Render Distance"
+_MainMenuSettings.choice[6] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawMainMenuSettings()
@@ -25,32 +27,51 @@ function drawMainMenuSettings()
 
 	-- Choices
 	local marque = ""
-	local vsyncValue = lovefilesystem.read("config.conf"):match("vsync=(%w+)")
-	local printValue = lovefilesystem.read("config.conf"):match("luacraftprint=(%w+)")
-	local renderdistancevalue = lovefilesystem.read("config.conf"):match("renderdistance=(%d)")
+	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
 
-	for n = 1, #_MainMenuSettings.choice do
-		if _MainMenuSettings.selection == n then
-			marque = "%1*%0 "
-		else
-			marque = "   "
+	if file_content then
+		local Settings = {}
+		local orderedKeys =
+			{ "vsync", "LuaCraftPrintLoggingNormal", "LuaCraftWarnLogging", "LuaCraftErrorLogging", "renderdistance" }
+
+		for _, key in ipairs(orderedKeys) do
+			local value = file_content:match(key .. "=(%w+)")
+			if value then
+				local numValue = tonumber(value)
+				Settings[key] = numValue or (value == "true")
+			end
 		end
 
-		local choiceText = _MainMenuSettings.choice[n]
-		if n == 1 and vsyncValue and vsyncValue:lower() == "true" then
-			choiceText = choiceText .. " X"
-		end
+		for n = 1, #_MainMenuSettings.choice do
+			if _MainMenuSettings.selection == n then
+				marque = "%1*%0 "
+			else
+				marque = "   "
+			end
 
-		if n == 2 and printValue and printValue:lower() == "true" then
-			choiceText = choiceText .. " X"
-		end
+			local choiceText = _MainMenuSettings.choice[n]
+			if n == 1 and Settings["vsync"] then
+				choiceText = choiceText .. " X"
+			end
 
-		if n == 3 and renderdistancevalue then
-			choiceText = choiceText .. " " .. globalRenderDistance
-		end
-		drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
+			if n == 2 and Settings["LuaCraftPrintLoggingNormal"] then
+				choiceText = choiceText .. " X"
+			end
+			if n == 3 and Settings["LuaCraftWarnLogging"] then
+				choiceText = choiceText .. " X"
+			end
+			if n == 4 and Settings["LuaCraftErrorLogging"] then
+				choiceText = choiceText .. " X"
+			end
+			if n == 5 and type(Settings["renderdistance"]) == "number" then
+				choiceText = choiceText .. " " .. Settings["renderdistance"]
+			end
+			drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
 
-		posY = posY + lineHeight
+			posY = posY + lineHeight
+		end
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
 
 	-- Help
@@ -73,10 +94,14 @@ function keysinitMainMenuSettings(k)
 			if _MainMenuSettings.selection == 1 then
 				toggleVSync()
 			elseif _MainMenuSettings.selection == 2 then
-				printSettings()
+				printNormalLoggingSettings()
 			elseif _MainMenuSettings.selection == 3 then
-				renderdistanceSetting()
+				printWarnsSettings()
 			elseif _MainMenuSettings.selection == 4 then
+				printErrorsSettings()
+			elseif _MainMenuSettings.selection == 5 then
+				renderdistanceSetting()
+			elseif _MainMenuSettings.selection == 6 then
 				gamestate = "MainMenu"
 				_MainMenuSettings.selection = 0
 			end

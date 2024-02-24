@@ -4,7 +4,7 @@ function LoadMods()
 	local modsDirectory = "mods/"
 
 	-- Print debugging information
-	LuaCraftPrint("Checking mods directory:", modsDirectory)
+	LuaCraftPrintLoggingNormal("Checking mods directory:", modsDirectory)
 
 	-- Iterate over all items in the mods directory
 	local items = lovefilesystem.getDirectoryItems(modsDirectory)
@@ -12,27 +12,27 @@ function LoadMods()
 		local fullPath = modsDirectory .. item
 
 		-- Print debugging information
-		LuaCraftPrint("Checking item:", fullPath)
+		LuaCraftPrintLoggingNormal("Checking item:", fullPath)
 
 		-- Check if the item is a directory
 		if lovefilesystem.getInfo(fullPath, "directory") then
 			-- Assuming you want to load mods from subdirectories
 			local modName = item
-			LuaCraftPrint("Attempting to load mod:", modName)
+			LuaCraftPrintLoggingNormal("Attempting to load mod:", modName)
 
 			-- Load the mod
 			local success, mod = pcall(require, "mods." .. modName .. "." .. modName)
 
 			-- Check if the mod loaded successfully
 			if success then
-				LuaCraftPrint("Mod loaded successfully:", modName)
+				LuaCraftPrintLoggingNormal("Mod loaded successfully:", modName)
 				-- Assuming the mod has an initialization function
 				if mod.initialize then
 					mod.initialize()
 				end
 			else
-				LuaCraftPrint("Failed to load mod:", modName)
-				LuaCraftPrint("Error:", mod)
+				LuaCraftWarnLogging("Failed to load mod:", modName)
+				LuaCraftErrorLogging("Error:", mod)
 			end
 		end
 	end
@@ -57,31 +57,31 @@ function InitStructureConfigurationNEW()
 
 	local generateStructuresatRandomLocation = getFunctionsByTag("generateStructuresatRandomLocation")
 	for _, func in ipairs(generateStructuresatRandomLocation) do
-		LuaCraftPrint("Random Location Generator found:", func)
+		LuaCraftPrintLoggingNormal("Random Location Generator found:", func)
 		Config:setRandomLocationStructureGenerator(func)
 	end
 
 	local generateStructuresInPlayerRange = getFunctionsByTagWithXYZ("generateStructuresInPlayerRange")
 	for _, entry in ipairs(generateStructuresInPlayerRange) do
 		local func, params = entry.func, entry.params
-		LuaCraftPrint("Fixed Position Generator found:")
-		LuaCraftPrint("Function:", func)
-		LuaCraftPrint("Parameters:")
-		LuaCraftPrint("  x:", params.x)
-		LuaCraftPrint("  y:", params.y)
-		LuaCraftPrint("  z:", params.z)
+		LuaCraftPrintLoggingNormal("Fixed Position Generator found:")
+		LuaCraftPrintLoggingNormal("Function:", func)
+		LuaCraftPrintLoggingNormal("Parameters:")
+		LuaCraftPrintLoggingNormal("  x:", params.x)
+		LuaCraftPrintLoggingNormal("  y:", params.y)
+		LuaCraftPrintLoggingNormal("  z:", params.z)
 
 		Config:setFixedPositionStructureGeneratorUsingPlayerRangeWithXYZ(func, params.x, params.y, params.z)
 	end
 	local generateStructuresatFixedPositions = getFunctionsByTagWithXYZ("generateStructuresatFixedPositions")
 	for _, entry in ipairs(generateStructuresatFixedPositions) do
 		local func, params = entry.func, entry.params
-		LuaCraftPrint("Fixed Position Generator found:")
-		LuaCraftPrint("Function:", func)
-		LuaCraftPrint("Parameters:")
-		LuaCraftPrint("  x:", params.x)
-		LuaCraftPrint("  y:", params.y)
-		LuaCraftPrint("  z:", params.z)
+		LuaCraftPrintLoggingNormal("Fixed Position Generator found:")
+		LuaCraftPrintLoggingNormal("Function:", func)
+		LuaCraftPrintLoggingNormal("Parameters:")
+		LuaCraftPrintLoggingNormal("  x:", params.x)
+		LuaCraftPrintLoggingNormal("  y:", params.y)
+		LuaCraftPrintLoggingNormal("  z:", params.z)
 
 		Config:setFixedPositionStructureGeneratorUsingIsChunkFullyGeneratedWithXYZ(func, params.x, params.y, params.z)
 	end
