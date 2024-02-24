@@ -35,8 +35,8 @@ function drawPlayingMenuSettings()
 		local choiceText = _PlayingGameSettings.choice[n]
 		-- Ajout de la condition pour activer ou désactiver le "X"
 		if n == 1 then
-			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%d)")
-			if vsyncValue and printValue:lower() == "true" then
+			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%w+)")
+			if vsyncValue and vsyncValue:lower() == "true" then
 				choiceText = choiceText .. " X"
 			end
 		end
