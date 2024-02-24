@@ -1,5 +1,4 @@
 function LoadMods()
-	_JPROFILER.push("LoadMods")
 	-- ModsRequireIteration
 	-- Specify the path to the mods directory
 	local modsDirectory = "mods/"
@@ -37,7 +36,6 @@ function LoadMods()
 			end
 		end
 	end
-	_JPROFILER.pop("LoadMods")
 end
 
 function ModLoaderInitALL()
