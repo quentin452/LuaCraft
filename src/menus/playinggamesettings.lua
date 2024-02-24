@@ -4,8 +4,9 @@ _PlayingGameSettings.y = 50
 _PlayingGameSettings.title = "Settings"
 _PlayingGameSettings.choice = {}
 _PlayingGameSettings.choice[1] = "Enable Vsync?"
-_PlayingGameSettings.choice[2] = "Render Distance"
-_PlayingGameSettings.choice[3] = "Exiting to game"
+_PlayingGameSettings.choice[2] = "Enable Print Logging?"
+_PlayingGameSettings.choice[3] = "Render Distance"
+_PlayingGameSettings.choice[4] = "Exiting to game"
 _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawPlayingMenuSettings()
@@ -35,11 +36,17 @@ function drawPlayingMenuSettings()
 		-- Ajout de la condition pour activer ou désactiver le "X"
 		if n == 1 then
 			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%d)")
-			if vsyncValue and tonumber(vsyncValue) == 1 then
+			if vsyncValue and printValue:lower() == "true" then
 				choiceText = choiceText .. " X"
 			end
 		end
 		if n == 2 then
+			local printValue = love.filesystem.read("config.conf"):match("luacraftprint=(%w+)")
+			if printValue and printValue:lower() == "true" then
+				choiceText = choiceText .. " X"
+			end
+		end
+		if n == 3 then
 			local renderdistancevalue = love.filesystem.read("config.conf"):match("renderdistance=(%d)")
 			if renderdistancevalue then
 				choiceText = choiceText .. " " .. globalRenderDistance
@@ -69,9 +76,11 @@ function keysinitPlayingMenuSettings(k)
 		elseif k == "return" then
 			if _PlayingGameSettings.selection == 1 then
 				toggleVSync()
-			elseif _PlayingGameSettings.selection == 2 then
-				renderdistanceSetting()
+			elseif _MainMenuSettings.selection == 2 then
+				printSettings()
 			elseif _PlayingGameSettings.selection == 3 then
+				renderdistanceSetting()
+			elseif _PlayingGameSettings.selection == 4 then
 				gamestate = "PlayingGame"
 				_PlayingGameSettings.selection = 0
 			end

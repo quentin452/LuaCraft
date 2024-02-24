@@ -4,11 +4,13 @@ _MainMenuSettings.y = 50
 _MainMenuSettings.title = "Settings"
 _MainMenuSettings.choice = {}
 _MainMenuSettings.choice[1] = "Enable Vsync?"
-_MainMenuSettings.choice[2] = "Render Distance"
-_MainMenuSettings.choice[3] = "Exiting to main menu"
+_MainMenuSettings.choice[2] = "Enable Print Logging?"
+_MainMenuSettings.choice[3] = "Render Distance"
+_MainMenuSettings.choice[4] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawMainMenuSettings()
+	LuaCraftPrint("test")
 	local w, h = lg.getDimensions()
 	local scaleX = w / mainMenuSettingsBackground:getWidth()
 	local scaleY = h / mainMenuSettingsBackground:getHeight()
@@ -34,11 +36,17 @@ function drawMainMenuSettings()
 		local choiceText = _MainMenuSettings.choice[n]
 		if n == 1 then
 			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%d)")
-			if vsyncValue and tonumber(vsyncValue) == 1 then
+			if vsyncValue and  printValue:lower() == "true" then
 				choiceText = choiceText .. " X"
 			end
 		end
 		if n == 2 then
+			local printValue = love.filesystem.read("config.conf"):match("luacraftprint=(%w+)")
+			if printValue and printValue:lower() == "true" then
+				choiceText = choiceText .. " X"
+			end
+		end
+		if n == 3 then
 			local renderdistancevalue = love.filesystem.read("config.conf"):match("renderdistance=(%d)")
 			if renderdistancevalue then
 				choiceText = choiceText .. " " .. globalRenderDistance
@@ -69,8 +77,10 @@ function keysinitMainMenuSettings(k)
 			if _MainMenuSettings.selection == 1 then
 				toggleVSync()
 			elseif _MainMenuSettings.selection == 2 then
-				renderdistanceSetting()
+				printSettings()
 			elseif _MainMenuSettings.selection == 3 then
+				renderdistanceSetting()
+			elseif _MainMenuSettings.selection == 4 then
 				gamestate = "MainMenu"
 				_MainMenuSettings.selection = 0
 			end

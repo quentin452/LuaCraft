@@ -17,7 +17,7 @@ function ExampleMod_generatePillarEveryChunks(chunk, value)
 		local pillarIndex = pillarX + size * pillarZ + size * size * pillarY
 		datapointer[pillarIndex] = value
 	end
-	--print("generatePillarEveryChunks" .. pillarX .. pillarYStart .. pillarZ)
+	--LuaCraftPrint("generatePillarEveryChunks" .. pillarX .. pillarYStart .. pillarZ)
 	_JPROFILER.pop("GameScene:update(generatePillarEveryChunks)")
 end
 
@@ -37,7 +37,7 @@ function ExampleMod_generatePillarAtFixedPosition(scene, x, y, z, value)
 		end
 	end
 
-   _JPROFILER.pop("GameScene:update(generatePillarAtFixedPosition)")
+	_JPROFILER.pop("GameScene:update(generatePillarAtFixedPosition)")
 end
 
 function ExampleMod_generatePillarAtRandomLocation(scene, value)
