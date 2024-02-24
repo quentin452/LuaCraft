@@ -3,8 +3,8 @@ require("src/utils/filesystem")
 globalVSync = lovewindow.getVSync()
 
 local function reloadConfig()
+	_JPROFILER.push("reloadConfig")
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
-
 	if file_content then
 		local vsyncValue = file_content:match("vsync=(%w+)")
 		if vsyncValue then
@@ -26,9 +26,11 @@ local function reloadConfig()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("reloadConfig")
 end
 
 function toggleVSync()
+	_JPROFILER.push("toggleVSync")
 	globalVSync = not globalVSync
 	lovewindow.setVSync(globalVSync and 1 or 0)
 
@@ -47,8 +49,10 @@ function toggleVSync()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("toggleVSync")
 end
 function refreshRenderDistance()
+	_JPROFILER.push("refreshRenderDistance")
 	local file_path = "C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt"
 
 	local file_content, error_message = customReadFile(file_path)
@@ -68,9 +72,11 @@ function refreshRenderDistance()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("refreshRenderDistance")
 end
 
 function renderdistanceSetting()
+	_JPROFILER.push("renderdistanceSetting")
 	local file_path = "C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt"
 	local file_content, error_message = customReadFile(file_path)
 
@@ -94,11 +100,12 @@ function renderdistanceSetting()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("renderdistanceSetting")
 end
 
 function printNormalLoggingSettings()
+	_JPROFILER.push("printNormalLoggingSettings")
 	EnableLuaCraftPrintLoggingNormalLogging = not EnableLuaCraftPrintLoggingNormalLogging
-
 	-- Load current contents of luacraftconfig.txt file
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
 
@@ -118,10 +125,11 @@ function printNormalLoggingSettings()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("printNormalLoggingSettings")
 end
 function printWarnsSettings()
+	_JPROFILER.push("printWarnsSettings")
 	EnableLuaCraftLoggingWarn = not EnableLuaCraftLoggingWarn
-
 	-- Load current contents of luacraftconfig.txt file
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
 
@@ -141,8 +149,11 @@ function printWarnsSettings()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("printWarnsSettings")
 end
 function printErrorsSettings()
+	_JPROFILER.push("printErrorsSettings")
+
 	EnableLuaCraftLoggingError = not EnableLuaCraftLoggingError
 
 	-- Load current contents of luacraftconfig.txt file
@@ -164,8 +175,11 @@ function printErrorsSettings()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("printErrorsSettings")
 end
 function SettingsHandlingInit()
+	_JPROFILER.push("SettingsHandlingInit")
+
 	reloadConfig()
 
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
@@ -180,18 +194,25 @@ function SettingsHandlingInit()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
+	_JPROFILER.pop("SettingsHandlingInit")
 end
 
 function getLuaCraftPrintLoggingNormalValue()
+	--	_JPROFILER.push("getLuaCraftPrintLoggingNormalValue")
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	--	_JPROFILER.pop("getLuaCraftPrintLoggingNormalValue")
 	return file_content and file_content:match("LuaCraftPrintLoggingNormal=(%d)")
 end
 function getLuaCraftPrintLoggingWarnValue()
+	--_JPROFILER.push("getLuaCraftPrintLoggingWarnValue")
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	--_JPROFILER.pop("getLuaCraftPrintLoggingWarnValue")
 	return file_content and file_content:match("LuaCraftErrorLogging=(%d)")
 end
 function getLuaCraftPrintLoggingErrorValue()
+	--	_JPROFILER.push("getLuaCraftPrintLoggingErrorValue")
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	--	_JPROFILER.pop("getLuaCraftPrintLoggingErrorValue")
 	return file_content and file_content:match("LuaCraftWarnLogging=(%d)")
 end
 EnableLuaCraftPrintLoggingNormalLogging = getLuaCraftPrintLoggingNormalValue()

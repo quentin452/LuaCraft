@@ -1,6 +1,7 @@
 Settings = {}
 
 function checkAndUpdateDefaults(Settings)
+	_JPROFILER.push("checkAndUpdateDefaults")
 	if Settings["vsync"] == nil then
 		Settings["vsync"] = true
 	end
@@ -16,14 +17,18 @@ function checkAndUpdateDefaults(Settings)
 	if Settings["renderdistance"] == nil then
 		Settings["renderdistance"] = 5
 	end
+	_JPROFILER.pop("checkAndUpdateDefaults")
 end
 
 function customReadFile(filePath)
+	--_JPROFILER.push("customReadFile")
+
 	local file, error_message = io.open(filePath, "r")
 
 	if file then
 		local content = file:read("*a") -- *a read all things in the configurations
 		file:close()
+		--	_JPROFILER.pop("customReadFile")
 		return content
 	else
 		return nil, error_message
@@ -31,6 +36,8 @@ function customReadFile(filePath)
 end
 
 function loadAndSaveLuaCraftFileSystem()
+	_JPROFILER.push("loadAndSaveLuaCraftFileSystem")
+
 	LuaCraftPrintLoggingNormal("Attempting to load LuaCraft settings")
 
 	local userDirectory = love.filesystem.getUserDirectory()
@@ -48,7 +55,8 @@ function loadAndSaveLuaCraftFileSystem()
 
 	if file_content then
 		local Settings = {}
-		local orderedKeys = { "vsync", "LuaCraftPrintLoggingNormal", "LuaCraftWarnLogging","LuaCraftErrorLogging", "renderdistance" }
+		local orderedKeys =
+			{ "vsync", "LuaCraftPrintLoggingNormal", "LuaCraftWarnLogging", "LuaCraftErrorLogging", "renderdistance" }
 
 		for _, key in ipairs(orderedKeys) do
 			local value = file_content:match(key .. "=(%w+)")
@@ -80,4 +88,5 @@ function loadAndSaveLuaCraftFileSystem()
 	else
 		LuaCraftErrorLogging("Failed to open file for reading. Error: " .. error_message)
 	end
+	_JPROFILER.pop("loadAndSaveLuaCraftFileSystem")
 end
