@@ -48,19 +48,17 @@ end
 local function updateChunk(self, x, y, z)
 	--TODO IMPROVE PERFORMANCES OF THIS
 	--_JPROFILER.push("updateChunk")
+
 	x = x + math.floor(g3d.camera.position[1] / size)
 	y = y + math.floor(g3d.camera.position[2] / size)
 	z = z + math.floor(g3d.camera.position[3] / size)
 	local hash = ("%d/%d/%d"):format(x, y, z)
 	if self.chunkMap[hash] then
 		self.chunkMap[hash].frames = 0
-		self.chunkMap[hash].unloaded = false
 	else
 		local chunk = Chunk(x, y, z)
 		self.chunkMap[hash] = chunk
-		self.chunkMap[hash].unloaded = false
 		self.chunkCreationsThisFrame = self.chunkCreationsThisFrame + 1
-
 		-- this chunk was just created, so update all the chunks around it
 		self:requestRemesh(self.chunkMap[("%d/%d/%d"):format(x + 1, y, z)])
 		self:requestRemesh(self.chunkMap[("%d/%d/%d"):format(x - 1, y, z)])
@@ -107,9 +105,9 @@ function GameScene:update(dt)
 	local creationLimit = 1
 	self.chunkCreationsThisFrame = 0
 
-	-- Precompute constants outside the loop
-	local pi2 = math.pi * 2
-	local halfPi = math.pi / 2
+	local pi = math.pi
+	local pi2 = pi * 2
+	local halfPi = pi / 2
 
 	for r = 0, bubbleWidth do
 		local cosR = math.cos(r * halfPi / bubbleWidth)
@@ -251,9 +249,6 @@ function GameScene:draw()
 			-- Draw chunks only in the render distance
 			chunk:draw()
 		end
-		if not chunk.unloaded and dist > globalRenderDistance * Chunk.size then
-			self.chunkMap[_].unloaded = true
-		end
 	end
 
 	self.updatedThisFrame = false
@@ -261,12 +256,9 @@ function GameScene:draw()
 	_JPROFILER.push("CursorDrawingGameScene")
 	CursorDrawingGameScene()
 	_JPROFILER.pop("CursorDrawingGameScene")
-
 	if enableProfiler then
 		ProFi:stop()
-		ProFi:writeReport("report.txt")
 	end
-
 	_JPROFILER.pop("GameScene:draw")
 end
 
@@ -304,7 +296,6 @@ function GameScene:requestRemesh(chunk, first)
 	if not chunk then
 		return
 	end
-
 	local x, y, z = chunk.cx, chunk.cy, chunk.cz
 	local formatStr = "%d/%d/%d"
 	local key1 = formatStr:format(x + 1, y, z)

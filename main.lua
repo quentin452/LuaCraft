@@ -25,6 +25,7 @@ require("src/utils/filesystem")
 --world
 require("src/world/chunk/chunk")
 require("src/world/scene/gamescenecore")
+require("src/world/noise/perlinnoise")
 --modloader
 require("src/modloader/structuremodloader")
 require("src/modloader/modloaderinit")
@@ -56,7 +57,6 @@ mainMenuSettingsBackground = nil
 gameplayingpausemenu = nil
 playinggamesettings = nil
 worldCreationBackground = nil
-
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
@@ -67,7 +67,6 @@ function love.load()
 	if enableProfiler then
 		ProFi:start()
 	end
-
 	mainMenuBackground = lovegraphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
 	mainMenuSettingsBackground = lovegraphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
 	gameplayingpausemenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
@@ -135,7 +134,6 @@ function love.draw()
 		drawPlayingMenuSettings()
 		_JPROFILER.pop("drawPlayingMenuSettings")
 	end
-
 	_JPROFILER.pop("MainDraw")
 	_JPROFILER.pop("frame")
 end
@@ -201,5 +199,7 @@ function love.resize(w, h)
 end
 
 function love.quit()
+	ProFi:writeReport("report.txt")
+
 	_JPROFILER.write("_JPROFILER.mpack")
 end
