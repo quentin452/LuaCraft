@@ -1,5 +1,5 @@
-font25 = love.graphics.newFont(25)
-font15 = love.graphics.newFont(15)
+font25 = lg.newFont(25)
+font15 = lg.newFont(15)
 
 local colorMap = {
 	["0"] = { 255, 255, 255 }, -- white
@@ -14,7 +14,7 @@ function drawColorString(Pstring, Px, Py)
 	local defaultColor = { 255, 255, 255 }
 	local currentColor = defaultColor
 
-	love.graphics.setColor(unpack(currentColor))
+	lg.setColor(unpack(currentColor))
 
 	local i = 1
 	local len = #Pstring
@@ -25,10 +25,10 @@ function drawColorString(Pstring, Px, Py)
 		if c == "%" then
 			local colorDigit = string.sub(Pstring, i + 1, i + 1)
 			currentColor = colorMap[tostring(colorDigit)] or defaultColor
-			love.graphics.setColor(unpack(currentColor))
+			lg.setColor(unpack(currentColor))
 			i = i + 2 -- skip both '%' and the color digit
 		else
-			love.graphics.print(c, rx, ry)
+			lg.print(c, rx, ry)
 			if
 				gamestate == "MainMenu"
 				or gamestate == "MainMenuSettings"
@@ -55,14 +55,13 @@ function setFont()
 		or gamestate == "GamePausing"
 		or gamestate == "PlayingGameSettings"
 	then
-		love.graphics.setFont(font25)
+		lg.setFont(font25)
 	end
 	if gamestate == "WorldCreationMenu" or gamestate == "PlayingGame" then
-		love.graphics.setFont(font15)
+		lg.setFont(font15)
 	end
 	_JPROFILER.pop("setFont")
 end
-
 
 function IsStructureIsGenerated(x, y, z)
 	_JPROFILER.push("IsStructureIsGenerated")

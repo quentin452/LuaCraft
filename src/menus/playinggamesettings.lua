@@ -9,11 +9,11 @@ _PlayingGameSettings.choice[3] = "Exiting to game"
 _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawPlayingMenuSettings()
-	local w, h = love.graphics.getDimensions()
+	local w, h = lg.getDimensions()
 	local scaleX = w / playinggamesettings:getWidth()
 	local scaleY = h / playinggamesettings:getHeight()
 
-	love.graphics.draw(playinggamesettings, 0, 0, 0, scaleX, scaleY)
+	lg.draw(playinggamesettings, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _PlayingGameSettings.y
 	local lineHeight = font25:getHeight("X")

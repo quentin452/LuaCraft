@@ -9,11 +9,11 @@ _Mainmenu.choice[3] = "Exit"
 _Mainmenu.selection = 1
 
 function drawMainMenu()
-	local w, h = love.graphics.getDimensions()
+	local w, h = lg.getDimensions()
 	local scaleX = w / mainMenuBackground:getWidth()
 	local scaleY = h / mainMenuBackground:getHeight()
 
-	love.graphics.draw(mainMenuBackground, 0, 0, 0, scaleX, scaleY)
+	lg.draw(mainMenuBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _Mainmenu.y
 	local lineHeight = font25:getHeight("X")

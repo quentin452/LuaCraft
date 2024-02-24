@@ -146,11 +146,11 @@ function love.load()
 	if enableProfiler then
 		ProFi:start()
 	end
-	mainMenuBackground = love.graphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
-	mainMenuSettingsBackground = love.graphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
-	gameplayingpausemenu = love.graphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
-	playinggamesettings = love.graphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
-	worldCreationBackground = love.graphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
+	mainMenuBackground = lg.newImage("resources/assets/backgrounds/MainMenuBackground.png")
+	mainMenuSettingsBackground = lg.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
+	gameplayingpausemenu = lg.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
+	playinggamesettings = lg.newImage("resources/assets/backgrounds/playinggamesettings.png")
+	worldCreationBackground = lg.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 
 	if love.filesystem.getInfo("config.conf") then
 		local content, size = love.filesystem.read("config.conf")

@@ -9,11 +9,11 @@ _MainMenuSettings.choice[3] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawMainMenuSettings()
-	local w, h = love.graphics.getDimensions()
+	local w, h = lg.getDimensions()
 	local scaleX = w / mainMenuSettingsBackground:getWidth()
 	local scaleY = h / mainMenuSettingsBackground:getHeight()
 
-	love.graphics.draw(mainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
+	lg.draw(mainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _MainMenuSettings.y
 	local lineHeight = font25:getHeight("X")

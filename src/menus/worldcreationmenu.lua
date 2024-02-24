@@ -8,11 +8,11 @@ _WorldCreationMenu.choice[2] = "Exiting to main menu"
 _WorldCreationMenu.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawWorldCreationMenu()
-	local w, h = love.graphics.getDimensions()
+	local w, h = lg.getDimensions()
 	local scaleX = w / worldCreationBackground:getWidth()
 	local scaleY = h / worldCreationBackground:getHeight()
 
-	love.graphics.draw(worldCreationBackground, 0, 0, 0, scaleX, scaleY)
+	lg.draw(worldCreationBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _WorldCreationMenu.y
 	local lineHeight = font15:getHeight("X")

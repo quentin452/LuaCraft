@@ -44,13 +44,13 @@ local function newModel(verts, texture, translation, rotation, scale)
 	-- if texture is a string, use it as a path to an image file
 	-- otherwise texture is already an image, so don't bother
 	if type(texture) == "string" then
-		texture = love.graphics.newImage(texture)
+		texture = lg3d.newImage(texture)
 	end
 
 	-- initialize my variables
 	self.verts = verts
 	self.texture = texture
-	self.mesh = love.graphics.newMesh(self.vertexFormat, self.verts, "triangles")
+	self.mesh =	lg3d.newMesh(self.vertexFormat, self.verts, "triangles")
 	self.mesh:setTexture(self.texture)
 	self.matrix = newMatrix()
 	if type(scale) == "number" then
@@ -81,7 +81,7 @@ function model:makeNormals(isFlipped)
 		vp[8], v[8], vn[8] = n_3, n_3, n_3
 	end
 
-	self.mesh = love.graphics.newMesh(self.vertexFormat, self.verts, "triangles")
+	self.mesh = lg3d.newMesh(self.vertexFormat, self.verts, "triangles")
 	self.mesh:setTexture(self.texture)
 end
 
@@ -149,15 +149,15 @@ end
 -- draw the model
 function model:draw(shader)
 	local shader = shader or self.shader
-	love.graphics.setShader(shader)
+	lg3d.setShader(shader)
 	shader:send("modelMatrix", self.matrix)
 	shader:send("viewMatrix", camera.viewMatrix)
 	shader:send("projectionMatrix", camera.projectionMatrix)
 	if shader:hasUniform("isCanvasEnabled") then
-		shader:send("isCanvasEnabled", love.graphics.getCanvas() ~= nil)
+		shader:send("isCanvasEnabled", lg3d.getCanvas() ~= nil)
 	end
-	love.graphics.draw(self.mesh)
-	love.graphics.setShader()
+	lg3d.draw(self.mesh)
+	lg3d.setShader()
 end
 
 -- the fallback function if ffi was not loaded
@@ -201,7 +201,7 @@ if success then
 		end
 
 		self.mesh:release()
-		self.mesh = love.graphics.newMesh(self.vertexFormat, #self.verts, "triangles")
+		self.mesh = lg3d.newMesh(self.vertexFormat, #self.verts, "triangles")
 		self.mesh:setVertices(data)
 		self.mesh:setTexture(self.texture)
 		self.verts = nil
