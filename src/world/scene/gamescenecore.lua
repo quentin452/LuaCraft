@@ -5,9 +5,15 @@ StructureMap = {}
 gamescenetexturepack = lg.newImage("resources/assets/texturepack.png")
 local wasLeftDown, wasRightDown, rightDown, leftDown
 
+local threadpool = {}
+
+-- load up some threads so that chunk meshing won't block the main thread
+for i = 1, 8 do
+	threadpool[i] = love.thread.newThread("src/world/chunk/chunkremesh.lua")
+end
+local threadchannels = {}
 --Dependencies
 require("src/world/scene/blockplacementandcursor")
-require("src/world/scene/gamescenethreads")
 
 function GameScene:init()
 	size = Chunk.size
@@ -127,10 +133,86 @@ function GameScene:update(dt)
 	end
 	_JPROFILER.pop("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 
-	ThreadCountGameScene(self, gamescenethreadusage)
-	ListenFinishedMeshesOnthreadGameScene()
+	-- count how many threads are being used right now
+	_JPROFILER.push("GameScene:update(THREADSCOUNTS)")
+	local threadusage = 0
+	for _, thread in ipairs(threadpool) do
+		if thread:isRunning() then
+			threadusage = threadusage + 1
+		end
 
-	RemeshChunkInQueueGameScene(self)
+		local err = thread:getError()
+		assert(not err, err)
+	end
+	_JPROFILER.pop("GameScene:update(THREADSCOUNTS)")
+
+	-- listen for finished meshes on the thread channels
+	_JPROFILER.push("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
+	for channel, chunk in pairs(threadchannels) do
+		local data = love.thread.getChannel(channel):pop()
+		if data then
+			threadchannels[channel] = nil
+			if chunk.model then
+				chunk.model.mesh:release()
+			end
+			chunk.model = nil
+			if data.count > 0 then
+				chunk.model = g3d.newModel(data.count, gamescenetexturepack)
+				chunk.model.mesh:setVertices(data.data)
+				chunk.model:setTranslation(chunk.x, chunk.y, chunk.z)
+				chunk.inRemeshQueue = false
+				break
+			end
+		end
+	end
+	_JPROFILER.pop("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
+
+	_JPROFILER.push("GameScene:update(REMESHTHECHUNKINQUEUE)")
+	-- remesh the chunks in the queue
+	-- NOTE: if this happens multiple times in a frame, weird things can happen? idk why
+	if threadusage < #threadpool and #self.remeshQueue > 0 then
+		local chunk = table.remove(self.remeshQueue, 1)
+		if chunk and not chunk.dead then
+			for _, thread in ipairs(threadpool) do
+				if not thread:isRunning() then
+					-- send over the neighboring chunks to the thread
+					-- so that voxels on the edges can face themselves properly
+					local x, y, z = chunk.cx, chunk.cy, chunk.cz
+					local neighbor, n1, n2, n3, n4, n5, n6
+					neighbor = self.chunkMap[("%d/%d/%d"):format(x + 1, y, z)]
+					if neighbor and not neighbor.dead then
+						n1 = neighbor.data
+					end
+					neighbor = self.chunkMap[("%d/%d/%d"):format(x - 1, y, z)]
+					if neighbor and not neighbor.dead then
+						n2 = neighbor.data
+					end
+					neighbor = self.chunkMap[("%d/%d/%d"):format(x, y + 1, z)]
+					if neighbor and not neighbor.dead then
+						n3 = neighbor.data
+					end
+					neighbor = self.chunkMap[("%d/%d/%d"):format(x, y - 1, z)]
+					if neighbor and not neighbor.dead then
+						n4 = neighbor.data
+					end
+					neighbor = self.chunkMap[("%d/%d/%d"):format(x, y, z + 1)]
+					if neighbor and not neighbor.dead then
+						n5 = neighbor.data
+					end
+					neighbor = self.chunkMap[("%d/%d/%d"):format(x, y, z - 1)]
+					if neighbor and not neighbor.dead then
+						n6 = neighbor.data
+					end
+
+					thread:start(chunk.hash, chunk.data, n1, n2, n3, n4, n5, n6)
+					threadchannels[chunk.hash] = chunk
+					break
+				end
+			end
+		end
+	end
+	_JPROFILER.pop("GameScene:update(REMESHTHECHUNKINQUEUE)")
+
 	LeftClickGameScene(self, size)
 	RightClickGameScene(self, size)
 	_JPROFILER.push("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
@@ -197,7 +279,6 @@ function GameScene:draw()
 
 	_JPROFILER.pop("GameScene:draw")
 end
-
 
 function GameScene:getChunkFromWorld(x, y, z)
 	_JPROFILER.push("GameScene:getChunkFromWorld")
