@@ -47,7 +47,7 @@ end
 
 local function updateChunk(self, x, y, z)
 	--TODO IMPROVE PERFORMANCES OF THIS
-	_JPROFILER.push("updateChunk")
+	--_JPROFILER.push("updateChunk")
 	x = x + math.floor(g3d.camera.position[1] / size)
 	y = y + math.floor(g3d.camera.position[2] / size)
 	z = z + math.floor(g3d.camera.position[3] / size)
@@ -69,19 +69,18 @@ local function updateChunk(self, x, y, z)
 		self:requestRemesh(self.chunkMap[("%d/%d/%d"):format(x, y, z + 1)])
 		self:requestRemesh(self.chunkMap[("%d/%d/%d"):format(x, y, z - 1)])
 	end
-	_JPROFILER.pop("updateChunk")
+	--_JPROFILER.pop("updateChunk")
 end
 local RenderDistanceGotRefreshed = 0
 function GameScene:update(dt)
+	_JPROFILER.push("GameScene:update(ALL)")
 	if RenderDistanceGotRefreshed == 0 then
-		--this is needed to prevent a bug introduced by this commit : 
+		--this is needed to prevent a bug introduced by this commit : https://github.com/quentin452/LuaCraft/commit/c468810d6d2199541ea0bf9b93708adeac290e1d
 		refreshRenderDistance()
 		RenderDistanceGotRefreshed = 1
 	end
-	_JPROFILER.push("GameScene:update(ALL)")
 
 	-- update all the things in the scene
-	_JPROFILER.push("GameScene:update(RemoveDeadThings)")
 	local i = 1
 	while i <= #self.thingList do
 		local thing = self.thingList[i]
@@ -92,10 +91,8 @@ function GameScene:update(dt)
 			self:removeThing(i)
 		end
 	end
-	_JPROFILER.pop("GameScene:update(RemoveDeadThings)")
 
 	-- collect mouse inputs
-	_JPROFILER.push("GameScene:update(DIVERS)")
 
 	wasLeftDown, wasRightDown = leftDown, rightDown
 	leftDown, rightDown = love.mouse.isDown(1), love.mouse.isDown(2)
@@ -103,10 +100,8 @@ function GameScene:update(dt)
 
 	self.updatedThisFrame = true
 	g3d.camera.firstPersonMovement(dt)
-	_JPROFILER.pop("GameScene:update(DIVERS)")
 
 	-- generate a "bubble" of loaded chunks around the camera
-	_JPROFILER.push("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 	local bubbleWidth = globalRenderDistance
 	local bubbleHeight = math.floor(globalRenderDistance * 0.75)
 	local creationLimit = 1
@@ -136,10 +131,8 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	_JPROFILER.pop("GameScene:update(BUBBLEOFLOADEDCHUNKS)")
 
 	-- count how many threads are being used right now
-	_JPROFILER.push("GameScene:update(THREADSCOUNTS)")
 	local threadusage = 0
 	for _, thread in ipairs(threadpool) do
 		if thread:isRunning() then
@@ -149,10 +142,8 @@ function GameScene:update(dt)
 		local err = thread:getError()
 		assert(not err, err)
 	end
-	_JPROFILER.pop("GameScene:update(THREADSCOUNTS)")
 
 	-- listen for finished meshes on the thread channels
-	_JPROFILER.push("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
 	for channel, chunk in pairs(threadchannels) do
 		local data = love.thread.getChannel(channel):pop()
 		if data then
@@ -170,9 +161,7 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	_JPROFILER.pop("GameScene:update(LISTENFINISHEDMESHESONTHREAD)")
 
-	_JPROFILER.push("GameScene:update(REMESHTHECHUNKINQUEUE)")
 	-- remesh the chunks in the queue
 	-- NOTE: if this happens multiple times in a frame, weird things can happen? idk why
 	if threadusage < #threadpool and #self.remeshQueue > 0 then
@@ -216,11 +205,9 @@ function GameScene:update(dt)
 			end
 		end
 	end
-	_JPROFILER.pop("GameScene:update(REMESHTHECHUNKINQUEUE)")
 
 	LeftClickGameScene(self, size)
 	RightClickGameScene(self, size)
-	_JPROFILER.push("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
 	for _, chunk in pairs(self.chunkMap) do
 		-- Calculate the distance between the chunk and the camera
 		local dist = math.sqrt(
@@ -233,8 +220,6 @@ function GameScene:update(dt)
 			StructureGenFinal(self, size)
 		end
 	end
-
-	_JPROFILER.pop("GameScene:update(GENSTRUCTUREFROMGAMESCENE)")
 
 	_JPROFILER.pop("GameScene:update(ALL)")
 	--TODO here add periodic chunk saving system

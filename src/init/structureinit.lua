@@ -38,7 +38,7 @@ end
 --THIS METHOD IS WORK CORRECTLY
 
 function generateStructuresInPlayerRange(scene, size)
-	_JPROFILER.push("GameScene:update(generateStructuresInPlayerRange)")
+	--_JPROFILER.push("GameScene:update(generateStructuresInPlayerRange)")
 	local playerX, playerY, playerZ = g3d.camera.position[1], g3d.camera.position[2], g3d.camera.position[3]
 	local generatorFunc, storedX, storedY, storedZ = Config:getFixedPositionStructureGeneratorUsingPlayerRangeWithXYZ()
 
@@ -58,12 +58,12 @@ function generateStructuresInPlayerRange(scene, size)
 		end
 	end
 
-	_JPROFILER.pop("GameScene:update(generateStructuresInPlayerRange)")
+	--_JPROFILER.pop("GameScene:update(generateStructuresInPlayerRange)")
 end
 
 --THIS METHOD IS WORK CORRECTLY
 function generateStructuresatFixedPositions(scene, size)
-	_JPROFILER.push("generateStructuresatFixedPositions")
+	--_JPROFILER.push("generateStructuresatFixedPositions")
 
 	local generatorFunc, storedX, storedY, storedZ =
 		Config:getFixedPositionStructureGeneratorUsingIsChunkFullyGeneratedWithXYZ()
@@ -79,7 +79,7 @@ function generateStructuresatFixedPositions(scene, size)
 		LuaCraftPrintLoggingNormal("Structure générée avec succès à la position :", storedX, storedY, storedZ)
 	end
 
-	_JPROFILER.pop("generateStructuresatFixedPositions")
+	--_JPROFILER.pop("generateStructuresatFixedPositions")
 end
 
 function StructureGenFinal(scene, size)

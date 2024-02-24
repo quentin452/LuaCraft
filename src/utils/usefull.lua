@@ -64,9 +64,7 @@ function setFont()
 end
 
 function IsStructureIsGenerated(x, y, z)
-	_JPROFILER.push("IsStructureIsGenerated")
 	local blockKey = string.format("%d/%d/%d", x, y, z)
-	_JPROFILER.pop("IsStructureIsGenerated")
 	return StructureMap[blockKey]
 end
 
