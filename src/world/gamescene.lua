@@ -115,8 +115,26 @@ end
 
 function GameScene:update(dt)
 	_JPROFILER.push("GameScene:update(ALL)")
+
+	_JPROFILER.push("GameScene:update(UnloadChunkIfNotInRenderDistanceRange)")
+	local unloadDistance = globalRenderDistance * Chunk.size * 2
+	for hash, chunk in pairs(self.chunkMap) do
+		local dist = math.sqrt(
+			(chunk.x - g3d.camera.position[1]) ^ 2
+				+ (chunk.y - g3d.camera.position[2]) ^ 2
+				+ (chunk.z - g3d.camera.position[3]) ^ 2
+		)
+
+		if dist > unloadDistance then
+			self.chunkMap[hash] = nil
+
+			if chunk.model then
+				chunk.model.mesh:release()
+			end
+		end
+	end
+	_JPROFILER.pop("GameScene:update(UnloadChunkIfNotInRenderDistanceRange))")
 	-- update all the things in the scene
-	-- remove the dead things
 	_JPROFILER.push("GameScene:update(RemoveDeadThings)")
 	local i = 1
 	while i <= #self.thingList do
