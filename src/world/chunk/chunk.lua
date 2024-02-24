@@ -3,7 +3,6 @@ local ffi = require("ffi")
 
 Chunk = Object:extend()
 Chunk.size = size
-
 function Chunk:new(x, y, z)
 	_JPROFILER.push("Chunk:new")
 	self.data = {}
@@ -13,6 +12,7 @@ function Chunk:new(x, y, z)
 	self.x = x * size
 	self.y = y * size
 	self.z = z * size
+	self.unloaded = false
 	self.hash = ("%d/%d/%d"):format(x, y, z)
 	self.frames = 0
 	self.inRemeshQueue = false
@@ -93,6 +93,9 @@ end
 
 function Chunk:draw()
 	_JPROFILER.push("Chunk:draw")
+	if self.unloaded then
+		return
+	end
 	if self.model and not self.dead then
 		self.model:draw()
 	end

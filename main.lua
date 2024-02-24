@@ -18,8 +18,8 @@ require("src/client/hud/gamehud")
 --utils
 require("src/utils/usefull")
 --world
-require("src/world/chunk")
-require("src/world/gamescene")
+require("src/world/chunk/chunk")
+require("src/world/scene/gamescenecore")
 --modloader
 require("src/modloader/structuremodloader")
 require("src/modloader/modloaderinit")
@@ -182,6 +182,7 @@ end
 function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
+
 	if gamestate == "PlayingGame" then
 		if gameSceneInstance and gameSceneInstance.update then
 			gameSceneInstance:update(dt)
@@ -195,7 +196,6 @@ function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	setFont()
-
 	if gamestate == "GamePausing" then
 		_JPROFILER.push("drawGamePlayingPauseMenu")
 		drawGamePlayingPauseMenu()

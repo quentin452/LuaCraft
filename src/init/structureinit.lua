@@ -85,5 +85,5 @@ end
 function StructureGenFinal(scene, size)
 	generateStructuresatFixedPositions(scene, size)
 	generateStructuresInPlayerRange(scene, size)
-	generateStructuresatRandomLocation(scene, 1)
+	--generateStructuresatRandomLocation(scene, 1)
 end
