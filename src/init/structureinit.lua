@@ -3,12 +3,12 @@
 --TODO PROBABLY IN CHUNK script i need to add a timer to avoid generating at infinit time caused by generateStructuresatRandomLocation????
 
 --THIS METHOD IS WORK CORRECTLY BUT HE GENERATE AT INFINITE TIME
-function generateStructuresatRandomLocation(scene, numStructures, value)
+function generateStructuresatRandomLocation(scene, value)
 	_JPROFILER.push("GameScene:update(generateStructuresatRandomLocation)")
 
 	local structureGenerator = Config:getRandomLocationStructureGenerator()
 
-	for i = 1, numStructures do
+	for _ = 1, 1 do
 		local size = math.random(5, 10)
 		local x = math.random(0, 100)
 		local y = math.random(100, 200)
@@ -41,8 +41,8 @@ function generateStructuresInPlayerRange(scene)
 
 	local Pillars = {
 		{ x = 40, y = 40, z = 22 },
-		{ x = 40, y = 40, z = 22 },
-		{ x = 40, y = 40, z = 22 },
+		{ x = 40, y = 41, z = 22 },
+		{ x = 40, y = 42, z = 22 },
 	}
 
 	for _, Pillar in ipairs(Pillars) do
@@ -50,7 +50,13 @@ function generateStructuresInPlayerRange(scene)
 			not IsStructureIsGenerated(Pillar.x, Pillar.y, Pillar.z)
 			and isPlayerInRange(playerX, playerY, playerZ, Pillar.x, Pillar.y, Pillar.z)
 		then
-			Config:getFixedPositionStructureGenerator()(scene, Pillar.x, Pillar.y, Pillar.z, 1)
+			Config:getFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical()(
+				scene,
+				Pillar.x,
+				Pillar.y,
+				Pillar.z,
+				1
+			)
 			local blockKey = ("%d/%d/%d"):format(Pillar.x, Pillar.y, Pillar.z)
 			StructureMap[blockKey] = true
 			print("Structure générée avec succès à la position :", Pillar.x, Pillar.y, Pillar.z)
@@ -68,7 +74,7 @@ function generateStructuresatFixedPositions(scene, size)
 
 	local function generateStructureAtPosition(x, y, z)
 		-- Appel de la fonction associée à structureGenerator
-		Config:getFixedPositionStructureGenerator()(scene, x, y, z, 1)
+		Config:getFixedPositionStructureGeneratorIsChunkFullyGeneratedTechnical()(scene, x, y, z, 1)
 		local blockKey = ("%d/%d/%d"):format(x, y, z)
 		StructureMap[blockKey] = true
 		print("Structure générée avec succès à la position :", x, y, z)
@@ -110,5 +116,5 @@ end
 function StructureGenFinal(scene, size)
 	generateStructuresatFixedPositions(scene, size)
 	generateStructuresInPlayerRange(scene)
-	generateStructuresatRandomLocation(scene, 1, 1)
+	generateStructuresatRandomLocation(scene, 1)
 end

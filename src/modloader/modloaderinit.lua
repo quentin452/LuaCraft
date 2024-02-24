@@ -15,16 +15,22 @@ end
 function InitStructureConfigurationNEW()
 	_JPROFILER.push("InitStructureConfigurationtest")
 
-	local randomLocationGenerators = getFunctionsByTag("randomLocation")
+	local randomLocationGenerators = getFunctionsByTag("generateStructuresatRandomLocation")
 	for _, func in ipairs(randomLocationGenerators) do
 		print("Random Location Generator found:", func)
 		Config:setRandomLocationStructureGenerator(func)
 	end
 
-	local fixedPositionGenerators = getFunctionsByTag("fixedPosition")
+	local fixedPositionGenerators = getFunctionsByTag("generateStructuresInPlayerRange")
 	for _, func in ipairs(fixedPositionGenerators) do
 		print("Fixed Position Generator found:", func)
-		Config:setFixedPositionStructureGenerator(func)
+		Config:setFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical(func)
+	end
+
+	local fixedPositionGenerators = getFunctionsByTag("generateStructuresatFixedPositions")
+	for _, func in ipairs(fixedPositionGenerators) do
+		print("Fixed Position Generator found:", func)
+		Config:setFixedPositionStructureGeneratorisChunkFullyGeneratedTechnical(func)
 	end
 
 	_JPROFILER.pop("InitStructureConfigurationtest")

@@ -15,10 +15,18 @@ function Config:getRandomLocationStructureGenerator()
 	return self.randomLocationStructureGenerator or function() end
 end
 
-function Config:setFixedPositionStructureGenerator(generatorFunc)
-	self.fixedPositionStructureGenerator = generatorFunc
+function Config:setFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical(generatorFunc)
+	self.fixedPositionStructureGeneratorInPlayerRenderDistanceTechnical = generatorFunc
 end
 
-function Config:getFixedPositionStructureGenerator()
-	return self.fixedPositionStructureGenerator or function() end
+function Config:getFixedPositionStructureGeneratorInPlayerRenderDistanceTechnical()
+	return self.fixedPositionStructureGeneratorInPlayerRenderDistanceTechnical or function() end
+end
+
+function Config:setFixedPositionStructureGeneratorisChunkFullyGeneratedTechnical(generatorFunc)
+	self.fixedPositionStructureGeneratorisChunkFullyGeneratedTechnical = generatorFunc
+end
+
+function Config:getFixedPositionStructureGeneratorIsChunkFullyGeneratedTechnical()
+	return self.fixedPositionStructureGeneratorisChunkFullyGeneratedTechnical or function() end
 end

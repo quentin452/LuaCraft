@@ -8,7 +8,7 @@ function addTagToFunction(func, tag)
 end
 
 function getFunctionsByTag(tag)
-	_JPROFILER.push("getFunctionsByTag")
+	--_JPROFILER.push("getFunctionsByTag")
 	local functionsWithTag = {}
 	for func, tags in pairs(functionTags) do
 		for _, t in ipairs(tags) do

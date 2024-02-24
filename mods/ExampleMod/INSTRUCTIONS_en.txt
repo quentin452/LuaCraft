@@ -1,3 +1,5 @@
+-- FOR NOW ONLY BASIC MODDED STRUCTURE CAN BE MADE
+
 -- MOD LOADER NOTICE: THIS SYNTAX IS CRUCIAL FOR ALL FUNCTIONS AND VARIABLES IN YOUR MOD.
 
 -- Follow this syntax to ensure naming consistency and avoid conflicts with other mods or the core game.
