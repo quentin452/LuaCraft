@@ -10,11 +10,12 @@ _MainMenuSettings.choice[4] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawMainMenuSettings()
-	local w, h = lg.getDimensions()
+	LuaCraftPrint("test")
+	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / mainMenuSettingsBackground:getWidth()
 	local scaleY = h / mainMenuSettingsBackground:getHeight()
 
-	lg.draw(mainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
+	lovegraphics.draw(mainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _MainMenuSettings.y
 	local lineHeight = font25:getHeight("X")
@@ -34,19 +35,19 @@ function drawMainMenuSettings()
 
 		local choiceText = _MainMenuSettings.choice[n]
 		if n == 1 then
-			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%w+)")
+			local vsyncValue = lovefilesystem.read("config.conf"):match("vsync=(%w+)")
 			if vsyncValue and vsyncValue:lower() == "true" then
 				choiceText = choiceText .. " X"
 			end
 		end
 		if n == 2 then
-			local printValue = love.filesystem.read("config.conf"):match("luacraftprint=(%w+)")
+			local printValue = lovefilesystem.read("config.conf"):match("luacraftprint=(%w+)")
 			if printValue and printValue:lower() == "true" then
 				choiceText = choiceText .. " X"
 			end
 		end
 		if n == 3 then
-			local renderdistancevalue = love.filesystem.read("config.conf"):match("renderdistance=(%d)")
+			local renderdistancevalue = lovefilesystem.read("config.conf"):match("renderdistance=(%d)")
 			if renderdistancevalue then
 				choiceText = choiceText .. " " .. globalRenderDistance
 			end

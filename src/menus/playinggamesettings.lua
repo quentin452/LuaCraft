@@ -10,11 +10,11 @@ _PlayingGameSettings.choice[4] = "Exiting to game"
 _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawPlayingMenuSettings()
-	local w, h = lg.getDimensions()
+	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / playinggamesettings:getWidth()
 	local scaleY = h / playinggamesettings:getHeight()
 
-	lg.draw(playinggamesettings, 0, 0, 0, scaleX, scaleY)
+	lovegraphics.draw(playinggamesettings, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _PlayingGameSettings.y
 	local lineHeight = font25:getHeight("X")
@@ -35,19 +35,19 @@ function drawPlayingMenuSettings()
 		local choiceText = _PlayingGameSettings.choice[n]
 		-- Ajout de la condition pour activer ou désactiver le "X"
 		if n == 1 then
-			local vsyncValue = love.filesystem.read("config.conf"):match("vsync=(%w+)")
+			local vsyncValue = lovefilesystem.read("config.conf"):match("vsync=(%w+)")
 			if vsyncValue and vsyncValue:lower() == "true" then
 				choiceText = choiceText .. " X"
 			end
 		end
 		if n == 2 then
-			local printValue = love.filesystem.read("config.conf"):match("luacraftprint=(%w+)")
+			local printValue = lovefilesystem.read("config.conf"):match("luacraftprint=(%w+)")
 			if printValue and printValue:lower() == "true" then
 				choiceText = choiceText .. " X"
 			end
 		end
 		if n == 3 then
-			local renderdistancevalue = love.filesystem.read("config.conf"):match("renderdistance=(%d)")
+			local renderdistancevalue = lovefilesystem.read("config.conf"):match("renderdistance=(%d)")
 			if renderdistancevalue then
 				choiceText = choiceText .. " " .. globalRenderDistance
 			end

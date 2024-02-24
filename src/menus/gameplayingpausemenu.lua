@@ -9,11 +9,11 @@ _GamePlayingPauseMenu.choice[3] = "Exit to main menu"
 _GamePlayingPauseMenu.selection = 1
 
 function drawGamePlayingPauseMenu()
-	local w, h = lg.getDimensions()
+	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / gameplayingpausemenu:getWidth()
 	local scaleY = h / gameplayingpausemenu:getHeight()
 
-	lg.draw(gameplayingpausemenu, 0, 0, 0, scaleX, scaleY)
+	lovegraphics.draw(gameplayingpausemenu, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _GamePlayingPauseMenu.y
 	local lineHeight = font25:getHeight("X")

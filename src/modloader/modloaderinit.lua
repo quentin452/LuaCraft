@@ -8,7 +8,7 @@ function LoadMods()
 	LuaCraftPrint("Checking mods directory:", modsDirectory)
 
 	-- Iterate over all items in the mods directory
-	local items = love.filesystem.getDirectoryItems(modsDirectory)
+	local items = lovefilesystem.getDirectoryItems(modsDirectory)
 	for _, item in ipairs(items) do
 		local fullPath = modsDirectory .. item
 
@@ -16,7 +16,7 @@ function LoadMods()
 		LuaCraftPrint("Checking item:", fullPath)
 
 		-- Check if the item is a directory
-		if love.filesystem.getInfo(fullPath, "directory") then
+		if lovefilesystem.getInfo(fullPath, "directory") then
 			-- Assuming you want to load mods from subdirectories
 			local modName = item
 			LuaCraftPrint("Attempting to load mod:", modName)

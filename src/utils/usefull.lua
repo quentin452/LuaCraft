@@ -1,5 +1,5 @@
-font25 = lg.newFont(25)
-font15 = lg.newFont(15)
+font25 = lovegraphics.newFont(25)
+font15 = lovegraphics.newFont(15)
 
 local colorMap = {
 	["0"] = { 255, 255, 255 }, -- white
@@ -14,7 +14,7 @@ function drawColorString(Pstring, Px, Py)
 	local defaultColor = { 255, 255, 255 }
 	local currentColor = defaultColor
 
-	lg.setColor(currentColor)
+	lovegraphics.setColor(currentColor)
 
 	local i = 1
 	local len = #Pstring
@@ -25,10 +25,10 @@ function drawColorString(Pstring, Px, Py)
 		if c == "%" then
 			local colorDigit = string.sub(Pstring, i + 1, i + 1)
 			currentColor = colorMap[tostring(colorDigit)] or defaultColor
-			lg.setColor(currentColor)
+			lovegraphics.setColor(currentColor)
 			i = i + 2 -- skip both '%' and the color digit
 		else
-			lg.print(c, rx, ry)
+			lovegraphics.print(c, rx, ry)
 			local fontWidth = (
 				gamestate == "MainMenu"
 				or gamestate == "MainMenuSettings"
@@ -41,7 +41,7 @@ function drawColorString(Pstring, Px, Py)
 			i = i + 1
 		end
 	end
-	lg.setColor(defaultColor)
+	lovegraphics.setColor(defaultColor)
 	_JPROFILER.pop("drawColorString")
 end
 
@@ -58,7 +58,7 @@ function setFont()
 	_JPROFILER.push("setFont")
 	local selectedFont = fontTable[gamestate]
 	if selectedFont then
-		lg.setFont(selectedFont)
+		lovegraphics.setFont(selectedFont)
 	end
 	_JPROFILER.pop("setFont")
 end

@@ -1,5 +1,8 @@
-lg = love.graphics
-lg.setDefaultFilter("nearest")
+lovez = love
+lovefilesystem = lovez.filesystem
+lovegraphics = lovez.graphics
+lovewindow = lovez.window
+lovegraphics.setDefaultFilter("nearest")
 io.stdout:setvbuf("no")
 
 --libs
@@ -57,17 +60,17 @@ function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
 	ModLoaderInitALL()
-	love.filesystem.setIdentity("LuaCraft")
+	lovefilesystem.setIdentity("LuaCraft")
 	SettingsHandlingInit()
 
 	if enableProfiler then
 		ProFi:start()
 	end
-	mainMenuBackground = lg.newImage("resources/assets/backgrounds/MainMenuBackground.png")
-	mainMenuSettingsBackground = lg.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
-	gameplayingpausemenu = lg.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
-	playinggamesettings = lg.newImage("resources/assets/backgrounds/playinggamesettings.png")
-	worldCreationBackground = lg.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
+	mainMenuBackground = lovegraphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
+	mainMenuSettingsBackground = lovegraphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
+	gameplayingpausemenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
+	playinggamesettings = lovegraphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
+	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 
 	_JPROFILER.pop("Mainload")
 	_JPROFILER.pop("frame")

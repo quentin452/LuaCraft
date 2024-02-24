@@ -145,8 +145,8 @@ function CursorDrawingGameScene()
 		return
 	end
 
-	lg.setColor(0, 0, 0)
-	lg.setWireframe(true)
+	lovegraphics.setColor(0, 0, 0)
+	lovegraphics.setWireframe(true)
 	gamesceneblockCursor:draw()
-	lg.setWireframe(false)
+	lovegraphics.setWireframe(false)
 end

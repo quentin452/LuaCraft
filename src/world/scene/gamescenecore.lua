@@ -2,7 +2,7 @@ GameScene = Object:extend()
 local size
 StructureMap = {}
 
-gamescenetexturepack = lg.newImage("resources/assets/texturepack.png")
+gamescenetexturepack = lovegraphics.newImage("resources/assets/texturepack.png")
 local wasLeftDown, wasRightDown, rightDown, leftDown
 
 local threadpool = {}
@@ -241,14 +241,14 @@ end
 
 function GameScene:draw()
 	_JPROFILER.push("GameScene:draw")
-	lg.clear(lume.color("#4488ff"))
+	lovegraphics.clear(lume.color("#4488ff"))
 
 	-- draw all the things in the scene
 	for _, thing in ipairs(self.thingList) do
 		thing:draw()
 	end
 
-	lg.setColor(1, 1, 1)
+	lovegraphics.setColor(1, 1, 1)
 	for _, chunk in pairs(self.chunkMap) do
 		-- Calculate the distance between the chunk and the camera
 		local dist = math.sqrt(
