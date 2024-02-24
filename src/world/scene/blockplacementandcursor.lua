@@ -48,8 +48,8 @@ do
 end
 local buildx, buildy, buildz
 
-function LeftClickGameScene(scene,size)
-    -- left click to destroy blocks
+function LeftClickGameScene(scene, size)
+	-- left click to destroy blocks
 	-- casts a ray from the camera five blocks in the look vector
 	-- finds the first intersecting block
 	_JPROFILER.push("GameScene:update(LEFTCLICK)")
@@ -105,8 +105,8 @@ function LeftClickGameScene(scene,size)
 	_JPROFILER.pop("GameScene:update(LEFTCLICK)")
 end
 
-function RightClickGameScene(scene,size)
-    _JPROFILER.push("GameScene:update(RIGHTCLICK)")
+function RightClickGameScene(scene, size)
+	_JPROFILER.push("GameScene:update(RIGHTCLICK)")
 	-- right click to place blocks
 	if rightClick and buildx then
 		local chunk = scene:getChunkFromWorld(buildx, buildy, buildz)
@@ -141,12 +141,12 @@ function RightClickGameScene(scene,size)
 end
 
 function CursorDrawingGameScene()
-    if not blockCursorVisible then
-        return
-    end
+	if not blockCursorVisible then
+		return
+	end
 
-    lg.setColor(0, 0, 0)
-    lg.setWireframe(true)
-    gamesceneblockCursor:draw()
-    lg.setWireframe(false)
+	lg.setColor(0, 0, 0)
+	lg.setWireframe(true)
+	gamesceneblockCursor:draw()
+	lg.setWireframe(false)
 end

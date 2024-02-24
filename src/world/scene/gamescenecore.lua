@@ -186,7 +186,9 @@ function GameScene:draw()
 
 	self.updatedThisFrame = false
 
+	_JPROFILER.push("CursorDrawingGameScene")
 	CursorDrawingGameScene()
+	_JPROFILER.pop("CursorDrawingGameScene")
 
 	if enableProfiler then
 		ProFi:stop()
@@ -195,6 +197,7 @@ function GameScene:draw()
 
 	_JPROFILER.pop("GameScene:draw")
 end
+
 
 function GameScene:getChunkFromWorld(x, y, z)
 	_JPROFILER.push("GameScene:getChunkFromWorld")

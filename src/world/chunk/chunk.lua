@@ -92,14 +92,12 @@ function Chunk:setBlock(x, y, z, value)
 end
 
 function Chunk:draw()
-	_JPROFILER.push("Chunk:draw")
 	if self.unloaded then
 		return
 	end
 	if self.model and not self.dead then
 		self.model:draw()
 	end
-	_JPROFILER.pop("Chunk:draw")
 end
 
 function Chunk:destroy()
