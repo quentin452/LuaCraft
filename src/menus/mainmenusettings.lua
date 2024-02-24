@@ -10,7 +10,6 @@ _MainMenuSettings.choice[4] = "Exiting to main menu"
 _MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
 
 function drawMainMenuSettings()
-	LuaCraftPrint("test")
 	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / mainMenuSettingsBackground:getWidth()
 	local scaleY = h / mainMenuSettingsBackground:getHeight()
