@@ -32,7 +32,7 @@ require("src/modloader/functiontags")
 
 --profiling
 ProFi = require("ProFi")
-PROF_CAPTURE = true
+PROF_CAPTURE = false
 _JPROFILER = require("libs/jprofiler/jprof")
 --profs instruction
 --1 : enable PROF_CAPTURE to enable profiler
