@@ -1,3 +1,4 @@
+--TODO SEE IF HUD DESTROY PERFORMANCES AND IF YES , TRY ADDING A CACHE FOR IT
 function drawF3MainGame()
 	local w = lg.getDimensions()
 
