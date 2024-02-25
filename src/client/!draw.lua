@@ -13,12 +13,28 @@ function DrawGame()
 	end
 	if gamestate == gamestatePlayingGame then
 		_JPROFILER.push("DrawGameScene")
+		if hudMessage ~= nil then
+			local width, height = love.graphics.getDimensions()
+			local font = love.graphics.getFont()
+	
+			-- Calculate the width and height of the text
+			local textWidth = font:getWidth(hudMessage)
+			local textHeight = font:getHeight(hudMessage)
+	
+			-- Calculate the position to center the text
+			local x = (width - textWidth) / 2
+			local y = (height - textHeight) / 2 + 280
+	
+			love.graphics.print(hudMessage, x, y)
+		end
 		-- draw 3d scene
 		Scene:render(true)
 
 		-- draw HUD
 		Scene:renderFunction(function()
-			DrawF3()
+			if enableF3 == true then
+				DrawF3()
+			end
 
 			DrawCrossHair()
 

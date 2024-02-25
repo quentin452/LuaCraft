@@ -56,6 +56,8 @@ gamestateWorldCreationMenu = "WorldCreationMenu"
 
 gamestate = gamestateMainMenu
 
+enableF3 = false
+
 --modloader
 require("src/modloader/structuremodloader")
 require("src/modloader/modloaderinit")
@@ -103,20 +105,6 @@ function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	DrawGame()
-	if hudMessage ~= nil and gamestate == gamestatePlayingGame then
-		local width, height = love.graphics.getDimensions()
-		local font = love.graphics.getFont()
-
-		-- Calculate the width and height of the text
-		local textWidth = font:getWidth(hudMessage)
-		local textHeight = font:getHeight(hudMessage)
-
-		-- Calculate the position to center the text
-		local x = (width - textWidth) / 2
-		local y = (height - textHeight) / 2 + 280
-
-		love.graphics.print(hudMessage, x, y)
-	end
 
 	if enablePROFIProfiler then
 		ProFi:stop()

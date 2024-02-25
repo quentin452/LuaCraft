@@ -40,14 +40,6 @@ function MouseLogicOnPlay(x, y, b)
 end
 
 function KeyPressed(k)
-	--if k == "escape" then
-	--	love.event.push("quit")
-	--end
-
-	if k == "n" then
-		GenerateWorld()
-	end
-
 	-- simplified hotbar number press code, thanks nico-abram!
 	local numberPress = tonumber(k)
 	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 then
@@ -71,6 +63,11 @@ function KeyPressed(k)
 	if gamestate == gamestatePlayingGame then
 		if k == "escape" then
 			gamestate = gamestateGamePausing
+		elseif k == "n" then
+			--TODO FOR REMOVAL
+			GenerateWorld()
+		elseif k == "f3" then
+           enableF3 = not enableF3
 		end
 	end
 	if gamestate == gamestateGamePausing then
