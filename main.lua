@@ -3,7 +3,6 @@ lovefilesystem = lovez.filesystem
 lovegraphics = lovez.graphics
 lovewindow = lovez.window
 
-
 Engine = require("engine")
 --menus
 require("src/menus/mainmenu")
@@ -53,7 +52,7 @@ require("src/modloader/modloaderinit")
 require("src/modloader/functiontags")
 
 LoadMods()
-
+hudTimeLeft = 0
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
@@ -80,6 +79,12 @@ function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
 	UpdateGame(dt)
+	if hudTimeLeft > 0 then
+		hudTimeLeft = hudTimeLeft - dt
+		if hudTimeLeft <= 0 then
+			hudMessage = ""
+		end
+	end
 	_JPROFILER.pop("MainUpdate")
 	_JPROFILER.pop("frame")
 end
@@ -88,6 +93,21 @@ function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	DrawGame()
+	if hudMessage ~= nil then
+		local width, height = love.graphics.getDimensions()
+		local font = love.graphics.getFont()
+
+		-- Calculate the width and height of the text
+		local textWidth = font:getWidth(hudMessage)
+		local textHeight = font:getHeight(hudMessage)
+
+		-- Calculate the position to center the text
+		local x = (width - textWidth) / 2
+		local y = (height - textHeight) / 2 + 280
+
+		love.graphics.print(hudMessage, x, y)
+	end
+
 	if enablePROFIProfiler then
 		ProFi:stop()
 	end

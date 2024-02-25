@@ -21,7 +21,9 @@ function MouseLogicOnPlay(x, y, b)
 
 	local cx, cy, cz = pos and pos.x, pos and pos.y, pos and pos.z
 	local chunk = pos and pos.chunk
-	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit then
+
+	-- Check if the block is not placed at Y 128
+	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and cy and cy < 128 then
 		chunk:setVoxel(cx, cy, cz, value, true)
 		LightingUpdate()
 		UpdateChangedChunks()
@@ -29,6 +31,9 @@ function MouseLogicOnPlay(x, y, b)
 		-- print("---")
 		-- print(cx, cy, cz)
 		-- print(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
+	elseif pos.y >= 128 then
+		hudMessage = "you cannot place blocks at Y = 128 or more"
+		hudTimeLeft = 3
 	end
 end
 
