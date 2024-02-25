@@ -1,11 +1,25 @@
+lovez = love
+lovefilesystem = lovez.filesystem
+lovegraphics = lovez.graphics
+lovewindow = lovez.window
+
 Engine = require("engine")
 Perspective = require("src/world/perspective")
+--menus
+require("src/menus/mainmenu")
+require("src/menus/mainmenusettings")
+require("src/menus/gameplayingpausemenu")
+require("src/menus/playinggamesettings")
+require("src/menus/worldcreationmenu")
 --blocks
 require("src/blocks/TileEntities/tiledata")
 --utils
 require("src/utils/things")
 require("src/utils/math")
 require("src/utils/mouselogic")
+require("src/utils/usefull")
+require("src/utils/filesystem")
+require("src/utils/settingshandling")
 ProFi = require("src/utils/ProFi")
 --entities
 require("src/entities/player")
@@ -19,13 +33,18 @@ require("src/world/gen/caves")
 require("src/init/!init")
 --client
 require("src/client/!draw")
+--libs
+_JPROFILER = require("libs/jprofiler/jprof")
 
-local enableProfiler = false
+local enablePROFIProfiler = false
 
+PROF_CAPTURE = false
+gamestate = "MainMenu"
 function love.load()
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:start()
 	end
+	lovefilesystem.setIdentity("LuaCraft")
 	InitializeGame()
 end
 
@@ -41,14 +60,16 @@ end
 
 function love.draw()
 	DrawGame()
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:stop()
 	end
 end
 
 function love.mousemoved(x, y, dx, dy)
 	-- forward mouselook to Scene object for first person camera control
-	Scene:mouseLook(x, y, dx, dy)
+	if gamestate == "PlayingGame" then
+		Scene:mouseLook(x, y, dx, dy)
+	end
 end
 
 function love.wheelmoved(x, y)
@@ -64,7 +85,7 @@ function love.keypressed(k)
 end
 
 function love.quit()
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:writeReport("report.txt")
 	end
 end

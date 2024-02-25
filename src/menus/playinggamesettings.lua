@@ -64,7 +64,7 @@ function drawPlayingMenuSettings()
 			end
 
 			if n == 5 and type(Settings["renderdistance"]) == "number" then
-				choiceText = choiceText .. " " .. Settings["renderdistance"]
+				choiceText = choiceText .. " TODO" .. Settings["renderdistance"]
 			end
 			drawColorString(marque .. "" .. choiceText, _PlayingGameSettings.x, posY)
 

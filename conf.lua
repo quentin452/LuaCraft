@@ -20,7 +20,6 @@ function love.conf(t)
 	t.window.minheight = 576 -- Hauteur minimale de la fenêtre si elle est redimensionnée (number)
 	t.window.fullscreen = false -- Active le plein écran (booléen)
 	t.window.fullscreentype = "desktop" -- Choisissez entre le mode plein écran "bureau" ou le mode plein écran "exclusif" (string)
-	t.window.vsync = 0
 	t.window.msaa = 0 -- Le nombre d'échantillons à utiliser avec l'anti-crénelage multi-échantillonné (number)
 	t.window.display = 1 -- Index du moniteur où afficher la fenêtre (number)
 	t.window.highdpi = false -- Activer le mode haute résolution pour la fenêtre sur un écran Retina (booléen)

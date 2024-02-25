@@ -28,9 +28,9 @@ function MouseLogicOnPlay(x, y, b)
 end
 
 function KeyPressed(k)
-	if k == "escape" then
-		love.event.push("quit")
-	end
+	--if k == "escape" then
+	--	love.event.push("quit")
+	--end
 
 	if k == "n" then
 		GenerateWorld()
@@ -40,5 +40,35 @@ function KeyPressed(k)
 	local numberPress = tonumber(k)
 	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 then
 		PlayerInventory.hotbarSelect = numberPress
+	end
+	if gamestate == "MainMenu" then
+		_JPROFILER.push("keysinitMainMenu")
+		keysinitMainMenu(k)
+		_JPROFILER.pop("keysinitMainMenu")
+	end
+	if gamestate == "MainMenuSettings" then
+		_JPROFILER.push("keysinitMainMenuSettings")
+		keysinitMainMenuSettings(k)
+		_JPROFILER.pop("keysinitMainMenuSettings")
+	end
+	if gamestate == "WorldCreationMenu" then
+		_JPROFILER.push("keysInitWorldCreationMenu")
+		keysInitWorldCreationMenu(k)
+		_JPROFILER.pop("keysInitWorldCreationMenu")
+	end
+	if gamestate == "PlayingGame" then
+		if k == "escape" then
+			gamestate = "GamePausing"
+		end
+	end
+	if gamestate == "GamePausing" then
+		_JPROFILER.push("keysinitGamePlayingPauseMenu")
+		keysinitGamePlayingPauseMenu(k)
+		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
+	end
+	if gamestate == "PlayingGameSettings" then
+		_JPROFILER.push("keysinitPlayingMenuSettings")
+		keysinitPlayingMenuSettings(k)
+		_JPROFILER.pop("keysinitPlayingMenuSettings")
 	end
 end

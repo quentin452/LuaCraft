@@ -22,6 +22,4 @@ function InitializeGame()
 	InitializeTileCanevas()
 	InitalizeLightningCanevas()
 	initWorldGenerationVariables()
-    --TODO NEED TO MOVE THIS
-	GenerateWorld()
 end
