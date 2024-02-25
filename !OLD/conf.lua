@@ -1,6 +1,6 @@
 function love.conf(t)
 	t.window.depth = 16
-	t.identity = "OLDLUACRAFT" -- Le nom du répertoire de sauvegarde (string)
+	t.identity = "LuaCraftSaves" -- Le nom du répertoire de sauvegarde (string)
 	t.appendidentity = false -- Rechercher des fichiers dans le répertoire source avant le répertoire de sauvegarde (booléen)
 	t.version = "11.5" -- La version de LÖVE pour laquelle ce jeu a été fait (string)
 	t.console = false -- Ouvrir une console (boolean, Windows seulement)
@@ -20,7 +20,7 @@ function love.conf(t)
 	t.window.minheight = 576 -- Hauteur minimale de la fenêtre si elle est redimensionnée (number)
 	t.window.fullscreen = false -- Active le plein écran (booléen)
 	t.window.fullscreentype = "desktop" -- Choisissez entre le mode plein écran "bureau" ou le mode plein écran "exclusif" (string)
-    t.window.vsync = 0
+	--t.window.vsync = 1 THIS IS MADE DYNAMICALLY WITH MENU SETTINGS IN THE GAME
 	t.window.msaa = 0 -- Le nombre d'échantillons à utiliser avec l'anti-crénelage multi-échantillonné (number)
 	t.window.display = 1 -- Index du moniteur où afficher la fenêtre (number)
 	t.window.highdpi = false -- Activer le mode haute résolution pour la fenêtre sur un écran Retina (booléen)
