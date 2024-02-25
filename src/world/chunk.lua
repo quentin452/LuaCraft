@@ -82,9 +82,10 @@ function NewChunk(x, z)
 						GenerateTree(self, i, height, j)
 						self:setVoxelRaw(i, height, j, 3, 15)
 					elseif love.math.noise(xx / 32, zz / 32) > 0.9 and love.math.random() < 0.2 then
-						-- put a flower here
-						self:setVoxelRaw(i, height + 1, j, 37, 15)
-						--LuaCraftPrintLoggingNormal("Height:", height, "xx:", xx, "zz:", zz)
+						-- put a random flower here
+						local flowerID = love.math.random(37, 38)
+						self:setVoxelRaw(i, height + 1, j, flowerID, 15)
+						-- LuaCraftPrintLoggingNormal("Height:", height, "xx:", xx, "zz:", zz)
 					end
 				end
 			end
