@@ -3,7 +3,7 @@ function initScene()
 	Scene.camera.perspective = TransposeMatrix(
 		cpml.mat4.from_perspective(90, love.graphics.getWidth() / love.graphics.getHeight(), 0.001, 10000)
 	)
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(1, "Premier profil")
 	end
 end
@@ -13,7 +13,7 @@ function initGlobalRandomNumbers()
 	for i = 1, 128 do
 		Salt[i] = love.math.random()
 	end
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(2, "Second profil")
 	end
 end
@@ -21,7 +21,7 @@ end
 function initEntities()
 	initEntityList()
 	initPlayerInventory()
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(3, "Troisième profil")
 	end
 end
@@ -29,7 +29,7 @@ end
 function initEntityList()
 	ThingList = {}
 	ThePlayer = CreateThing(NewPlayer(0, 128, 0))
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(4, "4eme profil")
 	end
 end
@@ -44,7 +44,7 @@ function initPlayerInventory()
 	for i = 1, 36 do
 		PlayerInventory.items[i] = defaultItems[i] or 0
 	end
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(5, "5eme profil")
 	end
 end
@@ -76,7 +76,7 @@ function generateWorldChunks()
 			ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
 		end
 	end
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(6, "6eme profil")
 	end
 end
@@ -84,7 +84,7 @@ end
 function updateWorld()
 	UpdateCaves()
 	updateLighting()
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(7, "7eme profil")
 	end
 end
@@ -102,7 +102,7 @@ function updateLighting()
 		chunk:initialize()
 	end
 
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(8, "8eme profil")
 	end
 end
@@ -118,7 +118,7 @@ function GenerateWorld()
 	generateWorldChunks()
 	updateWorld()
 	printGenerationTime()
-	if enableProfiler then
+	if enablePROFIProfiler then
 		ProFi:checkMemory(9, "9eme profil")
 	end
 end

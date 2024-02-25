@@ -1,3 +1,4 @@
+StructureMap = {}
 local floor = math.floor
 
 --TODO MADE STRUCTURE GENERATION INTO AN ANOTHER THREAD
@@ -83,7 +84,7 @@ function generateStructuresatFixedPositions(scene, size)
 end
 
 function StructureGenFinal(scene, size)
-	generateStructuresatFixedPositions(scene, size)
-	generateStructuresInPlayerRange(scene, size)
+	--generateStructuresatFixedPositions(scene, size)
+	--generateStructuresInPlayerRange(scene, size)
 	--generateStructuresatRandomLocation(scene, 1)
 end

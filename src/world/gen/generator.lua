@@ -59,6 +59,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 			chunk.voxels[i][k] = table.concat(temp)
 		end
 	end
+	
 end
 
 function StandardTerrain(chunk, xx, j, zz)
@@ -99,50 +100,52 @@ function ClassicTerrain(chunk, xx, j, zz)
 end
 
 function GenerateTree(chunk, x, y, z)
-	local treeHeight = 4 + math.floor(love.math.random() * 2 + 0.5)
+    local treeHeight = 4 + math.floor(love.math.random() * 2 + 0.5)
 
-	for tr = 1, treeHeight do
-		local gx, gy, gz = Globalize(chunk.x, chunk.z, x, y + tr, z)
-		NewChunkRequest(gx, gy, gz, 17)
-	end
+    for tr = 1, treeHeight do
+        local gx, gy, gz = Globalize(chunk.x, chunk.z, x, y + tr, z)
+        NewChunkRequest(gx, gy, gz, 17)
+    end
 
-	local leafWidth = 2
-	for lx = -leafWidth, leafWidth do
-		for ly = -leafWidth, leafWidth do
-			local chance = 1
-			if math.abs(lx) == leafWidth and math.abs(ly) == leafWidth then
-				chance = 0.5
-			end
+    local leafWidth = 2
+    for lx = -leafWidth, leafWidth do
+        for ly = -leafWidth, leafWidth do
+            local chance = 1
+            if math.abs(lx) == leafWidth and math.abs(ly) == leafWidth then
+                chance = 0.5
+            end
 
-			if love.math.random() < chance then
-				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 2, z + ly)
-				NewChunkRequest(gx, gy, gz, 18)
-			end
-			if love.math.random() < chance then
-				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 1, z + ly)
-				NewChunkRequest(gx, gy, gz, 18)
-			end
-		end
-	end
-	local leafWidth = 1
-	for lx = -leafWidth, leafWidth do
-		for ly = -leafWidth, leafWidth do
-			local chance = 1
-			if math.abs(lx) == leafWidth and math.abs(ly) == leafWidth then
-				chance = 0.5
-			end
+            if love.math.random() < chance then
+                local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 2, z + ly)
+                NewChunkRequest(gx, gy, gz, 18)
+            end
+            if love.math.random() < chance then
+                local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 1, z + ly)
+                NewChunkRequest(gx, gy, gz, 18)
+            end
+        end
+    end
 
-			if love.math.random() < chance then
-				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight, z + ly)
-				NewChunkRequest(gx, gy, gz, 18)
-			end
-			if chance == 1 then
-				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight + 1, z + ly)
-				NewChunkRequest(gx, gy, gz, 18)
-			end
-		end
-	end
+    local leafWidth = 1
+    for lx = -leafWidth, leafWidth do
+        for ly = -leafWidth, leafWidth do
+            local chance = 1
+            if math.abs(lx) == leafWidth and math.abs(ly) == leafWidth then
+                chance = 0.5
+            end
+
+            if love.math.random() < chance then
+                local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight, z + ly)
+                NewChunkRequest(gx, gy, gz, 18)
+            end
+            if chance == 1 then
+                local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight + 1, z + ly)
+                NewChunkRequest(gx, gy, gz, 18)
+            end
+        end
+    end
 end
+
 
 -- noise function used in chunk generation
 function ChunkNoise(x, y, z)

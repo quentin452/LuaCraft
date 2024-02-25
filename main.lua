@@ -3,8 +3,8 @@ lovefilesystem = lovez.filesystem
 lovegraphics = lovez.graphics
 lovewindow = lovez.window
 
+
 Engine = require("engine")
-Perspective = require("src/world/perspective")
 --menus
 require("src/menus/mainmenu")
 require("src/menus/mainmenusettings")
@@ -20,10 +20,12 @@ require("src/utils/mouselogic")
 require("src/utils/usefull")
 require("src/utils/filesystem")
 require("src/utils/settingshandling")
+enablePROFIProfiler = false
 ProFi = require("src/utils/ProFi")
 --entities
 require("src/entities/player")
 --world
+Perspective = require("src/world/perspective")
 require("src/world/lighting")
 require("src/world/chunk")
 require("src/world/updatelogic")
@@ -34,42 +36,74 @@ require("src/init/!init")
 --client
 require("src/client/!draw")
 --libs
-_JPROFILER = require("libs/jprofiler/jprof")
-
-local enablePROFIProfiler = false
-
 PROF_CAPTURE = false
+_JPROFILER = require("libs/jprofiler/jprof")
+--profs instruction
+--1 : enable PROF_CAPTURE to enable profiler
+--2 : profiling some times
+--3 : exiting game
+--4 : open a CMD on Jprofiler (SRC)
+--5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
+
 gamestate = "MainMenu"
+
+--modloader
+require("src/modloader/structuremodloader")
+require("src/modloader/modloaderinit")
+require("src/modloader/functiontags")
+
+LoadMods()
+
 function love.load()
+	_JPROFILER.push("frame")
+	_JPROFILER.push("Mainload")
 	if enablePROFIProfiler then
 		ProFi:start()
 	end
 	lovefilesystem.setIdentity("LuaCraft")
 	InitializeGame()
+	_JPROFILER.pop("Mainload")
+	_JPROFILER.pop("frame")
 end
 
 function love.resize(w, h)
+	_JPROFILER.push("frame")
+	_JPROFILER.push("Mainresize")
 	local scaleX = w / GraphicsWidth
 	local scaleY = h / GraphicsHeight
 	love.graphics.scale(scaleX, scaleY)
+	_JPROFILER.pop("Mainresize")
+	_JPROFILER.pop("frame")
 end
 
 function love.update(dt)
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MainUpdate")
 	UpdateGame(dt)
+	_JPROFILER.pop("MainUpdate")
+	_JPROFILER.pop("frame")
 end
 
 function love.draw()
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MainDraw")
 	DrawGame()
 	if enablePROFIProfiler then
 		ProFi:stop()
 	end
+	_JPROFILER.pop("MainDraw")
+	_JPROFILER.pop("frame")
 end
 
 function love.mousemoved(x, y, dx, dy)
+	_JPROFILER.push("frame")
+	_JPROFILER.push("Mainmousemoved")
 	-- forward mouselook to Scene object for first person camera control
 	if gamestate == "PlayingGame" then
 		Scene:mouseLook(x, y, dx, dy)
 	end
+	_JPROFILER.pop("Mainmousemoved")
+	_JPROFILER.pop("frame")
 end
 
 function love.wheelmoved(x, y)
@@ -81,7 +115,11 @@ function love.mousepressed(x, y, b)
 end
 
 function love.keypressed(k)
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MainKeypressed")
 	KeyPressed(k)
+	_JPROFILER.pop("MainKeypressed")
+	_JPROFILER.pop("frame")
 end
 
 function love.quit()
