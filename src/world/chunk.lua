@@ -83,7 +83,8 @@ function NewChunk(x, z)
 						self:setVoxelRaw(i, height, j, 3, 15)
 					elseif love.math.noise(xx / 32, zz / 32) > 0.9 and love.math.random() < 0.2 then
 						-- put a flower here
-						self:setVoxelRaw(i, height + 1, j, 38, 15)
+						self:setVoxelRaw(i, height + 1, j, 37, 15)
+						--LuaCraftPrintLoggingNormal("Height:", height, "xx:", xx, "zz:", zz)
 					end
 				end
 			end
@@ -440,9 +441,9 @@ function NewChunkSlice(x, y, z, parent)
 								model[#model + 1] = v
 							end
 
-							for _, v in ipairs(vertices) do
-								model[#model + 1] = { x + scale - v[1], y + v[2], z + scale - v[3], v[4], v[5] }
-							end
+							--	for _, v in ipairs(vertices) do
+							--		model[#model + 1] = { x + scale - v[1], y + v[2], z + scale - v[3], v[4], v[5] }
+							--	end
 						end
 
 						-- top
