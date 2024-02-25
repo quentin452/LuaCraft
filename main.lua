@@ -126,4 +126,5 @@ function love.quit()
 	if enablePROFIProfiler then
 		ProFi:writeReport("report.txt")
 	end
+	_JPROFILER.write("_JPROFILER.mpack")
 end
