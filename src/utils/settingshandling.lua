@@ -218,17 +218,17 @@ end
 
 function getLuaCraftPrintLoggingNormalValue()
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
-	return file_content and file_content:match("LuaCraftPrintLoggingNormal=(%w+)")
+	return file_content and file_content:match("LuaCraftPrintLoggingNormal=(%d)")
 end
 
 function getLuaCraftPrintLoggingWarnValue()
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
-	return file_content and file_content:match("LuaCraftWarnLogging=(%w+)")
+	return file_content and file_content:match("LuaCraftWarnLogging=(%d)")
 end
 
 function getLuaCraftPrintLoggingErrorValue()
 	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
-	return file_content and file_content:match("LuaCraftErrorLogging=(%w+)")
+	return file_content and file_content:match("LuaCraftErrorLogging=(%d)")
 end
 
 EnableLuaCraftPrintLoggingNormalLogging = getLuaCraftPrintLoggingNormalValue()

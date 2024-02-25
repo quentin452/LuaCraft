@@ -1,6 +1,41 @@
+__AIR_Block = 0
+__STONE_Block = 1
+__GRASS_Block = 2
+__DIRT_Block = 3
+__COBBLE_Block = 4
+__OAK_PLANK_Block = 5
+__OAK_SAPPLING_Block = 6
+__BEDROCK_Block = 7
+__WATER_BLock = 8
+__STATIONARY_WATER_BLock = 9
+__LAVA_BLock = 10
+__STATIONARY_LAVA_BLock = 11
+__SAND_BLock = 12
+__GRAVEL_BLock = 13
+__GOLD_BLock = 14
+__IRON_BLock = 15
+__COAL_BLock = 16
+__OAK_LOG_BLock = 17
+__OAK_LEAVE_BLock = 18
+__SPONGE_BLock = 19
+__GLASS_BLock = 20
+__YELLO_FLOWER_Block = 37
+__ROSE_FLOWER_Block = 38
+__STONE_BRICK_Block = 45
+__GLOWSTONE_BLock = 89
+
 -- tile enumerations stored as a function called by tile index (base 0 to accomodate air)
 function TileCollisions(n)
-	if n == 0 or n == 6 or n == 8 or n == 9 or n == 10 or n == 11 or n == 37 or n == 38 or n == 39 or n == 40 then
+	if
+		n == __AIR_Block
+		or n == __OAK_SAPPLING_Block
+		or n == __WATER_BLock
+		or n == __STATIONARY_WATER_BLock
+		or n == __LAVA_BLock
+		or n == __STATIONARY_LAVA_BLock
+		or n == __YELLO_FLOWER_Block
+		or n == __ROSE_FLOWER_Block
+	then
 		return false
 	end
 
@@ -9,13 +44,13 @@ end
 
 -- Define a lookup table for tile transparency values
 local transparencyLookup = {
-	[0] = 0, -- air
-	[37] = 0, -- yellow flower
-	[38] = 0, -- rose
-	[6] = 0, -- air
-	[18] = 1, -- leaves
-	[20] = 2, -- glass
-	[89] = 2, -- glowstone
+	[__AIR_Block] = 0, -- air
+	[__YELLO_FLOWER_Block] = 0, -- yellow flower
+	[__ROSE_FLOWER_Block] = 0, -- rose
+	[__OAK_SAPPLING_Block] = 0, -- oaksappling
+	[__OAK_LEAVE_BLock] = 1, -- oakleaves
+	[__GLASS_BLock] = 2, -- glass
+	[__GLOWSTONE_BLock] = 2, -- glowstone
 }
 
 function TileTransparency(n)
@@ -23,6 +58,7 @@ function TileTransparency(n)
 end
 
 function TileLightSource(n)
+	--i think this should be optimized
 	if n == 89 then -- glowstone
 		return 15
 	end
@@ -77,7 +113,7 @@ end
 
 function TileModel(n)
 	-- flowers and mushrooms have different models
-	if n == 37 or n == 38 or n == 39 or n == 40 then
+	if n == __YELLO_FLOWER_Block or n == __ROSE_FLOWER_Block or n == __OAK_SAPPLING_Block then
 		return 1
 	end
 

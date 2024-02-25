@@ -80,10 +80,10 @@ function NewChunk(x, z)
 					if love.math.random() < love.math.noise(xx / 64, zz / 64) * 0.02 then
 						-- put a tree here
 						GenerateTree(self, i, height, j)
-						self:setVoxelRaw(i, height, j, 3, 15)
+					--	self:setVoxelRaw(i, height, j, __DIRT_Block, 15)
 					elseif love.math.noise(xx / 32, zz / 32) > 0.9 and love.math.random() < 0.2 then
 						-- put a random flower here
-						local flowerID = love.math.random(37, 38)
+						local flowerID = love.math.random(__YELLO_FLOWER_Block, __ROSE_FLOWER_Block)
 						self:setVoxelRaw(i, height + 1, j, flowerID, 15)
 						-- LuaCraftPrintLoggingNormal("Height:", height, "xx:", xx, "zz:", zz)
 					end
@@ -139,17 +139,17 @@ function NewChunk(x, z)
 		return 0
 	end
 
-	chunk.setVoxelRaw = function(self, x, y, z, value, light)
+	chunk.setVoxelRaw = function(self, x, y, z, blockvalue, light)
 		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
 			local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(value))
+			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
 	end
 
 	-- set voxel id of the voxel in this chunk's coordinate space
-	chunk.setVoxel = function(self, x, y, z, value, manuallyPlaced)
+	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		if manuallyPlaced == nil then
 			manuallyPlaced = false
 		end
@@ -168,7 +168,7 @@ function NewChunk(x, z)
 			local placingLocalSource = false
 			local destroyLight = false
 
-			if TileLightable(value) then
+			if TileLightable(blockvalue) then
 				if inDirectSunlight then
 					NewSunlightDownAddition(gx, gy, gz, sunlight)
 				else
@@ -182,7 +182,7 @@ function NewChunk(x, z)
 				end
 
 				if manuallyPlaced then
-					local source = TileLightSource(value)
+					local source = TileLightSource(blockvalue)
 					if source > 0 then
 						NewLocalLightAddition(gx, gy, gz, source)
 						placingLocalSource = true
@@ -199,12 +199,12 @@ function NewChunk(x, z)
 			else
 				NewSunlightDownSubtraction(gx, gy - 1, gz)
 
-				if TileSemiLightable(value) and inDirectSunlight and manuallyPlaced then
+				if TileSemiLightable(blockvalue) and inDirectSunlight and manuallyPlaced then
 					NewSunlightAdditionCreation(gx, gy + 1, gz)
 				end
 
-				if not TileSemiLightable(value) or manuallyPlaced then
-					destroyLight = not TileSemiLightable(value)
+				if not TileSemiLightable(blockvalue) or manuallyPlaced then
+					destroyLight = not TileSemiLightable(blockvalue)
 
 					for dx = -1, 1 do
 						for dy = -1, 1 do
@@ -220,7 +220,7 @@ function NewChunk(x, z)
 			end
 
 			local source = TileLightSource(self:getVoxel(x, y, z))
-			if source > 0 and TileLightSource(value) == 0 then
+			if source > 0 and TileLightSource(blockvalue) == __AIR_Block then
 				NewLocalLightSubtraction(gx, gy, gz, source + 1)
 				destroyLight = true
 			end
@@ -239,7 +239,7 @@ function NewChunk(x, z)
 					end
 				end
 
-				if TileSemiLightable(value) and not placingLocalSource then
+				if TileSemiLightable(blockvalue) and not placingLocalSource then
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
@@ -250,42 +250,42 @@ function NewChunk(x, z)
 				end
 			end
 
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(value))
+			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
 	end
 
-	chunk.setVoxelData = function(self, x, y, z, value)
+	chunk.setVoxelData = function(self, x, y, z, blockvalue)
 		x = math.floor(x)
 		y = math.floor(y)
 		z = math.floor(z)
 		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 2, string.char(value))
+			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 2, string.char(blockvalue))
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
 	end
 
 	-- sunlight data
-	chunk.setVoxelFirstData = function(self, x, y, z, value)
+	chunk.setVoxelFirstData = function(self, x, y, z, blockvalue)
 		x = math.floor(x)
 		y = math.floor(y)
 		z = math.floor(z)
 		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 2, string.char(value))
+			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 2, string.char(blockvalue))
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
 	end
 
 	-- local light data
-	chunk.setVoxelSecondData = function(self, x, y, z, value)
+	chunk.setVoxelSecondData = function(self, x, y, z, blockvalue)
 		x = math.floor(x)
 		y = math.floor(y)
 		z = math.floor(z)
 		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 3, string.char(value))
+			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 3, string.char(blockvalue))
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end

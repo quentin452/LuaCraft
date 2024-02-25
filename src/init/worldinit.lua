@@ -40,7 +40,17 @@ function initPlayerInventory()
 		hotbarSelect = 1,
 	}
 
-	local defaultItems = { 1, 4, 45, 3, 5, 17, 18, 20, 89 }
+	local defaultItems = {
+		__STONE_Block,
+		__COBBLE_Block,
+		__STONE_BRICK_Block,
+		__YELLO_FLOWER_Block,
+		__OAK_SAPPLING_Block,
+		__OAK_LOG_BLock,
+		__OAK_LEAVE_BLock,
+		__GLASS_BLock,
+		__GLOWSTONE_BLock,
+	}
 	for i = 1, 36 do
 		PlayerInventory.items[i] = defaultItems[i] or 0
 	end

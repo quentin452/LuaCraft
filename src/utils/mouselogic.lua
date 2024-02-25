@@ -32,10 +32,8 @@ function MouseLogicOnPlay(x, y, b)
 		-- print(cx, cy, cz)
 		-- print(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
 	elseif pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
-		if hudMessage ~= "" then
 			hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
 			hudTimeLeft = 3
-		end
 	end
 end
 
@@ -67,7 +65,7 @@ function KeyPressed(k)
 			--TODO FOR REMOVAL
 			GenerateWorld()
 		elseif k == "f3" then
-           enableF3 = not enableF3
+			enableF3 = not enableF3
 		end
 	end
 	if gamestate == gamestateGamePausing then
