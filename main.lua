@@ -24,8 +24,6 @@ function love.load()
 	love.graphics.setLineStyle("rough")
 	love.window.setTitle("LuaCraft")
 
-	-- for capping game logic at 60 manually
-	LogicRate = 60
 	LogicAccumulator = 0
 	PhysicsStep = true
 
@@ -386,8 +384,13 @@ function love.update(dt)
 		Scene:update()
 	end
 
-	if LogicAccumulator >= 1 / LogicRate then
-		LogicAccumulator = LogicAccumulator - 1 / LogicRate
+	local logicThreshold = 1 / 60
+
+	local fps = love.timer.getFPS()
+
+	if LogicAccumulator >= logicThreshold and fps ~= 0 then
+		local logicUpdates = math.floor(LogicAccumulator / logicThreshold)
+		LogicAccumulator = LogicAccumulator - logicThreshold * logicUpdates
 		PhysicsStep = true
 	else
 		PhysicsStep = false
