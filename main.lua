@@ -22,7 +22,6 @@ function love.load()
 	love.mouse.setRelativeMode(true)
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	love.graphics.setLineStyle("rough")
-	love.window.setMode(GraphicsWidth, GraphicsHeight, { resizable = 1 })
 	love.window.setTitle("LuaCraft")
 
 	-- for capping game logic at 60 manually
@@ -102,7 +101,11 @@ function love.load()
 
 	GenerateWorld()
 end
-
+function love.resize(w, h)
+	local scaleX = w / GraphicsWidth
+	local scaleY = h / GraphicsHeight
+	love.graphics.scale(scaleX, scaleY)
+end
 function initScene()
 	Scene = Engine.newScene(GraphicsWidth, GraphicsHeight)
 	Scene.camera.perspective = TransposeMatrix(

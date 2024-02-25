@@ -195,6 +195,10 @@ function engine.newScene(renderWidth, renderHeight)
 	-- renders the models in the scene to the threeCanvas
 	-- will draw threeCanvas if drawArg is not given or is true (use if you want to scale the game canvas to window)
 	scene.render = function(self, drawArg)
+		local windowWidth, windowHeight = love.graphics.getDimensions()
+		local scaleX = windowWidth / self.renderWidth
+		local scaleY = windowHeight / self.renderHeight
+	
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.setCanvas({ self.threeCanvas, depth = true })
 		love.graphics.clear(0, 0, 0, 0)
@@ -230,16 +234,16 @@ function engine.newScene(renderWidth, renderHeight)
 
 		love.graphics.setShader()
 		love.graphics.setCanvas()
-
+	
 		love.graphics.setColor(1, 1, 1)
 		if drawArg == nil or drawArg == true then
 			love.graphics.draw(
 				self.threeCanvas,
-				self.renderWidth / 2,
-				self.renderHeight / 2,
+				windowWidth / 2,
+				windowHeight / 2,
 				0,
-				1,
-				-1,
+				scaleX,
+				-scaleY,
 				self.renderWidth / 2,
 				self.renderHeight / 2
 			)
