@@ -1,29 +1,34 @@
 function MouseLogicOnPlay(x, y, b)
-	-- forward mousepress events to all things in ThingList
+	-- Forward mousepress events to all things in ThingList
+	if ThingList == nil then
+		return
+	end
 	for i = 1, #ThingList do
 		local thing = ThingList[i]
-		thing:mousepressed(b)
+		if thing and thing.mousepressed then
+			thing:mousepressed(b)
+		end
 	end
 
-	-- handle clicking to place / destroy blocks
-	local pos = ThePlayer.cursorpos
+	-- Handle clicking to place / destroy blocks
+	local pos = ThePlayer and ThePlayer.cursorpos
 	local value = 0
 
 	if b == 2 then
-		pos = ThePlayer.cursorposPrev
-		value = PlayerInventory.items[PlayerInventory.hotbarSelect]
+		pos = ThePlayer and ThePlayer.cursorposPrev
+		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or 0
 	end
 
-	local cx, cy, cz = pos.x, pos.y, pos.z
-	local chunk = pos.chunk
-	if chunk ~= nil and ThePlayer.cursorpos.chunk ~= nil and ThePlayer.cursorHit then
+	local cx, cy, cz = pos and pos.x, pos and pos.y, pos and pos.z
+	local chunk = pos and pos.chunk
+	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit then
 		chunk:setVoxel(cx, cy, cz, value, true)
 		LightingUpdate()
 		UpdateChangedChunks()
-		--chunk:updateModel(cx,cy,cz)
-		--print("---")
-		--print(cx,cy,cz)
-		--print(cx%ChunkSize,cy%SliceHeight,cz%ChunkSize)
+		-- chunk:updateModel(cx, cy, cz)
+		-- print("---")
+		-- print(cx, cy, cz)
+		-- print(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
 	end
 end
 
