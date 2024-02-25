@@ -1,7 +1,7 @@
 -- Super Simple 3D Engine v1
 -- groverburger 2019
 
-cpml = require("utils/libs/cpml")
+cpml = require("libs/cpml")
 
 local engine = {}
 engine.objFormat = {
@@ -198,7 +198,7 @@ function engine.newScene(renderWidth, renderHeight)
 		local windowWidth, windowHeight = love.graphics.getDimensions()
 		local scaleX = windowWidth / self.renderWidth
 		local scaleY = windowHeight / self.renderHeight
-	
+
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.setCanvas({ self.threeCanvas, depth = true })
 		love.graphics.clear(0, 0, 0, 0)
@@ -234,7 +234,7 @@ function engine.newScene(renderWidth, renderHeight)
 
 		love.graphics.setShader()
 		love.graphics.setCanvas()
-	
+
 		love.graphics.setColor(1, 1, 1)
 		if drawArg == nil or drawArg == true then
 			love.graphics.draw(
