@@ -31,9 +31,11 @@ function MouseLogicOnPlay(x, y, b)
 		-- print("---")
 		-- print(cx, cy, cz)
 		-- print(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
-	elseif pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
-		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
-		hudTimeLeft = 3
+	elseif pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
+		if hudMessage ~= "" then
+			hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
+			hudTimeLeft = 3
+		end
 	end
 end
 
@@ -61,7 +63,7 @@ function KeyPressed(k)
 		keysinitMainMenuSettings(k)
 		_JPROFILER.pop("keysinitMainMenuSettings")
 	end
-	if gamestate ==	gamestateWorldCreationMenu then
+	if gamestate == gamestateWorldCreationMenu then
 		_JPROFILER.push("keysInitWorldCreationMenu")
 		keysInitWorldCreationMenu(k)
 		_JPROFILER.pop("keysInitWorldCreationMenu")
