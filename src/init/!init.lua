@@ -5,6 +5,7 @@ require("src/init/shadersinit")
 require("src/init/windowsettingsinit")
 require("src/init/worldinit")
 require("src/init/structureinit")
+
 local function initWorldGenerationVariables()
 	ChunkSize = 16
 	SliceHeight = 8
@@ -12,8 +13,10 @@ local function initWorldGenerationVariables()
 	TileWidth, TileHeight = 1 / 16, 1 / 16
 	TileDataSize = 3
 end
+
 function InitializeGame()
 	SettingsHandlingInit()
+	loadAndSaveLuaCraftFileSystem()
 	ModLoaderInitALL()
 	InitializeWindowSettings()
 	StructureGenFinal()
@@ -25,5 +28,4 @@ function InitializeGame()
 	InitializeTileCanevas()
 	InitalizeLightningCanevas()
 	initWorldGenerationVariables()
-	loadAndSaveLuaCraftFileSystem()
 end

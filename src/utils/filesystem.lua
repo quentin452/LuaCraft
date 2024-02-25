@@ -35,6 +35,21 @@ function customReadFile(filePath)
 	end
 end
 
+function createFileIfNotExists(filePath)
+	local file, err = io.open(filePath, "r")
+
+	if not file then
+		file, err = io.open(filePath, "w")
+		if not file then
+			error("Failed to create file. Error: " .. err)
+		end
+		file:close()
+		LuaCraftPrintLoggingNormal("Created file: " .. filePath)
+	else
+		file:close()
+	end
+end
+
 function loadAndSaveLuaCraftFileSystem()
 	_JPROFILER.push("loadAndSaveLuaCraftFileSystem")
 
@@ -43,6 +58,9 @@ function loadAndSaveLuaCraftFileSystem()
 	local userDirectory = love.filesystem.getUserDirectory()
 	local luaCraftDirectory = userDirectory .. ".LuaCraft\\"
 	local configFilePath = luaCraftDirectory .. "luacraftconfig.txt"
+
+	-- Check and create file if not exists
+	createFileIfNotExists(configFilePath)
 
 	LuaCraftPrintLoggingNormal("Directory contents before attempting to load settings:")
 	for _, item in ipairs(love.filesystem.getDirectoryItems(luaCraftDirectory)) do
