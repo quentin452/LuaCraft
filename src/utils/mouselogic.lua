@@ -31,8 +31,8 @@ function MouseLogicOnPlay(x, y, b)
 		-- print("---")
 		-- print(cx, cy, cz)
 		-- print(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
-	elseif pos.y >= WorldHeight then
-		hudMessage = "you cannot place blocks at Y = 128 or more"
+	elseif pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
+		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
 		hudTimeLeft = 3
 	end
 end

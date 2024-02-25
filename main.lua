@@ -93,7 +93,7 @@ function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	DrawGame()
-	if hudMessage ~= nil then
+	if hudMessage ~= nil and gamestate == "PlayingGame" then
 		local width, height = love.graphics.getDimensions()
 		local font = love.graphics.getFont()
 

@@ -1,3 +1,4 @@
+local playerReach = 5
 function NewPlayer(x, y, z)
 	local t = NewThing(x, y, z)
 	t.friction = 0.85
@@ -33,7 +34,7 @@ function NewPlayer(x, y, z)
 		local step = 0.1
 		self.voxelCursor.model.visible = false
 		self.cursorHit = false
-		for i = 1, 5, step do
+		for i = 1, playerReach, step do
 			local chunk, cx, cy, cz, hashx, hashy = GetChunk(rx, ry, rz)
 			if chunk ~= nil and chunk:getVoxel(cx, cy, cz) ~= 0 then
 				self.cursorpos = { x = cx, y = cy, z = cz, chunk = chunk }
