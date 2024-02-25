@@ -44,7 +44,17 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --4 : open a CMD on Jprofiler (SRC)
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
 
-gamestate = "MainMenu"
+gamestateMainMenuSettings = "MainMenuSettings"
+gamestateMainMenu = "MainMenu"
+
+gamestatePlayingGame = "PlayingGame"
+gamestatePlayingGameSettings = "PlayingGameSettings"
+
+gamestateGamePausing = "GamePausing"
+
+gamestateWorldCreationMenu = "WorldCreationMenu"
+
+gamestate = gamestateMainMenu
 
 --modloader
 require("src/modloader/structuremodloader")
@@ -93,7 +103,7 @@ function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	DrawGame()
-	if hudMessage ~= nil and gamestate == "PlayingGame" then
+	if hudMessage ~= nil and gamestate == gamestatePlayingGame then
 		local width, height = love.graphics.getDimensions()
 		local font = love.graphics.getFont()
 
@@ -119,7 +129,7 @@ function love.mousemoved(x, y, dx, dy)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainmousemoved")
 	-- forward mouselook to Scene object for first person camera control
-	if gamestate == "PlayingGame" then
+	if gamestate == gamestatePlayingGame then
 		Scene:mouseLook(x, y, dx, dy)
 	end
 	_JPROFILER.pop("Mainmousemoved")

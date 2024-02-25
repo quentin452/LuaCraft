@@ -1,17 +1,17 @@
 require("src/client/drawhud")
 function DrawGame()
 	setFont()
-	if gamestate == "GamePausing" then
+	if gamestate == gamestateGamePausing then
 		_JPROFILER.push("drawGamePlayingPauseMenu")
 		drawGamePlayingPauseMenu()
 		_JPROFILER.pop("drawGamePlayingPauseMenu")
 	end
-	if gamestate == "WorldCreationMenu" then
+	if gamestate == gamestateWorldCreationMenu then
 		_JPROFILER.push("drawWorldCreationMenu")
 		drawWorldCreationMenu()
 		_JPROFILER.pop("drawWorldCreationMenu")
 	end
-	if gamestate == "PlayingGame" then
+	if gamestate == gamestatePlayingGame then
 		_JPROFILER.push("DrawGameScene")
 		-- draw 3d scene
 		Scene:render(true)
@@ -36,19 +36,19 @@ function DrawGame()
 		_JPROFILER.pop("DrawGameScene")
 	end
 
-	if gamestate == "MainMenuSettings" then
+	if gamestate == gamestateMainMenuSettings then
 		_JPROFILER.push("drawMainMenuSettings")
 		drawMainMenuSettings()
 		_JPROFILER.pop("drawMainMenuSettings")
 	end
 
-	if gamestate == "MainMenu" then
+	if gamestate == gamestateMainMenu then
 		_JPROFILER.push("drawMainMenu")
 		drawMainMenu()
 		_JPROFILER.pop("drawMainMenu")
 	end
 
-	if gamestate == "PlayingGameSettings" then
+	if gamestate == gamestatePlayingGameSettings then
 		_JPROFILER.push("drawPlayingMenuSettings")
 		drawPlayingMenuSettings()
 		_JPROFILER.pop("drawPlayingMenuSettings")

@@ -54,10 +54,10 @@ function keysInitWorldCreationMenu(k)
 			end
 		elseif k == "return" then
 			if _WorldCreationMenu.selection == 1 then
-				gamestate = "PlayingGame"
+				gamestate = gamestatePlayingGame
 				GenerateWorld()
 			elseif _WorldCreationMenu.selection == 2 then
-				gamestate = "MainMenu"
+				gamestate = gamestateMainMenu
 				_WorldCreationMenu.selection = 0
 			end
 		end

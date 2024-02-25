@@ -53,12 +53,12 @@ function keysinitGamePlayingPauseMenu(k)
 			end
 		elseif k == "return" then
 			if _GamePlayingPauseMenu.selection == 1 then
-				gamestate = "PlayingGame"
+				gamestate = gamestatePlayingGame
 			elseif _GamePlayingPauseMenu.selection == 2 then
-				gamestate = "PlayingGameSettings"
+				gamestate = gamestatePlayingGameSettings
 			elseif _GamePlayingPauseMenu.selection == 3 then
 				--TODO here add chunk saving system before going to MainMenu and during gameplay
-				gamestate = "MainMenu"
+				gamestate = gamestateMainMenu
 				_GamePlayingPauseMenu.selection = 0
 			end
 		end

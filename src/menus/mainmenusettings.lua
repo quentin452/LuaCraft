@@ -102,7 +102,7 @@ function keysinitMainMenuSettings(k)
 			elseif _MainMenuSettings.selection == 5 then
 				renderdistanceSetting()
 			elseif _MainMenuSettings.selection == 6 then
-				gamestate = "MainMenu"
+				gamestate = gamestateMainMenu
 				_MainMenuSettings.selection = 0
 			end
 		end

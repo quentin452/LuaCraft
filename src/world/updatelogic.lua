@@ -1,5 +1,5 @@
 function UpdateGame(dt)
-	if gamestate == "PlayingGame" then
+	if gamestate == gamestatePlayingGame then
 		LogicAccumulator = LogicAccumulator + dt
 
 		-- update all things in ThingList update queue

@@ -51,32 +51,32 @@ function KeyPressed(k)
 	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 then
 		PlayerInventory.hotbarSelect = numberPress
 	end
-	if gamestate == "MainMenu" then
+	if gamestate == gamestateMainMenu then
 		_JPROFILER.push("keysinitMainMenu")
 		keysinitMainMenu(k)
 		_JPROFILER.pop("keysinitMainMenu")
 	end
-	if gamestate == "MainMenuSettings" then
+	if gamestate == gamestateMainMenuSettings then
 		_JPROFILER.push("keysinitMainMenuSettings")
 		keysinitMainMenuSettings(k)
 		_JPROFILER.pop("keysinitMainMenuSettings")
 	end
-	if gamestate == "WorldCreationMenu" then
+	if gamestate ==	gamestateWorldCreationMenu then
 		_JPROFILER.push("keysInitWorldCreationMenu")
 		keysInitWorldCreationMenu(k)
 		_JPROFILER.pop("keysInitWorldCreationMenu")
 	end
-	if gamestate == "PlayingGame" then
+	if gamestate == gamestatePlayingGame then
 		if k == "escape" then
-			gamestate = "GamePausing"
+			gamestate = gamestateGamePausing
 		end
 	end
-	if gamestate == "GamePausing" then
+	if gamestate == gamestateGamePausing then
 		_JPROFILER.push("keysinitGamePlayingPauseMenu")
 		keysinitGamePlayingPauseMenu(k)
 		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
 	end
-	if gamestate == "PlayingGameSettings" then
+	if gamestate == gamestatePlayingGameSettings then
 		_JPROFILER.push("keysinitPlayingMenuSettings")
 		keysinitPlayingMenuSettings(k)
 		_JPROFILER.pop("keysinitPlayingMenuSettings")
