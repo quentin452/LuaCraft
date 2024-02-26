@@ -91,11 +91,12 @@ function ClassicTerrain(chunk, xx, j, zz)
 end
 
 function GenerateTree(chunk, x, y, z)
-	local treeHeight = 4 + math.floor(love.math.random() * 2 + 0.5)
+	local treeBlocks = {}
 
+	local treeHeight = 4 + math.floor(love.math.random() * 2 + 0.5)
 	for tr = 1, treeHeight do
 		local gx, gy, gz = Globalize(chunk.x, chunk.z, x, y + tr, z)
-		NewChunkRequest(gx, gy, gz, __OAK_LOG_BLock)
+		table.insert(treeBlocks, { gx, gy, gz, __OAK_LOG_BLock })
 	end
 
 	local leafWidth = 2
@@ -108,32 +109,36 @@ function GenerateTree(chunk, x, y, z)
 
 			if love.math.random() < chance then
 				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 2, z + ly)
-				NewChunkRequest(gx, gy, gz, __OAK_LEAVE_BLock)
+				table.insert(treeBlocks, { gx, gy, gz, __OAK_LEAVE_BLock })
 			end
 			if love.math.random() < chance then
 				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 1, z + ly)
-				NewChunkRequest(gx, gy, gz, __OAK_LEAVE_BLock)
+				table.insert(treeBlocks, { gx, gy, gz, __OAK_LEAVE_BLock })
 			end
 		end
 	end
 
-	local leafWidth = 1
-	for lx = -leafWidth, leafWidth do
-		for ly = -leafWidth, leafWidth do
+	local upperLeafWidth = 1
+	for lx = -upperLeafWidth, upperLeafWidth do
+		for ly = -upperLeafWidth, upperLeafWidth do
 			local chance = 1
-			if math.abs(lx) == leafWidth and math.abs(ly) == leafWidth then
+			if math.abs(lx) == upperLeafWidth and math.abs(ly) == upperLeafWidth then
 				chance = 0.5
 			end
 
 			if love.math.random() < chance then
 				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight, z + ly)
-				NewChunkRequest(gx, gy, gz, __OAK_LEAVE_BLock)
+				table.insert(treeBlocks, { gx, gy, gz, __OAK_LEAVE_BLock })
 			end
 			if chance == 1 then
 				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight + 1, z + ly)
-				NewChunkRequest(gx, gy, gz, __OAK_LEAVE_BLock)
+				table.insert(treeBlocks, { gx, gy, gz, __OAK_LEAVE_BLock })
 			end
 		end
+	end
+
+	for _, block in ipairs(treeBlocks) do
+		NewChunkRequest(block[1], block[2], block[3], block[4])
 	end
 end
 
