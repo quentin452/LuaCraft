@@ -28,12 +28,12 @@ function MouseLogicOnPlay(x, y, b)
 		LightingUpdate()
 		UpdateChangedChunks()
 		-- chunk:updateModel(cx, cy, cz)
-		-- print("---")
-		-- print(cx, cy, cz)
-		-- print(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
+		-- LuaCraftPrintLoggingNormal("---")
+		-- LuaCraftPrintLoggingNormal(cx, cy, cz)
+		-- LuaCraftPrintLoggingNormal(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
 	elseif pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
-			hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
-			hudTimeLeft = 3
+		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
+		hudTimeLeft = 3
 	end
 end
 
@@ -66,6 +66,10 @@ function KeyPressed(k)
 			GenerateWorld()
 		elseif k == "f3" then
 			enableF3 = not enableF3
+		elseif k == "f8" then
+			enableF8 = not enableF8
+		elseif k == "f1" then
+			enableTESTBLOCK = not enableTESTBLOCK
 		end
 	end
 	if gamestate == gamestateGamePausing then

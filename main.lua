@@ -57,6 +57,10 @@ gamestateWorldCreationMenu = "WorldCreationMenu"
 gamestate = gamestateMainMenu
 
 enableF3 = false
+enableF8 = false
+enableTESTBLOCK = false
+modelalreadycreated = 0
+ChunkBorderAlreadyCreated = 0
 
 --modloader
 require("src/modloader/structuremodloader")

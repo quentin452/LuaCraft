@@ -3,7 +3,7 @@
 
 cpml = require("libs/cpml")
 
-local engine = {}
+engine = {}
 engine.objFormat = {
 	{ "VertexPosition", "float", 4 },
 	{ "VertexTexCoord", "float", 2 },
@@ -116,7 +116,7 @@ end
 -- create a new Scene object with given canvas output size
 function engine.newScene(renderWidth, renderHeight)
 	love.graphics.setDepthMode("lequal", true)
-	local scene = {}
+	scene = {}
 
 	-- define the shaders used in rendering the scene
 	scene.threeShader = love.graphics.newShader([[
@@ -249,7 +249,7 @@ function engine.newScene(renderWidth, renderHeight)
 			)
 		end
 	end
-
+	
 	-- renders the given func to the twoCanvas
 	-- this is useful for drawing 2d HUDS and information on the screen in front of the 3d scene
 	-- will draw threeCanvas if drawArg is not given or is true (use if you want to scale the game canvas to window)

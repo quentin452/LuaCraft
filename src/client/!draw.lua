@@ -22,6 +22,8 @@ function DrawGame()
 				DrawF3()
 			end
 
+			DrawChunkBorders3D()
+			DrawTestBlock()
 			DrawCrossHair()
 
 			love.graphics.setShader()

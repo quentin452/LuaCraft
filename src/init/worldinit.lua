@@ -60,36 +60,33 @@ function initPlayerInventory()
 end
 
 function generateWorldChunks()
-	ChunkHashTable = {}
-	ChunkSet = {}
-	ChunkRequests = {}
-	LightingQueue = {}
-	LightingRemovalQueue = {}
-	CaveList = {}
-	local worldSize = 4
+    ChunkHashTable = {}
+    ChunkSet = {}
+    ChunkRequests = {}
+    LightingQueue = {}
+    LightingRemovalQueue = {}
+    CaveList = {}
+    local worldSize = 4
 
-	StartTime = love.timer.getTime()
-	MeasureTime = StartTime
-	local timeDiff = function()
-		local timeget = love.timer.getTime()
-		local ret = timeget - MeasureTime
-		MeasureTime = timeget
+    StartTime = love.timer.getTime()
+    MeasureTime = StartTime
 
-		return ret
-	end
+    for i = worldSize / -2 + 1, worldSize / 2 do
+        ChunkHashTable[ChunkHash(i)] = {}
+        for j = worldSize / -2 + 1, worldSize / 2 do
+            local chunk = NewChunk(i, j)
+            ChunkSet[chunk] = true
+            ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
 
-	for i = worldSize / -2 + 1, worldSize / 2 do
-		ChunkHashTable[ChunkHash(i)] = {}
-		for j = worldSize / -2 + 1, worldSize / 2 do
-			local chunk = NewChunk(i, j)
-			ChunkSet[chunk] = true
-			ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
-		end
-	end
-	if enablePROFIProfiler then
-		ProFi:checkMemory(6, "6eme profil")
-	end
+            -- Ajoutez des prints pour déboguer
+            LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
+        end
+    end
+    if enablePROFIProfiler then
+        ProFi:checkMemory(6, "6eme profil")
+    end
 end
+
 
 function updateWorld()
 	UpdateCaves()
@@ -118,7 +115,7 @@ function updateLighting()
 end
 
 function printGenerationTime()
-	print("total generation time: " .. (love.timer.getTime() - StartTime))
+	LuaCraftPrintLoggingNormal("total generation time: " .. (love.timer.getTime() - StartTime))
 end
 
 function GenerateWorld()

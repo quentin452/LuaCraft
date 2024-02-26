@@ -16,4 +16,7 @@ function InitializeAssets()
 	gameplayingpausemenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
 	playinggamesettings = lovegraphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
 	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
+
+	BlockTest = love.graphics.newImage("resources/assets/textures/blocks/Stone.png")
+	ChunkBorders = love.graphics.newImage("resources/assets/textures/debug/chunkborders.png")
 end

@@ -315,26 +315,26 @@ function NewChunk(x, z)
 					sliceUpdates[math.max(index - 1, 1)][1] = true
 				end
 
-				--print(self.changes[i][1], self.changes[i][2], self.changes[i][3])
+				--LuaCraftPrintLoggingNormal(self.changes[i][1], self.changes[i][2], self.changes[i][3])
 				-- neg x
 				if self.changes[i][1] == 1 then
 					sliceUpdates[index][2] = true
-					--print("neg x")
+					--LuaCraftPrintLoggingNormal("neg x")
 				end
 				-- pos x
 				if self.changes[i][1] == ChunkSize then
 					sliceUpdates[index][3] = true
-					--print("pos x")
+					--LuaCraftPrintLoggingNormal("pos x")
 				end
 				-- neg z
 				if self.changes[i][3] == 1 then
 					sliceUpdates[index][4] = true
-					--print("neg z")
+					--LuaCraftPrintLoggingNormal("neg z")
 				end
 				-- pos z
 				if self.changes[i][3] == ChunkSize then
 					sliceUpdates[index][5] = true
-					--print("pos z")
+					--LuaCraftPrintLoggingNormal("pos z")
 				end
 			end
 		end
@@ -390,7 +390,7 @@ function NewChunkSlice(x, y, z, parent)
 	t.parent = parent
 	t.name = "chunkslice"
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
-	compmodel.culling = true
+	compmodel.culling = false
 	t:assignModel(compmodel)
 
 	t.updateModel = function(self)
