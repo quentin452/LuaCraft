@@ -60,37 +60,35 @@ function initPlayerInventory()
 end
 
 function generateWorldChunks()
-    ChunkHashTable = {}
-    ChunkSet = {}
-    ChunkRequests = {}
-    LightingQueue = {}
-    LightingRemovalQueue = {}
-    CaveList = {}
-    local worldSize = 4
+	ChunkHashTable = {}
+	ChunkSet = {}
+	ChunkRequests = {}
+	LightingQueue = {}
+	LightingRemovalQueue = {}
+	CaveList = {}
+	local worldSize = 4
 
-    StartTime = love.timer.getTime()
-    MeasureTime = StartTime
+	StartTime = love.timer.getTime()
+	MeasureTime = StartTime
 
-    for i = worldSize / -2 + 1, worldSize / 2 do
-        ChunkHashTable[ChunkHash(i)] = {}
-        for j = worldSize / -2 + 1, worldSize / 2 do
-            local chunk = NewChunk(i, j)
-            ChunkSet[chunk] = true
-            ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
+	for i = worldSize / -2 + 1, worldSize / 2 do
+		ChunkHashTable[ChunkHash(i)] = {}
+		for j = worldSize / -2 + 1, worldSize / 2 do
+			local chunk = NewChunk(i, j)
+			ChunkSet[chunk] = true
+			ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
 
-            -- Ajoutez des prints pour déboguer
-            LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
-        end
-    end
-    if enablePROFIProfiler then
-        ProFi:checkMemory(6, "6eme profil")
-    end
+			-- Ajoutez des prints pour déboguer
+			LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
+		end
+	end
+	if enablePROFIProfiler then
+		ProFi:checkMemory(6, "6eme profil")
+	end
 end
-
 
 function updateWorld()
 	UpdateCaves()
-	updateLighting()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(7, "7eme profil")
 	end
@@ -101,10 +99,11 @@ function updateLighting()
 		chunk:sunlight()
 	end
 
-	LightingUpdate()
-
 	for chunk in pairs(ChunkSet) do
 		chunk:populate()
+	end
+
+	for chunk in pairs(ChunkSet) do
 		chunk:processRequests()
 		chunk:initialize()
 	end
@@ -125,6 +124,7 @@ function GenerateWorld()
 	generateWorldChunks()
 	updateWorld()
 	printGenerationTime()
+	updateLighting()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(9, "9eme profil")
 	end
