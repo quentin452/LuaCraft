@@ -80,7 +80,7 @@ function NewChunk(x, z)
 					if love.math.random() < love.math.noise(xx / 64, zz / 64) * 0.02 then
 						-- put a tree here
 						GenerateTree(self, i, height, j)
-					--	self:setVoxelRaw(i, height, j, __DIRT_Block, 15)
+						self:setVoxelRaw(i, height, j, __DIRT_Block, 15)
 					elseif love.math.noise(xx / 32, zz / 32) > 0.9 and love.math.random() < 0.2 then
 						-- put a random flower here
 						local flowerID = love.math.random(__YELLO_FLOWER_Block, __ROSE_FLOWER_Block)
