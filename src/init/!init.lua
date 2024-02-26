@@ -17,6 +17,15 @@ end
 function InitializeGame()
 	SettingsHandlingInit()
 	loadAndSaveLuaCraftFileSystem()
+	if
+		EnableLuaCraftLoggingError == nil
+		or EnableLuaCraftLoggingWarn == nil
+		or EnableLuaCraftPrintLoggingNormalLogging == nil
+	then
+		--TODO FIX EnableLuaCraftLoggingError + EnableLuaCraftLoggingWarn + EnableLuaCraftPrintLoggingNormalLogging are nil at first game launch
+		love.event.quit()
+	end
+
 	ModLoaderInitALL()
 	InitializeWindowSettings()
 	StructureGenFinal()

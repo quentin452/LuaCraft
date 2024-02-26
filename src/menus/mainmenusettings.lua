@@ -27,7 +27,8 @@ function drawMainMenuSettings()
 
 	-- Choices
 	local marque = ""
-	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+    local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
+	local file_content, error_message = customReadFile(configFilePath)
 
 	if file_content then
 		local Settings = {}

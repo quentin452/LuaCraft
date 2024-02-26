@@ -2,6 +2,7 @@ lovez = love
 lovefilesystem = lovez.filesystem
 lovegraphics = lovez.graphics
 lovewindow = lovez.window
+userDirectory = lovez.filesystem.getUserDirectory()
 
 Engine = require("engine")
 --menus
