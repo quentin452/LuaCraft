@@ -25,7 +25,7 @@ function InitializeGame()
 		--TODO FIX EnableLuaCraftLoggingError + EnableLuaCraftLoggingWarn + EnableLuaCraftPrintLoggingNormalLogging are nil at first game launch
 		love.event.quit()
 	end
-
+	saveLogsToOldLogsFolder()
 	ModLoaderInitALL()
 	InitializeWindowSettings()
 	StructureGenFinal()

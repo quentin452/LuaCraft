@@ -8,7 +8,60 @@ function writeToLog(string, message)
 		file:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. string .. message .. "\n")
 		file:close()
 	else
-		--LuaCraftErrorLogging("Failed to open log file. Error: " .. err)
+		LuaCraftErrorLogging("Failed to open log file. Error: " .. err)
+	end
+end
+
+local ffi = require("ffi")
+
+ffi.cdef([[
+    int CreateDirectoryA(const char* lpPathName, void* lpSecurityAttributes);
+    int GetLastError(void);
+    int _access(const char* path, int mode);
+]])
+
+function directoryExists(path)
+	return ffi.C._access(path, 0) == 0
+end
+
+function createDirectoryIfNotExists(directoryPath)
+	if not directoryExists(directoryPath) then
+		local success = ffi.C.CreateDirectoryA(directoryPath, nil)
+
+		if success == 0 then
+			local err = ffi.C.GetLastError()
+			LuaCraftErrorLogging("Failed to create directory. Error code: " .. err)
+		end
+	end
+end
+
+function saveLogsToOldLogsFolder()
+	local oldLogsFolder = userDirectory .. ".LuaCraft\\old_logs\\"
+	local timestamp = os.date("%Y%m%d%H%M%S")
+	local newLogFilePath = oldLogsFolder .. "luacraftconfig_" .. timestamp .. ".txt"
+
+	createDirectoryIfNotExists(oldLogsFolder)
+
+	local currentLogContent, error_message = customReadFile(logFilePath)
+
+	if currentLogContent then
+		local file, error_message = io.open(newLogFilePath, "w")
+		if file then
+			file:write(currentLogContent)
+			file:close()
+			LuaCraftPrintLoggingNormal("Logs saved to old_logs folder.")
+
+			local resetFile, resetError = io.open(logFilePath, "w")
+			if resetFile then
+				resetFile:close()
+			else
+				LuaCraftErrorLogging("Failed to reset main log file. Error: " .. resetError)
+			end
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+	else
+		LuaCraftErrorLogging("Failed to read current log file. Error: " .. error_message)
 	end
 end
 
@@ -30,9 +83,6 @@ function checkAndUpdateDefaults(Settings)
 	end
 	if Settings["renderdistance"] == nil then
 		Settings["renderdistance"] = 5
-	end
-	if Settings["goodlyinitializedconfigs"] == nil then
-		Settings["goodlyinitializedconfigs"] = 0
 	end
 	_JPROFILER.pop("checkAndUpdateDefaults")
 end
@@ -95,8 +145,13 @@ function loadAndSaveLuaCraftFileSystem()
 
 	if file_content then
 		local Settings = {}
-		local orderedKeys =
-			{ "vsync", "LuaCraftPrintLoggingNormal", "LuaCraftWarnLogging", "LuaCraftErrorLogging", "renderdistance" , "goodlyinitializedconfigs" }
+		local orderedKeys = {
+			"vsync",
+			"LuaCraftPrintLoggingNormal",
+			"LuaCraftWarnLogging",
+			"LuaCraftErrorLogging",
+			"renderdistance",
+		}
 
 		for _, key in ipairs(orderedKeys) do
 			local value = file_content:match(key .. "=(%w+)")
@@ -153,7 +208,6 @@ end
 EnableLuaCraftPrintLoggingNormalLogging = getLuaCraftPrintLoggingNormalValue()
 
 function LuaCraftPrintLoggingNormal(...)
-	
 	--print(EnableLuaCraftPrintLoggingNormalLogging)
 	--if EnableLuaCraftLoggingError == nil then
 	--	EnableLuaCraftLoggingError = true
