@@ -25,9 +25,13 @@ function MouseLogicOnPlay(x, y, b)
 		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
 		LightingUpdate()
 
+		
 		for _, chunkSlice in ipairs(chunk.slices) do
 			renderChunkSlice(chunkSlice, ThePlayer.x, ThePlayer.y, ThePlayer.z)
-			UpdateNeighboringChunks(chunk, pos.y)
+		--	UpdateNeighboringChunks(chunk, pos.y)
+		end
+		if chunk.slices and chunk and #chunk.changes > 0 then
+			chunk:updateModel()
 		end
 	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
 		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"

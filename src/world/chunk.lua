@@ -403,7 +403,7 @@ function NewChunkSlice(x, y, z, parent)
 	t:assignModel(compmodel)
 	t.active = true
 	t.updateModel = function(self)
-		--[[local model = {}
+		local model = {}
 
 		for i = 1, ChunkSize do
 			for j = self.y, self.y + SliceHeight - 1 do
@@ -423,10 +423,9 @@ function NewChunkSlice(x, y, z, parent)
 		end
 
 		self.model:setVerts(model)
-		--]]
 	end
 
-	--	t:updateModel()
+	t:updateModel()
 	return t
 end
 
