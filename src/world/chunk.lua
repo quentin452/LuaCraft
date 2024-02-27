@@ -342,7 +342,7 @@ function NewChunk(x, z)
 			end
 		end
 
-		-- update slices that were flagged in previous step
+		-- update slices that were flagged in the previous step
 		for i = 1, WorldHeight / SliceHeight do
 			if sliceUpdates[i][1] then
 				self.slices[i]:updateModel()
@@ -350,25 +350,40 @@ function NewChunk(x, z)
 				if sliceUpdates[i][2] then
 					local chunk = GetChunkRaw(self.x - 1, self.z)
 					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
+						local neighborSlice = chunk.slices[i]
+						if neighborSlice ~= nil then
+							neighborSlice:updateModel()
+						end
 					end
 				end
+
 				if sliceUpdates[i][3] then
 					local chunk = GetChunkRaw(self.x + 1, self.z)
 					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
+						local neighborSlice = chunk.slices[i]
+						if neighborSlice ~= nil then
+							neighborSlice:updateModel()
+						end
 					end
 				end
+
 				if sliceUpdates[i][4] or sliceUpdates[i][5] then
 					local chunk = GetChunkRaw(self.x, self.z - 1)
 					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
+						local neighborSlice = chunk.slices[i]
+						if neighborSlice ~= nil then
+							neighborSlice:updateModel()
+						end
 					end
 				end
+
 				if sliceUpdates[i][4] or sliceUpdates[i][5] then
 					local chunk = GetChunkRaw(self.x, self.z + 1)
 					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
+						local neighborSlice = chunk.slices[i]
+						if neighborSlice ~= nil then
+							neighborSlice:updateModel()
+						end
 					end
 				end
 			end
@@ -394,9 +409,9 @@ function NewChunkSlice(x, y, z, parent)
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
 	compmodel.culling = false
 	t:assignModel(compmodel)
-
+	t.active = true
 	t.updateModel = function(self)
-		local model = {}
+		--[[local model = {}
 
 		for i = 1, ChunkSize do
 			for j = self.y, self.y + SliceHeight - 1 do
@@ -416,9 +431,10 @@ function NewChunkSlice(x, y, z, parent)
 		end
 
 		self.model:setVerts(model)
+		--]]
 	end
 
-	t:updateModel()
+	--	t:updateModel()
 	return t
 end
 

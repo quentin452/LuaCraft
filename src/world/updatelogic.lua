@@ -3,6 +3,7 @@ local RenderDistance = 8 * ChunkSize
 --ChunkSet = {}
 --ChunkHashTable = {}
 --CaveList = {}
+
 function UpdateGame(dt)
 	if gamestate == gamestatePlayingGame then
 		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
@@ -25,6 +26,11 @@ function UpdateGame(dt)
 		for _, chunk in ipairs(renderChunks) do
 			if chunk.isInitialized and chunk.active and #chunk.changes > 0 then
 				chunk:updateModel()
+				for _, chunkSlice in ipairs(chunk.slices) do
+					if chunkSlice.active then
+						renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
+					end
+				end
 			end
 		end
 
@@ -39,7 +45,6 @@ function UpdateGame(dt)
 		end
 
 		local logicThreshold = 1 / 60
-
 		local fps = love.timer.getFPS()
 
 		if LogicAccumulator >= logicThreshold and fps ~= 0 then
@@ -63,9 +68,10 @@ function getRenderChunks(playerX, playerY, playerZ)
 	-- Deuxième étape: Mettre à jour uniquement les chunks actifs parmi cette sphère
 	for _, chunk in ipairs(renderChunks) do
 		local mx, y, mz = chunk.x, chunk.y, chunk.z
-		local dx, dy, dz = math.abs(playerX - mx), math.abs(playerY - y), math.abs(playerZ - mz)
+		local dx, dy, dz = playerX - mx, playerY - y, playerZ - mz
 
-		local distance = math.max(dx, dy, dz)
+		-- Calculate Euclidean distance
+		local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
 
 		if distance < RenderDistance then
 			if not chunk.isInitialLightningInititalized then
@@ -79,15 +85,44 @@ function getRenderChunks(playerX, playerY, playerZ)
 				chunk:initialize()
 				chunk.isInitialized = true
 			end
-			--todo add a way to enable the render/update of the chunk but before i need to find in the code where the chunk render is , but i think its NewChunkSlice
 			chunk.active = true
+			for _, chunkSlice in ipairs(chunk.slices) do
+				chunkSlice.active = true
+			end
 		else
-			--todo add a way to disable the render/update of the chunk
 			chunk.active = false
+			for _, chunkSlice in ipairs(chunk.slices) do
+				chunkSlice.active = false
+			end
 		end
 	end
 
 	return renderChunks
+end
+
+function renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
+	local model = {}
+
+	for i = 1, ChunkSize do
+		for j = chunkSlice.y, chunkSlice.y + SliceHeight - 1 do
+			for k = 1, ChunkSize do
+				local this, thisSunlight, thisLocalLight = chunkSlice.parent:getVoxel(i, j, k)
+				local thisLight = math.max(thisSunlight, thisLocalLight)
+				local thisTransparency = TileTransparency(this)
+				local scale = 1
+				local x, y, z =
+					(chunkSlice.x - 1) * ChunkSize + i - 1, 1 * j * scale, (chunkSlice.z - 1) * ChunkSize + k - 1
+
+				if thisTransparency < 3 then
+					--LuaCraftPrintLoggingNormal("Rendering voxel:", i, j, k, "at position:", x, y, z)
+					TileRendering(chunkSlice, i, j, k, x, y, z, thisLight, model, scale)
+					BlockRendering(chunkSlice, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
+				end
+			end
+		end
+	end
+
+	chunkSlice.model:setVerts(model)
 end
 
 function updateThingList(dt)
