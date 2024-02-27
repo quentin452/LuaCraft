@@ -38,7 +38,7 @@ end
 function saveLogsToOldLogsFolder()
 	local oldLogsFolder = userDirectory .. ".LuaCraft\\old_logs\\"
 	local timestamp = os.date("%Y%m%d%H%M%S")
-	local newLogFilePath = oldLogsFolder .. "luacraftconfig_" .. timestamp .. ".txt"
+	local newLogFilePath = oldLogsFolder .. "luacraftlog_" .. timestamp .. ".txt"
 
 	createDirectoryIfNotExists(oldLogsFolder)
 
@@ -208,28 +208,21 @@ end
 EnableLuaCraftPrintLoggingNormalLogging = getLuaCraftPrintLoggingNormalValue()
 
 function LuaCraftPrintLoggingNormal(...)
-	--print(EnableLuaCraftPrintLoggingNormalLogging)
-	--if EnableLuaCraftLoggingError == nil then
-	--	EnableLuaCraftLoggingError = true
-	--end
-	--if EnableLuaCraftLoggingWarn == nil then
-	--		EnableLuaCraftLoggingWarn = true
-	--	end
-	--	if EnableLuaCraftPrintLoggingNormalLogging == nil then
-	--		EnableLuaCraftPrintLoggingNormalLogging = true
-	--	end
 	if EnableLuaCraftPrintLoggingNormalLogging then
-		writeToLog("[NORMAL]", ...)
-		print("[NORMAL]", ...)
+		local message = table.concat({...}, " ")
+		writeToLog("[NORMAL]", message)
+		print("[NORMAL]", message)
 	end
 end
+
 
 EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
 
 function LuaCraftWarnLogging(...)
 	if EnableLuaCraftLoggingWarn then
-		writeToLog("[WARN]", ...)
-		print("[WARN]", ...)
+		local message = table.concat({...}, " ")
+		writeToLog("[WARN]", message)
+		print("[WARN]", message)
 	end
 end
 
@@ -237,8 +230,9 @@ EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
 
 function LuaCraftErrorLogging(...)
 	if EnableLuaCraftLoggingError then
-		writeToLog("[FATAL]", ...)
-		error(...)
+		local message = table.concat({...}, " ")
+		writeToLog("[FATAL]", message)
+		error(message)
 	end
 end
 
