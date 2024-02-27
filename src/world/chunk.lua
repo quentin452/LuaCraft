@@ -394,203 +394,22 @@ function NewChunkSlice(x, y, z, parent)
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
 	compmodel.culling = false
 	t:assignModel(compmodel)
-	--	local renderDistance = 5 * ChunkSize
 
 	t.updateModel = function(self)
-		--		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
-
-		--		local dx = math.abs(playerX - (x * ChunkSize))
-		--		local dy = math.abs(playerY - (y * ChunkSize))
-		--		local dz = math.abs(playerZ - (z * ChunkSize))
-
-		--		local distance = math.max(dx, dy, dz)
-
-		--		print("Distance from player:", distance)
-		--		print("Render distance:", renderDistance)
-
-		--		if distance > renderDistance then
-		--			print("Chunk is outside render distance. Skipping model update.")
-		--			return
-		--		end
-
 		local model = {}
 
-		-- iterate through the voxels in this chunkslice's domain
-		-- if air block, see if any solid neighbors
-		-- then place faces down accordingly with proper texture and lighting value
 		for i = 1, ChunkSize do
 			for j = self.y, self.y + SliceHeight - 1 do
 				for k = 1, ChunkSize do
 					local this, thisSunlight, thisLocalLight = self.parent:getVoxel(i, j, k)
-					-- local thisSunlight = thisData%16
-					-- local thisLocalLight = math.floor(thisData/16)
 					local thisLight = math.max(thisSunlight, thisLocalLight)
 					local thisTransparency = TileTransparency(this)
 					local scale = 1
 					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * scale, (self.z - 1) * ChunkSize + k - 1
 
 					if thisTransparency < 3 then
-						-- if not checking for tget == 0, then it will render the "faces" of airblocks
-						-- on transparent block edges
-
-						-- simple plant model (flowers, mushrooms)
-						if TileModel(this) == 1 then
-							local otx, oty = NumberToCoord(TileTextures(this)[1], 16, 16)
-							otx = otx + 16 * thisLight
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							local diagLong = 0.7071 * scale * 0.5 + 0.5
-							local diagShort = -0.7071 * scale * 0.5 + 0.5
-
-							local vertices = {}
-
-							for _, v in ipairs({
-								{ diagShort, 0, diagShort, tx2, ty2 },
-								{ diagLong, 0, diagLong, tx, ty2 },
-								{ diagShort, scale, diagShort, tx2, ty },
-								{ diagLong, 0, diagLong, tx, ty2 },
-								{ diagLong, scale, diagLong, tx, ty },
-								{ diagShort, scale, diagShort, tx2, ty },
-							}) do
-								table.insert(vertices, { x + v[1], y + v[2], z + v[3], v[4], v[5] })
-							end
-
-							for _, v in ipairs(vertices) do
-								model[#model + 1] = v
-							end
-
-							--	for _, v in ipairs(vertices) do
-							--		model[#model + 1] = { x + scale - v[1], y + v[2], z + scale - v[3], v[4], v[5] }
-							--	end
-						end
-
-						-- top
-						local get = self.parent:getVoxel(i, j - 1, k)
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[math.min(2, #TileTextures(get))], 16, 16)
-							otx = otx + 16 * thisLight
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y, z, tx, ty }
-							model[#model + 1] = { x + scale, y, z, tx2, ty }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-							model[#model + 1] = { x + scale, y, z, tx2, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-						end
-
-						-- bottom
-						local get = self.parent:getVoxel(i, j + 1, k)
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[math.min(3, #TileTextures(get))], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 3, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y + scale, z, tx, ty }
-							model[#model + 1] = { x, y + scale, z + scale, tx, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y + scale, z + scale, tx, ty2 }
-						end
-
-						-- positive x
-						local get = self.parent:getVoxel(i - 1, j, k)
-						if i == 1 then
-							local chunkGet = GetChunk(x - 1, y, z)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(ChunkSize, j, k)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 2, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y, z, tx2, ty2 }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-							model[#model + 1] = { x, y + scale, z + scale, tx, ty }
-							model[#model + 1] = { x, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-						end
-
-						-- negative x
-						local get = self.parent:getVoxel(i + 1, j, k)
-						if i == ChunkSize then
-							local chunkGet = GetChunk(x + 1, y, z)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(1, j, k)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 2, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x + scale, y, z, tx, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-						end
-
-						-- positive z
-						local get = self.parent:getVoxel(i, j, k - 1)
-						if k == 1 then
-							local chunkGet = GetChunk(x, y, z - 1)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(i, j, ChunkSize)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 1, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y, z, tx, ty2 }
-							model[#model + 1] = { x, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y, z, tx2, ty2 }
-							model[#model + 1] = { x, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-							model[#model + 1] = { x + scale, y, z, tx2, ty2 }
-						end
-
-						-- negative z
-						local get = self.parent:getVoxel(i, j, k + 1)
-						if k == ChunkSize then
-							local chunkGet = GetChunk(x, y, z + 1)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(i, j, 1)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 1, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-							model[#model + 1] = { x, y, z + scale, tx2, ty2 }
-							model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z + scale, tx, ty }
-							model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
-						end
+						TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
+						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
 					end
 				end
 			end
@@ -600,8 +419,166 @@ function NewChunkSlice(x, y, z, parent)
 	end
 
 	t:updateModel()
-
 	return t
+end
+
+function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
+	local this = self.parent:getVoxel(i, j, k)
+	if TileModel(this) == 1 then
+		local otx, oty = NumberToCoord(TileTextures(this)[1], 16, 16)
+		otx = otx + 16 * thisLight
+		local otx2, oty2 = otx + 1, oty + 1
+		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
+		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+
+		local diagLong = 0.7071 * scale * 0.5 + 0.5
+		local diagShort = -0.7071 * scale * 0.5 + 0.5
+
+		local vertices = {}
+
+		for _, v in ipairs({
+			{ diagShort, 0, diagShort, tx2, ty2 },
+			{ diagLong, 0, diagLong, tx, ty2 },
+			{ diagShort, scale, diagShort, tx2, ty },
+			{ diagLong, 0, diagLong, tx, ty2 },
+			{ diagLong, scale, diagLong, tx, ty },
+			{ diagShort, scale, diagShort, tx2, ty },
+		}) do
+			table.insert(vertices, { x + v[1], y + v[2], z + v[3], v[4], v[5] })
+		end
+
+		for _, v in ipairs(vertices) do
+			model[#model + 1] = v
+		end
+	end
+end
+
+function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
+	-- top
+	local get = self.parent:getVoxel(i, j - 1, k)
+	if CanDrawFace(get, thisTransparency) then
+		local otx, oty = NumberToCoord(TileTextures(get)[math.min(2, #TileTextures(get))], 16, 16)
+		otx = otx + 16 * thisLight
+		local otx2, oty2 = otx + 1, oty + 1
+		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
+		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+
+		model[#model + 1] = { x, y, z, tx, ty }
+		model[#model + 1] = { x + scale, y, z, tx2, ty }
+		model[#model + 1] = { x, y, z + scale, tx, ty2 }
+		model[#model + 1] = { x + scale, y, z, tx2, ty }
+		model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
+		model[#model + 1] = { x, y, z + scale, tx, ty2 }
+	end
+
+	-- bottom
+	local get = self.parent:getVoxel(i, j + 1, k)
+	if CanDrawFace(get, thisTransparency) then
+		local otx, oty = NumberToCoord(TileTextures(get)[math.min(3, #TileTextures(get))], 16, 16)
+		otx = otx + 16 * math.max(thisLight - 3, 0)
+		local otx2, oty2 = otx + 1, oty + 1
+		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
+		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+
+		model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
+		model[#model + 1] = { x, y + scale, z, tx, ty }
+		model[#model + 1] = { x, y + scale, z + scale, tx, ty2 }
+		model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty2 }
+		model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
+		model[#model + 1] = { x, y + scale, z + scale, tx, ty2 }
+	end
+
+	-- positive x
+	local get = self.parent:getVoxel(i - 1, j, k)
+	if i == 1 then
+		local chunkGet = GetChunk(x - 1, y, z)
+		if chunkGet ~= nil then
+			get = chunkGet:getVoxel(ChunkSize, j, k)
+		end
+	end
+	if CanDrawFace(get, thisTransparency) then
+		local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
+		otx = otx + 16 * math.max(thisLight - 2, 0)
+		local otx2, oty2 = otx + 1, oty + 1
+		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
+		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+
+		model[#model + 1] = { x, y + scale, z, tx2, ty }
+		model[#model + 1] = { x, y, z, tx2, ty2 }
+		model[#model + 1] = { x, y, z + scale, tx, ty2 }
+		model[#model + 1] = { x, y + scale, z + scale, tx, ty }
+		model[#model + 1] = { x, y + scale, z, tx2, ty }
+		model[#model + 1] = { x, y, z + scale, tx, ty2 }
+	end
+
+	-- negative x
+	local get = self.parent:getVoxel(i + 1, j, k)
+	if i == ChunkSize then
+		local chunkGet = GetChunk(x + 1, y, z)
+		if chunkGet ~= nil then
+			get = chunkGet:getVoxel(1, j, k)
+		end
+	end
+	if CanDrawFace(get, thisTransparency) then
+		local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
+		otx = otx + 16 * math.max(thisLight - 2, 0)
+		local otx2, oty2 = otx + 1, oty + 1
+		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
+		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+
+		model[#model + 1] = { x + scale, y, z, tx, ty2 }
+		model[#model + 1] = { x + scale, y + scale, z, tx, ty }
+		model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
+		model[#model + 1] = { x + scale, y + scale, z, tx, ty }
+		model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty }
+		model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
+	end
+
+	-- positive z
+	local get = self.parent:getVoxel(i, j, k - 1)
+	if k == 1 then
+		local chunkGet = GetChunk(x, y, z - 1)
+		if chunkGet ~= nil then
+			get = chunkGet:getVoxel(i, j, ChunkSize)
+		end
+	end
+	if CanDrawFace(get, thisTransparency) then
+		local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
+		otx = otx + 16 * math.max(thisLight - 1, 0)
+		local otx2, oty2 = otx + 1, oty + 1
+		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
+		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+
+		model[#model + 1] = { x, y, z, tx, ty2 }
+		model[#model + 1] = { x, y + scale, z, tx, ty }
+		model[#model + 1] = { x + scale, y, z, tx2, ty2 }
+		model[#model + 1] = { x, y + scale, z, tx, ty }
+		model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
+		model[#model + 1] = { x + scale, y, z, tx2, ty2 }
+	end
+
+	-- negative z
+	local get = self.parent:getVoxel(i, j, k + 1)
+	if k == ChunkSize then
+		local chunkGet = GetChunk(x, y, z + 1)
+		if chunkGet ~= nil then
+			get = chunkGet:getVoxel(i, j, 1)
+		end
+	end
+	if CanDrawFace(get, thisTransparency) then
+		local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
+		otx = otx + 16 * math.max(thisLight - 1, 0)
+		local otx2, oty2 = otx + 1, oty + 1
+		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
+		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+
+		model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
+		model[#model + 1] = { x, y, z + scale, tx2, ty2 }
+		model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
+		model[#model + 1] = { x + scale, y + scale, z + scale, tx, ty }
+		model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
+		model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
+	end
 end
 
 -- used for building structures across chunk borders
