@@ -15,13 +15,11 @@ function NewChunk(x, z)
 
 	-- store a list of voxels to be updated on next modelUpdate
 	chunk.changes = {}
-
+	chunk.updatedSunLight = false
+	chunk.isPopulated = false
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
 	end
-	chunk.isInitialLightningInititalized = false
-	chunk.isPopulated = false
-	chunk.isInitialized = false
 
 	GenerateTerrain(chunk, x, z, StandardTerrain)
 
@@ -58,9 +56,41 @@ function NewChunk(x, z)
 				end
 			end
 		end
-		--LightingUpdate()
+		LightingUpdate()
 	end
+	chunk.sunlightUpdateAllTheChunk = function(self)
+		for x = 1, ChunkSize do
+			for y = 1, WorldHeight do
+				for z = 1, ChunkSize do
+					-- Mettez à jour l'éclairage pour le voxel à la position (x, y, z)
+					local blockvalue = self:getVoxel(x, y, z)
+					local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 
+					if TileLightable(blockvalue) then
+						local sunget = self:getVoxel(x, y + 1, z)
+						local sunlight = self:getVoxelFirstData(x, y + 1, z)
+						local inDirectSunlight = TileLightable(sunget) and sunlight == 15
+
+						if inDirectSunlight then
+							NewSunlightDownAddition(gx, gy, gz, sunlight)
+						else
+							for dx = -1, 1 do
+								for dy = -1, 1 do
+									for dz = -1, 1 do
+										NewSunlightAdditionCreation(gx + dx, gy + dy, gz + dz)
+									end
+								end
+							end
+						end
+					else
+						NewSunlightDownSubtraction(gx, gy - 1, gz)
+					end
+				end
+			end
+		end
+		-- Mettez à jour l'éclairage pour tous les voxels
+		LightingUpdate()
+	end
 	chunk.processRequests = function(self)
 		for j = 1, #self.requests do
 			local block = self.requests[j]
@@ -68,6 +98,17 @@ function NewChunk(x, z)
 				self:setVoxel(block.x, block.y, block.z, block.value, 15)
 			end
 		end
+		LightingUpdate()
+	end
+	chunk.updateLightingForAllVoxels = function(self)
+		for x = 1, ChunkSize do
+			for y = 1, WorldHeight do
+				for z = 1, ChunkSize do
+					self:setVoxel(x, y, z, -1, false)
+				end
+			end
+		end
+		-- Mettez à jour l'éclairage pour tous les voxels
 		LightingUpdate()
 	end
 
@@ -245,10 +286,11 @@ function NewChunk(x, z)
 					end
 				end
 			end
+			if blockvalue ~= -1 then
+				self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
 
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
-
-			self.changes[#self.changes + 1] = { x, y, z }
+				self.changes[#self.changes + 1] = { x, y, z }
+			end
 		end
 	end
 

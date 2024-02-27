@@ -25,10 +25,9 @@ function MouseLogicOnPlay(x, y, b)
 		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
 		LightingUpdate()
 
-		
 		for _, chunkSlice in ipairs(chunk.slices) do
-			renderChunkSlice(chunkSlice, ThePlayer.x, ThePlayer.y, ThePlayer.z)
-		--	UpdateNeighboringChunks(chunk, pos.y)
+			--	renderChunkSlice(chunkSlice, ThePlayer.x, ThePlayer.y, ThePlayer.z)
+			--	UpdateNeighboringChunks(chunk, pos.y)
 		end
 		if chunk.slices and chunk and #chunk.changes > 0 then
 			chunk:updateModel()
@@ -38,6 +37,7 @@ function MouseLogicOnPlay(x, y, b)
 		hudTimeLeft = 3
 	end
 end
+
 function UpdateNeighboringChunks(chunk, y)
 	local neighborOffsets = {
 		{ -1, 0 },
@@ -88,6 +88,13 @@ function KeyPressed(k)
 			enableF8 = not enableF8
 		elseif k == "f1" then
 			enableTESTBLOCK = not enableTESTBLOCK
+		elseif k == "f2" then
+		--	for _, chunk in ipairs(renderChunks) do
+		--		if chunk.active then
+		--			chunk:sunlight()
+		--			chunk:processRequests()
+		--		end
+		--	end
 		end
 	end
 	if gamestate == gamestateGamePausing then
