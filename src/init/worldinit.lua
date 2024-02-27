@@ -60,6 +60,7 @@ function initPlayerInventory()
 end
 
 function generateWorldChunks()
+	--TODO : MOVE TO updatelogic.lua
 	ChunkHashTable = {}
 	ChunkSet = {}
 	ChunkRequests = {}
@@ -88,32 +89,15 @@ function generateWorldChunks()
 end
 
 function updateWorld()
+	--TODO : MOVE TO updatelogic.lua
 	UpdateCaves()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(7, "7eme profil")
 	end
 end
 
-function updateLighting()
-	for chunk in pairs(ChunkSet) do
-		chunk:sunlight()
-	end
-
-	for chunk in pairs(ChunkSet) do
-		chunk:populate()
-	end
-
-	for chunk in pairs(ChunkSet) do
-		chunk:processRequests()
-		chunk:initialize()
-	end
-
-	if enablePROFIProfiler then
-		ProFi:checkMemory(8, "8eme profil")
-	end
-end
-
 function printGenerationTime()
+	--TODO : MOVE TO updatelogic.lua
 	LuaCraftPrintLoggingNormal("total generation time: " .. (love.timer.getTime() - StartTime))
 end
 
@@ -124,7 +108,6 @@ function GenerateWorld()
 	generateWorldChunks()
 	updateWorld()
 	printGenerationTime()
-	updateLighting()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(9, "9eme profil")
 	end
@@ -254,12 +237,4 @@ function SetVoxelSecondData(x, y, z, value)
 		return true
 	end
 	return false
-end
-
-function UpdateChangedChunks()
-	for chunk in pairs(ChunkSet) do
-		if #chunk.changes > 0 then
-			chunk:updateModel()
-		end
-	end
 end

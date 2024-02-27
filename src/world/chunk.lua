@@ -19,6 +19,9 @@ function NewChunk(x, z)
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
 	end
+	chunk.isInitialLightningInititalized = false
+	chunk.isPopulated = false
+	chunk.isInitialized = false
 
 	GenerateTerrain(chunk, x, z, StandardTerrain)
 
@@ -55,7 +58,7 @@ function NewChunk(x, z)
 				end
 			end
 		end
-		LightingUpdate()
+		--LightingUpdate()
 	end
 
 	chunk.processRequests = function(self)
@@ -384,7 +387,6 @@ function CanDrawFace(get, thisTransparency)
 	-- must be different transparency to draw, except for tree leaves which have transparency of 1
 	return (tget ~= thisTransparency or tget == 1) and tget > 0
 end
-
 function NewChunkSlice(x, y, z, parent)
 	local t = NewThing(x, y, z)
 	t.parent = parent
@@ -392,8 +394,25 @@ function NewChunkSlice(x, y, z, parent)
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
 	compmodel.culling = false
 	t:assignModel(compmodel)
+	--	local renderDistance = 5 * ChunkSize
 
 	t.updateModel = function(self)
+		--		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
+
+		--		local dx = math.abs(playerX - (x * ChunkSize))
+		--		local dy = math.abs(playerY - (y * ChunkSize))
+		--		local dz = math.abs(playerZ - (z * ChunkSize))
+
+		--		local distance = math.max(dx, dy, dz)
+
+		--		print("Distance from player:", distance)
+		--		print("Render distance:", renderDistance)
+
+		--		if distance > renderDistance then
+		--			print("Chunk is outside render distance. Skipping model update.")
+		--			return
+		--		end
+
 		local model = {}
 
 		-- iterate through the voxels in this chunkslice's domain

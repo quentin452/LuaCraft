@@ -26,7 +26,6 @@ function MouseLogicOnPlay(x, y, b)
 	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and cy and cy < 128 then
 		chunk:setVoxel(cx, cy, cz, value, true)
 		LightingUpdate()
-		UpdateChangedChunks()
 		-- chunk:updateModel(cx, cy, cz)
 		-- LuaCraftPrintLoggingNormal("---")
 		-- LuaCraftPrintLoggingNormal(cx, cy, cz)
