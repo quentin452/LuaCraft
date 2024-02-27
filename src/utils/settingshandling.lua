@@ -12,8 +12,8 @@ function reloadConfig()
 			lovewindow.setVSync(globalVSync and 1 or 0)
 		end
 
-		-- local renderdistanceValue = file_content:match("renderdistance=(%d+)")
-		-- globalRenderDistance = tonumber(renderdistanceValue) or 5
+	--	local renderdistanceValue = file_content:match("renderdistance=(%d+)")
+	--	globalRenderDistance = tonumber(renderdistanceValue) or 6
 
 		local printNormalValue = file_content:match("LuaCraftPrintLoggingNormal=(%w+)")
 		EnableLuaCraftPrintLoggingNormalLogging = printNormalValue:lower() == "true"
@@ -50,43 +50,18 @@ function toggleVSync()
 	end
 	_JPROFILER.pop("toggleVSync")
 end
-function refreshRenderDistance()
-	_JPROFILER.push("refreshRenderDistance")
-	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
-	local file_path, error_message = customReadFile(configFilePath)
-
-	local file_content, error_message = customReadFile(file_path)
-
-	if file_content then
-		local current_renderdistance = tonumber(file_content:match("renderdistance=(%d+)")) or 0
-		globalRenderDistance = current_renderdistance
-		file_content = file_content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
-		local file, error_message = io.open(file_path, "w")
-		if file then
-			file:write(file_content)
-			file:close()
-			LuaCraftPrintLoggingNormal("Render distance refreshed successfully.")
-		else
-			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
-		end
-	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
-	end
-	_JPROFILER.pop("refreshRenderDistance")
-end
 
 function renderdistanceSetting()
 	_JPROFILER.push("renderdistanceSetting")
-	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
-	local file_path, error_message = customReadFile(configFilePath)
+	local file_path = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 	local file_content, error_message = customReadFile(file_path)
 
 	if file_content then
 		local current_renderdistance = tonumber(file_content:match("renderdistance=(%d+)")) or 0
-		globalRenderDistance = current_renderdistance + 5
+		globalRenderDistance = current_renderdistance + 6
 
-		if globalRenderDistance > 25 then
-			globalRenderDistance = 5
+		if globalRenderDistance > 24 then
+			globalRenderDistance = 6
 		end
 
 		file_content = file_content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
@@ -199,9 +174,8 @@ function createDefaultConfig(filePath)
 end
 
 function SettingsHandlingInit()
-	
 	_JPROFILER.push("SettingsHandlingInit")
-	
+
 	reloadConfig()
 	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 	local file_content, error_message = customReadFile(configFilePath)
@@ -216,6 +190,6 @@ function SettingsHandlingInit()
 	else
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
-	
+
 	_JPROFILER.pop("SettingsHandlingInit")
 end

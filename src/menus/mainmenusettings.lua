@@ -27,7 +27,7 @@ function drawMainMenuSettings()
 
 	-- Choices
 	local marque = ""
-    local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
+	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 	local file_content, error_message = customReadFile(configFilePath)
 
 	if file_content then
@@ -65,7 +65,7 @@ function drawMainMenuSettings()
 				choiceText = choiceText .. " X"
 			end
 			if n == 5 and type(Settings["renderdistance"]) == "number" then
-				choiceText = choiceText .. " TODO" .. Settings["renderdistance"]
+				choiceText = choiceText .. "" .. Settings["renderdistance"]
 			end
 			drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
 

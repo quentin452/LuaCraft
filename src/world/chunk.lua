@@ -95,13 +95,6 @@ function NewChunk(x, z)
 		end
 	end
 
-	chunk.initialize = function(self)
-		for i = 1, WorldHeight / SliceHeight do
-			self.slices[i] = NewChunkSlice(self.x, self.y + (i - 1) * SliceHeight + 1, self.z, self)
-		end
-		self.changes = {}
-	end
-
 	-- get voxel id of the voxel in this chunk's coordinate space
 	chunk.getVoxel = function(self, x, y, z)
 		x, y, z = math.floor(x), math.floor(y), math.floor(z)

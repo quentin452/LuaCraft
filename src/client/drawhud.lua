@@ -79,7 +79,6 @@ function DrawTestBlock()
 			-- Retirer le modèle de la liste
 			if modelIndex then
 				table.remove(scene.modelList, modelIndex)
-				LuaCraftPrintLoggingNormal("Model removed.")
 			end
 
 			exampleModelReference = nil
@@ -232,38 +231,19 @@ function DrawChunkBorders3D()
 
 			if modelIndex then
 				table.remove(scene.modelList, modelIndex)
-				LuaCraftPrintLoggingNormal("Model removed.")
+
 			end
 		end
 
 		chunkBordersModels = {} -- Réinitialiser la table des modèles
 
 		ChunkBorderAlreadyCreated = 0
-		LuaCraftPrintLoggingNormal("ChunkBorderAlreadyCreated reset to 0")
-		LuaCraftPrintLoggingNormal("Models removed.")
 	elseif enableF8 and ChunkBorderAlreadyCreated == 0 then
 		for chunk, _ in pairs(ChunkSet) do
-			LuaCraftPrintLoggingNormal("test1")
 			if type(chunk) == "table" and chunk.x and chunk.y and chunk.z then
-				LuaCraftPrintLoggingNormal("test2")
-
 				CreateChunkBordersVertices()
 				-- No rotation applied, so rotatedVerts is the same as verts
 				local rotatedVerts = ChunkVerts
-
-				-- Debugging output
-				for i, v in ipairs(rotatedVerts) do
-					LuaCraftPrintLoggingNormal(
-						"After Rotation - Vertex "
-							.. i
-							.. ": x = "
-							.. rotatedVerts[i][1]
-							.. ", y = "
-							.. rotatedVerts[i][2]
-							.. ", z = "
-							.. rotatedVerts[i][3]
-					)
-				end
 
 				-- Update verts with rotatedVerts
 				ChunkVerts = rotatedVerts
@@ -277,20 +257,6 @@ function DrawChunkBorders3D()
 					{ "VertexPosition", "float", 3 },
 					{ "VertexTexCoord", "float", 2 },
 				}
-
-				-- Print debugging information
-				LuaCraftPrintLoggingNormal("Chunk Borders Debugging:")
-				LuaCraftPrintLoggingNormal("World Height: " .. WorldHeight)
-
-				-- Print chunk coordinates
-				LuaCraftPrintLoggingNormal("Chunk Coordinates: x = " .. x .. ", y = " .. y .. ", z = " .. z)
-
-				-- Print vertices
-				for i, v in ipairs(ChunkVerts) do
-					LuaCraftPrintLoggingNormal(
-						"Vertex " .. i .. ": x = " .. v[1] .. ", y = " .. v[2] .. ", z = " .. v[3]
-					)
-				end
 
 				local t = NewThing(x, y, z)
 				t.name = "ChunkBorders"
@@ -306,7 +272,6 @@ function DrawChunkBorders3D()
 		end
 
 		ChunkBorderAlreadyCreated = 1
-		LuaCraftPrintLoggingNormal("DrawChunkBorders3D completed.")
 	end
 end
 

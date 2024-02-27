@@ -1,26 +1,37 @@
 local ChunkSize = 16
-local RenderDistance = 8 * ChunkSize
---ChunkSet = {}
---ChunkHashTable = {}
---CaveList = {}
+--TODO FIX : currently render distance does not support renderdistance lower than 6
+--TODO FIX : when i reecreate world the world is empty
+--TODO FIX : some issues accross chunks on blocks
+--TODO FIX : the render distance wont move with the player
+--TODO FIX : Caves are generated after ChunkSlice get init
+
+--TODO MADE : support renderdistance setting from settingshandling/filesystem
+local RenderDistance = 6 * ChunkSize
+ChunkSet = {}
+ChunkHashTable = {}
+CaveList = {}
+ChunkRequests = {}
+LightingQueue = {}
+LightingRemovalQueue = {}
 
 function UpdateGame(dt)
 	if gamestate == gamestatePlayingGame then
 		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
 
 		--todo need to fix some things before
-		-- Générer les chunks si nécessaire
-		--	for i = math.floor(playerX / ChunkSize) - RenderDistance, math.floor(playerX / ChunkSize) + RenderDistance do
-		--		for j = math.floor(playerZ / ChunkSize) - RenderDistance, math.floor(playerZ / ChunkSize) + RenderDistance do
-		--			if not ChunkHashTable[ChunkHash(i)] or not ChunkHashTable[ChunkHash(i)][ChunkHash(j)] then
-		--				local chunk = NewChunk(i, j)
-		--				ChunkSet[chunk] = true
-		--				ChunkHashTable[ChunkHash(i)] = ChunkHashTable[ChunkHash(i)] or {}
-		--		ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
-		--		LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
-		--	end
-		--		end
-		--	end
+		-- Generate Chunks within render distance
+		for i = math.floor(playerX / ChunkSize) - RenderDistance / ChunkSize, math.floor(playerX / ChunkSize) + RenderDistance / ChunkSize do
+			for j = math.floor(playerZ / ChunkSize) - RenderDistance / ChunkSize, math.floor(playerZ / ChunkSize) + RenderDistance / ChunkSize do
+				if not ChunkHashTable[ChunkHash(i)] or not ChunkHashTable[ChunkHash(i)][ChunkHash(j)] then
+					local chunk = NewChunk(i, j)
+					ChunkSet[chunk] = true
+					ChunkHashTable[ChunkHash(i)] = ChunkHashTable[ChunkHash(i)] or {}
+					ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
+					UpdateCaves()
+					LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
+				end
+			end
+		end
 
 		local renderChunks = getRenderChunks(playerX, playerY, playerZ)
 		for _, chunk in ipairs(renderChunks) do
@@ -88,8 +99,11 @@ function getRenderChunks(playerX, playerY, playerZ)
 				chunk:populate()
 				chunk.isPopulated = true
 			elseif not chunk.isInitialized then
+				for i = 1, WorldHeight / SliceHeight do
+					chunk.slices[i] = NewChunkSlice(chunk.x, chunk.y + (i - 1) * SliceHeight + 1, chunk.z, chunk)
+				end
+				chunk.changes = {}
 				chunk:processRequests()
-				chunk:initialize()
 				chunk.isInitialized = true
 			end
 			chunk.active = true

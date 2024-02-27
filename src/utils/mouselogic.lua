@@ -78,9 +78,6 @@ function KeyPressed(k)
 	if gamestate == gamestatePlayingGame then
 		if k == "escape" then
 			gamestate = gamestateGamePausing
-		elseif k == "n" then
-			--TODO FOR REMOVAL
-			GenerateWorld()
 		elseif k == "f3" then
 			enableF3 = not enableF3
 		elseif k == "f8" then

@@ -59,55 +59,10 @@ function initPlayerInventory()
 	end
 end
 
-function generateWorldChunks()
-	--TODO : MOVE TO updatelogic.lua
-	ChunkHashTable = {}
-	ChunkSet = {}
-	ChunkRequests = {}
-	LightingQueue = {}
-	LightingRemovalQueue = {}
-	CaveList = {}
-	local worldSize = 4
-
-	StartTime = love.timer.getTime()
-	MeasureTime = StartTime
-
-	for i = worldSize / -2 + 1, worldSize / 2 do
-		ChunkHashTable[ChunkHash(i)] = {}
-		for j = worldSize / -2 + 1, worldSize / 2 do
-			local chunk = NewChunk(i, j)
-			ChunkSet[chunk] = true
-			ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
-
-			-- Ajoutez des prints pour déboguer
-			LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
-		end
-	end
-	if enablePROFIProfiler then
-		ProFi:checkMemory(6, "6eme profil")
-	end
-end
-
-function updateWorld()
-	--TODO : MOVE TO updatelogic.lua
-	UpdateCaves()
-	if enablePROFIProfiler then
-		ProFi:checkMemory(7, "7eme profil")
-	end
-end
-
-function printGenerationTime()
-	--TODO : MOVE TO updatelogic.lua
-	LuaCraftPrintLoggingNormal("total generation time: " .. (love.timer.getTime() - StartTime))
-end
-
 function GenerateWorld()
 	initScene()
 	initGlobalRandomNumbers()
 	initEntities()
-	generateWorldChunks()
-	updateWorld()
-	printGenerationTime()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(9, "9eme profil")
 	end
