@@ -13,7 +13,7 @@ function DrawCanevas()
 end
 
 function DrawF3()
-	love.graphics.setColor(0, 0, 0)
+	love.graphics.setColor(1, 1, 1)
 	love.graphics.print(
 		"x: "
 			.. math.floor(ThePlayer.x + 0.5)

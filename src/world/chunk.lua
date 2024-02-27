@@ -301,7 +301,6 @@ function NewChunk(x, z)
 		for i = 1, WorldHeight / SliceHeight do
 			sliceUpdates[i] = { false, false, false, false, false }
 		end
-
 		-- find which slices need to be updated
 		for i = 1, #self.changes do
 			local index = math.floor((self.changes[i][2] - 1) / SliceHeight) + 1
@@ -349,9 +348,9 @@ function NewChunk(x, z)
 
 				if sliceUpdates[i][2] then
 					local chunk = GetChunkRaw(self.x - 1, self.z)
-					if chunk ~= nil then
+					if chunk then
 						local neighborSlice = chunk.slices[i]
-						if neighborSlice ~= nil then
+						if neighborSlice then
 							neighborSlice:updateModel()
 						end
 					end
@@ -359,9 +358,9 @@ function NewChunk(x, z)
 
 				if sliceUpdates[i][3] then
 					local chunk = GetChunkRaw(self.x + 1, self.z)
-					if chunk ~= nil then
+					if chunk then
 						local neighborSlice = chunk.slices[i]
-						if neighborSlice ~= nil then
+						if neighborSlice then
 							neighborSlice:updateModel()
 						end
 					end
@@ -369,9 +368,9 @@ function NewChunk(x, z)
 
 				if sliceUpdates[i][4] or sliceUpdates[i][5] then
 					local chunk = GetChunkRaw(self.x, self.z - 1)
-					if chunk ~= nil then
+					if chunk then
 						local neighborSlice = chunk.slices[i]
-						if neighborSlice ~= nil then
+						if neighborSlice then
 							neighborSlice:updateModel()
 						end
 					end
@@ -379,9 +378,9 @@ function NewChunk(x, z)
 
 				if sliceUpdates[i][4] or sliceUpdates[i][5] then
 					local chunk = GetChunkRaw(self.x, self.z + 1)
-					if chunk ~= nil then
+					if chunk then
 						local neighborSlice = chunk.slices[i]
-						if neighborSlice ~= nil then
+						if neighborSlice then
 							neighborSlice:updateModel()
 						end
 					end

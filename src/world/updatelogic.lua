@@ -24,11 +24,19 @@ function UpdateGame(dt)
 
 		local renderChunks = getRenderChunks(playerX, playerY, playerZ)
 		for _, chunk in ipairs(renderChunks) do
-			if chunk.isInitialized and chunk.active and #chunk.changes > 0 then
-				chunk:updateModel()
+			if chunk.isInitialized and chunk.active then
+				-- Only update the model if there are changes
+				if #chunk.changes > 0 then
+					chunk:updateModel()
+				end
+
 				for _, chunkSlice in ipairs(chunk.slices) do
 					if chunkSlice.active then
-						renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
+						if not chunkSlice.alreadyrendered then
+							renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
+						end
+					else
+						chunkSlice.alreadyrendered = false
 					end
 				end
 			end
@@ -38,7 +46,6 @@ function UpdateGame(dt)
 
 		-- update all things in ThingList update queue
 		updateThingList(dt)
-
 		-- update 3D scene with dt only if PhysicsStep is true
 		if PhysicsStep then
 			Scene:update()
@@ -99,7 +106,6 @@ function getRenderChunks(playerX, playerY, playerZ)
 
 	return renderChunks
 end
-
 function renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
 	local model = {}
 
@@ -114,7 +120,7 @@ function renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
 					(chunkSlice.x - 1) * ChunkSize + i - 1, 1 * j * scale, (chunkSlice.z - 1) * ChunkSize + k - 1
 
 				if thisTransparency < 3 then
-					--LuaCraftPrintLoggingNormal("Rendering voxel:", i, j, k, "at position:", x, y, z)
+					-- LuaCraftPrintLoggingNormal("Rendering voxel:", i, j, k, "at position:", x, y, z)
 					TileRendering(chunkSlice, i, j, k, x, y, z, thisLight, model, scale)
 					BlockRendering(chunkSlice, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
 				end
@@ -123,6 +129,7 @@ function renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
 	end
 
 	chunkSlice.model:setVerts(model)
+	chunkSlice.alreadyrendered = true
 end
 
 function updateThingList(dt)
