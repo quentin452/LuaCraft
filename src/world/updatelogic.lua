@@ -1,9 +1,8 @@
 local ChunkSize = 16
 --TODO FIX : currently render distance does not support renderdistance lower than 6
---TODO FIX : when i reecreate world the world is empty
 --TODO FIX : some issues accross chunks on blocks
 --TODO FIX : the render distance wont move with the player
---TODO FIX : Caves are generated after ChunkSlice get init
+--TODO FIX : sometimes when i create a world the first time , the world become empty
 
 --TODO MADE : support renderdistance setting from settingshandling/filesystem
 local RenderDistance = 6 * ChunkSize
@@ -99,11 +98,11 @@ function getRenderChunks(playerX, playerY, playerZ)
 				chunk:populate()
 				chunk.isPopulated = true
 			elseif not chunk.isInitialized then
+				chunk.changes = {}
+				chunk:processRequests()
 				for i = 1, WorldHeight / SliceHeight do
 					chunk.slices[i] = NewChunkSlice(chunk.x, chunk.y + (i - 1) * SliceHeight + 1, chunk.z, chunk)
 				end
-				chunk.changes = {}
-				chunk:processRequests()
 				chunk.isInitialized = true
 			end
 			chunk.active = true
