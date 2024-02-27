@@ -337,44 +337,34 @@ function NewChunk(x, z)
 		-- update slices that were flagged in the previous step
 		for i = 1, WorldHeight / SliceHeight do
 			if sliceUpdates[i][1] then
-				self.slices[i]:updateModel()
+				if self.slices[i] then
+					self.slices[i]:updateModel()
 
-				if sliceUpdates[i][2] then
-					local chunk = GetChunkRaw(self.x - 1, self.z)
-					if chunk then
-						local neighborSlice = chunk.slices[i]
-						if neighborSlice then
-							neighborSlice:updateModel()
+					if sliceUpdates[i][2] then
+						local chunk = GetChunkRaw(self.x - 1, self.z)
+						if chunk and chunk.slices[i] then
+							chunk.slices[i]:updateModel()
 						end
 					end
-				end
 
-				if sliceUpdates[i][3] then
-					local chunk = GetChunkRaw(self.x + 1, self.z)
-					if chunk then
-						local neighborSlice = chunk.slices[i]
-						if neighborSlice then
-							neighborSlice:updateModel()
+					if sliceUpdates[i][3] then
+						local chunk = GetChunkRaw(self.x + 1, self.z)
+						if chunk and chunk.slices[i] then
+							chunk.slices[i]:updateModel()
 						end
 					end
-				end
 
-				if sliceUpdates[i][4] or sliceUpdates[i][5] then
-					local chunk = GetChunkRaw(self.x, self.z - 1)
-					if chunk then
-						local neighborSlice = chunk.slices[i]
-						if neighborSlice then
-							neighborSlice:updateModel()
+					if sliceUpdates[i][4] or sliceUpdates[i][5] then
+						local chunk = GetChunkRaw(self.x, self.z - 1)
+						if chunk and chunk.slices[i] then
+							chunk.slices[i]:updateModel()
 						end
 					end
-				end
 
-				if sliceUpdates[i][4] or sliceUpdates[i][5] then
-					local chunk = GetChunkRaw(self.x, self.z + 1)
-					if chunk then
-						local neighborSlice = chunk.slices[i]
-						if neighborSlice then
-							neighborSlice:updateModel()
+					if sliceUpdates[i][4] or sliceUpdates[i][5] then
+						local chunk = GetChunkRaw(self.x, self.z + 1)
+						if chunk and chunk.slices[i] then
+							chunk.slices[i]:updateModel()
 						end
 					end
 				end
@@ -403,6 +393,9 @@ function NewChunkSlice(x, y, z, parent)
 	t:assignModel(compmodel)
 	t.active = true
 	t.updateModel = function(self)
+		if not self or not self.parent or not self.model then
+			return
+		end
 		local model = {}
 
 		for i = 1, ChunkSize do

@@ -18,56 +18,89 @@ function UpdateGame(dt)
 
 		-- Generate and update chunks within render distance
 		local renderChunks = {}
-		table.remove(renderChunks)
+		--table.remove(renderChunks)
 
-		for i = math.floor(playerX / ChunkSize) - RenderDistance / ChunkSize, math.floor(playerX / ChunkSize) + RenderDistance / ChunkSize do
-			for j = math.floor(playerZ / ChunkSize) - RenderDistance / ChunkSize, math.floor(playerZ / ChunkSize) + RenderDistance / ChunkSize do
-				local chunk = ChunkHashTable[ChunkHash(i)] and ChunkHashTable[ChunkHash(i)][ChunkHash(j)]
+		local playerChunkX = math.floor(playerX / ChunkSize)
+		local playerChunkZ = math.floor(playerZ / ChunkSize)
 
-				if not chunk then
-					chunk = NewChunk(i, j)
-					ChunkSet[chunk] = true
-					ChunkHashTable[ChunkHash(i)] = ChunkHashTable[ChunkHash(i)] or {}
-					ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
-					UpdateCaves()
-					LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
+		for distance = 0, RenderDistance / ChunkSize do
+			for i = -distance, distance do
+				for j = -distance, distance do
+					local chunkX = playerChunkX + i
+					local chunkZ = playerChunkZ + j
+
+					local chunk = ChunkHashTable[ChunkHash(chunkX)]
+						and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
+
+					if not chunk then
+						chunk = NewChunk(chunkX, chunkZ)
+						ChunkSet[chunk] = true
+						ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
+						ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
+						UpdateCaves()
+						LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
+					end
+
+					local mx, y, mz = chunk.x, chunk.y, chunk.z
+					local dx, dy, dz = playerX - mx, playerY - y, playerZ - mz
+
+					-- Calculate Euclidean distance
+					local chunkDistance = math.sqrt(dx * dx + dy * dy + dz * dz)
+
+					if chunkDistance < RenderDistance then
+						if not chunk.isInitialLightningInititalized then
+							chunk:sunlight()
+							chunk.isInitialLightningInititalized = true
+						elseif not chunk.isPopulated then
+							chunk:populate()
+							chunk.isPopulated = true
+						elseif not chunk.isInitialized then
+							chunk.changes = {}
+
+							-- Populate the chunk before initializing slices
+							for sliceIndex = 1, WorldHeight / SliceHeight do
+								if not chunk.slices[sliceIndex] then
+									local sliceY = chunk.y + (sliceIndex - 1) * SliceHeight + 1
+									chunk.slices[sliceIndex] = NewChunkSlice(chunk.x, sliceY, chunk.z, chunk)
+								end
+							end
+
+							chunk:processRequests()
+							for _, chunkSlice in ipairs(chunk.slices) do
+								renderChunkSlice(chunkSlice, ThePlayer.x, ThePlayer.y, ThePlayer.z)
+							end
+							chunk.isInitialized = true
+						end
+
+						chunk.active = true
+						for i = 1, #chunk.slices do
+							--	LuaCraftPrintLoggingNormal("test2")
+							local chunkSlice = chunk.slices[i]
+							chunkSlice.active = true
+						end
+					else
+						chunk.active = false
+						for i = 1, #chunk.slices do
+							--LuaCraftPrintLoggingNormal("test2")
+							local chunkSlice = chunk.slices[i]
+							chunkSlice.active = false
+						end
+
+						--it seem that table.remove hre is doesn't work
+						for j = #renderChunks, 1, -1 do
+							if not renderChunks[j].active then
+								table.remove(renderChunks, j)
+							end
+						end
+						
+
+						-- LuaCraftPrintLoggingNormal("Chunk at coordinates (", chunk.x, ",", chunk.z, ") is inactive")
+					end
+
+					if not isInTable(renderChunks, chunk) then
+						table.insert(renderChunks, chunk)
+					end
 				end
-
-				local mx, y, mz = chunk.x, chunk.y, chunk.z
-				local dx, dy, dz = playerX - mx, playerY - y, playerZ - mz
-
-				-- Calculate Euclidean distance
-				local distance = math.sqrt(dx * dx + dy * dy + dz * dz)
-
-				if distance < RenderDistance then
-					if not chunk.isInitialLightningInititalized then
-						chunk:sunlight()
-						chunk.isInitialLightningInititalized = true
-					elseif not chunk.isPopulated then
-						chunk:populate()
-						chunk.isPopulated = true
-					elseif not chunk.isInitialized then
-						chunk.changes = {}
-						chunk:processRequests()
-						for i = 1, WorldHeight / SliceHeight do
-							local sliceY = chunk.y + (i - 1) * SliceHeight + 1
-							print("Creating slice at Y:", sliceY)
-							chunk.slices[i] = NewChunkSlice(chunk.x, sliceY, chunk.z, chunk)
-						end						
-						chunk.isInitialized = true
-					end
-					chunk.active = true
-					for _, chunkSlice in ipairs(chunk.slices) do
-						chunkSlice.active = true
-					end
-				else
-					chunk.active = false
-					for _, chunkSlice in ipairs(chunk.slices) do
-						chunkSlice.active = false
-					end
-				end
-
-				table.insert(renderChunks, chunk)
 			end
 		end
 
@@ -78,19 +111,25 @@ function UpdateGame(dt)
 				if #chunk.changes > 0 then
 					chunk:updateModel()
 				end
-
+		
 				for _, chunkSlice in ipairs(chunk.slices) do
-					if chunkSlice.active then
-						if not chunkSlice.alreadyrendered then
-							-- renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
-						end
-					else
+					if chunkSlice.active == false then
+						-- Remove the inactive ChunkSlice
+						LuaCraftPrintLoggingNormal(
+							"Removed chunkSlice at coordinates: "
+								.. chunkSlice.x
+								.. ", "
+								.. chunkSlice.y
+								.. ", "
+								.. chunkSlice.z
+						)
+						table.remove(chunk.slices, i)
 						chunkSlice.alreadyrendered = false
 					end
 				end
 			end
 		end
-
+		
 		LogicAccumulator = LogicAccumulator + dt
 
 		-- update all things in ThingList update queue
@@ -112,9 +151,16 @@ function UpdateGame(dt)
 		end
 	end
 end
-
+function isInTable(tbl, value)
+	for _, v in ipairs(tbl) do
+		if v == value then
+			return true
+		end
+	end
+	return false
+end
 function renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
-	print("Rendering chunk slice:", chunkSlice.x, chunkSlice.y, chunkSlice.z)
+	--LuaCraftPrintLoggingNormal("Rendering chunk slice:", chunkSlice.x, chunkSlice.y, chunkSlice.z)
 	local model = {}
 
 	for i = 1, ChunkSize do
