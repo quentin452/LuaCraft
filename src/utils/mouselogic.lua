@@ -23,37 +23,10 @@ function MouseLogicOnPlay(x, y, b)
 
 	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
 		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
-
-		for _, chunkSlice in ipairs(chunk.slices) do
-			--	renderChunkSlice(chunkSlice, ThePlayer.x, ThePlayer.y, ThePlayer.z)
-			--	UpdateNeighboringChunks(chunk, pos.y)
-		end
-		if chunk.slices and chunk and #chunk.changes > 0 then
-			chunk:updateModel()
-		end
+		LightingUpdate()
 	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
 		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
 		hudTimeLeft = 3
-	end
-end
-
-function UpdateNeighboringChunks(chunk, y)
-	local neighborOffsets = {
-		{ -1, 0 },
-		{ 1, 0 },
-		{ 0, -1 },
-		{ 0, 1 },
-	}
-
-	for _, offset in ipairs(neighborOffsets) do
-		local neighborChunk = GetChunkRaw(chunk.x + offset[1], chunk.z + offset[2])
-		if neighborChunk then
-			local sliceIndex = math.floor(y / SliceHeight) + 1
-			local neighborSlice = neighborChunk.slices[sliceIndex]
-			if neighborSlice then
-				neighborSlice.alreadyrendered = false
-			end
-		end
 	end
 end
 
@@ -88,14 +61,27 @@ function KeyPressed(k)
 		elseif k == "f1" then
 			enableTESTBLOCK = not enableTESTBLOCK
 		elseif k == "f2" then
-			
-				for _, chunk in ipairs(renderChunks) do
-			chunk:removeModel()
-			--	
-			--			chunk:sunlight()
-			--			chunk:processRequests()
-			--		end
-			end
+		--	for chunk in pairs(ChunkSet) do
+		--		for i = 1, #chunk.slices do
+		--			local chunkSlice = chunk.slices[i]
+		--			chunkSlice.enableBlockAndTilesModels = false
+		--		end
+			--	RemoveChunkAndChunkSliceModels()
+		--	end
+			--updateAllChunksModel()
+		--	for _, chunk in ipairs(renderChunks) do
+				--DeactivateAllSlices(chunk)
+				--
+				--			chunk:sunlight()
+				--			chunk:processRequests()
+				--		end
+		--	end
+		elseif k == "f4" then
+		--	for _, chunk in ipairs(renderChunks) do
+		--		for _ = 1, WorldHeight / SliceHeight do
+		--			chunk.slices[_] = NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
+		--		end
+		--	end
 		end
 	end
 	if gamestate == gamestateGamePausing then

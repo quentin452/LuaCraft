@@ -1,5 +1,6 @@
 --TODO FIX : chunks are not removed if there are outside of render distance
---TODO FIX : generate Trees after all active chunks getting generated : like that trees can be generated without cutting
+--TODO FIX : trees sometimes has problems to be generated across chunk borders
+--TODO FIX : sometimes lightning updates are incorect
 
 ChunkSet = {}
 ChunkHashTable = {}
@@ -36,38 +37,21 @@ function UpdateGame(dt)
 						ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 						ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
 						LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
-					end
-
+					--	LightingUpdate()
 					-- Only update chunks within render distance
-					if distance < RenderDistance / ChunkSize then
-						if chunk.updatedSunLight == false then
-							chunk:sunlight()
-							chunk.updatedSunLight = true
-						elseif chunk.isPopulated == false then
-							UpdateCaves()
-							chunk:populate()
-							chunk:processRequests()
-							for _ = 1, WorldHeight / SliceHeight do
-								chunk.slices[_] =
-									NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
-							end
-							--UpdateNeighboringChunks(chunk, playerY)
-							chunk:updateModel()
-
-							LightingUpdate()
-							chunk.isPopulated = true
-						end
-						for i = 1, #chunk.slices do
-							local chunkSlice = chunk.slices[i]
-							chunkSlice.active = true
-						end
-						chunk.active = true
+					elseif distance < RenderDistance / ChunkSize then
+						processChunkUpdates(chunk)
 					else
-						RemoveChunkAndChunkSliceModels(chunk)
-					end
+						local chunkDistanceX = math.abs(chunk.x - playerChunkX)
+						local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
+						local chunkDistance = math.sqrt(chunkDistanceX ^ 2 + chunkDistanceZ ^ 2)
 
-					if not isInTable(renderChunks, chunk) then
-						table.insert(renderChunks, chunk)
+						if chunkDistance > RenderDistance / ChunkSize then
+							for i = 1, #chunk.slices do
+								local chunkSlice = chunk.slices[i]
+								chunkSlice.enableBlockAndTilesModels = false
+							end
+						end
 					end
 				end
 			end
@@ -76,75 +60,46 @@ function UpdateGame(dt)
 		if RenderDistance ~= previousRenderDistance then
 			updateAllChunksModel()
 		end
+
 		LogicAccumulator = LogicAccumulator + dt
 		previousRenderDistance = RenderDistance
-
-		-- update all things in ThingList update queue
 		updateThingList(dt)
 	end
 end
 
---this remove all chunk and chunk slice even if the chunk is within the render distance
-function DeactivateAllSlices(chunk)
-	for i = 1, #chunk.slices do
-		local chunkSlice = chunk.slices[i]
-		chunkSlice.active = false
-	end
-end
+function processChunkUpdates(chunk)
+	if chunk.updatedSunLight == false then
+		chunk:sunlight()
 
-function UpdateActiveChunkModel(chunk)
-	if chunk.active then
-		-- Only update the model if there are changes
+		chunk.updatedSunLight = true
+	elseif chunk.isPopulated == false then
+		UpdateCaves()
+		chunk:populate()
+		chunk:processRequests()
+		for _ = 1, WorldHeight / SliceHeight do
+			chunk.slices[_] = NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
+		end
+		for i = 1, #chunk.slices do
+			local chunkSlice = chunk.slices[i]
+			chunkSlice.enableBlockAndTilesModels = true
+		end
+		chunk:updateModel()
+		LightingUpdate()
+		chunk.isPopulated = true
+	end
+	if not isInTable(renderChunks, chunk) then
+		table.insert(renderChunks, chunk)
+	end
+	for _, chunk in ipairs(renderChunks) do
+		for i = 1, #chunk.slices do
+			local chunkSlice = chunk.slices[i]
+			chunkSlice.enableBlockAndTilesModels = true
+		end
 		if #chunk.changes > 0 then
 			chunk:updateModel()
 		end
-
-		local i = #chunk.slices
-		while i > 0 do
-			local chunkSlice = chunk.slices[i]
-			if chunkSlice.active == false then
-				LuaCraftPrintLoggingNormal(
-					"Removed chunkSlice at coordinates: "
-						.. chunkSlice.x
-						.. ", "
-						.. chunkSlice.y
-						.. ", "
-						.. chunkSlice.z
-				)
-				table.remove(chunk.slices, i)
-				chunkSlice.alreadyrendered = false
-			end
-			i = i - 1
-		end
 	end
 end
-
-function UpdateRenderChunksTable(updatedRenderChunks)
-	renderChunks = updatedRenderChunks
-end
-
-function RemoveChunkAndChunkSliceModels(chunk)
-	DeactivateAllSlices(chunk)
-
-	for j = #renderChunks, 1, -1 do
-		if not renderChunks[j].active then
-			table.remove(renderChunks, j)
-		end
-	end
-
-	local updatedRenderChunks = {}
-
-	for _, activeChunk in ipairs(renderChunks) do
-		UpdateActiveChunkModel(activeChunk)
-		if activeChunk.active then
-			table.insert(updatedRenderChunks, activeChunk)
-		end
-		activeChunk.active = false
-	end
-
-	UpdateRenderChunksTable(updatedRenderChunks)
-end
-
 function isInTable(tbl, value)
 	for _, v in ipairs(tbl) do
 		if v == value then

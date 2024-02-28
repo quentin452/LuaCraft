@@ -21,7 +21,6 @@ function NewChunk(x, z)
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
 	end
-	chunk.active = false
 	GenerateTerrain(chunk, x, z, StandardTerrain)
 
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
@@ -30,12 +29,13 @@ function NewChunk(x, z)
 		local caveCount1 = rand(1, 3)
 		for i = 1, caveCount1 do
 			NewCave(gx, rand(8, 64), gz)
+			--	LightingUpdate()
 		end
 		local caveCount2 = rand(1, 2)
 		for i = 1, caveCount2 do
 			NewCave(gx, rand(48, 80), gz)
+			--	LightingUpdate()
 		end
-		--	LightingUpdate()
 	end
 
 	chunk.sunlight = function(self)
@@ -58,7 +58,7 @@ function NewChunk(x, z)
 				end
 			end
 		end
-		--	LightingUpdate()
+		--LightingUpdate()
 	end
 
 	chunk.processRequests = function(self)
@@ -68,7 +68,7 @@ function NewChunk(x, z)
 				self:setVoxel(block.x, block.y, block.z, block.value, 15)
 			end
 		end
-		--	LightingUpdate()
+		--LightingUpdate()
 	end
 
 	-- populate chunk with trees and flowers
@@ -248,7 +248,7 @@ function NewChunk(x, z)
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
 		end
-		LightingUpdate()
+		--	LightingUpdate()
 	end
 
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)
@@ -283,16 +283,6 @@ function NewChunk(x, z)
 			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 3, string.char(blockvalue))
 
 			self.changes[#self.changes + 1] = { x, y, z }
-		end
-	end
-	chunk.removeModel = function(self)
-		print(chunk)
-		-- Supprimez le modèle de ce Chunk
-		-- (Remplacez ceci par le code réel pour supprimer le modèle)
-	end
-	function updateAllChunksModel()
-		for _, chunk in ipairs(renderChunks) do
-			chunk:updateModel()
 		end
 	end
 
@@ -386,6 +376,11 @@ function NewChunk(x, z)
 	return chunk
 end
 
+function updateAllChunksModel()
+	for _, chunk in ipairs(renderChunks) do
+		chunk:updateModel()
+	end
+end
 function CanDrawFace(get, thisTransparency)
 	local tget = TileTransparency(get)
 
@@ -400,7 +395,7 @@ function NewChunkSlice(x, y, z, parent)
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
 	compmodel.culling = false
 	t:assignModel(compmodel)
-	t.active = true
+	t.enableBlockAndTilesModels = false
 	t.updateModel = function(self)
 		if not self or not self.parent or not self.model then
 			return
@@ -426,7 +421,6 @@ function NewChunkSlice(x, y, z, parent)
 
 		self.model:setVerts(model)
 	end
-
 	t:updateModel()
 	return t
 end

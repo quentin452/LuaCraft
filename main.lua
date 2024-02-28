@@ -76,9 +76,6 @@ hudTimeLeft = 0
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
-	if enablePROFIProfiler then
-		ProFi:start()
-	end
 	lovefilesystem.setIdentity("LuaCraft")
 	InitializeGame()
 	_JPROFILER.pop("Mainload")
@@ -99,17 +96,20 @@ function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
 	UpdateGame(dt)
-	if hudTimeLeft > 0 then
-		hudTimeLeft = hudTimeLeft - dt
-		if hudTimeLeft <= 0 then
-			hudMessage = ""
+		if hudTimeLeft > 0 then
+			hudTimeLeft = hudTimeLeft - dt
+			if hudTimeLeft <= 0 or gamestate ~= gamestatePlayingGame then
+				hudMessage = ""
+			end
 		end
-	end
 	_JPROFILER.pop("MainUpdate")
 	_JPROFILER.pop("frame")
 end
 
 function love.draw()
+	if enablePROFIProfiler then
+		ProFi:start()
+	end
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	DrawGame()
