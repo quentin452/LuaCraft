@@ -1,19 +1,19 @@
---TODO MADE : support renderdistance setting from settingshandling/filesystem
 --TODO FIX : chunks are not removed if there are outside of render distance
---TODO FIX : Sunlight are not correct at high distance of spawn
 --TODO FIX : generate Trees after all active chunks getting generated : like that trees can be generated without cutting
-local ChunkSize = 16
-local RenderDistance = 4 * ChunkSize
+
 ChunkSet = {}
 ChunkHashTable = {}
 CaveList = {}
 ChunkRequests = {}
 LightingQueue = {}
 LightingRemovalQueue = {}
+local previousRenderDistance = nil
 
 function UpdateGame(dt)
 	if gamestate == gamestatePlayingGame then
-		local playerX, playerZ = ThePlayer.x, ThePlayer.z
+		local RenderDistance = getRenderDistanceValue()
+
+		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
 
 		-- Generate and update chunks within render distance
 		renderChunks = {}
@@ -36,7 +36,6 @@ function UpdateGame(dt)
 						ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 						ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
 						LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
-						chunk.active = true
 					end
 
 					-- Only update chunks within render distance
@@ -52,6 +51,9 @@ function UpdateGame(dt)
 								chunk.slices[_] =
 									NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
 							end
+							--UpdateNeighboringChunks(chunk, playerY)
+							chunk:updateModel()
+
 							LightingUpdate()
 							chunk.isPopulated = true
 						end
@@ -59,53 +61,9 @@ function UpdateGame(dt)
 							local chunkSlice = chunk.slices[i]
 							chunkSlice.active = true
 						end
+						chunk.active = true
 					else
-						chunk.active = false
-						for i = 1, #chunk.slices do
-							local chunkSlice = chunk.slices[i]
-							chunkSlice.active = false
-						end
-
-						--it seem that table.remove hre is doesn't work
-						for j = #renderChunks, 1, -1 do
-							if not renderChunks[j].active then
-								table.remove(renderChunks, j)
-							end
-						end
-						local updatedRenderChunks = {}
-
-						for _, chunk in ipairs(renderChunks) do
-							if chunk.active then
-								-- Only update the model if there are changes
-								if #chunk.changes > 0 then
-									chunk:updateModel()
-								end
-
-								local i = #chunk.slices
-								while i > 0 do
-									local chunkSlice = chunk.slices[i]
-									if chunkSlice.active == false then
-										LuaCraftPrintLoggingNormal(
-											"Removed chunkSlice at coordinates: "
-												.. chunkSlice.x
-												.. ", "
-												.. chunkSlice.y
-												.. ", "
-												.. chunkSlice.z
-										)
-										table.remove(chunk.slices, i)
-										chunkSlice.alreadyrendered = false
-									end
-									i = i - 1
-								end
-
-								-- Keep track of active chunks for later use
-								table.insert(updatedRenderChunks, chunk)
-							end
-						end
-
-						-- Update the main renderChunks table
-						renderChunks = updatedRenderChunks
+						RemoveChunkAndChunkSliceModels(chunk)
 					end
 
 					if not isInTable(renderChunks, chunk) then
@@ -115,27 +73,78 @@ function UpdateGame(dt)
 			end
 		end
 
+		if RenderDistance ~= previousRenderDistance then
+			updateAllChunksModel()
+		end
 		LogicAccumulator = LogicAccumulator + dt
+		previousRenderDistance = RenderDistance
 
 		-- update all things in ThingList update queue
 		updateThingList(dt)
-		-- update 3D scene with dt only if PhysicsStep is true
-		if PhysicsStep then
-			Scene:update()
+	end
+end
+
+--this remove all chunk and chunk slice even if the chunk is within the render distance
+function DeactivateAllSlices(chunk)
+	for i = 1, #chunk.slices do
+		local chunkSlice = chunk.slices[i]
+		chunkSlice.active = false
+	end
+end
+
+function UpdateActiveChunkModel(chunk)
+	if chunk.active then
+		-- Only update the model if there are changes
+		if #chunk.changes > 0 then
+			chunk:updateModel()
 		end
 
-		local logicThreshold = 1 / 60
-		local fps = love.timer.getFPS()
-
-		if LogicAccumulator >= logicThreshold and fps ~= 0 then
-			local logicUpdates = math.floor(LogicAccumulator / logicThreshold)
-			LogicAccumulator = LogicAccumulator - logicThreshold * logicUpdates
-			PhysicsStep = true
-		else
-			PhysicsStep = false
+		local i = #chunk.slices
+		while i > 0 do
+			local chunkSlice = chunk.slices[i]
+			if chunkSlice.active == false then
+				LuaCraftPrintLoggingNormal(
+					"Removed chunkSlice at coordinates: "
+						.. chunkSlice.x
+						.. ", "
+						.. chunkSlice.y
+						.. ", "
+						.. chunkSlice.z
+				)
+				table.remove(chunk.slices, i)
+				chunkSlice.alreadyrendered = false
+			end
+			i = i - 1
 		end
 	end
 end
+
+function UpdateRenderChunksTable(updatedRenderChunks)
+	renderChunks = updatedRenderChunks
+end
+
+function RemoveChunkAndChunkSliceModels(chunk)
+	DeactivateAllSlices(chunk)
+
+	for j = #renderChunks, 1, -1 do
+		if not renderChunks[j].active then
+			table.remove(renderChunks, j)
+		end
+	end
+
+	local updatedRenderChunks = {}
+
+	for _, activeChunk in ipairs(renderChunks) do
+		UpdateActiveChunkModel(activeChunk)
+		if activeChunk.active then
+			table.insert(updatedRenderChunks, activeChunk)
+		end
+		activeChunk.active = false
+	end
+
+	UpdateRenderChunksTable(updatedRenderChunks)
+end
+
 function isInTable(tbl, value)
 	for _, v in ipairs(tbl) do
 		if v == value then
@@ -143,31 +152,6 @@ function isInTable(tbl, value)
 		end
 	end
 	return false
-end
-function renderChunkSlice(chunkSlice, playerX, playerY, playerZ)
-	--LuaCraftPrintLoggingNormal("Rendering chunk slice:", chunkSlice.x, chunkSlice.y, chunkSlice.z)
-	local model = {}
-
-	for i = 1, ChunkSize do
-		for j = chunkSlice.y, chunkSlice.y + SliceHeight - 1 do
-			for k = 1, ChunkSize do
-				local this, thisSunlight, thisLocalLight = chunkSlice.parent:getVoxel(i, j, k)
-				local thisLight = math.max(thisSunlight, thisLocalLight)
-				local thisTransparency = TileTransparency(this)
-				local scale = 1
-				local x, y, z =
-					(chunkSlice.x - 1) * ChunkSize + i - 1, 1 * j * scale, (chunkSlice.z - 1) * ChunkSize + k - 1
-
-				if thisTransparency < 3 then
-					TileRendering(chunkSlice, i, j, k, x, y, z, thisLight, model, scale)
-					BlockRendering(chunkSlice, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
-				end
-			end
-		end
-	end
-
-	chunkSlice.model:setVerts(model)
-	chunkSlice.alreadyrendered = true
 end
 
 function updateThingList(dt)
@@ -183,5 +167,20 @@ function updateThingList(dt)
 			thing:destroy()
 			thing:destroyModel()
 		end
+	end
+	-- update 3D scene with dt only if PhysicsStep is true
+	if PhysicsStep then
+		Scene:update()
+	end
+
+	local logicThreshold = 1 / 60
+	local fps = love.timer.getFPS()
+
+	if LogicAccumulator >= logicThreshold and fps ~= 0 then
+		local logicUpdates = math.floor(LogicAccumulator / logicThreshold)
+		LogicAccumulator = LogicAccumulator - logicThreshold * logicUpdates
+		PhysicsStep = true
+	else
+		PhysicsStep = false
 	end
 end

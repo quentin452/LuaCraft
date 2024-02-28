@@ -88,12 +88,14 @@ function KeyPressed(k)
 		elseif k == "f1" then
 			enableTESTBLOCK = not enableTESTBLOCK
 		elseif k == "f2" then
-			--	for _, chunk in ipairs(renderChunks) do
-			--		if chunk.active then
+			
+				for _, chunk in ipairs(renderChunks) do
+			chunk:removeModel()
+			--	
 			--			chunk:sunlight()
 			--			chunk:processRequests()
 			--		end
-			--	end
+			end
 		end
 	end
 	if gamestate == gamestateGamePausing then

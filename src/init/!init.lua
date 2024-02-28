@@ -6,7 +6,7 @@ require("src/init/windowsettingsinit")
 require("src/init/worldinit")
 require("src/init/structureinit")
 
-local function initWorldGenerationVariables()
+function initWorldGenerationVariables()
 	ChunkSize = 16
 	SliceHeight = 8
 	WorldHeight = 128

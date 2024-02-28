@@ -65,7 +65,6 @@ end
 local exampleModelReference = nil
 function DrawTestBlock()
 	if enableTESTBLOCK == false and modelalreadycreated == 1 then
-		LuaCraftPrintLoggingNormal("[NORMAL LOGGING] Condition met. Disabling test block and removing model...")
 		if exampleModelReference then
 			-- Trouver l'indice du modèle dans la liste
 			local modelIndex = nil
@@ -217,9 +216,6 @@ end
 local chunkBordersModels = {}
 function DrawChunkBorders3D()
 	if enableF8 == false and ChunkBorderAlreadyCreated == 1 then
-		LuaCraftPrintLoggingNormal("[NORMAL LOGGING] Condition met. Disabling test block and removing models...")
-
-		-- Supprimer tous les modèles de la liste
 		for _, model in ipairs(chunkBordersModels) do
 			local modelIndex = nil
 			for i, sceneModel in ipairs(scene.modelList) do
@@ -235,7 +231,7 @@ function DrawChunkBorders3D()
 			end
 		end
 
-		chunkBordersModels = {} -- Réinitialiser la table des modèles
+		chunkBordersModels = {} 
 
 		ChunkBorderAlreadyCreated = 0
 	elseif enableF8 and ChunkBorderAlreadyCreated == 0 then

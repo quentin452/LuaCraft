@@ -17,10 +17,11 @@ function NewChunk(x, z)
 	chunk.changes = {}
 	chunk.updatedSunLight = false
 	chunk.isPopulated = false
+	chunk.isPopulated2 = false
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
 	end
-
+	chunk.active = false
 	GenerateTerrain(chunk, x, z, StandardTerrain)
 
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
@@ -34,6 +35,7 @@ function NewChunk(x, z)
 		for i = 1, caveCount2 do
 			NewCave(gx, rand(48, 80), gz)
 		end
+		--	LightingUpdate()
 	end
 
 	chunk.sunlight = function(self)
@@ -56,7 +58,7 @@ function NewChunk(x, z)
 				end
 			end
 		end
-		--LightingUpdate()
+		--	LightingUpdate()
 	end
 
 	chunk.processRequests = function(self)
@@ -281,6 +283,16 @@ function NewChunk(x, z)
 			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 3, string.char(blockvalue))
 
 			self.changes[#self.changes + 1] = { x, y, z }
+		end
+	end
+	chunk.removeModel = function(self)
+		print(chunk)
+		-- Supprimez le modèle de ce Chunk
+		-- (Remplacez ceci par le code réel pour supprimer le modèle)
+	end
+	function updateAllChunksModel()
+		for _, chunk in ipairs(renderChunks) do
+			chunk:updateModel()
 		end
 	end
 
