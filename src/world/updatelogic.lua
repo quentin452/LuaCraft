@@ -1,9 +1,9 @@
---TODO FIX : currently render distance does not support renderdistance lower than 6 (it seem to be caused by Slices not being created)
 --TODO MADE : support renderdistance setting from settingshandling/filesystem
 --TODO FIX : chunks are not removed if there are outside of render distance
---TODO FIX : update light are not correct at high distance of spawn
+--TODO FIX : Sunlight are not correct at high distance of spawn
+--TODO FIX : generate Trees after all active chunks getting generated : like that trees can be generated without cutting
 local ChunkSize = 16
-local RenderDistance = 6 * ChunkSize
+local RenderDistance = 4 * ChunkSize
 ChunkSet = {}
 ChunkHashTable = {}
 CaveList = {}
@@ -13,7 +13,7 @@ LightingRemovalQueue = {}
 
 function UpdateGame(dt)
 	if gamestate == gamestatePlayingGame then
-		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
+		local playerX, playerZ = ThePlayer.x, ThePlayer.z
 
 		-- Generate and update chunks within render distance
 		renderChunks = {}
@@ -35,45 +35,33 @@ function UpdateGame(dt)
 						ChunkSet[chunk] = true
 						ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 						ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
-						UpdateCaves()
-						--chunk:sunlight()
-						--chunk:populate()
-						--chunk:processRequests()
-						--chunk:updateLightingForAllVoxels()
-						for _ = 1, WorldHeight / SliceHeight do
-							chunk.slices[_] =
-								NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
-						end
-						--chunk:sunlightUpdateAllTheChunk()
-						--	LightingUpdate()
 						LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
+						chunk.active = true
 					end
 
-					local mx, y, mz = chunk.x + ChunkSize / 2, chunk.y, chunk.z + ChunkSize / 2
-					local dx, dy, dz = playerX - mx, playerY - y, playerZ - mz
-
-					-- Calculate Euclidean distance
-					local chunkDistance = math.sqrt(dx * dx + dy * dy + dz * dz)
-
-					if chunkDistance < RenderDistance then
-						chunk.active = true
-						for i = 1, #chunk.slices do
-							--	LuaCraftPrintLoggingNormal("test2")
-							local chunkSlice = chunk.slices[i]
-							chunkSlice.active = true
-						end
+					-- Only update chunks within render distance
+					if distance < RenderDistance / ChunkSize then
 						if chunk.updatedSunLight == false then
 							chunk:sunlight()
 							chunk.updatedSunLight = true
 						elseif chunk.isPopulated == false then
+							UpdateCaves()
 							chunk:populate()
 							chunk:processRequests()
+							for _ = 1, WorldHeight / SliceHeight do
+								chunk.slices[_] =
+									NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
+							end
+							LightingUpdate()
 							chunk.isPopulated = true
+						end
+						for i = 1, #chunk.slices do
+							local chunkSlice = chunk.slices[i]
+							chunkSlice.active = true
 						end
 					else
 						chunk.active = false
 						for i = 1, #chunk.slices do
-							--LuaCraftPrintLoggingNormal("test2")
 							local chunkSlice = chunk.slices[i]
 							chunkSlice.active = false
 						end
@@ -82,11 +70,42 @@ function UpdateGame(dt)
 						for j = #renderChunks, 1, -1 do
 							if not renderChunks[j].active then
 								table.remove(renderChunks, j)
-								table.remove(ChunkSet, j)
+							end
+						end
+						local updatedRenderChunks = {}
+
+						for _, chunk in ipairs(renderChunks) do
+							if chunk.active then
+								-- Only update the model if there are changes
+								if #chunk.changes > 0 then
+									chunk:updateModel()
+								end
+
+								local i = #chunk.slices
+								while i > 0 do
+									local chunkSlice = chunk.slices[i]
+									if chunkSlice.active == false then
+										LuaCraftPrintLoggingNormal(
+											"Removed chunkSlice at coordinates: "
+												.. chunkSlice.x
+												.. ", "
+												.. chunkSlice.y
+												.. ", "
+												.. chunkSlice.z
+										)
+										table.remove(chunk.slices, i)
+										chunkSlice.alreadyrendered = false
+									end
+									i = i - 1
+								end
+
+								-- Keep track of active chunks for later use
+								table.insert(updatedRenderChunks, chunk)
 							end
 						end
 
-						-- LuaCraftPrintLoggingNormal("Chunk at coordinates (", chunk.x, ",", chunk.z, ") is inactive")
+						-- Update the main renderChunks table
+						renderChunks = updatedRenderChunks
 					end
 
 					if not isInTable(renderChunks, chunk) then
@@ -95,41 +114,6 @@ function UpdateGame(dt)
 				end
 			end
 		end
-		local updatedRenderChunks = {}
-
-		for _, chunk in ipairs(renderChunks) do
-			if chunk.active then
-				-- Only update the model if there are changes
-				if #chunk.changes > 0 then
-					chunk:updateModel()
-				end
-
-				local i = #chunk.slices
-				while i > 0 do
-					local chunkSlice = chunk.slices[i]
-					if chunkSlice.active == false then
-						-- Remove the inactive ChunkSlice
-						LuaCraftPrintLoggingNormal(
-							"Removed chunkSlice at coordinates: "
-								.. chunkSlice.x
-								.. ", "
-								.. chunkSlice.y
-								.. ", "
-								.. chunkSlice.z
-						)
-						table.remove(chunk.slices, i)
-						chunkSlice.alreadyrendered = false
-					end
-					i = i - 1
-				end
-
-				-- Keep track of active chunks for later use
-				table.insert(updatedRenderChunks, chunk)
-			end
-		end
-
-		-- Update the main renderChunks table
-		renderChunks = updatedRenderChunks
 
 		LogicAccumulator = LogicAccumulator + dt
 

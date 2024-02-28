@@ -23,7 +23,6 @@ function MouseLogicOnPlay(x, y, b)
 
 	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
 		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
-		LightingUpdate()
 
 		for _, chunkSlice in ipairs(chunk.slices) do
 			--	renderChunkSlice(chunkSlice, ThePlayer.x, ThePlayer.y, ThePlayer.z)
@@ -89,12 +88,12 @@ function KeyPressed(k)
 		elseif k == "f1" then
 			enableTESTBLOCK = not enableTESTBLOCK
 		elseif k == "f2" then
-		--	for _, chunk in ipairs(renderChunks) do
-		--		if chunk.active then
-		--			chunk:sunlight()
-		--			chunk:processRequests()
-		--		end
-		--	end
+			--	for _, chunk in ipairs(renderChunks) do
+			--		if chunk.active then
+			--			chunk:sunlight()
+			--			chunk:processRequests()
+			--		end
+			--	end
 		end
 	end
 	if gamestate == gamestateGamePausing then

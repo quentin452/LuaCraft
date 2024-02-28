@@ -35,6 +35,9 @@ require("src/world/gen/caves")
 require("src/init/!init")
 --client
 require("src/client/!draw")
+require("src/client/blocks/blockrendering")
+require("src/client/blocks/tilerendering")
+
 --libs
 PROF_CAPTURE = false
 _JPROFILER = require("libs/jprofiler/jprof")

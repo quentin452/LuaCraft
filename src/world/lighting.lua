@@ -15,19 +15,18 @@ end
 
 -- Function to process lighting updates
 function LightingUpdate()
-	-- Process removals
-	for _, lthing in ipairs(LightingRemovalQueue) do
-		lthing:query()
-	end
-	-- Clear the removal queue
-	LightingRemovalQueue = {}
+    -- Process removals and additions
+    for _, lthing in ipairs(LightingRemovalQueue) do
+        lthing:query()
+    end
 
-	-- Process additions
-	for _, lthing in ipairs(LightingQueue) do
-		lthing:query()
-	end
-	-- Clear the addition queue
-	LightingQueue = {}
+    for _, lthing in ipairs(LightingQueue) do
+        lthing:query()
+    end
+
+    -- Clear both queues
+    LightingRemovalQueue = {}
+    LightingQueue = {}
 end
 
 function NewSunlightAddition(x, y, z, value)
