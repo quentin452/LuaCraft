@@ -249,7 +249,7 @@ function engine.newScene(renderWidth, renderHeight)
 			)
 		end
 	end
-	
+
 	-- renders the given func to the twoCanvas
 	-- this is useful for drawing 2d HUDS and information on the screen in front of the 3d scene
 	-- will draw threeCanvas if drawArg is not given or is true (use if you want to scale the game canvas to window)
@@ -288,13 +288,13 @@ end
 
 -- useful functions
 function TransposeMatrix(mat)
-	local m = cpml.mat4.new()
-	return cpml.mat4.transpose(m, mat)
+	return cpml.mat4.transpose(cpml.mat4(), mat)
 end
+
 function InvertMatrix(mat)
-	local m = cpml.mat4.new()
-	return cpml.mat4.invert(m, mat)
+	return cpml.mat4.invert(cpml.mat4(), mat)
 end
+
 function CopyTable(orig)
 	local orig_type = type(orig)
 	local copy

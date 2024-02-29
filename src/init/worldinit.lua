@@ -69,20 +69,24 @@ function GenerateWorld()
 end
 
 -- convert an index into a point on a 2d plane of given width and height
+coordCache = {}
+
 function NumberToCoord(n, w, h)
+	local key = tostring(n) .. ":" .. tostring(w) .. ":" .. tostring(h)
+	if coordCache[key] then
+		return unpack(coordCache[key])
+	end
+
 	local y = math.floor(n / w)
 	local x = n - (y * w)
+	coordCache[key] = { x, y }
 
 	return x, y
 end
 
 -- hash function used in chunk hash table
 function ChunkHash(x)
-	if x < 0 then
-		return math.abs(2 * x)
-	end
-
-	return 1 + 2 * x
+	return x < 0 and 2 * math.abs(x) or 1 + 2 * x
 end
 
 function Localize(x, y, z)
@@ -90,10 +94,6 @@ function Localize(x, y, z)
 end
 function Globalize(cx, cz, x, y, z)
 	return (cx - 1) * ChunkSize + x - 1, y, (cz - 1) * ChunkSize + z - 1
-end
-
-function ToChunkCoords(x, z)
-	return math.floor(x / ChunkSize) + 1, math.floor(z / ChunkSize) + 1
 end
 
 -- get chunk from reading chunk hash table at given position

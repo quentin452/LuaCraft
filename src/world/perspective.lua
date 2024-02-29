@@ -142,14 +142,16 @@ vec4 effect(vec4 colour,Image UNUSED1,vec2 UNUSED2,vec2 inverted)
 ]])
 local pers = {}
 local gl_send = glsl.send
-local q = love.graphics.polygon
--- local lgr = love.graphics
-local setEffect = love.graphics.setShader
+local love_graphics = love.graphics
+local polygon = love_graphics.polygon
+local setEffect = love_graphics.setShader
+
 gl_send(glsl, "p0", { 1, 1 })
 gl_send(glsl, "rep", { 1, 1 })
 
 pers.cw = true -- Clockwise
 pers.flip = false -- Flip the image
+
 function pers.preload(loadup)
 	if loadup then
 		setEffect(glsl)
@@ -157,51 +159,54 @@ function pers.preload(loadup)
 		setEffect()
 	end
 end
+
 function pers.setRepeat(origin, size)
 	gl_send(glsl, "p0", origin)
 	gl_send(glsl, "rep", size)
 end
+
 function pers.fast(img, v1, v2, v3, v4)
 	gl_send(glsl, "img", img)
 	gl_send(glsl, "v1", v2)
 	gl_send(glsl, "v2", v3)
 	gl_send(glsl, "v3", v4)
 	gl_send(glsl, "v4", v1)
-	q("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2], v4[1], v4[2])
+	polygon("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2], v4[1], v4[2])
 end
+
 function pers.quad(img, v1, v2, v3, v4, h)
 	if h then
 		gl_send(glsl, "SIZEY", h)
 	end
+
 	if img and v4 then
 		setEffect(glsl)
-		gl_send(glsl, "img", img)
+
+		local v1_, v2_, v3_, v4_
+
 		if pers.cw and not pers.flip then
-			gl_send(glsl, "v1", v2)
-			gl_send(glsl, "v2", v3)
-			gl_send(glsl, "v3", v4)
-			gl_send(glsl, "v4", v1)
+			v1_, v2_, v3_, v4_ = v2, v3, v4, v1
 		elseif pers.cw and pers.flip then
-			gl_send(glsl, "v1", v1)
-			gl_send(glsl, "v2", v4)
-			gl_send(glsl, "v3", v3)
-			gl_send(glsl, "v4", v2)
+			v1_, v2_, v3_, v4_ = v1, v4, v3, v2
 		else
-			gl_send(glsl, "v1", v2)
-			gl_send(glsl, "v2", v1)
-			gl_send(glsl, "v3", v4)
-			gl_send(glsl, "v4", v3)
+			v1_, v2_, v3_, v4_ = v2, v1, v4, v3
 		end
+
+		gl_send(glsl, "img", img)
+		gl_send(glsl, "v1", v1_)
+		gl_send(glsl, "v2", v2_)
+		gl_send(glsl, "v3", v3_)
+		gl_send(glsl, "v4", v4_)
 	else
 		setEffect()
 	end
-	-- lgr.setBlendMode("premultiplied")
+
 	if v4 then
-		q("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2], v4[1], v4[2])
-	else --img acts as a vertex
-		q("fill", img[1], img[2], v1[1], v1[2], v2[1], v2[2], v3[1], v3[2])
+		polygon("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2], v4[1], v4[2])
+	else -- img acts as a vertex
+		polygon("fill", img[1], img[2], v1[1], v1[2], v2[1], v2[2], v3[1], v3[2])
 	end
-	-- lgr.setBlendMode("alpha")
+
 	setEffect()
 end
 

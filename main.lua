@@ -96,12 +96,12 @@ function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
 	UpdateGame(dt)
-		if hudTimeLeft > 0 then
-			hudTimeLeft = hudTimeLeft - dt
-			if hudTimeLeft <= 0 or gamestate ~= gamestatePlayingGame then
-				hudMessage = ""
-			end
+	if hudTimeLeft > 0 then
+		hudTimeLeft = hudTimeLeft - dt
+		if hudTimeLeft <= 0 or gamestate ~= gamestatePlayingGame then
+			hudMessage = ""
 		end
+	end
 	_JPROFILER.pop("MainUpdate")
 	_JPROFILER.pop("frame")
 end

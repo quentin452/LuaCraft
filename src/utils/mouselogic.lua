@@ -60,28 +60,6 @@ function KeyPressed(k)
 			enableF8 = not enableF8
 		elseif k == "f1" then
 			enableTESTBLOCK = not enableTESTBLOCK
-		elseif k == "f2" then
-		--	for chunk in pairs(ChunkSet) do
-		--		for i = 1, #chunk.slices do
-		--			local chunkSlice = chunk.slices[i]
-		--			chunkSlice.enableBlockAndTilesModels = false
-		--		end
-			--	RemoveChunkAndChunkSliceModels()
-		--	end
-			--updateAllChunksModel()
-		--	for _, chunk in ipairs(renderChunks) do
-				--DeactivateAllSlices(chunk)
-				--
-				--			chunk:sunlight()
-				--			chunk:processRequests()
-				--		end
-		--	end
-		elseif k == "f4" then
-		--	for _, chunk in ipairs(renderChunks) do
-		--		for _ = 1, WorldHeight / SliceHeight do
-		--			chunk.slices[_] = NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
-		--		end
-		--	end
 		end
 	end
 	if gamestate == gamestateGamePausing then

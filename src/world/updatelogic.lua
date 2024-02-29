@@ -1,6 +1,4 @@
---TODO FIX : chunks are not removed if there are outside of render distance
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
---TODO FIX : sometimes lightning updates are incorect
 
 ChunkSet = {}
 ChunkHashTable = {}
@@ -9,7 +7,7 @@ ChunkRequests = {}
 LightingQueue = {}
 LightingRemovalQueue = {}
 local previousRenderDistance = nil
-
+local updateCounter = 0
 function UpdateGame(dt)
 	if gamestate == gamestatePlayingGame then
 		local RenderDistance = getRenderDistanceValue()
@@ -36,22 +34,26 @@ function UpdateGame(dt)
 						ChunkSet[chunk] = true
 						ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 						ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
-						LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
-					--	LightingUpdate()
-					-- Only update chunks within render distance
+						--LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
 					elseif distance < RenderDistance / ChunkSize then
 						processChunkUpdates(chunk)
 					else
 						local chunkDistanceX = math.abs(chunk.x - playerChunkX)
 						local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
 						local chunkDistance = math.sqrt(chunkDistanceX ^ 2 + chunkDistanceZ ^ 2)
-
 						if chunkDistance > RenderDistance / ChunkSize then
-							for i = 1, #chunk.slices do
-								local chunkSlice = chunk.slices[i]
-								chunkSlice.enableBlockAndTilesModels = false
-							end
-						end
+                            -- Supprimer le cache pour ce chunk
+                            local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
+                            coordCache[key] = nil
+
+                            for i = 1, #chunk.slices do
+                                local chunkSlice = chunk.slices[i]
+                                chunkSlice:destroy()
+                                chunkSlice:destroyModel()
+                                chunkSlice.enableBlockAndTilesModels = false
+                                chunk.slices[i] = nil
+                            end
+                        end
 					end
 				end
 			end
@@ -70,19 +72,11 @@ end
 function processChunkUpdates(chunk)
 	if chunk.updatedSunLight == false then
 		chunk:sunlight()
-
 		chunk.updatedSunLight = true
 	elseif chunk.isPopulated == false then
 		UpdateCaves()
 		chunk:populate()
 		chunk:processRequests()
-		for _ = 1, WorldHeight / SliceHeight do
-			chunk.slices[_] = NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
-		end
-		for i = 1, #chunk.slices do
-			local chunkSlice = chunk.slices[i]
-			chunkSlice.enableBlockAndTilesModels = true
-		end
 		chunk:updateModel()
 		LightingUpdate()
 		chunk.isPopulated = true
@@ -90,7 +84,23 @@ function processChunkUpdates(chunk)
 	if not isInTable(renderChunks, chunk) then
 		table.insert(renderChunks, chunk)
 	end
+	updateCounter = updateCounter + 1
+	--this is to force model updates for chunks : need to be optimized
+	if updateCounter > 3500 then
+		for i = 1, WorldHeight / SliceHeight do
+			if chunk.slices[i] then
+				chunk.slices[i]:updateModel()
+			end
+			LightingUpdate()
+			updateCounter = 0
+		end
+	end
 	for _, chunk in ipairs(renderChunks) do
+		for _ = 1, WorldHeight / SliceHeight do
+			if not chunk.slices[_] then
+				chunk.slices[_] = NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
+			end
+		end
 		for i = 1, #chunk.slices do
 			local chunkSlice = chunk.slices[i]
 			chunkSlice.enableBlockAndTilesModels = true

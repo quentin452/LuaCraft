@@ -125,5 +125,8 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 			model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
 			model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
 		end
+
+	elseif self.enableBlockAndTilesModels == false then
+		--self.model:setVerts({})
 	end
 end

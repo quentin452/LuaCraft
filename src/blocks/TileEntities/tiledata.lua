@@ -24,6 +24,23 @@ __ROSE_FLOWER_Block = 38
 __STONE_BRICK_Block = 45
 __GLOWSTONE_BLock = 89
 
+__Light_Source0 = 0
+__Light_Source11 = 1
+__Light_Source12 = 2
+__Light_Source13 = 3
+__Light_Source14 =4
+__Light_Source15 = 5
+__Light_Source16 = 6
+__Light_Source17 = 7
+__Light_Source18 = 8
+__Light_Source19 = 9
+__Light_Source10 = 10
+__Light_Source11 = 11
+__Light_Source12 = 12
+__Light_Source13 = 13
+__Light_Source14 = 14
+__Light_Source15 = 15
+
 -- tile enumerations stored as a function called by tile index (base 0 to accomodate air)
 function TileCollisions(n)
 	if
@@ -53,17 +70,25 @@ local transparencyLookup = {
 	[__GLOWSTONE_BLock] = 2, -- glowstone
 }
 
+local transparencyCache = {}
+
 function TileTransparency(n)
-	return transparencyLookup[n] or 3 -- Default to solid (opaque) if not found in the lookup table
+    if transparencyCache[n] then
+        return transparencyCache[n]
+    else
+        local transparency = transparencyLookup[n] or 3
+        transparencyCache[n] = transparency
+        return transparency
+    end
 end
 
 function TileLightSource(n)
 	--i think this should be optimized
-	if n == 89 then -- glowstone
-		return 15
+	if n == __GLOWSTONE_BLock then -- glowstone
+		return __Light_Source15
 	end
 
-	return 0
+	return __Light_Source0
 end
 
 function TileLightable(n)
@@ -76,7 +101,13 @@ function TileSemiLightable(n)
 	return t == 0 or t == 1 or t == 2
 end
 
+local tileTexturesCache = {}
+
 function TileTextures(n)
+	if tileTexturesCache[n] then
+		return tileTexturesCache[n]
+	end
+
 	local list = {
 		-- textures are in format: SIDE UP DOWN FRONT
 		-- at least one texture must be present
@@ -107,9 +138,11 @@ function TileTextures(n)
 	list[46] = { 7 } -- 18 leaves
 	list[90] = { 105 } -- 89 glowstone
 
-	-- transforms the list into base 0 to accomodate for air blocks
-	return list[n + 1]
+	tileTexturesCache[n] = list[n + 1]
+
+	return tileTexturesCache[n]
 end
+
 
 function TileModel(n)
 	-- flowers and mushrooms have different models
