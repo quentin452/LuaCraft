@@ -1,4 +1,6 @@
 function UpdateCaves()
+	_JPROFILER.push("UpdateCaves")
+
 	local continue = true
 
 	while continue do
@@ -15,9 +17,12 @@ function UpdateCaves()
 			end
 		end
 	end
+	_JPROFILER.pop("UpdateCaves")
 end
 
 function NewCave(x, y, z)
+	_JPROFILER.push("NewCave")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -77,7 +82,7 @@ function NewCave(x, y, z)
 								if cy == chunk.heightMap[cx][cz] then
 									NewSunlightDownAddition(gx, gy, gz, 15)
 								end
-							end
+							end 
 						end
 					end
 				end
@@ -87,5 +92,7 @@ function NewCave(x, y, z)
 	end
 
 	CaveList[#CaveList + 1] = t
+	_JPROFILER.pop("NewCave")
+
 	return t
 end

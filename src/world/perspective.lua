@@ -153,28 +153,37 @@ pers.cw = true -- Clockwise
 pers.flip = false -- Flip the image
 
 function pers.preload(loadup)
+	_JPROFILER.push("pers.preload")
 	if loadup then
 		setEffect(glsl)
 	else
 		setEffect()
 	end
+	_JPROFILER.pop("pers.preload")
 end
 
 function pers.setRepeat(origin, size)
+	_JPROFILER.push("setRepeat")
+
 	gl_send(glsl, "p0", origin)
 	gl_send(glsl, "rep", size)
+	_JPROFILER.pop("setRepeat")
 end
 
 function pers.fast(img, v1, v2, v3, v4)
+	_JPROFILER.push("pers.fast")
+
 	gl_send(glsl, "img", img)
 	gl_send(glsl, "v1", v2)
 	gl_send(glsl, "v2", v3)
 	gl_send(glsl, "v3", v4)
 	gl_send(glsl, "v4", v1)
 	polygon("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2], v4[1], v4[2])
+	_JPROFILER.pop("pers.fast")
 end
 
 function pers.quad(img, v1, v2, v3, v4, h)
+	_JPROFILER.push("pers.quad")
 	if h then
 		gl_send(glsl, "SIZEY", h)
 	end
@@ -208,6 +217,7 @@ function pers.quad(img, v1, v2, v3, v4, h)
 	end
 
 	setEffect()
+	_JPROFILER.pop("pers.quad")
 end
 
 return pers

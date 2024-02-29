@@ -1,4 +1,5 @@
 function GenerateTerrain(chunk, x, z, generationFunction)
+	_JPROFILER.push("GenerateTerrain")
 	-- chunk generation
 	local dirt = 4
 	local grass = true
@@ -59,6 +60,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 			chunk.voxels[i][k] = table.concat(temp)
 		end
 	end
+	_JPROFILER.pop("GenerateTerrain")
 end
 
 function StandardTerrain(chunk, xx, j, zz)
@@ -67,6 +69,8 @@ function StandardTerrain(chunk, xx, j, zz)
 end
 
 function ClassicTerrain(chunk, xx, j, zz)
+	_JPROFILER.push("ClassicTerrain")
+
 	local scalar = 1.3
 	local heightLow = (OctaveNoise(xx * scalar, zz * scalar, 8, 2, 3) + OctaveNoise(xx * scalar, zz * scalar, 8, 4, 5))
 			/ 6
@@ -86,11 +90,14 @@ function ClassicTerrain(chunk, xx, j, zz)
 	end
 
 	heightResult = heightResult + 64 -- water level
+	_JPROFILER.pop("ClassicTerrain")
 
 	return j <= heightResult --ChunkNoise(xx,j,zz) > (j-chunk.floor)/(chunk.ceiling-chunk.floor)*(Noise2D(xx,zz, 128,5)*0.75 +0.75)
 end
 
 function GenerateTree(chunk, x, y, z)
+	_JPROFILER.push("GenerateTree")
+
 	local treeBlocks = {}
 
 	local treeHeight = 4 + math.floor(love.math.random() * 2 + 0.5)
@@ -140,6 +147,8 @@ function GenerateTree(chunk, x, y, z)
 	for _, block in ipairs(treeBlocks) do
 		NewChunkRequest(block[1], block[2], block[3], block[4])
 	end
+	_JPROFILER.pop("GenerateTree")
+
 end
 
 -- noise function used in chunk generation
@@ -148,6 +157,7 @@ function ChunkNoise(x, y, z)
 end
 
 function Noise(x, y, z, freq, yfreq, si)
+	
 	return love.math.noise(
 		x / freq + Salt[si] * 100000,
 		y / yfreq + Salt[si + 1] * 100000,
@@ -160,6 +170,8 @@ end
 local memoizedResults = {}
 
 function OctaveNoise(x, y, octaves, seed1, seed2)
+	_JPROFILER.push("OctaveNoise")
+
 	-- Generate a unique key based on the function inputs
 	local key = string.format("%d_%d_%d_%d_%d", x, y, octaves, seed1, seed2)
 
@@ -180,6 +192,8 @@ function OctaveNoise(x, y, octaves, seed1, seed2)
 
 	-- Memoize the result for future use
 	memoizedResults[key] = ret
+
+	_JPROFILER.pop("OctaveNoise")
 
 	return ret
 end

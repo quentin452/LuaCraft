@@ -1,4 +1,6 @@
 function initScene()
+	_JPROFILER.push("initScene")
+
 	Scene = Engine.newScene(GraphicsWidth, GraphicsHeight)
 	Scene.camera.perspective = TransposeMatrix(
 		cpml.mat4.from_perspective(90, love.graphics.getWidth() / love.graphics.getHeight(), 0.001, 10000)
@@ -6,9 +8,12 @@ function initScene()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(1, "Premier profil")
 	end
+	_JPROFILER.pop("initScene")
 end
 
 function initGlobalRandomNumbers()
+	_JPROFILER.push("initGlobalRandomNumbers")
+
 	Salt = {}
 	for i = 1, 128 do
 		Salt[i] = love.math.random()
@@ -16,25 +21,34 @@ function initGlobalRandomNumbers()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(2, "Second profil")
 	end
+	_JPROFILER.pop("initGlobalRandomNumbers")
 end
 
 function initEntities()
+	_JPROFILER.push("initEntities")
+
 	initEntityList()
 	initPlayerInventory()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(3, "Troisième profil")
 	end
+	_JPROFILER.pop("initEntities")
 end
 
 function initEntityList()
+	_JPROFILER.push("initEntityList")
+
 	ThingList = {}
 	ThePlayer = CreateThing(NewPlayer(0, 128, 0))
 	if enablePROFIProfiler then
 		ProFi:checkMemory(4, "4eme profil")
 	end
+	_JPROFILER.pop("initEntityList")
 end
 
 function initPlayerInventory()
+	_JPROFILER.push("initPlayerInventory")
+
 	PlayerInventory = {
 		items = {},
 		hotbarSelect = 1,
@@ -57,21 +71,27 @@ function initPlayerInventory()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(5, "5eme profil")
 	end
+	_JPROFILER.pop("initPlayerInventory")
 end
 
 function GenerateWorld()
+	_JPROFILER.push("GenerateWorld")
+
 	initScene()
 	initGlobalRandomNumbers()
 	initEntities()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(9, "9eme profil")
 	end
+	_JPROFILER.pop("GenerateWorld")
 end
 
 -- convert an index into a point on a 2d plane of given width and height
 coordCache = {}
 
 function NumberToCoord(n, w, h)
+	--	_JPROFILER.push("NumberToCoord")
+
 	local key = tostring(n) .. ":" .. tostring(w) .. ":" .. tostring(h)
 	if coordCache[key] then
 		return unpack(coordCache[key])
@@ -80,6 +100,7 @@ function NumberToCoord(n, w, h)
 	local y = math.floor(n / w)
 	local x = n - (y * w)
 	coordCache[key] = { x, y }
+	--	_JPROFILER.pop("NumberToCoord")
 
 	return x, y
 end
@@ -98,6 +119,8 @@ end
 
 -- get chunk from reading chunk hash table at given position
 function GetChunk(x, y, z)
+	--	_JPROFILER.push("GetChunk")
+
 	local x = math.floor(x)
 	local y = math.floor(y)
 	local z = math.floor(z)
@@ -111,27 +134,35 @@ function GetChunk(x, y, z)
 	end
 
 	local mx, mz = x % ChunkSize + 1, z % ChunkSize + 1
+	--	_JPROFILER.pop("GetChunk")
 
 	return getChunk, mx, y, mz, hashx, hashy
 end
 
 function GetChunkRaw(x, z)
+	_JPROFILER.push("GetChunkRaw")
+
 	local hashx, hashy = ChunkHash(x), ChunkHash(z)
 	local getChunk = nil
 	if ChunkHashTable[hashx] ~= nil then
 		getChunk = ChunkHashTable[hashx][hashy]
 	end
+	_JPROFILER.pop("GetChunkRaw")
 
 	return getChunk
 end
 
 -- get voxel by looking at chunk at given position's local coordinate system
 function GetVoxel(x, y, z)
+	--	_JPROFILER.push("GetVoxel")
+
 	local chunk, cx, cy, cz = GetChunk(x, y, z)
 	local v = 0
 	if chunk ~= nil then
 		v = chunk:getVoxel(cx, cy, cz)
 	end
+	--	_JPROFILER.pop("GetVoxel")
+
 	return v
 end
 function GetVoxelData(x, y, z)
@@ -178,11 +209,15 @@ function SetVoxelData(x, y, z, value)
 end
 
 function SetVoxelFirstData(x, y, z, value)
+	--_JPROFILER.push("SetVoxelFirstData")
+
 	local chunk, cx, cy, cz = GetChunk(x, y, z)
 	if chunk ~= nil then
 		chunk:setVoxelFirstData(cx, cy, cz, value)
 		return true
 	end
+	--_JPROFILER.pop("SetVoxelFirstData")
+
 	return false
 end
 function SetVoxelSecondData(x, y, z, value)

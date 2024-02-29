@@ -107,11 +107,12 @@ function love.update(dt)
 end
 
 function love.draw()
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MainDraw")
 	if enablePROFIProfiler then
 		ProFi:start()
 	end
-	_JPROFILER.push("frame")
-	_JPROFILER.push("MainDraw")
+
 	DrawGame()
 	if hudMessage ~= nil then
 		local width, height = love.graphics.getDimensions()

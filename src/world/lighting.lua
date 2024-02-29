@@ -1,35 +1,56 @@
+--TODO put lightning into another thread
+--TODO FIX CANNOT PROFILE THIS WITH JPROF : causing crash during loading te viewer
 local LightingQueue = {}
 local LightingRemovalQueue = {}
 
 -- Function to add an item to the lighting queue
 local function LightingQueueAdd(lthing)
+	--_JPROFILER.push("frame")
+
+	--_JPROFILER.push("LightingQueueAdd")
+
 	LightingQueue[#LightingQueue + 1] = lthing
+	--_JPROFILER.pop("LightingQueueAdd")
+	--_JPROFILER.pop("frame")
+
 	return lthing
 end
 
 -- Function to add an item to the lighting removal queue
 local function LightingRemovalQueueAdd(lthing)
+	--_JPROFILER.push("LightingRemovalQueueAdd")
+
 	LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
+	--_JPROFILER.pop("LightingRemovalQueueAdd")
+
 	return lthing
 end
 
 -- Function to process lighting updates
 function LightingUpdate()
-    -- Process removals and additions
-    for _, lthing in ipairs(LightingRemovalQueue) do
-        lthing:query()
-    end
+	--_JPROFILER.push("frame")
 
-    for _, lthing in ipairs(LightingQueue) do
-        lthing:query()
-    end
+	--_JPROFILER.push("LightingUpdate")
 
-    -- Clear both queues
-    LightingRemovalQueue = {}
-    LightingQueue = {}
+	-- Process removals and additions
+	for _, lthing in ipairs(LightingRemovalQueue) do
+		lthing:query()
+	end
+
+	for _, lthing in ipairs(LightingQueue) do
+		lthing:query()
+	end
+
+	-- Clear both queues
+	LightingRemovalQueue = {}
+	LightingQueue = {}
+	--_JPROFILER.pop("LightingUpdate")
+	--_JPROFILER.pop("frame")
 end
 
 function NewSunlightAddition(x, y, z, value)
+	--_JPROFILER.push("NewSunlightAddition")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -56,9 +77,12 @@ function NewSunlightAddition(x, y, z, value)
 	end
 
 	LightingQueueAdd(t)
+	--_JPROFILER.pop("NewSunlightAddition")
 end
 
 function NewSunlightAdditionCreation(x, y, z)
+	--_JPROFILER.push("NewSunlightAdditionCreation")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -78,9 +102,12 @@ function NewSunlightAdditionCreation(x, y, z)
 	end
 
 	LightingQueueAdd(t)
+	--_JPROFILER.pop("NewSunlightAdditionCreation")
 end
 
 function NewSunlightForceAddition(x, y, z, value)
+	--_JPROFILER.push("NewSunlightForceAddition")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -106,9 +133,12 @@ function NewSunlightForceAddition(x, y, z, value)
 	end
 
 	LightingQueueAdd(t)
+	--_JPROFILER.pop("NewSunlightForceAddition")
 end
 
 function NewSunlightDownAddition(x, y, z, value)
+	--_JPROFILER.push("NewSunlightDownAddition")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -135,9 +165,12 @@ function NewSunlightDownAddition(x, y, z, value)
 	end
 
 	LightingQueueAdd(t)
+	--_JPROFILER.pop("NewSunlightDownAddition")
 end
 
 function NewSunlightSubtraction(x, y, z, value)
+	--_JPROFILER.push("NewSunlightSubtraction")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -170,9 +203,12 @@ function NewSunlightSubtraction(x, y, z, value)
 	end
 
 	LightingRemovalQueueAdd(t)
+	--_JPROFILER.pop("NewSunlightSubtraction")
 end
 
 function NewSunlightDownSubtraction(x, y, z)
+	--_JPROFILER.push("NewSunlightDownSubtraction")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -195,9 +231,12 @@ function NewSunlightDownSubtraction(x, y, z)
 	end
 
 	LightingRemovalQueueAdd(t)
+	--_JPROFILER.pop("NewSunlightDownSubtraction")
 end
 
 function NewLocalLightAddition(x, y, z, value)
+	--_JPROFILER.push("NewLocalLightAddition")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -227,9 +266,12 @@ function NewLocalLightAddition(x, y, z, value)
 	end
 
 	LightingQueueAdd(t)
+	--_JPROFILER.pop("NewLocalLightAddition")
 end
 
 function NewLocalLightSubtraction(x, y, z, value)
+	--_JPROFILER.push("NewLocalLightSubtraction")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -262,9 +304,12 @@ function NewLocalLightSubtraction(x, y, z, value)
 	end
 
 	LightingRemovalQueueAdd(t)
+	--_JPROFILER.pop("NewLocalLightSubtraction")
 end
 
 function NewLocalLightForceAddition(x, y, z, value)
+	--_JPROFILER.push("NewLocalLightForceAddition")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -290,9 +335,12 @@ function NewLocalLightForceAddition(x, y, z, value)
 	end
 
 	LightingQueueAdd(t)
+	--_JPROFILER.pop("NewLocalLightForceAddition")
 end
 
 function NewLocalLightAdditionCreation(x, y, z)
+	--_JPROFILER.push("NewLocalLightAdditionCreation")
+
 	local t = {}
 	t.x = x
 	t.y = y
@@ -318,4 +366,5 @@ function NewLocalLightAdditionCreation(x, y, z)
 	end
 
 	LightingQueueAdd(t)
+	--_JPROFILER.pop("NewLocalLightAdditionCreation")
 end

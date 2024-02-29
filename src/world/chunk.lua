@@ -1,8 +1,12 @@
+--TODO FIX CANNOT PROFILE SOME SECTIONS WITH JPROF : causing crash during loading te viewer
+
 function ReplaceChar(str, pos, r)
 	return str:sub(1, pos - 1) .. r .. str:sub(pos + #r)
 end
 
 function NewChunk(x, z)
+	_JPROFILER.push("NewChunk")
+
 	local chunk = NewThing(x, 0, z)
 	chunk.voxels = {}
 	chunk.slices = {}
@@ -26,6 +30,8 @@ function NewChunk(x, z)
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
 
 	if choose({ true, false }) then
+		--_JPROFILER.push("chooseCave")
+
 		local caveCount1 = rand(1, 3)
 		for i = 1, caveCount1 do
 			NewCave(gx, rand(8, 64), gz)
@@ -34,9 +40,12 @@ function NewChunk(x, z)
 		for i = 1, caveCount2 do
 			NewCave(gx, rand(48, 80), gz)
 		end
+		--_JPROFILER.pop("chooseCave")
 	end
 
 	chunk.sunlight = function(self)
+		--_JPROFILER.push("sunlight")
+
 		for i = 1, ChunkSize do
 			for j = 1, ChunkSize do
 				local gx, gz = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
@@ -60,21 +69,29 @@ function NewChunk(x, z)
 				end
 			end
 		end
+		--_JPROFILER.pop("sunlight")
+
 		--LightingUpdate()
 	end
 
 	chunk.processRequests = function(self)
+		--_JPROFILER.push("processRequests")
+
 		for j = 1, #self.requests do
 			local block = self.requests[j]
 			if not TileCollisions(self:getVoxel(block.x, block.y, block.z)) then
 				self:setVoxel(block.x, block.y, block.z, block.value, 15)
 			end
 		end
+		--_JPROFILER.pop("processRequests")
+
 		--LightingUpdate()
 	end
 
 	-- populate chunk with trees and flowers
 	chunk.populate = function(self)
+		--_JPROFILER.push("populate")
+
 		for i = 1, ChunkSize do
 			if self.heightMap[i] then
 				for j = 1, ChunkSize do
@@ -96,6 +113,7 @@ function NewChunk(x, z)
 				end
 			end
 		end
+		--_JPROFILER.pop("populate")
 	end
 
 	-- get voxel id of the voxel in this chunk's coordinate space
@@ -142,6 +160,8 @@ function NewChunk(x, z)
 	end
 
 	chunk.setVoxelRaw = function(self, x, y, z, blockvalue, light)
+		--_JPROFILER.push("setVoxelRaw")
+
 		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then
 			return 0, 0, 0
 		end
@@ -151,9 +171,14 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
+		--_JPROFILER.pop("setVoxelRaw")
 	end
 	-- set voxel id of the voxel in this chunk's coordinate space
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
+		--_JPROFILER.push("frame")
+
+		--_JPROFILER.push("setVoxel")
+
 		if manuallyPlaced == nil then
 			manuallyPlaced = false
 		end
@@ -256,10 +281,15 @@ function NewChunk(x, z)
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
 		end
+		--_JPROFILER.pop("setVoxel")
+		--_JPROFILER.pop("frame")
+
 		--	LightingUpdate()
 	end
 
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)
+		--_JPROFILER.push("setVoxelData")
+
 		x = math.floor(x)
 		y = math.floor(y)
 		z = math.floor(z)
@@ -268,10 +298,13 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
+		--_JPROFILER.pop("setVoxelData")
 	end
 
 	-- sunlight data
 	chunk.setVoxelFirstData = function(self, x, y, z, blockvalue)
+		--_JPROFILER.push("setVoxelFirstData")
+
 		x = math.floor(x)
 		y = math.floor(y)
 		z = math.floor(z)
@@ -280,10 +313,13 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
+		--_JPROFILER.pop("setVoxelFirstData")
 	end
 
 	-- local light data
 	chunk.setVoxelSecondData = function(self, x, y, z, blockvalue)
+		--_JPROFILER.push("setVoxelSecondData")
+
 		x = math.floor(x)
 		y = math.floor(y)
 		z = math.floor(z)
@@ -292,17 +328,24 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
+		--_JPROFILER.pop("setVoxelSecondData")
 	end
 
 	local function initSliceUpdates()
+		--_JPROFILER.push("initSliceUpdates")
+
 		sliceUpdates = {}
 		for i = 1, WorldHeight / SliceHeight do
 			sliceUpdates[i] = { false, false, false, false, false }
 		end
+		--_JPROFILER.pop("initSliceUpdates")
+
 		return sliceUpdates
 	end
 
 	local function findUpdatedSlices(self, sliceUpdates)
+		--_JPROFILER.push("findUpdatedSlices")
+
 		local INDEX, NEG_X, POS_X, NEG_Z, POS_Z = 1, 2, 3, 4, 5
 
 		for i = 1, #self.changes do
@@ -338,9 +381,12 @@ function NewChunk(x, z)
 				end
 			end
 		end
+		--_JPROFILER.pop("findUpdatedSlices")
 	end
 
 	function updateFlaggedSlices(self, sliceUpdates)
+		--_JPROFILER.push("updateFlaggedSlices")
+
 		for i = 1, WorldHeight / SliceHeight do
 			if sliceUpdates[i][1] then
 				if self.slices[i] then
@@ -348,15 +394,20 @@ function NewChunk(x, z)
 				end
 			end
 		end
+		--_JPROFILER.pop("updateFlaggedSlices")
 	end
 
 	chunk.updateModel = function(self)
+		--_JPROFILER.push("chunk.updateModel")
 		local sliceUpdates = initSliceUpdates()
 		findUpdatedSlices(self, sliceUpdates)
 		updateFlaggedSlices(self, sliceUpdates)
 
 		self.changes = {}
+		--_JPROFILER.pop("chunk.updateModel")
 	end
+	_JPROFILER.pop("NewChunk")
+
 	return chunk
 end
 
@@ -386,6 +437,8 @@ local transparency3 = 3
 local reusableModel = {}
 
 function NewChunkSlice(x, y, z, parent)
+	_JPROFILER.push("NewChunkSlice")
+
 	local t = NewThing(x, y, z)
 	t.parent = parent
 	t.name = "chunkslice"
@@ -425,6 +478,7 @@ function NewChunkSlice(x, y, z, parent)
 	t.destroyModel = function(self)
 		self.model.dead = true
 	end
+	_JPROFILER.pop("NewChunkSlice")
 
 	return t
 end
@@ -432,6 +486,8 @@ end
 -- used for building structures across chunk borders
 -- by requesting a block to be built in a chunk that does not yet exist
 function NewChunkRequest(gx, gy, gz, valueg)
+	_JPROFILER.push("NewChunkRequest")
+
 	-- assume structures can only cross one chunk
 	local lx, ly, lz = Localize(gx, gy, gz)
 	local chunk = GetChunk(gx, gy, gz)
@@ -439,4 +495,5 @@ function NewChunkRequest(gx, gy, gz, valueg)
 	if chunk ~= nil then
 		chunk.requests[#chunk.requests + 1] = { x = lx, y = ly, z = lz, value = valueg }
 	end
+	_JPROFILER.pop("NewChunkRequest")
 end

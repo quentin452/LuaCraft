@@ -16,6 +16,8 @@ engine.objFormat = {
 -- another example, this with uvs: { {0,0,0, 0,0}, {0,1,0, 1,0}, {0,0,1, 0,1} }
 -- polygons are automatically created with three consecutive verts
 function engine.newModel(verts, texture, coords, color, format)
+	_JPROFILER.push("engine.newModel")
+
 	local m = {}
 
 	-- default values if no arguments are given
@@ -109,12 +111,14 @@ function engine.newModel(verts, texture, coords, color, format)
 	m.deathQuery = function(self)
 		return not self.dead
 	end
-
+	_JPROFILER.pop("engine.newModel")
 	return m
 end
 
 -- create a new Scene object with given canvas output size
 function engine.newScene(renderWidth, renderHeight)
+	_JPROFILER.push("engine.newScene")
+
 	love.graphics.setDepthMode("lequal", true)
 	scene = {}
 
@@ -282,6 +286,7 @@ function engine.newScene(renderWidth, renderHeight)
 		Camera.angle.x = Camera.angle.x + math.rad(dx * 0.5)
 		Camera.angle.y = math.max(math.min(Camera.angle.y + math.rad(dy * 0.5), math.pi / 2), -1 * math.pi / 2)
 	end
+	_JPROFILER.pop("engine.newScene")
 
 	return scene
 end
@@ -296,6 +301,8 @@ function InvertMatrix(mat)
 end
 
 function CopyTable(orig)
+	_JPROFILER.push("CopyTable")
+
 	local orig_type = type(orig)
 	local copy
 	if orig_type == "table" then
@@ -307,6 +314,8 @@ function CopyTable(orig)
 	else
 		copy = orig
 	end
+	_JPROFILER.pop("CopyTable")
+
 	return copy
 end
 function GetSign(n)
@@ -319,6 +328,8 @@ function GetSign(n)
 	return 0
 end
 function CrossProduct(v1, v2)
+	_JPROFILER.push("CrossProduct")
+
 	local a = { x = v1[1], y = v1[2], z = v1[3] }
 	local b = { x = v2[1], y = v2[2], z = v2[3] }
 
@@ -326,9 +337,13 @@ function CrossProduct(v1, v2)
 	x = a.y * (b.z or 0) - (a.z or 0) * b.y
 	y = (a.z or 0) * b.x - a.x * (b.z or 0)
 	z = a.x * b.y - a.y * b.x
+	_JPROFILER.pop("CrossProduct")
+
 	return { x, y, z }
 end
 function UnitVectorOf(vector)
+	_JPROFILER.push("UnitVectorOf")
+
 	local ab1 = math.abs(vector[1])
 	local ab2 = math.abs(vector[2])
 	local ab3 = math.abs(vector[3])
@@ -338,13 +353,21 @@ function UnitVectorOf(vector)
 	end
 
 	local ret = { vector[1] / max, vector[2] / max, vector[3] / max }
+	_JPROFILER.pop("UnitVectorOf")
+
 	return ret
 end
 function VectorLength(x2, y2, z2)
+	_JPROFILER.push("VectorLength")
+
 	local x1, y1, z1 = 0, 0, 0
+	_JPROFILER.pop("VectorLength")
+
 	return ((x2 - x1) ^ 2 + (y2 - y1) ^ 2 + (z2 - z1) ^ 2) ^ 0.5
 end
 function ScaleVerts(verts, sx, sy, sz)
+	_JPROFILER.push("ScaleVerts")
+
 	if sy == nil then
 		sy = sx
 		sz = sx
@@ -356,10 +379,13 @@ function ScaleVerts(verts, sx, sy, sz)
 		this[2] = this[2] * sy
 		this[3] = this[3] * sz
 	end
+	_JPROFILER.pop("ScaleVerts")
 
 	return verts
 end
 function MoveVerts(verts, sx, sy, sz)
+	_JPROFILER.push("MoveVerts")
+
 	if sy == nil then
 		sy = sx
 		sz = sx
@@ -371,6 +397,7 @@ function MoveVerts(verts, sx, sy, sz)
 		this[2] = this[2] + sy
 		this[3] = this[3] + sz
 	end
+	_JPROFILER.pop("MoveVerts")
 
 	return verts
 end

@@ -1,5 +1,6 @@
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
 --TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel()
+--TODO FIX CANNOT PROFILE THIS WITH JPROF : causing crash during closing the game
 
 ChunkSet = {}
 ChunkHashTable = {}
@@ -10,6 +11,7 @@ LightingRemovalQueue = {}
 local previousRenderDistance = nil
 local updateCounter = 0
 function UpdateGame(dt)
+	--_JPROFILER.push("frame")
 	if gamestate == gamestatePlayingGame then
 		local RenderDistance = getRenderDistanceValue()
 
@@ -43,18 +45,18 @@ function UpdateGame(dt)
 						local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
 						local chunkDistance = math.sqrt(chunkDistanceX ^ 2 + chunkDistanceZ ^ 2)
 						if chunkDistance > RenderDistance / ChunkSize then
-                            -- Supprimer le cache pour ce chunk
-                            local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
-                            coordCache[key] = nil
+							-- Supprimer le cache pour ce chunk
+							local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
+							coordCache[key] = nil
 
-                            for i = 1, #chunk.slices do
-                                local chunkSlice = chunk.slices[i]
-                                chunkSlice:destroy()
-                                chunkSlice:destroyModel()
-                                chunkSlice.enableBlockAndTilesModels = false
-                                chunk.slices[i] = nil
-                            end
-                        end
+							for i = 1, #chunk.slices do
+								local chunkSlice = chunk.slices[i]
+								chunkSlice:destroy()
+								chunkSlice:destroyModel()
+								chunkSlice.enableBlockAndTilesModels = false
+								chunk.slices[i] = nil
+							end
+						end
 					end
 				end
 			end
@@ -67,10 +69,13 @@ function UpdateGame(dt)
 		LogicAccumulator = LogicAccumulator + dt
 		previousRenderDistance = RenderDistance
 		updateThingList(dt)
+		--_JPROFILER.pop("UpdateGameDT")
 	end
 end
 
 function processChunkUpdates(chunk)
+	--_JPROFILER.push("processChunkUpdates")
+
 	if chunk.updatedSunLight == false then
 		chunk:sunlight()
 		chunk.updatedSunLight = true
@@ -110,17 +115,24 @@ function processChunkUpdates(chunk)
 			chunk:updateModel()
 		end
 	end
+	--_JPROFILER.pop("processChunkUpdates")
 end
 function isInTable(tbl, value)
+	--_JPROFILER.push("isInTable")
+
 	for _, v in ipairs(tbl) do
 		if v == value then
 			return true
 		end
 	end
+	----_JPROFILER.pop("isInTable")
+
 	return false
 end
 
 function updateThingList(dt)
+	--_JPROFILER.push("updateThingList")
+
 	local i = 1
 
 	while i <= #ThingList do
@@ -149,4 +161,5 @@ function updateThingList(dt)
 	else
 		PhysicsStep = false
 	end
+	--_JPROFILER.pop("updateThingList")
 end
