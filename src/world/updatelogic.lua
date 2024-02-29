@@ -1,4 +1,5 @@
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
+--TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel()
 
 ChunkSet = {}
 ChunkHashTable = {}
