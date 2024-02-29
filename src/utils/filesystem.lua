@@ -84,6 +84,9 @@ function checkAndUpdateDefaults(Settings)
 	if Settings["renderdistance"] == nil then
 		Settings["renderdistance"] = 5
 	end
+	if Settings["fullscreen"] == nil then
+		Settings["fullscreen"] = false
+	end
 	_JPROFILER.pop("checkAndUpdateDefaults")
 end
 
@@ -149,6 +152,7 @@ function loadAndSaveLuaCraftFileSystem()
 			"LuaCraftWarnLogging",
 			"LuaCraftErrorLogging",
 			"renderdistance",
+			"fullscreen",
 		}
 
 		for _, key in ipairs(orderedKeys) do
@@ -206,18 +210,17 @@ EnableLuaCraftPrintLoggingNormalLogging = getLuaCraftPrintLoggingNormalValue()
 
 function LuaCraftPrintLoggingNormal(...)
 	if EnableLuaCraftPrintLoggingNormalLogging then
-		local message = table.concat({...}, " ")
+		local message = table.concat({ ... }, " ")
 		writeToLog("[NORMAL]", message)
 		print("[NORMAL]", message)
 	end
 end
 
-
 EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
 
 function LuaCraftWarnLogging(...)
 	if EnableLuaCraftLoggingWarn then
-		local message = table.concat({...}, " ")
+		local message = table.concat({ ... }, " ")
 		writeToLog("[WARN]", message)
 		print("[WARN]", message)
 	end
@@ -227,7 +230,7 @@ EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
 
 function LuaCraftErrorLogging(...)
 	if EnableLuaCraftLoggingError then
-		local message = table.concat({...}, " ")
+		local message = table.concat({ ... }, " ")
 		writeToLog("[FATAL]", message)
 		error(message)
 	end

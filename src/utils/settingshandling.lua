@@ -28,6 +28,31 @@ function reloadConfig()
 	end
 end
 
+function toggleFullScreen()
+	_JPROFILER.push("toggleFullScreen")
+	GlobalFullscreen = not GlobalFullscreen
+
+	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
+	local file_content, error_message = customReadFile(configFilePath)
+
+	if file_content then
+		file_content = file_content:gsub("fullscreen=%w+", "fullscreen=" .. (GlobalFullscreen and "true" or "false"))
+		local file, error_message = io.open(userDirectory .. "\\.LuaCraft\\luacraftconfig.txt", "w")
+		if file then
+			file:write(file_content)
+			file:close()
+		else
+			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+		end
+		-- Set the window to fullscreen
+		local fullscreen = GlobalFullscreen -- Change this to false if you want to start in windowed mode
+		local fullscreenType = "desktop" -- Can be "desktop" or "exclusive"
+		love.window.setFullscreen(fullscreen, fullscreenType)
+	else
+		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+	end
+	_JPROFILER.pop("toggleFullScreen")
+end
 function toggleVSync()
 	_JPROFILER.push("toggleVSync")
 	globalVSync = not globalVSync
@@ -50,6 +75,7 @@ function toggleVSync()
 	end
 	_JPROFILER.pop("toggleVSync")
 end
+
 function getRenderDistanceValue()
 	local file_path = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 	local file_content, error_message = customReadFile(file_path)
