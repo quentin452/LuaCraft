@@ -19,19 +19,12 @@ function MouseLogicOnPlay(x, y, b)
 		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or 0
 	end
 
-	local cx, cy, cz = pos and pos.x, pos and pos.y, pos and pos.z
 	local chunk = pos and pos.chunk
 
-	-- Check if the block is not placed at Y 128
-	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and cy and cy < 128 then
-		chunk:setVoxel(cx, cy, cz, value, true)
+	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
+		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
 		LightingUpdate()
-		UpdateChangedChunks()
-		-- chunk:updateModel(cx, cy, cz)
-		-- LuaCraftPrintLoggingNormal("---")
-		-- LuaCraftPrintLoggingNormal(cx, cy, cz)
-		-- LuaCraftPrintLoggingNormal(cx % ChunkSize, cy % SliceHeight, cz % ChunkSize)
-	elseif pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
+	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
 		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
 		hudTimeLeft = 3
 	end
@@ -61,9 +54,6 @@ function KeyPressed(k)
 	if gamestate == gamestatePlayingGame then
 		if k == "escape" then
 			gamestate = gamestateGamePausing
-		elseif k == "n" then
-			--TODO FOR REMOVAL
-			GenerateWorld()
 		elseif k == "f3" then
 			enableF3 = not enableF3
 		elseif k == "f8" then

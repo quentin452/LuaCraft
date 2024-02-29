@@ -59,92 +59,34 @@ function initPlayerInventory()
 	end
 end
 
-function generateWorldChunks()
-	ChunkHashTable = {}
-	ChunkSet = {}
-	ChunkRequests = {}
-	LightingQueue = {}
-	LightingRemovalQueue = {}
-	CaveList = {}
-	local worldSize = 4
-
-	StartTime = love.timer.getTime()
-	MeasureTime = StartTime
-
-	for i = worldSize / -2 + 1, worldSize / 2 do
-		ChunkHashTable[ChunkHash(i)] = {}
-		for j = worldSize / -2 + 1, worldSize / 2 do
-			local chunk = NewChunk(i, j)
-			ChunkSet[chunk] = true
-			ChunkHashTable[ChunkHash(i)][ChunkHash(j)] = chunk
-
-			-- Ajoutez des prints pour déboguer
-			LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", i, j)
-		end
-	end
-	if enablePROFIProfiler then
-		ProFi:checkMemory(6, "6eme profil")
-	end
-end
-
-function updateWorld()
-	UpdateCaves()
-	if enablePROFIProfiler then
-		ProFi:checkMemory(7, "7eme profil")
-	end
-end
-
-function updateLighting()
-	for chunk in pairs(ChunkSet) do
-		chunk:sunlight()
-	end
-
-	for chunk in pairs(ChunkSet) do
-		chunk:populate()
-	end
-
-	for chunk in pairs(ChunkSet) do
-		chunk:processRequests()
-		chunk:initialize()
-	end
-
-	if enablePROFIProfiler then
-		ProFi:checkMemory(8, "8eme profil")
-	end
-end
-
-function printGenerationTime()
-	LuaCraftPrintLoggingNormal("total generation time: " .. (love.timer.getTime() - StartTime))
-end
-
 function GenerateWorld()
 	initScene()
 	initGlobalRandomNumbers()
 	initEntities()
-	generateWorldChunks()
-	updateWorld()
-	printGenerationTime()
-	updateLighting()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(9, "9eme profil")
 	end
 end
 
 -- convert an index into a point on a 2d plane of given width and height
+coordCache = {}
+
 function NumberToCoord(n, w, h)
+	local key = tostring(n) .. ":" .. tostring(w) .. ":" .. tostring(h)
+	if coordCache[key] then
+		return unpack(coordCache[key])
+	end
+
 	local y = math.floor(n / w)
 	local x = n - (y * w)
+	coordCache[key] = { x, y }
 
 	return x, y
 end
 
 -- hash function used in chunk hash table
 function ChunkHash(x)
-	if x < 0 then
-		return math.abs(2 * x)
-	end
-
-	return 1 + 2 * x
+	return x < 0 and 2 * math.abs(x) or 1 + 2 * x
 end
 
 function Localize(x, y, z)
@@ -152,10 +94,6 @@ function Localize(x, y, z)
 end
 function Globalize(cx, cz, x, y, z)
 	return (cx - 1) * ChunkSize + x - 1, y, (cz - 1) * ChunkSize + z - 1
-end
-
-function ToChunkCoords(x, z)
-	return math.floor(x / ChunkSize) + 1, math.floor(z / ChunkSize) + 1
 end
 
 -- get chunk from reading chunk hash table at given position
@@ -254,12 +192,4 @@ function SetVoxelSecondData(x, y, z, value)
 		return true
 	end
 	return false
-end
-
-function UpdateChangedChunks()
-	for chunk in pairs(ChunkSet) do
-		if #chunk.changes > 0 then
-			chunk:updateModel()
-		end
-	end
 end

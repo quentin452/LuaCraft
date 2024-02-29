@@ -2,9 +2,9 @@ name: Build love file
 
 on:
   push:
-    branches: [ "remake" ]
+    branches: [ "remake-renderdistanceANDprocedurallychunkgen" ]
   pull_request:
-    branches: [ "remake" ]
+    branches: [ "remake-renderdistanceANDprocedurallychunkgen" ]
   workflow_dispatch:
 
 jobs:

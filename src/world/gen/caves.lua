@@ -83,6 +83,7 @@ function NewCave(x, y, z)
 				end
 			end
 		end
+		--LightingUpdate()
 	end
 
 	CaveList[#CaveList + 1] = t

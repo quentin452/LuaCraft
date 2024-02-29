@@ -106,7 +106,6 @@ function createFileIfNotExists(filePath)
 	local file, err = io.open(filePath, "r")
 
 	if not file then
-		-- Créer le répertoire s'il n'existe pas
 		local directory = filePath:match("(.+\\).-$")
 		os.execute('mkdir "' .. directory .. '"')
 
@@ -131,7 +130,6 @@ function loadAndSaveLuaCraftFileSystem()
 	local luaCraftDirectory = userDirectory .. ".LuaCraft\\"
 	local configFilePath = luaCraftDirectory .. "luacraftconfig.txt"
 
-	-- Check and create file if not exists
 	createFileIfNotExists(configFilePath)
 
 	LuaCraftPrintLoggingNormal("Directory contents before attempting to load settings:")
@@ -163,7 +161,6 @@ function loadAndSaveLuaCraftFileSystem()
 
 		LuaCraftPrintLoggingNormal("Settings loaded successfully.")
 
-		-- Verify and Update Default Values
 		checkAndUpdateDefaults(Settings)
 
 		-- Open the file in Writter mod
@@ -245,6 +242,5 @@ function writeToLog(string, message)
 		file:write(os.date("[%Y-%m-%d %H:%M:%S] ") .. string .. message .. "\n")
 		file:close()
 	else
-		--LuaCraftErrorLogging("Failed to open log file. Error: " .. err)
 	end
 end

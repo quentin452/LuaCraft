@@ -15,11 +15,12 @@ function NewChunk(x, z)
 
 	-- store a list of voxels to be updated on next modelUpdate
 	chunk.changes = {}
+	chunk.updatedSunLight = false
+	chunk.isPopulated = false
 
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
 	end
-
 	GenerateTerrain(chunk, x, z, StandardTerrain)
 
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
@@ -39,23 +40,27 @@ function NewChunk(x, z)
 		for i = 1, ChunkSize do
 			for j = 1, ChunkSize do
 				local gx, gz = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
-				local this = self.heightMap[i][j]
 
-				if i == 1 or this > self.heightMap[i - 1][j] + 1 then
-					NewSunlightDownAddition(gx - 1, this, gz, 15)
-				end
-				if j == 1 or this > self.heightMap[i][j - 1] then
-					NewSunlightDownAddition(gx, this, gz - 1, 15)
-				end
-				if i == ChunkSize or this > self.heightMap[i + 1][j] then
-					NewSunlightDownAddition(gx + 1, this, gz, 15)
-				end
-				if j == ChunkSize or this > self.heightMap[i][j + 1] then
-					NewSunlightDownAddition(gx, this, gz + 1, 15)
+				if self.heightMap[i] and self.heightMap[i][j] then
+					local this = self.heightMap[i][j]
+
+					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
+						NewSunlightDownAddition(gx - 1, this, gz, 15)
+					end
+
+					if j == 1 or this > self.heightMap[i][j - 1] then
+						NewSunlightDownAddition(gx, this, gz - 1, 15)
+					end
+					if i == ChunkSize or this > self.heightMap[i + 1][j] then
+						NewSunlightDownAddition(gx + 1, this, gz, 15)
+					end
+					if j == ChunkSize or this > self.heightMap[i][j + 1] then
+						NewSunlightDownAddition(gx, this, gz + 1, 15)
+					end
 				end
 			end
 		end
-		LightingUpdate()
+		--LightingUpdate()
 	end
 
 	chunk.processRequests = function(self)
@@ -65,42 +70,39 @@ function NewChunk(x, z)
 				self:setVoxel(block.x, block.y, block.z, block.value, 15)
 			end
 		end
-		LightingUpdate()
+		--LightingUpdate()
 	end
 
 	-- populate chunk with trees and flowers
 	chunk.populate = function(self)
 		for i = 1, ChunkSize do
-			for j = 1, ChunkSize do
-				local height = self.heightMap[i][j]
-				local xx = (self.x - 1) * ChunkSize + i
-				local zz = (self.z - 1) * ChunkSize + j
+			if self.heightMap[i] then
+				for j = 1, ChunkSize do
+					if self.heightMap[i][j] then
+						local height = self.heightMap[i][j]
+						local xx = (self.x - 1) * ChunkSize + i
+						local zz = (self.z - 1) * ChunkSize + j
 
-				if TileCollisions(self:getVoxel(i, height, j)) then
-					if love.math.random() < love.math.noise(xx / 64, zz / 64) * 0.02 then
-						-- put a tree here
-						GenerateTree(self, i, height, j)
-						self:setVoxelRaw(i, height, j, __DIRT_Block, 15)
-					elseif love.math.noise(xx / 32, zz / 32) > 0.9 and love.math.random() < 0.2 then
-						-- put a random flower here
-						local flowerID = love.math.random(__YELLO_FLOWER_Block, __ROSE_FLOWER_Block)
-						self:setVoxelRaw(i, height + 1, j, flowerID, 15)
-						-- LuaCraftPrintLoggingNormal("Height:", height, "xx:", xx, "zz:", zz)
+						if TileCollisions(self:getVoxel(i, height, j)) then
+							if love.math.random() < love.math.noise(xx / 64, zz / 64) * 0.02 then
+								GenerateTree(self, i, height, j)
+								self:setVoxelRaw(i, height, j, __DIRT_Block, 15)
+							elseif love.math.noise(xx / 32, zz / 32) > 0.9 and love.math.random() < 0.2 then
+								local flowerID = love.math.random(__YELLO_FLOWER_Block, __ROSE_FLOWER_Block)
+								self:setVoxelRaw(i, height + 1, j, flowerID, 15)
+							end
+						end
 					end
 				end
 			end
 		end
 	end
 
-	chunk.initialize = function(self)
-		for i = 1, WorldHeight / SliceHeight do
-			self.slices[i] = NewChunkSlice(self.x, self.y + (i - 1) * SliceHeight + 1, self.z, self)
-		end
-		self.changes = {}
-	end
-
 	-- get voxel id of the voxel in this chunk's coordinate space
 	chunk.getVoxel = function(self, x, y, z)
+		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then
+			return 0, 0, 0
+		end
 		x, y, z = math.floor(x), math.floor(y), math.floor(z)
 
 		-- Calculate string indices once
@@ -140,6 +142,9 @@ function NewChunk(x, z)
 	end
 
 	chunk.setVoxelRaw = function(self, x, y, z, blockvalue, light)
+		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then
+			return 0, 0, 0
+		end
 		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
 			local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
@@ -147,7 +152,6 @@ function NewChunk(x, z)
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
 	end
-
 	-- set voxel id of the voxel in this chunk's coordinate space
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		if manuallyPlaced == nil then
@@ -155,12 +159,9 @@ function NewChunk(x, z)
 		end
 		x, y, z = math.floor(x), math.floor(y), math.floor(z)
 
-		-- Précalculez les coordonnées globales
 		local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 
-		-- Vérifiez si les coordonnées sont dans la plage
 		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
-			-- Stockez les valeurs pour éviter les appels de fonction répétés
 			local sunget = self:getVoxel(x, y + 1, z)
 			local sunlight = self:getVoxelFirstData(x, y + 1, z)
 
@@ -249,11 +250,13 @@ function NewChunk(x, z)
 					end
 				end
 			end
+			if blockvalue ~= -1 then
+				self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
 
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
-
-			self.changes[#self.changes + 1] = { x, y, z }
+				self.changes[#self.changes + 1] = { x, y, z }
+			end
 		end
+		--	LightingUpdate()
 	end
 
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)
@@ -291,99 +294,96 @@ function NewChunk(x, z)
 		end
 	end
 
-	-- update this chunk's model slices based on what changes it has stored
-	chunk.updateModel = function(self)
-		local sliceUpdates = {}
-
+	local function initSliceUpdates()
+		sliceUpdates = {}
 		for i = 1, WorldHeight / SliceHeight do
 			sliceUpdates[i] = { false, false, false, false, false }
 		end
+		return sliceUpdates
+	end
 
-		-- find which slices need to be updated
+	local function findUpdatedSlices(self, sliceUpdates)
+		local INDEX, NEG_X, POS_X, NEG_Z, POS_Z = 1, 2, 3, 4, 5
+
 		for i = 1, #self.changes do
-			local index = math.floor((self.changes[i][2] - 1) / SliceHeight) + 1
-			if sliceUpdates[index] ~= nil then
-				sliceUpdates[index][1] = true
+			local height = self.changes[i][2]
+			local index = math.floor((height - 1) / SliceHeight) + 1
 
-				if math.floor(self.changes[i][2] / SliceHeight) + 1 > index and sliceUpdates[index + 1] ~= nil then
-					sliceUpdates[math.min(index + 1, #sliceUpdates)][1] = true
+			if sliceUpdates[index] then
+				sliceUpdates[index][INDEX] = true
+
+				local floorHeight = math.floor(height / SliceHeight) + 1
+				local ceilHeight = math.floor((height - 2) / SliceHeight) + 1
+
+				if floorHeight > index and sliceUpdates[index + 1] then
+					sliceUpdates[math.min(index + 1, #sliceUpdates)][INDEX] = true
 				end
-				if
-					math.floor((self.changes[i][2] - 2) / SliceHeight) + 1 < index
-					and sliceUpdates[index - 1] ~= nil
-				then
-					sliceUpdates[math.max(index - 1, 1)][1] = true
+				if ceilHeight < index and sliceUpdates[index - 1] then
+					sliceUpdates[math.max(index - 1, 1)][INDEX] = true
 				end
 
-				--LuaCraftPrintLoggingNormal(self.changes[i][1], self.changes[i][2], self.changes[i][3])
-				-- neg x
-				if self.changes[i][1] == 1 then
-					sliceUpdates[index][2] = true
-					--LuaCraftPrintLoggingNormal("neg x")
+				local xChange = self.changes[i][1]
+				local zChange = self.changes[i][3]
+
+				if xChange == 1 then
+					sliceUpdates[index][NEG_X] = true
+				elseif xChange == ChunkSize then
+					sliceUpdates[index][POS_X] = true
 				end
-				-- pos x
-				if self.changes[i][1] == ChunkSize then
-					sliceUpdates[index][3] = true
-					--LuaCraftPrintLoggingNormal("pos x")
-				end
-				-- neg z
-				if self.changes[i][3] == 1 then
-					sliceUpdates[index][4] = true
-					--LuaCraftPrintLoggingNormal("neg z")
-				end
-				-- pos z
-				if self.changes[i][3] == ChunkSize then
-					sliceUpdates[index][5] = true
-					--LuaCraftPrintLoggingNormal("pos z")
+
+				if zChange == 1 then
+					sliceUpdates[index][NEG_Z] = true
+				elseif zChange == ChunkSize then
+					sliceUpdates[index][POS_Z] = true
 				end
 			end
 		end
+	end
 
-		-- update slices that were flagged in previous step
+	function updateFlaggedSlices(self, sliceUpdates)
 		for i = 1, WorldHeight / SliceHeight do
 			if sliceUpdates[i][1] then
-				self.slices[i]:updateModel()
-
-				if sliceUpdates[i][2] then
-					local chunk = GetChunkRaw(self.x - 1, self.z)
-					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
-					end
-				end
-				if sliceUpdates[i][3] then
-					local chunk = GetChunkRaw(self.x + 1, self.z)
-					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
-					end
-				end
-				if sliceUpdates[i][4] or sliceUpdates[i][5] then
-					local chunk = GetChunkRaw(self.x, self.z - 1)
-					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
-					end
-				end
-				if sliceUpdates[i][4] or sliceUpdates[i][5] then
-					local chunk = GetChunkRaw(self.x, self.z + 1)
-					if chunk ~= nil then
-						chunk.slices[i]:updateModel()
-					end
+				if self.slices[i] then
+					self.slices[i]:updateModel()
 				end
 			end
 		end
+	end
+
+	chunk.updateModel = function(self)
+		local sliceUpdates = initSliceUpdates()
+		findUpdatedSlices(self, sliceUpdates)
+		updateFlaggedSlices(self, sliceUpdates)
 
 		self.changes = {}
 	end
-
 	return chunk
 end
 
+function updateAllChunksModel()
+	for _, chunk in ipairs(renderChunks) do
+		chunk:updateModel()
+	end
+end
 function CanDrawFace(get, thisTransparency)
 	local tget = TileTransparency(get)
 
-	-- tget > 0 means can only draw faces from outside in (bc transparency of 0 is air)
-	-- must be different transparency to draw, except for tree leaves which have transparency of 1
-	return (tget ~= thisTransparency or tget == 1) and tget > 0
+	-- Transparency of 0 is air, so can't draw any face
+	if tget == 0 then
+		return false
+	end
+
+	-- For tree leaves, transparency of 1 allows drawing all faces
+	if tget == 1 then
+		return true
+	end
+
+	-- Draw faces if the transparencies are different
+	return tget ~= thisTransparency
 end
+
+local transparency3 = 3
+local reusableModel = {}
 
 function NewChunkSlice(x, y, z, parent)
 	local t = NewThing(x, y, z)
@@ -392,195 +392,39 @@ function NewChunkSlice(x, y, z, parent)
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
 	compmodel.culling = false
 	t:assignModel(compmodel)
-
+	t.enableBlockAndTilesModels = false
 	t.updateModel = function(self)
-		local model = {}
+		if not self or not self.parent or not self.model then
+			return
+		end
 
-		-- iterate through the voxels in this chunkslice's domain
-		-- if air block, see if any solid neighbors
-		-- then place faces down accordingly with proper texture and lighting value
+		reusableModel = {}
+
 		for i = 1, ChunkSize do
 			for j = self.y, self.y + SliceHeight - 1 do
 				for k = 1, ChunkSize do
 					local this, thisSunlight, thisLocalLight = self.parent:getVoxel(i, j, k)
-					-- local thisSunlight = thisData%16
-					-- local thisLocalLight = math.floor(thisData/16)
 					local thisLight = math.max(thisSunlight, thisLocalLight)
 					local thisTransparency = TileTransparency(this)
 					local scale = 1
 					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * scale, (self.z - 1) * ChunkSize + k - 1
 
-					if thisTransparency < 3 then
-						-- if not checking for tget == 0, then it will render the "faces" of airblocks
-						-- on transparent block edges
-
-						-- simple plant model (flowers, mushrooms)
-						if TileModel(this) == 1 then
-							local otx, oty = NumberToCoord(TileTextures(this)[1], 16, 16)
-							otx = otx + 16 * thisLight
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							local diagLong = 0.7071 * scale * 0.5 + 0.5
-							local diagShort = -0.7071 * scale * 0.5 + 0.5
-
-							local vertices = {}
-
-							for _, v in ipairs({
-								{ diagShort, 0, diagShort, tx2, ty2 },
-								{ diagLong, 0, diagLong, tx, ty2 },
-								{ diagShort, scale, diagShort, tx2, ty },
-								{ diagLong, 0, diagLong, tx, ty2 },
-								{ diagLong, scale, diagLong, tx, ty },
-								{ diagShort, scale, diagShort, tx2, ty },
-							}) do
-								table.insert(vertices, { x + v[1], y + v[2], z + v[3], v[4], v[5] })
-							end
-
-							for _, v in ipairs(vertices) do
-								model[#model + 1] = v
-							end
-
-							--	for _, v in ipairs(vertices) do
-							--		model[#model + 1] = { x + scale - v[1], y + v[2], z + scale - v[3], v[4], v[5] }
-							--	end
-						end
-
-						-- top
-						local get = self.parent:getVoxel(i, j - 1, k)
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[math.min(2, #TileTextures(get))], 16, 16)
-							otx = otx + 16 * thisLight
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y, z, tx, ty }
-							model[#model + 1] = { x + scale, y, z, tx2, ty }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-							model[#model + 1] = { x + scale, y, z, tx2, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-						end
-
-						-- bottom
-						local get = self.parent:getVoxel(i, j + 1, k)
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[math.min(3, #TileTextures(get))], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 3, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y + scale, z, tx, ty }
-							model[#model + 1] = { x, y + scale, z + scale, tx, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y + scale, z + scale, tx, ty2 }
-						end
-
-						-- positive x
-						local get = self.parent:getVoxel(i - 1, j, k)
-						if i == 1 then
-							local chunkGet = GetChunk(x - 1, y, z)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(ChunkSize, j, k)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 2, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y, z, tx2, ty2 }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-							model[#model + 1] = { x, y + scale, z + scale, tx, ty }
-							model[#model + 1] = { x, y + scale, z, tx2, ty }
-							model[#model + 1] = { x, y, z + scale, tx, ty2 }
-						end
-
-						-- negative x
-						local get = self.parent:getVoxel(i + 1, j, k)
-						if i == ChunkSize then
-							local chunkGet = GetChunk(x + 1, y, z)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(1, j, k)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 2, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x + scale, y, z, tx, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-						end
-
-						-- positive z
-						local get = self.parent:getVoxel(i, j, k - 1)
-						if k == 1 then
-							local chunkGet = GetChunk(x, y, z - 1)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(i, j, ChunkSize)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 1, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y, z, tx, ty2 }
-							model[#model + 1] = { x, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y, z, tx2, ty2 }
-							model[#model + 1] = { x, y + scale, z, tx, ty }
-							model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-							model[#model + 1] = { x + scale, y, z, tx2, ty2 }
-						end
-
-						-- negative z
-						local get = self.parent:getVoxel(i, j, k + 1)
-						if k == ChunkSize then
-							local chunkGet = GetChunk(x, y, z + 1)
-							if chunkGet ~= nil then
-								get = chunkGet:getVoxel(i, j, 1)
-							end
-						end
-						if CanDrawFace(get, thisTransparency) then
-							local otx, oty = NumberToCoord(TileTextures(get)[1], 16, 16)
-							otx = otx + 16 * math.max(thisLight - 1, 0)
-							local otx2, oty2 = otx + 1, oty + 1
-							local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-							local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-							model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-							model[#model + 1] = { x, y, z + scale, tx2, ty2 }
-							model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
-							model[#model + 1] = { x + scale, y + scale, z + scale, tx, ty }
-							model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-							model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
-						end
+					if thisTransparency < transparency3 then
+						TileRendering(self, i, j, k, x, y, z, thisLight, reusableModel, scale)
+						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, reusableModel, scale)
 					end
 				end
 			end
 		end
 
-		self.model:setVerts(model)
+		if self.model then
+			self.model:setVerts(reusableModel)
+		end
 	end
 
-	t:updateModel()
+	t.destroyModel = function(self)
+		self.model.dead = true
+	end
 
 	return t
 end

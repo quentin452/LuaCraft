@@ -27,12 +27,13 @@ function drawPlayingMenuSettings()
 
 	-- Choices
 	local marque = ""
-    local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
+	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 	local file_content, error_message = customReadFile(configFilePath)
 
 	if file_content then
 		local Settings = {}
-		local orderedKeys = { "vsync", "LuaCraftPrintLoggingNormal", "LuaCraftWarnLogging","LuaCraftErrorLogging", "renderdistance" }
+		local orderedKeys =
+			{ "vsync", "LuaCraftPrintLoggingNormal", "LuaCraftWarnLogging", "LuaCraftErrorLogging", "renderdistance" }
 
 		for _, key in ipairs(orderedKeys) do
 			local value = file_content:match(key .. "=(%w+)")
@@ -65,7 +66,8 @@ function drawPlayingMenuSettings()
 			end
 
 			if n == 5 and type(Settings["renderdistance"]) == "number" then
-				choiceText = choiceText .. " TODO" .. Settings["renderdistance"]
+				local numberOfSpaces = 1
+				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["renderdistance"]
 			end
 			drawColorString(marque .. "" .. choiceText, _PlayingGameSettings.x, posY)
 

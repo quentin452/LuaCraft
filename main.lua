@@ -35,6 +35,9 @@ require("src/world/gen/caves")
 require("src/init/!init")
 --client
 require("src/client/!draw")
+require("src/client/blocks/blockrendering")
+require("src/client/blocks/tilerendering")
+
 --libs
 PROF_CAPTURE = false
 _JPROFILER = require("libs/jprofiler/jprof")
@@ -73,9 +76,6 @@ hudTimeLeft = 0
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
-	if enablePROFIProfiler then
-		ProFi:start()
-	end
 	lovefilesystem.setIdentity("LuaCraft")
 	InitializeGame()
 	_JPROFILER.pop("Mainload")
@@ -98,7 +98,7 @@ function love.update(dt)
 	UpdateGame(dt)
 	if hudTimeLeft > 0 then
 		hudTimeLeft = hudTimeLeft - dt
-		if hudTimeLeft <= 0 then
+		if hudTimeLeft <= 0 or gamestate ~= gamestatePlayingGame then
 			hudMessage = ""
 		end
 	end
@@ -107,6 +107,9 @@ function love.update(dt)
 end
 
 function love.draw()
+	if enablePROFIProfiler then
+		ProFi:start()
+	end
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	DrawGame()
