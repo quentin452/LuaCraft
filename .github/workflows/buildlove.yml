@@ -2,9 +2,9 @@ name: Build love file
 
 on:
   push:
-    branches: [ "remake" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "remake" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
