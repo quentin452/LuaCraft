@@ -96,38 +96,40 @@ function NewPlayer(x, y, z)
 		local moving = false
 
 		-- take player input
-		if love.keyboard.isDown("z") then
-			mx = mx + 0
-			my = my - 1
+		if fixinputforDrawCommandInput == false then
+			if love.keyboard.isDown("z") then
+				mx = mx + 0
+				my = my - 1
 
-			moving = true
-		end
-		if love.keyboard.isDown("q") then
-			mx = mx - 1
-			my = my + 0
+				moving = true
+			end
+			if love.keyboard.isDown("q") then
+				mx = mx - 1
+				my = my + 0
 
-			moving = true
-		end
-		if love.keyboard.isDown("s") then
-			mx = mx + 0
-			my = my + 1
+				moving = true
+			end
+			if love.keyboard.isDown("s") then
+				mx = mx + 0
+				my = my + 1
 
-			moving = true
-		end
-		if love.keyboard.isDown("d") then
-			mx = mx + 1
-			my = my + 0
+				moving = true
+			end
+			if love.keyboard.isDown("d") then
+				mx = mx + 1
+				my = my + 0
 
-			moving = true
-		end
+				moving = true
+			end
 
-		-- jump if on ground
-		if
-			love.keyboard.isDown("space")
-			and self.onGround
-			and not TileCollisions(GetVoxel(self.x, self.y + self.height + 1, self.z))
-		then
-			self.ySpeed = self.ySpeed + 0.15
+			-- jump if on ground
+			if
+				love.keyboard.isDown("space")
+				and self.onGround
+				and not TileCollisions(GetVoxel(self.x, self.y + self.height + 1, self.z))
+			then
+				self.ySpeed = self.ySpeed + 0.15
+			end
 		end
 
 		-- hit head ceilings
@@ -281,7 +283,7 @@ function ChooseSpawnLocation()
 
 	-- Change the player's position to the calculated position
 	ThePlayer.x = playerX
-	ThePlayer.y = playerY + 1
+	ThePlayer.y = playerY + 1.1
 	ThePlayer.z = playerZ
 end
 

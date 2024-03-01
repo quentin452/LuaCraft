@@ -61,15 +61,31 @@ function KeyPressed(k)
 	end
 	if gamestate == gamestatePlayingGame then
 		if k == "escape" then
-			gamestate = gamestateGamePausing
+			if enableCommandHUD then
+				fixinputforDrawCommandInput = false
+				enableCommandHUD = false
+			else
+				gamestate = gamestateGamePausing
+			end
 		elseif k == "f3" then
 			enableF3 = not enableF3
 		elseif k == "f8" then
 			enableF8 = not enableF8
 		elseif k == "f1" then
 			enableTESTBLOCK = not enableTESTBLOCK
+		elseif k == "w" then
+			if enableCommandHUD == false then
+				CurrentCommand = ""
+				enableCommandHUD = true
+			end
+		elseif k == "backspace" and enableCommandHUD then
+			CurrentCommand = string.sub(CurrentCommand, 1, -2)
+		elseif k == "return" and enableCommandHUD then
+			ExecuteCommand(CurrentCommand)
+			CurrentCommand = ""
 		end
 	end
+
 	if gamestate == gamestateGamePausing then
 		_JPROFILER.push("keysinitGamePlayingPauseMenu")
 		keysinitGamePlayingPauseMenu(k)

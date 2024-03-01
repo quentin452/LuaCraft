@@ -354,6 +354,50 @@ function DrawHotBar()
 	)
 end
 
+function cleanString(str)
+	-- Cette fonction supprime les caractères non valides en UTF-8 de la chaîne donnée
+	local cleaned = ""
+	for i = 1, #str do
+		local c = str:sub(i, i)
+		if c:match("[%w%p%s]") then
+			cleaned = cleaned .. c
+		end
+	end
+	return cleaned
+end
+
+function DrawCommandInput()
+	if enableCommandHUD == true then
+		if fixinputforDrawCommandInput == false then
+			CurrentCommand = ""
+			fixinputforDrawCommandInput = true
+		end
+
+		-- Dessiner le fond gris transparent
+		love.graphics.setColor(0.5, 0.5, 0.5, 0.5) -- Gris semi-transparent
+		love.graphics.rectangle("fill", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
+
+		-- Dessiner la zone de saisie des commandes (rectangle, texte, etc.)
+		love.graphics.setColor(1, 1, 1)
+		love.graphics.rectangle("line", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
+
+		-- Dessiner le texte de la commande actuelle
+		local cleanedCommand = cleanString(CurrentCommand)
+
+		-- Limiter le texte à la largeur du rectangle
+		local maxTextWidth = 600 -- La largeur du rectangle
+		while love.graphics.getFont():getWidth(cleanedCommand) > maxTextWidth do
+			cleanedCommand = cleanedCommand:sub(2) -- Supprimer le premier caractère
+		end
+
+		love.graphics.print(cleanedCommand, InterfaceWidth / 2 - 300, InterfaceHeight - 75)
+
+		-- Dessiner le curseur
+		local cursorX = InterfaceWidth / 2 - 300 + love.graphics.getFont():getWidth(cleanedCommand)
+		love.graphics.line(cursorX, InterfaceHeight - 80, cursorX, InterfaceHeight - 50)
+	end
+end
+
 function FixHudHotbarandTileScaling()
 	local scaleCoefficient = 0.7
 

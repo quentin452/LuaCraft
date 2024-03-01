@@ -21,6 +21,7 @@ require("src/utils/mouseandkeybindlogic")
 require("src/utils/usefull")
 require("src/utils/filesystem")
 require("src/utils/settingshandling")
+require("src/utils/commands/commandsexec")
 enablePROFIProfiler = false
 ProFi = require("src/utils/ProFi")
 --entities
@@ -64,6 +65,8 @@ gamestate = gamestateMainMenu
 enableF3 = false
 enableF8 = false
 enableTESTBLOCK = false
+enableCommandHUD = false
+fixinputforDrawCommandInput = false
 modelalreadycreated = 0
 ChunkBorderAlreadyCreated = 0
 
@@ -78,6 +81,14 @@ function love.load()
 	_JPROFILER.pop("Mainload")
 	_JPROFILER.pop("frame")
 end
+CurrentCommand = ""
+
+function love.textinput(text)
+	if gamestate == gamestatePlayingGame and enableCommandHUD == true then
+		CurrentCommand = CurrentCommand .. text
+	end
+end
+
 function love.resize(w, h)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainresize")
@@ -100,6 +111,7 @@ function love.resize(w, h)
 	_JPROFILER.pop("Mainresize")
 	_JPROFILER.pop("frame")
 end
+
 function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
@@ -161,7 +173,6 @@ end
 function love.mousepressed(x, y, b)
 	MouseLogicOnPlay(x, y, b)
 end
-
 function love.keypressed(k)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainKeypressed")

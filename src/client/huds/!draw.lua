@@ -33,7 +33,7 @@ function DrawGame()
 			for i = 1, 9 do
 				DrawHudTile(PlayerInventory.items[i], InterfaceWidth / 2 - 182 + 40 * (i - 1), InterfaceHeight - 22 * 2)
 			end
-			
+			DrawCommandInput()
 		end, false)
 
 		love.graphics.setColor(1, 1, 1)

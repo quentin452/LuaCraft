@@ -17,18 +17,24 @@ end
 --local gx, gy, gz = (self.x - 1) * ChunkSize + i, height, (self.z - 1) * ChunkSize + j
 --local chunkX, chunkZ = math.floor(gx / ChunkSize), math.floor(gz / ChunkSize)
 --if isChunkLoaded(chunkX, chunkZ) then
---
 --end
+
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
 	if gamestate == gamestatePlayingGame then
-		local RenderDistance = getRenderDistanceValue()
+		renderdistancevalue()
 		PlayerInitIfNeeded()
 		UpdateAndGenerateChunks(RenderDistance)
 		UpdateModelsIfNeeded(RenderDistance)
 		UpdateLogic(dt)
 	end
 	_JPROFILER.pop("UpdateGameDT")
+end
+
+function renderdistancevalue()
+	_JPROFILER.push("renderdistancevalue")
+	RenderDistance = getRenderDistanceValue()
+	_JPROFILER.pop("renderdistancevalue")
 end
 
 function PlayerInitIfNeeded()

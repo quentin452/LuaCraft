@@ -26,7 +26,6 @@ end
 
 function GenerateWorld()
 	_JPROFILER.push("GenerateWorld")
-
 	initScene()
 	initGlobalRandomNumbers()
 	if enablePROFIProfiler then
