@@ -168,7 +168,7 @@ function NewChunk(x, z)
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		--_JPROFILER.push("frame")
 
-		_JPROFILER.push("setVoxel")
+		--_JPROFILER.push("setVoxel")
 
 		if manuallyPlaced == nil then
 			manuallyPlaced = false
@@ -318,7 +318,7 @@ function NewChunk(x, z)
 		end
 
 		--LightingUpdate()
-		_JPROFILER.pop("setVoxel")
+		--_JPROFILER.pop("setVoxel")
 		--_JPROFILER.pop("frame")
 	end
 

@@ -23,87 +23,163 @@ function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
 	if gamestate == gamestatePlayingGame then
 		local RenderDistance = getRenderDistanceValue()
-		if ThePlayer == nil then
-			PlayerInit()
-		end
-		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
-
-		-- Generate and update chunks within render distance
-		renderChunks = {}
-
-		local playerChunkX = math.ceil(playerX / ChunkSize)
-		local playerChunkZ = math.ceil(playerZ / ChunkSize)
-
-		for distance = 0, RenderDistance / ChunkSize do
-			for i = -distance, distance do
-				for j = -distance, distance do
-					local chunkX = playerChunkX + i
-					local chunkZ = playerChunkZ + j
-
-					local chunk = ChunkHashTable[ChunkHash(chunkX)]
-						and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
-
-					if not chunk then
-						chunk = NewChunk(chunkX, chunkZ)
-						ChunkSet[chunk] = true
-						ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
-						ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
-						--LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
-					elseif distance < RenderDistance / ChunkSize then
-						processChunkUpdates(chunk)
-					else
-						local chunkDistanceX = math.abs(chunk.x - playerChunkX)
-						local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
-						local chunkDistance = math.sqrt(chunkDistanceX ^ 2 + chunkDistanceZ ^ 2)
-						if chunkDistance > RenderDistance / ChunkSize then
-							local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
-							coordCache[key] = nil
-
-							for i = 1, #chunk.slices do
-								local chunkSlice = chunk.slices[i]
-								chunkSlice:destroy()
-								chunkSlice:destroyModel()
-								chunkSlice.enableBlockAndTilesModels = false
-								chunk.slices[i] = nil
-							end
-						end
-					end
-				end
-			end
-		end
-
-		if RenderDistance ~= previousRenderDistance then
-			updateAllChunksModel()
-		end
-
-		LogicAccumulator = LogicAccumulator + dt
-		previousRenderDistance = RenderDistance
-		updateThingList(dt)
+		PlayerInitIfNeeded()
+		UpdateAndGenerateChunks(RenderDistance)
+		UpdateModelsIfNeeded(RenderDistance)
+		UpdateLogic(dt)
 	end
 	_JPROFILER.pop("UpdateGameDT")
 end
 
+function PlayerInitIfNeeded()
+	_JPROFILER.push("PlayerInitIfNeeded")
+	if ThePlayer == nil then
+		PlayerInit()
+	end
+	_JPROFILER.pop("PlayerInitIfNeeded")
+end
+
+function UpdateAndGenerateChunks(RenderDistance)
+	_JPROFILER.push("UpdateAndGenerateChunks")
+	renderChunks = {}
+
+	local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
+	local playerChunkX = math.ceil(playerX / ChunkSize)
+	local playerChunkZ = math.ceil(playerZ / ChunkSize)
+
+	UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
+	_JPROFILER.pop("UpdateAndGenerateChunks")
+end
+
+function UpdateModelsIfNeeded(RenderDistance)
+	_JPROFILER.push("UpdateModelsIfNeeded")
+	if RenderDistance ~= previousRenderDistance then
+		updateAllChunksModel()
+	end
+	_JPROFILER.pop("UpdateModelsIfNeeded")
+end
+
+function UpdateLogic(dt)
+	_JPROFILER.push("UpdateLogic")
+	LogicAccumulator = LogicAccumulator + dt
+	updateThingList(dt)
+	_JPROFILER.pop("UpdateLogic")
+end
+
+function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
+	_JPROFILER.push("UpdateChunksWithinRenderDistance")
+	for distance = 0, RenderDistance / ChunkSize do
+		for i = -distance, distance do
+			for j = -distance, distance do
+				local chunkX = playerChunkX + i
+				local chunkZ = playerChunkZ + j
+
+				local chunk = GetOrCreateChunk(chunkX, chunkZ)
+
+				if distance < RenderDistance / ChunkSize then
+					processChunkUpdates(chunk)
+				else
+					removeChunksOutsideRenderDistance(chunk, chunkX, chunkZ, playerChunkX, playerChunkZ, RenderDistance)
+				end
+			end
+		end
+	end
+	_JPROFILER.pop("UpdateChunksWithinRenderDistance")
+end
+
+function GetOrCreateChunk(chunkX, chunkZ)
+	_JPROFILER.push("GetOrCreateChunk")
+	local chunk = ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
+	if not chunk then
+		chunk = NewChunk(chunkX, chunkZ)
+		ChunkSet[chunk] = true
+		ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
+		ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
+		-- LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
+	end
+	_JPROFILER.pop("GetOrCreateChunk")
+	return chunk
+end
+
+function removeChunksOutsideRenderDistance(chunk, chunkX, chunkZ, playerChunkX, playerChunkZ, RenderDistance)
+	_JPROFILER.push("removeChunksOutsideRenderDistance")
+	local chunkDistanceX = math.abs(chunk.x - playerChunkX)
+	local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
+	local chunkDistance = math.sqrt(chunkDistanceX ^ 2 + chunkDistanceZ ^ 2)
+	if chunkDistance > RenderDistance / ChunkSize then
+		local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
+		coordCache[key] = nil
+
+		for i = 1, #chunk.slices do
+			local chunkSlice = chunk.slices[i]
+			chunkSlice:destroy()
+			chunkSlice:destroyModel()
+			chunkSlice.enableBlockAndTilesModels = false
+			chunk.slices[i] = nil
+		end
+	end
+	_JPROFILER.pop("removeChunksOutsideRenderDistance")
+end
+
 function processChunkUpdates(chunk)
 	_JPROFILER.push("processChunkUpdates")
-
 	if chunk.updatedSunLight == false then
-		chunk:sunlight()
+		updateSunlight(chunk)
 		chunk.updatedSunLight = true
 	elseif chunk.isPopulated == false then
-		UpdateCaves()
-		chunk:populate()
-		chunk:processRequests()
+		populateChunk(chunk)
 		chunk.isPopulated = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then
-		ChooseSpawnLocation()
+		spawnPlayer()
 		ThePlayer.IsPlayerHasSpawned = true
 	elseif chunk.updatemodel == false then
-		chunk:updateModel()
+		updateChunkModel(chunk)
 		chunk.updatemodel = true
+	else
+		addChunkToRenderQueue(chunk)
+		forceModelUpdatesForChunks(chunk)
+		processRenderChunks()
 	end
+	LightingUpdate()
+	_JPROFILER.pop("processChunkUpdates")
+end
+
+function updateSunlight(chunk)
+	_JPROFILER.push("updateSunlight")
+	chunk:sunlight()
+	_JPROFILER.pop("updateSunlight")
+end
+
+function populateChunk(chunk)
+	_JPROFILER.push("populateChunk")
+	UpdateCaves()
+	chunk:populate()
+	chunk:processRequests()
+	_JPROFILER.pop("populateChunk")
+end
+
+function spawnPlayer()
+	_JPROFILER.push("spawnPlayer")
+	ChooseSpawnLocation()
+	_JPROFILER.pop("spawnPlayer")
+end
+
+function updateChunkModel(chunk)
+	_JPROFILER.push("updateChunkModel")
+	chunk:updateModel()
+	_JPROFILER.pop("updateChunkModel")
+end
+
+function addChunkToRenderQueue(chunk)
+	_JPROFILER.push("addChunkToRenderQueue")
 	if not isInTable(renderChunks, chunk) then
 		table.insert(renderChunks, chunk)
 	end
+	_JPROFILER.pop("addChunkToRenderQueue")
+end
+
+function forceModelUpdatesForChunks(chunk)
+	_JPROFILER.push("forceModelUpdatesForChunks")
 	updateCounter = updateCounter + 1
 	--this is to force model updates for chunks : need to be optimized
 	if updateCounter > 1500 then
@@ -114,7 +190,11 @@ function processChunkUpdates(chunk)
 			updateCounter = 0
 		end
 	end
+	_JPROFILER.pop("forceModelUpdatesForChunks")
+end
 
+function processRenderChunks()
+	_JPROFILER.push("processRenderChunks")
 	for _, chunk in ipairs(renderChunks) do
 		for _ = 1, WorldHeight / SliceHeight do
 			if not chunk.slices[_] then
@@ -129,9 +209,9 @@ function processChunkUpdates(chunk)
 			chunk:updateModel()
 		end
 	end
-	LightingUpdate()
-	_JPROFILER.pop("processChunkUpdates")
+	_JPROFILER.pop("processRenderChunks")
 end
+
 function isInTable(tbl, value)
 	for _, v in ipairs(tbl) do
 		if v == value then
