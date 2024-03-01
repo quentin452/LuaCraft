@@ -151,3 +151,11 @@ function TileModel(n)
 
 	return 0
 end
+function Tile2D(n)
+	--draw in DrawHudTile 2D Tiles
+	if n == __YELLO_FLOWER_Block or n == __ROSE_FLOWER_Block or n == __OAK_SAPPLING_Block then
+		return true
+	end
+
+	return false
+end

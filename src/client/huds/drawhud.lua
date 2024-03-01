@@ -271,7 +271,6 @@ function DrawChunkBorders3D()
 end
 
 function DrawHudTile(tile, hudX, hudY)
-	-- Preload TileTextures
 	local textures = TileTextures(tile)
 
 	if tile == 0 or not textures then
@@ -280,45 +279,48 @@ function DrawHudTile(tile, hudX, hudY)
 
 	local x, y = hudX + 16 + 6, hudY + 16 + 6
 	local size = 16
-	local xsize = math.sin(3.14159 / 3) * 16
-	local ysize = math.cos(3.14159 / 3) * 16
+	local angle = 3.14159 / 3
+	local xsize = math.sin(angle) * size
+	local ysize = math.cos(angle) * size
 
 	local centerPoint = { x, y }
 
-	-- textures are in format: SIDE UP DOWN FRONT
-	-- top
-	Perspective.quad(
-		TileCanvas[textures[math.min(#textures, 2)] + 1],
-		{ x, y - size },
-		{ x + xsize, y - ysize },
-		centerPoint,
-		{ x - xsize, y - ysize }
-	)
+	if Tile2D(tile) then
+		DrawTileQuad(
+			textures[1] + 1,
+			{ { x - size, y - size }, { x + size, y - size }, { x + size, y + size }, { x - size, y + size } }
+		)
+	else
+		-- Draw top
+		DrawTileQuad(
+			textures[math.min(#textures, 2)] + 1,
+			{ { x, y - size }, { x + xsize, y - ysize }, centerPoint, { x - xsize, y - ysize } }
+		)
 
-	-- right side front
-	local shade1 = 0.8 ^ 3
-	love.graphics.setColor(shade1, shade1, shade1)
-	local index = (#textures == 4) and 4 or 1
-	Perspective.quad(
-		TileCanvas[textures[index] + 1],
-		centerPoint,
-		{ x + xsize, y - ysize },
-		{ x + xsize, y + ysize },
-		{ x, y + size }
-	)
+		-- Draw right side front
+		local shade1 = 0.8 ^ 3
+		love.graphics.setColor(shade1, shade1, shade1)
+		local index = (#textures == 4) and 4 or 1
+		DrawTileQuad(
+			textures[index] + 1,
+			{ centerPoint, { x + xsize, y - ysize }, { x + xsize, y + ysize }, { x, y + size } }
+		)
 
-	-- left side side
-	local shade2 = 0.8 ^ 2
-	love.graphics.setColor(shade2, shade2, shade2)
-	Perspective.flip = true
-	Perspective.quad(
-		TileCanvas[textures[1] + 1],
-		centerPoint,
-		{ x - xsize, y - ysize },
-		{ x - xsize, y + ysize },
-		{ x, y + size }
-	)
-	Perspective.flip = false
+		-- Draw left side side
+		local shade2 = 0.8 ^ 2
+		love.graphics.setColor(shade2, shade2, shade2)
+		Perspective.flip = true
+		DrawTileQuad(
+			textures[1] + 1,
+			{ centerPoint, { x - xsize, y - ysize }, { x - xsize, y + ysize }, { x, y + size } }
+		)
+		Perspective.flip = false
+	end
+end
+
+function DrawTileQuad(textureIndex, points)
+	local canvas = TileCanvas[textureIndex]
+	Perspective.quad(canvas, unpack(points))
 end
 
 function DrawCrossHair()
