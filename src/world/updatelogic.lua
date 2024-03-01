@@ -1,6 +1,5 @@
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
 --TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel() and many other
---TODO FIX CANNOT PROFILE THIS WITH JPROF : causing crash during closing the game
 
 ChunkSet = {}
 ChunkHashTable = {}
@@ -21,7 +20,7 @@ end
 --
 --end
 function UpdateGame(dt)
-	--_JPROFILER.push("frame")
+	_JPROFILER.push("UpdateGameDT")
 	if gamestate == gamestatePlayingGame then
 		local RenderDistance = getRenderDistanceValue()
 		if ThePlayer == nil then
@@ -80,12 +79,12 @@ function UpdateGame(dt)
 		LogicAccumulator = LogicAccumulator + dt
 		previousRenderDistance = RenderDistance
 		updateThingList(dt)
-		--_JPROFILER.pop("UpdateGameDT")
 	end
+	_JPROFILER.pop("UpdateGameDT")
 end
 
 function processChunkUpdates(chunk)
-	--_JPROFILER.push("processChunkUpdates")
+	_JPROFILER.push("processChunkUpdates")
 
 	if chunk.updatedSunLight == false then
 		chunk:sunlight()
@@ -131,7 +130,7 @@ function processChunkUpdates(chunk)
 		end
 	end
 	LightingUpdate()
-	--_JPROFILER.pop("processChunkUpdates")
+	_JPROFILER.pop("processChunkUpdates")
 end
 function isInTable(tbl, value)
 	for _, v in ipairs(tbl) do
@@ -143,7 +142,7 @@ function isInTable(tbl, value)
 end
 
 function updateThingList(dt)
-	--_JPROFILER.push("updateThingList")
+	_JPROFILER.push("updateThingList")
 
 	local i = 1
 
@@ -173,5 +172,5 @@ function updateThingList(dt)
 	else
 		PhysicsStep = false
 	end
-	--_JPROFILER.pop("updateThingList")
+	_JPROFILER.pop("updateThingList")
 end
