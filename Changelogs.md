@@ -31,3 +31,78 @@ OTHER CHANGES:
 REMOVED FEATURES:
 
     None
+
+**LuaCraft V0.2**
+  
+This version is compatible with LOVE2D 11.5, [11.5experiment1](https://github.com/quentin452/love-experiments/releases/tag/11.5experiment1), and probably newer versions. We recommend using 11.5experiment1 for better performance.
+
+NEW FEATURES/IMPROVEMENTS:
+
+    [add Primary Creation World menu + dedup love.graphics.newFont](https://github.com/quentin452/LuaCraft/commit/1390633138c894a6d876f2b504d21631721a718b)
+    https://github.com/quentin452/LuaCraft/issues/15
+    https://github.com/quentin452/LuaCraft/issues/8
+    for github : add github workflows : thx to Omay238
+    [micro optimizations on love.graphics usage](https://github.com/quentin452/LuaCraft/commit/437ee090d742949b3bd223ab3f2a9b14b48518f2)
+    [optimize usefull.lua functions](https://github.com/quentin452/LuaCraft/commit/75fce067037c53a4dc7dc37903e0a0b85fc0a1c0)
+    Improve GameState handling
+    Improve Tiles/Blocks handling
+    Improve Generation
+    Improve Chunk procedural gen/render distance
+    Big code reorganizations
+    Add DrawChunkBordersDEBUG + DrawTestBlock
+    Optimize Tree generation
+    add fullscreen support
+    Add mods support(chunk.populate)
+    Prevent some blocks like flower to be placed on an another flower
+    Prevent diagonals block placements(manuallyplaced)
+    Made Player Spawn location better
+    Prevent Voxels/blocks placements on Player Model to prevent suffocation
+    Add some huds
+    Draw in 2D in HOTBAR Flowers/Sapplings tiles
+    Improve Tile Rendering for flowers/sapplings by example
+    Optimize luacraftconfig.txt file reading performance
+    Add /tp command
+    and some other....
+
+NEW LIBRARIES ADDED:
+
+    New Voxel engine base
+
+    lovecraft : https://github.com/groverburger/lovecraft
+
+    cpml : https://github.com/quentin452/cpml
+
+LIBRARIES REMOVED : 
+
+    g3d : https://github.com/quentin452/g3d
+
+    g3d_voxel : https://github.com/groverburger/g3d_voxel/tree/master/lib
+
+NEW FIXES:
+
+    https://github.com/quentin452/LuaCraft/issues/26
+    https://github.com/quentin452/LuaCraft/issues/25
+    https://github.com/quentin452/LuaCraft/issues/24
+    https://github.com/quentin452/LuaCraft/issues/20
+    https://github.com/quentin452/LuaCraft/issues/19
+    https://github.com/quentin452/LuaCraft/issues/18
+    https://github.com/quentin452/LuaCraft/issues/10
+    https://github.com/quentin452/LuaCraft/issues/12
+    Fix Vsync issues + some config issues
+    Fix some filesystem issues
+    Fix some logic issues
+    Fix nil crashes in mouselogic.lua
+    Fix logging bugs
+    Fix collision issues with player jumping
+    Fix can't profile some code points with JPROFILER
+    and some other....
+
+OTHER CHANGES:
+
+    [Fix Typo + add Changelogs.md](https://github.com/quentin452/LuaCraft/commit/b31dd1fd9d96989910b6845fdc64199cf11bc6f9)
+    Add some todos
+    [Drastically improve performance for font](https://github.com/quentin452/LuaCraft/commit/b76bfb9fb640722ea7c6cda2d45385b61eb70fda)
+
+REMOVED FEATURES:
+
+    Structure generation because not compatible for now 
