@@ -1,5 +1,4 @@
 --TODO put lightning into another thread
---TODO FIX CANNOT PROFILE THIS WITH JPROF : causing crash during loading te viewer
 local LightingQueue = {}
 local LightingRemovalQueue = {}
 
@@ -30,7 +29,7 @@ end
 function LightingUpdate()
 	--_JPROFILER.push("frame")
 
-	--_JPROFILER.push("LightingUpdate")
+	_JPROFILER.push("LightingUpdate")
 
 	-- Process removals and additions
 	for _, lthing in ipairs(LightingRemovalQueue) do
@@ -44,12 +43,12 @@ function LightingUpdate()
 	-- Clear both queues
 	LightingRemovalQueue = {}
 	LightingQueue = {}
-	--_JPROFILER.pop("LightingUpdate")
+	_JPROFILER.pop("LightingUpdate")
 	--_JPROFILER.pop("frame")
 end
 
 function NewSunlightAddition(x, y, z, value)
-	--_JPROFILER.push("NewSunlightAddition")
+	_JPROFILER.push("NewSunlightAddition")
 
 	local t = {}
 	t.x = x
@@ -77,7 +76,7 @@ function NewSunlightAddition(x, y, z, value)
 	end
 
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewSunlightAddition")
+	_JPROFILER.pop("NewSunlightAddition")
 end
 
 function NewSunlightAdditionCreation(x, y, z)

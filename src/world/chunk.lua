@@ -1,5 +1,3 @@
---TODO FIX CANNOT PROFILE SOME SECTIONS WITH JPROF : causing crash during loading te viewer
-
 function ReplaceChar(str, pos, r)
 	return str:sub(1, pos - 1) .. r .. str:sub(pos + #r)
 end
@@ -170,7 +168,7 @@ function NewChunk(x, z)
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		--_JPROFILER.push("frame")
 
-		--_JPROFILER.push("setVoxel")
+		_JPROFILER.push("setVoxel")
 
 		if manuallyPlaced == nil then
 			manuallyPlaced = false
@@ -318,10 +316,10 @@ function NewChunk(x, z)
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
 		end
-		--_JPROFILER.pop("setVoxel")
-		--_JPROFILER.pop("frame")
 
-		--	LightingUpdate()
+		--LightingUpdate()
+		_JPROFILER.pop("setVoxel")
+		--_JPROFILER.pop("frame")
 	end
 
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)

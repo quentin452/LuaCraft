@@ -1,4 +1,7 @@
 function MouseLogicOnPlay(x, y, b)
+	_JPROFILER.push("frame")
+	_JPROFILER.push("MouseLogicOnPlay")
+
 	-- Forward mousepress events to all things in ThingList
 	if ThingList == nil then
 		return
@@ -28,6 +31,8 @@ function MouseLogicOnPlay(x, y, b)
 		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
 		hudTimeLeft = 3
 	end
+	_JPROFILER.pop("MouseLogicOnPlay")
+	_JPROFILER.pop("frame")
 end
 
 function KeyPressed(k)
