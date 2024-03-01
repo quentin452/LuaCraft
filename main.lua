@@ -3,6 +3,7 @@ lovefilesystem = lovez.filesystem
 lovegraphics = lovez.graphics
 lovewindow = lovez.window
 userDirectory = lovez.filesystem.getUserDirectory()
+luacraftconfig = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 
 Engine = require("engine")
 --menus
@@ -67,6 +68,7 @@ modelalreadycreated = 0
 ChunkBorderAlreadyCreated = 0
 
 hudTimeLeft = 0
+
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")

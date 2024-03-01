@@ -82,7 +82,7 @@ function checkAndUpdateDefaults(Settings)
 		Settings["LuaCraftErrorLogging"] = true
 	end
 	if Settings["renderdistance"] == nil then
-		Settings["renderdistance"] = 5
+		Settings["renderdistance"] = 2
 	end
 	if Settings["fullscreen"] == nil then
 		Settings["fullscreen"] = false
@@ -188,21 +188,17 @@ function loadAndSaveLuaCraftFileSystem()
 end
 
 function getLuaCraftPrintLoggingNormalValue()
-	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
-	local file_content, error_message = customReadFile(configFilePath)
+	local file_content, error_message = customReadFile(luacraftconfig)
 	return file_content and file_content:match("LuaCraftPrintLoggingNormal=(%d)")
 end
 
 function getLuaCraftPrintLoggingWarnValue()
-	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
-	local file_content, error_message = customReadFile(configFilePath)
+	local file_content, error_message = customReadFile(luacraftconfig)
 	return file_content and file_content:match("LuaCraftWarnLogging=(%d)")
 end
 
 function getLuaCraftPrintLoggingErrorValue()
-	local configFilePath = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
-
-	local file_content, error_message = customReadFile(configFilePath)
+	local file_content, error_message = customReadFile(luacraftconfig)
 	return file_content and file_content:match("LuaCraftErrorLogging=(%d)")
 end
 
