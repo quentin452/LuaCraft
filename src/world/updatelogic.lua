@@ -103,7 +103,7 @@ function processChunkUpdates(chunk)
 			if chunk.slices[i] then
 				chunk.slices[i]:updateModel()
 			end
-			--LightingUpdate()
+			LightingUpdate()
 			updateCounter = 0
 		end
 	end
