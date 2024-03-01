@@ -59,10 +59,6 @@ function UpdateGame(dt)
 								chunk.slices[i] = nil
 							end
 						end
-						if ThePlayer.IsPlayerHasSpawned == false then
-							ChooseSpawnLocation()
-							ThePlayer.IsPlayerHasSpawned = true
-						end
 					end
 				end
 			end
@@ -90,23 +86,25 @@ function processChunkUpdates(chunk)
 		chunk:populate()
 		chunk:processRequests()
 		chunk:updateModel()
-		LightingUpdate()
 		chunk.isPopulated = true
+	elseif ThePlayer.IsPlayerHasSpawned == false then
+		ChooseSpawnLocation()
+		ThePlayer.IsPlayerHasSpawned = true
 	end
 	if not isInTable(renderChunks, chunk) then
 		table.insert(renderChunks, chunk)
 	end
 	updateCounter = updateCounter + 1
 	--this is to force model updates for chunks : need to be optimized
-	if updateCounter > 3500 then
+	if updateCounter > 1500 then
 		for i = 1, WorldHeight / SliceHeight do
-			if chunk.slices[i] then
+			if chunk.slices[i] and not chunk.slices[i].isUpdating then
 				chunk.slices[i]:updateModel()
 			end
-			LightingUpdate()
 			updateCounter = 0
 		end
 	end
+
 	for _, chunk in ipairs(renderChunks) do
 		for _ = 1, WorldHeight / SliceHeight do
 			if not chunk.slices[_] then
@@ -121,18 +119,15 @@ function processChunkUpdates(chunk)
 			chunk:updateModel()
 		end
 	end
+	LightingUpdate()
 	--_JPROFILER.pop("processChunkUpdates")
 end
 function isInTable(tbl, value)
-	--_JPROFILER.push("isInTable")
-
 	for _, v in ipairs(tbl) do
 		if v == value then
 			return true
 		end
 	end
-	----_JPROFILER.pop("isInTable")
-
 	return false
 end
 

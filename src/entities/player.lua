@@ -260,13 +260,11 @@ function NewVoxelCursor(x, y, z)
 end
 
 function PlayerInit()
-	ChooseSpawnLocation()
+	ThePlayer = CreateThing(NewPlayer(0, 0, 0))
 	initPlayerInventory()
+	ChooseSpawnLocation()
 end
-
 function ChooseSpawnLocation()
-	_JPROFILER.push("initEntityList")
-
 	-- Generate a random position for the player
 	local playerX = math.random() * 120
 	local playerZ = math.random() * 120
@@ -277,13 +275,10 @@ function ChooseSpawnLocation()
 		playerY = playerY - 1
 	end
 
-	-- Spawn the player at the calculated position
-	ThePlayer = CreateThing(NewPlayer(playerX, playerY + 1, playerZ))
-
-	if enablePROFIProfiler then
-		ProFi:checkMemory(4, "4eme profil")
-	end
-	_JPROFILER.pop("initEntityList")
+	-- Change the player's position to the calculated position
+	ThePlayer.x = playerX
+	ThePlayer.y = playerY + 1
+	ThePlayer.z = playerZ
 end
 
 function initPlayerInventory()

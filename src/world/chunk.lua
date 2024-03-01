@@ -183,6 +183,16 @@ function NewChunk(x, z)
 		local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 
 		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+			--prevent block placements on the player
+			local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
+			if
+				gx == math.floor(playerX)
+				and gy >= math.floor(playerY)
+				and gy <= math.floor(playerY + 1)
+				and gz == math.floor(playerZ)
+			then
+				return
+			end
 			--prevent manually diagonal block placements
 			if manuallyPlaced == true and self:getVoxel(x, y - 1, z) == __AIR_Block then
 				local solidBlockNearby = false
@@ -476,10 +486,13 @@ function NewChunkSlice(x, y, z, parent)
 	compmodel.culling = false
 	t:assignModel(compmodel)
 	t.enableBlockAndTilesModels = false
+	t.isUpdating = false
 	t.updateModel = function(self)
 		if not self or not self.parent or not self.model then
 			return
 		end
+
+		self.isUpdating = true
 
 		reusableModel = {}
 
@@ -503,6 +516,7 @@ function NewChunkSlice(x, y, z, parent)
 		if self.model then
 			self.model:setVerts(reusableModel)
 		end
+		self.isUpdating = false
 	end
 
 	t.destroyModel = function(self)
