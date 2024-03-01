@@ -183,6 +183,25 @@ function NewChunk(x, z)
 		local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 
 		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+			--prevent manually diagonal block placements
+			if manuallyPlaced == true and self:getVoxel(x, y - 1, z) == __AIR_Block then
+				local solidBlockNearby = false
+				for dx = -1, 1 do
+					for dz = -1, 1 do
+						if self:getVoxel(x + dx, y, z + dz) ~= __AIR_Block then
+							solidBlockNearby = true
+							break
+						end
+					end
+					if solidBlockNearby then
+						break
+					end
+				end
+				if not solidBlockNearby then
+					return
+				end
+			end
+			--prevent placing a block on an another block(like flowers)
 			local blockBelow = self:getVoxel(x, y - 1, z)
 			if
 				(
