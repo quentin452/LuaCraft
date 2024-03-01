@@ -15,6 +15,7 @@ function NewPlayer(x, y, z)
 	t.width = 0.25
 	t.rotation = 0
 	t.pitch = 0
+	t.IsPlayerHasSpawned = false
 
 	t.update = function(self, dt)
 		if PhysicsStep then
@@ -256,4 +257,59 @@ function NewVoxelCursor(x, y, z)
 	t:assignModel(compmodel)
 
 	return t
+end
+
+function PlayerInit()
+	ChooseSpawnLocation()
+	initPlayerInventory()
+end
+
+function ChooseSpawnLocation()
+	_JPROFILER.push("initEntityList")
+
+	-- Generate a random position for the player
+	local playerX = math.random() * 120
+	local playerZ = math.random() * 120
+
+	-- Find the highest non-air voxel
+	local playerY = WorldHeight
+	while playerY > 0 and GetVoxel(playerX, playerY, playerZ) == 0 do
+		playerY = playerY - 1
+	end
+
+	-- Spawn the player at the calculated position
+	ThePlayer = CreateThing(NewPlayer(playerX, playerY + 1, playerZ))
+
+	if enablePROFIProfiler then
+		ProFi:checkMemory(4, "4eme profil")
+	end
+	_JPROFILER.pop("initEntityList")
+end
+
+function initPlayerInventory()
+	_JPROFILER.push("initPlayerInventory")
+
+	PlayerInventory = {
+		items = {},
+		hotbarSelect = 1,
+	}
+
+	local defaultItems = {
+		__STONE_Block,
+		__COBBLE_Block,
+		__STONE_BRICK_Block,
+		__YELLO_FLOWER_Block,
+		__OAK_SAPPLING_Block,
+		__OAK_LOG_BLock,
+		__OAK_LEAVE_BLock,
+		__GLASS_BLock,
+		__GLOWSTONE_BLock,
+	}
+	for i = 1, 36 do
+		PlayerInventory.items[i] = defaultItems[i] or 0
+	end
+	if enablePROFIProfiler then
+		ProFi:checkMemory(5, "5eme profil")
+	end
+	_JPROFILER.pop("initPlayerInventory")
 end

@@ -24,62 +24,11 @@ function initGlobalRandomNumbers()
 	_JPROFILER.pop("initGlobalRandomNumbers")
 end
 
-function initEntities()
-	_JPROFILER.push("initEntities")
-
-	initEntityList()
-	initPlayerInventory()
-	if enablePROFIProfiler then
-		ProFi:checkMemory(3, "Troisième profil")
-	end
-	_JPROFILER.pop("initEntities")
-end
-
-function initEntityList()
-	_JPROFILER.push("initEntityList")
-
-	ThingList = {}
-	ThePlayer = CreateThing(NewPlayer(0, 128, 0))
-	if enablePROFIProfiler then
-		ProFi:checkMemory(4, "4eme profil")
-	end
-	_JPROFILER.pop("initEntityList")
-end
-
-function initPlayerInventory()
-	_JPROFILER.push("initPlayerInventory")
-
-	PlayerInventory = {
-		items = {},
-		hotbarSelect = 1,
-	}
-
-	local defaultItems = {
-		__STONE_Block,
-		__COBBLE_Block,
-		__STONE_BRICK_Block,
-		__YELLO_FLOWER_Block,
-		__OAK_SAPPLING_Block,
-		__OAK_LOG_BLock,
-		__OAK_LEAVE_BLock,
-		__GLASS_BLock,
-		__GLOWSTONE_BLock,
-	}
-	for i = 1, 36 do
-		PlayerInventory.items[i] = defaultItems[i] or 0
-	end
-	if enablePROFIProfiler then
-		ProFi:checkMemory(5, "5eme profil")
-	end
-	_JPROFILER.pop("initPlayerInventory")
-end
-
 function GenerateWorld()
 	_JPROFILER.push("GenerateWorld")
 
 	initScene()
 	initGlobalRandomNumbers()
-	initEntities()
 	if enablePROFIProfiler then
 		ProFi:checkMemory(9, "9eme profil")
 	end

@@ -8,13 +8,16 @@ CaveList = {}
 ChunkRequests = {}
 LightingQueue = {}
 LightingRemovalQueue = {}
+ThingList = {}
 local previousRenderDistance = nil
 local updateCounter = 0
 function UpdateGame(dt)
 	--_JPROFILER.push("frame")
 	if gamestate == gamestatePlayingGame then
 		local RenderDistance = getRenderDistanceValue()
-
+		if ThePlayer == nil then
+			PlayerInit()
+		end
 		local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
 
 		-- Generate and update chunks within render distance
@@ -55,6 +58,10 @@ function UpdateGame(dt)
 								chunkSlice.enableBlockAndTilesModels = false
 								chunk.slices[i] = nil
 							end
+						end
+						if ThePlayer.IsPlayerHasSpawned == false then
+							ChooseSpawnLocation()
+							ThePlayer.IsPlayerHasSpawned = true
 						end
 					end
 				end
