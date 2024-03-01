@@ -6,6 +6,8 @@ require("src/init/windowsettingsinit")
 require("src/init/worldinit")
 require("src/init/structureinit")
 
+--modloader
+require("src/modloader/modloaderinit")
 function initWorldGenerationVariables()
 	ChunkSize = 16
 	SliceHeight = 8
@@ -17,6 +19,7 @@ end
 function InitializeGame()
 	SettingsHandlingInit()
 	loadAndSaveLuaCraftFileSystem()
+	LoadMods()
 	if
 		EnableLuaCraftLoggingError == nil
 		or EnableLuaCraftLoggingWarn == nil
@@ -26,7 +29,6 @@ function InitializeGame()
 		love.event.quit()
 	end
 	saveLogsToOldLogsFolder()
-	ModLoaderInitALL()
 	InitializeWindowSettings()
 	StructureGenFinal()
 	LogicAccumulator = 0

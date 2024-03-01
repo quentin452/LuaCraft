@@ -66,12 +66,6 @@ enableTESTBLOCK = false
 modelalreadycreated = 0
 ChunkBorderAlreadyCreated = 0
 
---modloader
-require("src/modloader/structuremodloader")
-require("src/modloader/modloaderinit")
-require("src/modloader/functiontags")
-
-LoadMods()
 hudTimeLeft = 0
 function love.load()
 	_JPROFILER.push("frame")

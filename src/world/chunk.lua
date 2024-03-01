@@ -101,12 +101,8 @@ function NewChunk(x, z)
 						local zz = (self.z - 1) * ChunkSize + j
 
 						if TileCollisions(self:getVoxel(i, height, j)) then
-							if love.math.random() < love.math.noise(xx / 64, zz / 64) * 0.02 then
-								GenerateTree(self, i, height, j)
-								self:setVoxelRaw(i, height, j, __DIRT_Block, 15)
-							elseif love.math.noise(xx / 32, zz / 32) > 0.9 and love.math.random() < 0.2 then
-								local flowerID = love.math.random(__YELLO_FLOWER_Block, __ROSE_FLOWER_Block)
-								self:setVoxelRaw(i, height + 1, j, flowerID, 15)
+							for _, func in ipairs(populateChunkModLoader["chunkPopulateTag"]) do
+								func(self, i, height, j)
 							end
 						end
 					end
