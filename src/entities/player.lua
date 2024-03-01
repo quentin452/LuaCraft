@@ -122,7 +122,11 @@ function NewPlayer(x, y, z)
 		end
 
 		-- jump if on ground
-		if love.keyboard.isDown("space") and self.onGround then
+		if
+			love.keyboard.isDown("space")
+			and self.onGround
+			and not TileCollisions(GetVoxel(self.x, self.y + self.height + 1, self.z))
+		then
 			self.ySpeed = self.ySpeed + 0.15
 		end
 
