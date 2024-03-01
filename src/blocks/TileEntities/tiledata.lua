@@ -28,7 +28,7 @@ __Light_Source0 = 0
 __Light_Source11 = 1
 __Light_Source12 = 2
 __Light_Source13 = 3
-__Light_Source14 =4
+__Light_Source14 = 4
 __Light_Source15 = 5
 __Light_Source16 = 6
 __Light_Source17 = 7
@@ -73,13 +73,13 @@ local transparencyLookup = {
 local transparencyCache = {}
 
 function TileTransparency(n)
-    if transparencyCache[n] then
-        return transparencyCache[n]
-    else
-        local transparency = transparencyLookup[n] or 3
-        transparencyCache[n] = transparency
-        return transparency
-    end
+	if transparencyCache[n] then
+		return transparencyCache[n]
+	else
+		local transparency = transparencyLookup[n] or 3
+		transparencyCache[n] = transparency
+		return transparency
+	end
 end
 
 function TileLightSource(n)
@@ -142,7 +142,6 @@ function TileTextures(n)
 
 	return tileTexturesCache[n]
 end
-
 
 function TileModel(n)
 	-- flowers and mushrooms have different models
