@@ -17,7 +17,7 @@ function MouseLogicOnPlay(x, y, b)
 	local pos = ThePlayer and ThePlayer.cursorpos
 	local value = 0
 
-	if b == 2 then
+	if b == 2 and fixinputforDrawCommandInput == false then
 		pos = ThePlayer and ThePlayer.cursorposPrev
 		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or 0
 	end
@@ -41,7 +41,7 @@ function KeyPressed(k)
 	end
 	-- simplified hotbar number press code, thanks nico-abram!
 	local numberPress = tonumber(k)
-	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 then
+	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and fixinputforDrawCommandInput == false then
 		PlayerInventory.hotbarSelect = numberPress
 	end
 	if gamestate == gamestateMainMenu then
