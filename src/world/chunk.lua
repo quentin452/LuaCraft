@@ -21,6 +21,7 @@ function NewChunk(x, z)
 	chunk.changes = {}
 	chunk.updatedSunLight = false
 	chunk.isPopulated = false
+	chunk.updatemodel = false
 
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
@@ -97,9 +98,6 @@ function NewChunk(x, z)
 				for j = 1, ChunkSize do
 					if self.heightMap[i][j] then
 						local height = self.heightMap[i][j]
-						local xx = (self.x - 1) * ChunkSize + i
-						local zz = (self.z - 1) * ChunkSize + j
-
 						if TileCollisions(self:getVoxel(i, height, j)) then
 							for _, func in ipairs(populateChunkModLoader["chunkPopulateTag"]) do
 								func(self, i, height, j)
@@ -111,7 +109,6 @@ function NewChunk(x, z)
 		end
 		--_JPROFILER.pop("populate")
 	end
-
 	-- get voxel id of the voxel in this chunk's coordinate space
 	chunk.getVoxel = function(self, x, y, z)
 		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then

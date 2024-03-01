@@ -11,6 +11,16 @@ LightingRemovalQueue = {}
 ThingList = {}
 local previousRenderDistance = nil
 local updateCounter = 0
+function isChunkLoaded(chunkX, chunkZ)
+	return ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
+end
+--how to call isChunkLoaded
+--local gx, gy, gz = (self.x - 1) * ChunkSize + i, height, (self.z - 1) * ChunkSize + j
+--local chunkX, chunkZ = math.floor(gx / ChunkSize), math.floor(gz / ChunkSize)
+--if isChunkLoaded(chunkX, chunkZ) then
+--	
+--end
+
 function UpdateGame(dt)
 	--_JPROFILER.push("frame")
 	if gamestate == gamestatePlayingGame then
@@ -85,11 +95,13 @@ function processChunkUpdates(chunk)
 		UpdateCaves()
 		chunk:populate()
 		chunk:processRequests()
-		chunk:updateModel()
 		chunk.isPopulated = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then
 		ChooseSpawnLocation()
 		ThePlayer.IsPlayerHasSpawned = true
+	elseif chunk.updatemodel == false then
+		chunk:updateModel()
+		chunk.updatemodel = true
 	end
 	if not isInTable(renderChunks, chunk) then
 		table.insert(renderChunks, chunk)
