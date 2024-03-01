@@ -20,8 +20,8 @@ function UpdateGame(dt)
 		-- Generate and update chunks within render distance
 		renderChunks = {}
 
-		local playerChunkX = math.floor(playerX / ChunkSize)
-		local playerChunkZ = math.floor(playerZ / ChunkSize)
+		local playerChunkX = math.ceil(playerX / ChunkSize)
+		local playerChunkZ = math.ceil(playerZ / ChunkSize)
 
 		for distance = 0, RenderDistance / ChunkSize do
 			for i = -distance, distance do
@@ -45,7 +45,6 @@ function UpdateGame(dt)
 						local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
 						local chunkDistance = math.sqrt(chunkDistanceX ^ 2 + chunkDistanceZ ^ 2)
 						if chunkDistance > RenderDistance / ChunkSize then
-							-- Supprimer le cache pour ce chunk
 							local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
 							coordCache[key] = nil
 
@@ -97,7 +96,7 @@ function processChunkUpdates(chunk)
 			if chunk.slices[i] then
 				chunk.slices[i]:updateModel()
 			end
-			LightingUpdate()
+			--LightingUpdate()
 			updateCounter = 0
 		end
 	end
