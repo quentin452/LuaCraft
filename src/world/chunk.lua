@@ -183,13 +183,19 @@ function NewChunk(x, z)
 		local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 
 		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
-			if blockvalue == __YELLO_FLOWER_Block and self:getVoxel(x, y - 1, z) == __YELLO_FLOWER_Block then
-				return
-			end
-			if blockvalue == __ROSE_FLOWER_Block and self:getVoxel(x, y - 1, z) == __ROSE_FLOWER_Block then
-				return
-			end
-			if blockvalue == __OAK_SAPPLING_Block and self:getVoxel(x, y - 1, z) == __OAK_SAPPLING_Block then
+			local blockBelow = self:getVoxel(x, y - 1, z)
+			if
+				(
+					blockvalue == __YELLO_FLOWER_Block
+					or blockvalue == __ROSE_FLOWER_Block
+					or blockvalue == __OAK_SAPPLING_Block
+				)
+				and (
+					blockBelow == __YELLO_FLOWER_Block
+					or blockBelow == __ROSE_FLOWER_Block
+					or blockBelow == __OAK_SAPPLING_Block
+				)
+			then
 				return
 			end
 			local sunget = self:getVoxel(x, y + 1, z)
