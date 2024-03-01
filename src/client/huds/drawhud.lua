@@ -227,11 +227,10 @@ function DrawChunkBorders3D()
 
 			if modelIndex then
 				table.remove(scene.modelList, modelIndex)
-
 			end
 		end
 
-		chunkBordersModels = {} 
+		chunkBordersModels = {}
 
 		ChunkBorderAlreadyCreated = 0
 	elseif enableF8 and ChunkBorderAlreadyCreated == 0 then
@@ -271,7 +270,7 @@ function DrawChunkBorders3D()
 	end
 end
 
-function DrawHudTile(tile, x, y)
+function DrawHudTile(tile, hudX, hudY)
 	-- Preload TileTextures
 	local textures = TileTextures(tile)
 
@@ -279,7 +278,7 @@ function DrawHudTile(tile, x, y)
 		return
 	end
 
-	local x, y = x + 16 + 6, y + 16 + 6
+	local x, y = hudX + 16 + 6, hudY + 16 + 6
 	local size = 16
 	local xsize = math.sin(3.14159 / 3) * 16
 	local ysize = math.cos(3.14159 / 3) * 16
@@ -351,4 +350,11 @@ function DrawHotBar()
 		2,
 		2
 	)
+end
+
+function FixHudHotbarandTileScaling()
+	local scaleCoefficient = 0.7
+
+	InterfaceWidth = love.graphics.getWidth() * scaleCoefficient
+	InterfaceHeight = love.graphics.getHeight() * scaleCoefficient
 end

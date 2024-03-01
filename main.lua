@@ -16,7 +16,7 @@ require("src/blocks/TileEntities/tiledata")
 --utils
 require("src/utils/things")
 require("src/utils/math")
-require("src/utils/mouselogic")
+require("src/utils/mouseandkeybindlogic")
 require("src/utils/usefull")
 require("src/utils/filesystem")
 require("src/utils/settingshandling")
@@ -34,7 +34,7 @@ require("src/world/gen/caves")
 --init
 require("src/init/!init")
 --client
-require("src/client/!draw")
+require("src/client/huds/!draw")
 require("src/client/blocks/blockrendering")
 require("src/client/blocks/tilerendering")
 
@@ -72,20 +72,32 @@ function love.load()
 	_JPROFILER.push("Mainload")
 	lovefilesystem.setIdentity("LuaCraft")
 	InitializeGame()
+	FixHudHotbarandTileScaling()
 	_JPROFILER.pop("Mainload")
 	_JPROFILER.pop("frame")
 end
-
 function love.resize(w, h)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainresize")
+
 	local scaleX = w / GraphicsWidth
 	local scaleY = h / GraphicsHeight
 	love.graphics.scale(scaleX, scaleY)
+	local newCanvas = love.graphics.newCanvas(w, h)
+
+	love.graphics.setCanvas(newCanvas)
+	love.graphics.draw(Scene.twoCanvas)
+	love.graphics.setCanvas()
+
+	Scene.twoCanvas = newCanvas
+
+	local scaleCoefficient = 0.7
+
+	InterfaceWidth = w * scaleCoefficient
+	InterfaceHeight = h * scaleCoefficient
 	_JPROFILER.pop("Mainresize")
 	_JPROFILER.pop("frame")
 end
-
 function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
