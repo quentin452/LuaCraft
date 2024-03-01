@@ -2,37 +2,45 @@ lovez = love
 lovefilesystem = lovez.filesystem
 lovegraphics = lovez.graphics
 lovewindow = lovez.window
-lovegraphics.setDefaultFilter("nearest")
-io.stdout:setvbuf("no")
+userDirectory = lovez.filesystem.getUserDirectory()
+luacraftconfig = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 
---libs
-g3d = require("libs/g3d")
-lume = require("libs/lume")
-Object = require("libs/classic")
-scene = require("libs/scene")
+Engine = require("engine")
 --menus
 require("src/menus/mainmenu")
 require("src/menus/mainmenusettings")
 require("src/menus/gameplayingpausemenu")
 require("src/menus/playinggamesettings")
 require("src/menus/worldcreationmenu")
---client
-require("src/client/hud/gamehud")
+--blocks
+require("src/blocks/TileEntities/tiledata")
 --utils
+require("src/utils/things")
+require("src/utils/math")
+require("src/utils/mouseandkeybindlogic")
 require("src/utils/usefull")
-require("src/utils/settingshandling")
 require("src/utils/filesystem")
+require("src/utils/settingshandling")
+require("src/utils/commands/commandsexec")
+enablePROFIProfiler = false
+ProFi = require("src/utils/ProFi")
+--entities
+require("src/entities/player")
 --world
-require("src/world/chunk/chunk")
-require("src/world/scene/gamescenecore")
-require("src/world/noise/perlinnoise")
---modloader
-require("src/modloader/structuremodloader")
-require("src/modloader/modloaderinit")
-require("src/modloader/functiontags")
+Perspective = require("src/world/perspective")
+require("src/world/lighting")
+require("src/world/chunk")
+require("src/world/updatelogic")
+require("src/world/gen/generator")
+require("src/world/gen/caves")
+--init
+require("src/init/!init")
+--client
+require("src/client/huds/!draw")
+require("src/client/blocks/blockrendering")
+require("src/client/blocks/tilerendering")
 
---profiling
-ProFi = require("ProFi")
+--libs
 PROF_CAPTURE = false
 _JPROFILER = require("libs/jprofiler/jprof")
 --profs instruction
@@ -41,49 +49,77 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --3 : exiting game
 --4 : open a CMD on Jprofiler (SRC)
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
---init
-require("src/init/structureinit")
 
-LoadMods()
+gamestateMainMenuSettings = "MainMenuSettings"
+gamestateMainMenu = "MainMenu"
 
-gamestate = "MainMenu"
-gameSceneInstance = nil
+gamestatePlayingGame = "PlayingGame"
+gamestatePlayingGameSettings = "PlayingGameSettings"
 
-enableProfiler = false
+gamestateGamePausing = "GamePausing"
 
---Backgrounds
-mainMenuBackground = nil
-mainMenuSettingsBackground = nil
-gameplayingpausemenu = nil
-playinggamesettings = nil
-worldCreationBackground = nil
+gamestateWorldCreationMenu = "WorldCreationMenu"
+
+gamestate = gamestateMainMenu
+
+enableF3 = false
+enableF8 = false
+enableTESTBLOCK = false
+enableCommandHUD = false
+fixinputforDrawCommandInput = false
+modelalreadycreated = 0
+ChunkBorderAlreadyCreated = 0
+
+hudTimeLeft = 0
+
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
-	ModLoaderInitALL()
 	lovefilesystem.setIdentity("LuaCraft")
-	loadAndSaveLuaCraftFileSystem()
-	SettingsHandlingInit()
-	if enableProfiler then
-		ProFi:start()
-	end
-	mainMenuBackground = lovegraphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
-	mainMenuSettingsBackground = lovegraphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
-	gameplayingpausemenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
-	playinggamesettings = lovegraphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
-	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
-
+	InitializeGame()
+	FixHudHotbarandTileScaling()
 	_JPROFILER.pop("Mainload")
+	_JPROFILER.pop("frame")
+end
+CurrentCommand = ""
+
+function love.textinput(text)
+	if gamestate == gamestatePlayingGame and enableCommandHUD == true then
+		CurrentCommand = CurrentCommand .. text
+	end
+end
+
+function love.resize(w, h)
+	_JPROFILER.push("frame")
+	_JPROFILER.push("Mainresize")
+
+	local scaleX = w / GraphicsWidth
+	local scaleY = h / GraphicsHeight
+	love.graphics.scale(scaleX, scaleY)
+	local newCanvas = love.graphics.newCanvas(w, h)
+
+	love.graphics.setCanvas(newCanvas)
+	love.graphics.draw(Scene.twoCanvas)
+	love.graphics.setCanvas()
+
+	Scene.twoCanvas = newCanvas
+
+	local scaleCoefficient = 0.7
+
+	InterfaceWidth = w * scaleCoefficient
+	InterfaceHeight = h * scaleCoefficient
+	_JPROFILER.pop("Mainresize")
 	_JPROFILER.pop("frame")
 end
 
 function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
-
-	if gamestate == "PlayingGame" then
-		if gameSceneInstance and gameSceneInstance.update then
-			gameSceneInstance:update(dt)
+	UpdateGame(dt)
+	if hudTimeLeft > 0 then
+		hudTimeLeft = hudTimeLeft - dt
+		if hudTimeLeft <= 0 or gamestate ~= gamestatePlayingGame then
+			hudMessage = ""
 		end
 	end
 	_JPROFILER.pop("MainUpdate")
@@ -93,46 +129,27 @@ end
 function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
-	setFont()
-	if gamestate == "GamePausing" then
-		_JPROFILER.push("drawGamePlayingPauseMenu")
-		drawGamePlayingPauseMenu()
-		_JPROFILER.pop("drawGamePlayingPauseMenu")
-	end
-	if gamestate == "WorldCreationMenu" then
-		_JPROFILER.push("drawWorldCreationMenu")
-		drawWorldCreationMenu()
-		_JPROFILER.pop("drawWorldCreationMenu")
-	end
-	if gamestate == "PlayingGame" then
-		_JPROFILER.push("DrawGameScene")
-		if not gameSceneInstance then
-			gameSceneInstance = GameScene()
-			scene(gameSceneInstance)
-		end
-		if gameSceneInstance and gameSceneInstance.draw then
-			gameSceneInstance:draw()
-			drawF3MainGame()
-		end
-		_JPROFILER.pop("DrawGameScene")
+	if enablePROFIProfiler then
+		ProFi:start()
 	end
 
-	if gamestate == "MainMenuSettings" then
-		_JPROFILER.push("drawMainMenuSettings")
-		drawMainMenuSettings()
-		_JPROFILER.pop("drawMainMenuSettings")
-	end
+	DrawGame()
+	if hudMessage ~= nil then
+		local width, height = love.graphics.getDimensions()
+		local font = love.graphics.getFont()
 
-	if gamestate == "MainMenu" then
-		_JPROFILER.push("drawMainMenu")
-		drawMainMenu()
-		_JPROFILER.pop("drawMainMenu")
-	end
+		-- Calculate the width and height of the text
+		local textWidth = font:getWidth(hudMessage)
+		local textHeight = font:getHeight(hudMessage)
 
-	if gamestate == "PlayingGameSettings" then
-		_JPROFILER.push("drawPlayingMenuSettings")
-		drawPlayingMenuSettings()
-		_JPROFILER.pop("drawPlayingMenuSettings")
+		-- Calculate the position to center the text
+		local x = (width - textWidth) / 2
+		local y = (height - textHeight) / 2 + 280
+
+		love.graphics.print(hudMessage, x, y)
+	end
+	if enablePROFIProfiler then
+		ProFi:stop()
 	end
 	_JPROFILER.pop("MainDraw")
 	_JPROFILER.pop("frame")
@@ -141,65 +158,34 @@ end
 function love.mousemoved(x, y, dx, dy)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainmousemoved")
-	if gamestate == "PlayingGame" then
-		_JPROFILER.push("mousemovedDuringGamePlaying")
-		if gameSceneInstance and gameSceneInstance.mousemoved then
-			gameSceneInstance:mousemoved(x, y, dx, dy)
-		end
-		_JPROFILER.pop("mousemovedDuringGamePlaying")
+	-- forward mouselook to Scene object for first person camera control
+	if gamestate == gamestatePlayingGame then
+		Scene:mouseLook(x, y, dx, dy)
 	end
 	_JPROFILER.pop("Mainmousemoved")
 	_JPROFILER.pop("frame")
 end
 
+function love.wheelmoved(x, y)
+	if fixinputforDrawCommandInput == false then
+		PlayerInventory.hotbarSelect = math.floor(((PlayerInventory.hotbarSelect - y - 1) % 9 + 1) + 0.5)
+	end
+end
+
+function love.mousepressed(x, y, b)
+	MouseLogicOnPlay(x, y, b)
+end
 function love.keypressed(k)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainKeypressed")
-	if gamestate == "MainMenu" then
-		_JPROFILER.push("keysinitMainMenu")
-		keysinitMainMenu(k)
-		_JPROFILER.pop("keysinitMainMenu")
-	end
-	if gamestate == "MainMenuSettings" then
-		_JPROFILER.push("keysinitMainMenuSettings")
-		keysinitMainMenuSettings(k)
-		_JPROFILER.pop("keysinitMainMenuSettings")
-	end
-	if gamestate == "WorldCreationMenu" then
-		_JPROFILER.push("keysInitWorldCreationMenu")
-		keysInitWorldCreationMenu(k)
-		_JPROFILER.pop("keysInitWorldCreationMenu")
-	end
-	if gamestate == "PlayingGame" then
-		if k == "escape" then
-			gamestate = "GamePausing"
-		end
-	end
-	if gamestate == "GamePausing" then
-		_JPROFILER.push("keysinitGamePlayingPauseMenu")
-		keysinitGamePlayingPauseMenu(k)
-		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
-	end
-	if gamestate == "PlayingGameSettings" then
-		_JPROFILER.push("keysinitPlayingMenuSettings")
-		keysinitPlayingMenuSettings(k)
-		_JPROFILER.pop("keysinitPlayingMenuSettings")
-	end
+	KeyPressed(k)
 	_JPROFILER.pop("MainKeypressed")
 	_JPROFILER.pop("frame")
 end
 
-function love.resize(w, h)
-	_JPROFILER.push("frame")
-	_JPROFILER.push("Mainresize")
-	g3d.camera.aspectRatio = w / h
-	g3d.camera.updateProjectionMatrix()
-	_JPROFILER.pop("Mainresize")
-	_JPROFILER.pop("frame")
-end
-
 function love.quit()
-	ProFi:writeReport("report.txt")
-
+	if enablePROFIProfiler then
+		ProFi:writeReport("report.txt")
+	end
 	_JPROFILER.write("_JPROFILER.mpack")
 end

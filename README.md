@@ -3,15 +3,17 @@ Minecraft Like written in Lua using Love2D
 
 # libraries
 
-Penlight : https://github.com/lunarmodules/Penlight
+Penlight : https://github.com/lunarmodules/Penlight (not used currently)
 
-g3d : https://github.com/quentin452/g3d
-
-g3d_voxel : https://github.com/groverburger/g3d_voxel/tree/master/lib
+cpml : https://github.com/quentin452/cpml
 
 jprof : https://github.com/pfirsich/jprof
 
 ProFi : https://gist.github.com/perky/2838755
+
+# Voxel engine base
+
+lovecraft : https://github.com/groverburger/lovecraft
 
 # Recommanded love2d fork to use : 
 

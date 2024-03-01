@@ -1,3 +1,10 @@
+populateChunkModLoader = {}
+function addFunctionToTag(tag, func)
+	if not populateChunkModLoader[tag] then
+		populateChunkModLoader[tag] = {}
+	end
+	table.insert(populateChunkModLoader[tag], func)
+end
 function LoadMods()
 	-- ModsRequireIteration
 	-- Specify the path to the mods directory
@@ -9,82 +16,38 @@ function LoadMods()
 	-- Iterate over all items in the mods directory
 	local items = lovefilesystem.getDirectoryItems(modsDirectory)
 	for _, item in ipairs(items) do
-		local fullPath = modsDirectory .. item
+        local fullPath = modsDirectory .. item
 
-		-- Print debugging information
-		LuaCraftPrintLoggingNormal("Checking item:", fullPath)
+        if lovefilesystem.getInfo(fullPath, "directory") then
+            local modName = item
+            LuaCraftPrintLoggingNormal("Attempting to load mod:", modName)
 
-		-- Check if the item is a directory
-		if lovefilesystem.getInfo(fullPath, "directory") then
-			-- Assuming you want to load mods from subdirectories
-			local modName = item
-			LuaCraftPrintLoggingNormal("Attempting to load mod:", modName)
+            -- Get the start time
+            local startTime = os.clock()
 
-			-- Load the mod
-			local success, mod = pcall(require, "mods." .. modName .. "." .. modName)
+            -- Load the mod
+            local success, mod = pcall(require, "mods." .. modName .. "." .. modName)
 
-			-- Check if the mod loaded successfully
-			if success then
-				LuaCraftPrintLoggingNormal("Mod loaded successfully:", modName)
-				-- Assuming the mod has an initialization function
-				if mod.initialize then
-					mod.initialize()
-				end
-			else
-				LuaCraftWarnLogging("Failed to load mod:", modName)
-				LuaCraftErrorLogging("Error:", mod)
-			end
-		end
-	end
-end
+            -- Check if the mod loaded successfully
+            if success then
+                LuaCraftPrintLoggingNormal("Mod loaded successfully:", modName)
+                -- Assuming the mod has an initialization function
+                if mod.initialize then
+                    mod.initialize()
+                end
 
-function ModLoaderInitALL()
-	_JPROFILER.push("ModLoaderInitALL")
-	--InitStructureConfigurationOLD()
-	InitStructureConfigurationNEW()
-	_JPROFILER.pop("ModLoaderInitALL")
-end
+                -- Get the end time after initialization
+                local endTime = os.clock()
 
---function InitStructureConfigurationOLD()
---	_JPROFILER.push("InitStructureConfigurationOLD")
---	Config:setRandomLocationStructureGenerator(generatePillarAtRandomLocation)
---	Config:setFixedPositionStructureGenerator(generatePillarAtFixedPosition)
---	_JPROFILER.pop("InitStructureConfigurationOLD")
---end
+                -- Calculate the load time
+                local loadTime = endTime - startTime
 
-function InitStructureConfigurationNEW()
-	_JPROFILER.push("InitStructureConfigurationtest")
-
-	local generateStructuresatRandomLocation = getFunctionsByTag("generateStructuresatRandomLocation")
-	for _, func in ipairs(generateStructuresatRandomLocation) do
-		LuaCraftPrintLoggingNormal("Random Location Generator found:", func)
-		Config:setRandomLocationStructureGenerator(func)
-	end
-
-	local generateStructuresInPlayerRange = getFunctionsByTagWithXYZ("generateStructuresInPlayerRange")
-	for _, entry in ipairs(generateStructuresInPlayerRange) do
-		local func, params = entry.func, entry.params
-		LuaCraftPrintLoggingNormal("Fixed Position Generator found:")
-		LuaCraftPrintLoggingNormal("Function:", func)
-		LuaCraftPrintLoggingNormal("Parameters:")
-		LuaCraftPrintLoggingNormal("  x:", params.x)
-		LuaCraftPrintLoggingNormal("  y:", params.y)
-		LuaCraftPrintLoggingNormal("  z:", params.z)
-
-		Config:setFixedPositionStructureGeneratorUsingPlayerRangeWithXYZ(func, params.x, params.y, params.z)
-	end
-	local generateStructuresatFixedPositions = getFunctionsByTagWithXYZ("generateStructuresatFixedPositions")
-	for _, entry in ipairs(generateStructuresatFixedPositions) do
-		local func, params = entry.func, entry.params
-		LuaCraftPrintLoggingNormal("Fixed Position Generator found:")
-		LuaCraftPrintLoggingNormal("Function:", func)
-		LuaCraftPrintLoggingNormal("Parameters:")
-		LuaCraftPrintLoggingNormal("  x:", params.x)
-		LuaCraftPrintLoggingNormal("  y:", params.y)
-		LuaCraftPrintLoggingNormal("  z:", params.z)
-
-		Config:setFixedPositionStructureGeneratorUsingIsChunkFullyGeneratedWithXYZ(func, params.x, params.y, params.z)
-	end
-
-	_JPROFILER.pop("InitStructureConfigurationtest")
+                -- Print the load time
+                LuaCraftPrintLoggingNormal("Load time for", modName, ":", loadTime, "seconds")
+            else
+                LuaCraftPrintLoggingNormal("Failed to load mod:", modName)
+                LuaCraftPrintLoggingNormal("Error:", mod)
+            end
+        end
+    end
 end

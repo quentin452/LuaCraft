@@ -53,14 +53,24 @@ function keysinitGamePlayingPauseMenu(k)
 			end
 		elseif k == "return" then
 			if _GamePlayingPauseMenu.selection == 1 then
-				gamestate = "PlayingGame"
+				gamestate = gamestatePlayingGame
 			elseif _GamePlayingPauseMenu.selection == 2 then
-				gamestate = "PlayingGameSettings"
+				gamestate = gamestatePlayingGameSettings
 			elseif _GamePlayingPauseMenu.selection == 3 then
-				--TODO here add chunk saving system before going to MainMenu
-				--GameScene:destroy()
-				resetGameScene() -- it seem this made nothing
-				gamestate = "MainMenu"
+				--TODO here add chunk saving system before going to MainMenu and during gameplay
+
+				for chunk in pairs(ChunkSet) do
+					for _, chunkSlice in ipairs(chunk.slices) do
+						chunkSlice.alreadyrendered = false
+						chunkSlice.model = nil 
+					end
+				end
+
+				ChunkSet = {}
+				ChunkHashTable = {}
+				CaveList = {}
+				ThePlayer.IsPlayerHasSpawned = false
+				gamestate = gamestateMainMenu
 				_GamePlayingPauseMenu.selection = 0
 			end
 		end

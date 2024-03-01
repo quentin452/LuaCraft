@@ -27,7 +27,7 @@ function drawMainMenuSettings()
 
 	-- Choices
 	local marque = ""
-	local file_content, error_message = customReadFile("C:\\Users\\iamacatfr\\.LuaCraft\\luacraftconfig.txt")
+	local file_content, error_message = customReadFile(luacraftconfig)
 
 	if file_content then
 		local Settings = {}
@@ -64,7 +64,8 @@ function drawMainMenuSettings()
 				choiceText = choiceText .. " X"
 			end
 			if n == 5 and type(Settings["renderdistance"]) == "number" then
-				choiceText = choiceText .. " " .. Settings["renderdistance"]
+				local numberOfSpaces = 1
+				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["renderdistance"]
 			end
 			drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
 
@@ -102,7 +103,7 @@ function keysinitMainMenuSettings(k)
 			elseif _MainMenuSettings.selection == 5 then
 				renderdistanceSetting()
 			elseif _MainMenuSettings.selection == 6 then
-				gamestate = "MainMenu"
+				gamestate = gamestateMainMenu
 				_MainMenuSettings.selection = 0
 			end
 		end

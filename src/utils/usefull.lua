@@ -30,13 +30,13 @@ function drawColorString(Pstring, Px, Py)
 		else
 			lovegraphics.print(c, rx, ry)
 			local fontWidth = (
-				gamestate == "MainMenu"
-				or gamestate == "MainMenuSettings"
-				or gamestate == "GamePausing"
-				or gamestate == "PlayingGameSettings"
+				gamestate == gamestateMainMenu
+				or gamestate == gamestateMainMenuSettings
+				or gamestate == gamestateGamePausing
+				or gamestate == gamestatePlayingGameSettings
 			)
 					and font25
-				or ("WorldCreationMenu" or gamestate == "PlayingGame") and font15
+				or (gamestateWorldCreationMenu or gamestate == gamestatePlayingGame) and font15
 			rx = rx + fontWidth:getWidth(c)
 			i = i + 1
 		end
