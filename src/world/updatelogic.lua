@@ -1,5 +1,5 @@
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
---TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel()
+--TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel() and many other
 --TODO FIX CANNOT PROFILE THIS WITH JPROF : causing crash during closing the game
 
 ChunkSet = {}
@@ -18,9 +18,8 @@ end
 --local gx, gy, gz = (self.x - 1) * ChunkSize + i, height, (self.z - 1) * ChunkSize + j
 --local chunkX, chunkZ = math.floor(gx / ChunkSize), math.floor(gz / ChunkSize)
 --if isChunkLoaded(chunkX, chunkZ) then
---	
+--
 --end
-
 function UpdateGame(dt)
 	--_JPROFILER.push("frame")
 	if gamestate == gamestatePlayingGame then
