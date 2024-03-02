@@ -9,7 +9,8 @@ LightingQueue = {}
 LightingRemovalQueue = {}
 ThingList = {}
 local previousRenderDistance = nil
-local updateCounter = 0
+local updateCounterForRemeshModel = 0
+RenderDistance = getRenderDistanceValue()
 function isChunkLoaded(chunkX, chunkZ)
 	return ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
 end
@@ -22,18 +23,24 @@ end
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
 	if gamestate == gamestatePlayingGame then
-		renderdistancevalue()
 		PlayerInitIfNeeded()
 		UpdateAndGenerateChunks(RenderDistance)
-		UpdateModelsIfNeeded(RenderDistance)
 		UpdateLogic(dt)
+		renderdistancevalue()
 	end
 	_JPROFILER.pop("UpdateGameDT")
 end
 
 function renderdistancevalue()
 	_JPROFILER.push("renderdistancevalue")
-	RenderDistance = getRenderDistanceValue()
+	if renderdistancegetresetted == true then
+		RenderDistance = getRenderDistanceValue()
+		for _, chunk in ipairs(renderChunks) do
+			destroyChunkModel(chunk)
+			updateAllChunksModel()
+		end
+		renderdistancegetresetted = false
+	end
 	_JPROFILER.pop("renderdistancevalue")
 end
 
@@ -55,14 +62,6 @@ function UpdateAndGenerateChunks(RenderDistance)
 
 	UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
 	_JPROFILER.pop("UpdateAndGenerateChunks")
-end
-
-function UpdateModelsIfNeeded(RenderDistance)
-	_JPROFILER.push("UpdateModelsIfNeeded")
-	if RenderDistance ~= previousRenderDistance then
-		updateAllChunksModel()
-	end
-	_JPROFILER.pop("UpdateModelsIfNeeded")
 end
 
 function UpdateLogic(dt)
@@ -101,7 +100,6 @@ function GetOrCreateChunk(chunkX, chunkZ)
 		ChunkSet[chunk] = true
 		ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 		ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
-		-- LuaCraftPrintLoggingNormal("Generated chunk with coordinates:", chunkX, chunkZ)
 	end
 	_JPROFILER.pop("GetOrCreateChunk")
 	return chunk
@@ -115,16 +113,19 @@ function removeChunksOutsideRenderDistance(chunk, chunkX, chunkZ, playerChunkX, 
 	if chunkDistance > RenderDistance / ChunkSize then
 		local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
 		coordCache[key] = nil
-
-		for i = 1, #chunk.slices do
-			local chunkSlice = chunk.slices[i]
-			chunkSlice:destroy()
-			chunkSlice:destroyModel()
-			chunkSlice.enableBlockAndTilesModels = false
-			chunk.slices[i] = nil
-		end
+		destroyChunkModel(chunk)
 	end
 	_JPROFILER.pop("removeChunksOutsideRenderDistance")
+end
+
+function destroyChunkModel(chunk)
+	for i = 1, #chunk.slices do
+		local chunkSlice = chunk.slices[i]
+		chunkSlice:destroy()
+		chunkSlice:destroyModel()
+		chunkSlice.enableBlockAndTilesModels = false
+		chunk.slices[i] = nil
+	end
 end
 
 function processChunkUpdates(chunk)
@@ -186,14 +187,14 @@ end
 
 function forceModelUpdatesForChunks(chunk)
 	_JPROFILER.push("forceModelUpdatesForChunks")
-	updateCounter = updateCounter + 1
+	updateCounterForRemeshModel = updateCounterForRemeshModel + 1
 	--this is to force model updates for chunks : need to be optimized
-	if updateCounter > 1500 then
+	if updateCounterForRemeshModel > 1500 then
 		for i = 1, WorldHeight / SliceHeight do
 			if chunk.slices[i] and not chunk.slices[i].isUpdating then
 				chunk.slices[i]:updateModel()
 			end
-			updateCounter = 0
+			updateCounterForRemeshModel = 0
 		end
 	end
 	_JPROFILER.pop("forceModelUpdatesForChunks")

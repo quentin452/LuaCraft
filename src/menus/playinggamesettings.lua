@@ -103,6 +103,7 @@ function keysinitPlayingMenuSettings(k)
 				printErrorsSettings()
 			elseif _PlayingGameSettings.selection == 5 then
 				renderdistanceSetting()
+				renderdistancegetresetted = true
 			elseif _PlayingGameSettings.selection == 6 then
 				gamestate = gamestatePlayingGame
 				_PlayingGameSettings.selection = 0

@@ -50,6 +50,6 @@ function ExampleMod_GenerateTree(chunk, x, y, z)
 	for _, block in ipairs(treeBlocks) do
 		NewChunkRequest(block[1], block[2], block[3], block[4])
 	end
-	
+
 	_JPROFILER.pop("GenerateTree")
 end

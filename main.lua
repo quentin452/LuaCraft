@@ -67,6 +67,7 @@ enableF8 = false
 enableTESTBLOCK = false
 enableCommandHUD = false
 fixinputforDrawCommandInput = false
+renderdistancegetresetted = true
 modelalreadycreated = 0
 ChunkBorderAlreadyCreated = 0
 
