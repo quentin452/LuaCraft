@@ -480,7 +480,6 @@ function NewChunkSlice(x, y, z, parent)
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
 	compmodel.culling = false
 	t:assignModel(compmodel)
-	t.enableBlockAndTilesModels = false
 	t.isUpdating = false
 	t.updateModel = function(self)
 		if not self or not self.parent or not self.model then

@@ -195,23 +195,49 @@ end
 function PlayerInit()
 	ThePlayer = CreateThing(NewPlayer(0, 0, 0))
 	initPlayerInventory()
-	ChooseSpawnLocation()
 end
 function ChooseSpawnLocation()
+	local maxTries = 1000
+	local currentTry = 0
+
 	-- Generate a random position for the player
 	local playerX = math.random() * 120
 	local playerZ = math.random() * 120
 
 	-- Find the highest non-air voxel
 	local playerY = WorldHeight
-	while playerY > 0 and GetVoxel(playerX, playerY, playerZ) == 0 do
-		playerY = playerY - 1
+	local foundSolidBlock = false
+
+	while not foundSolidBlock do
+		while playerY > 0 and GetVoxel(playerX, playerY, playerZ) == 0 do
+			playerY = playerY - 1
+		end
+
+		if playerY > 0 then
+			foundSolidBlock = true
+		else
+			-- If no solid block was found, generate a new random position and try again
+			playerX = math.random() * 120
+			playerZ = math.random() * 120
+			playerY = WorldHeight
+
+			currentTry = currentTry + 1
+
+			if currentTry >= maxTries then
+				LuaCraftErrorLogging(
+					"Warning: Unable to find a suitable spawn position after " .. maxTries .. " tries."
+				)
+			elseif currentTry % 100 == 0 then
+				LuaCraftPrintLoggingNormal("Still trying to find a suitable spawn position... Try #" .. currentTry)
+			end
+		end
 	end
 
 	-- Change the player's position to the calculated position
 	ThePlayer.x = playerX
 	ThePlayer.y = playerY + 1.1
 	ThePlayer.z = playerZ
+	ThePlayer.IsPlayerHasSpawned = true
 end
 
 function initPlayerInventory()

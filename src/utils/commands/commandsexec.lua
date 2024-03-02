@@ -30,9 +30,7 @@ function ExecuteCommand(command)
 				ThePlayer.y = y
 				ThePlayer.z = z
 				LuaCraftPrintLoggingNormal("Player teleported to: " .. x .. ", " .. y .. ", " .. z)
-				for _, chunk in ipairs(renderChunks) do
-					destroyChunkModel(chunk)
-				end
+
 			else
 				LuaCraftPrintLoggingNormal("Invalid coordinates.")
 			end

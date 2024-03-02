@@ -1,6 +1,5 @@
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
 --TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel() and many other
---TODO FIX : some chunks models are not removed when there are outside of render distance
 
 ChunkSet = {}
 ChunkHashTable = {}
@@ -9,7 +8,9 @@ ChunkRequests = {}
 LightingQueue = {}
 LightingRemovalQueue = {}
 ThingList = {}
+local destroyChunkModels = 0
 local updateCounterForRemeshModel = 0
+
 RenderDistance = getRenderDistanceValue()
 function isChunkLoaded(chunkX, chunkZ)
 	return ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
@@ -35,9 +36,6 @@ function renderdistancevalue()
 	_JPROFILER.push("renderdistancevalue")
 	if renderdistancegetresetted == true then
 		RenderDistance = getRenderDistanceValue()
-		for _, chunk in ipairs(renderChunks) do
-			destroyChunkModel(chunk)
-		end
 		renderdistancegetresetted = false
 	end
 	_JPROFILER.pop("renderdistancevalue")
@@ -106,31 +104,38 @@ end
 
 function removeChunksOutsideRenderDistance(chunk, chunkX, chunkZ, playerChunkX, playerChunkZ, RenderDistance)
 	_JPROFILER.push("removeChunksOutsideRenderDistance")
-	local chunkDistanceX = math.abs(chunk.x - playerChunkX)
-	local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
-	local chunkDistance = chunkDistanceX + chunkDistanceZ
-	if chunkDistance > RenderDistance / ChunkSize then
-		if renderdistancegetresetted == false then
-			destroyChunkModel(chunk)
+	for otherChunk, _ in pairs(ChunkSet) do
+		local chunkX, chunkZ = otherChunk.x, otherChunk.z
+		local dx = chunkX - playerChunkX
+		local dz = chunkZ - playerChunkZ
+		if dx * dx + dz * dz > RenderDistance / ChunkSize then
+			forceChunkModelsRemoval(otherChunk)
 		end
 	end
 	_JPROFILER.pop("removeChunksOutsideRenderDistance")
 end
 
-function destroyChunkModel(chunk)
-	_JPROFILER.push("destroyChunkModel")
+function forceChunkModelsRemoval(chunk)
+	destroyChunkModels = destroyChunkModels + 1
+	if destroyChunkModels > 50000 then
+		destroyAllChunkModels(chunk)
+		destroyChunkModels = 0
+	end
+end
+function destroyAllChunkModels(chunk)
+	_JPROFILER.push("destroyAllChunkModels")
 	if chunk.slices then
 		for i = 1, #chunk.slices do
 			local chunkSlice = chunk.slices[i]
-			if chunkSlice then
+			if chunkSlice and not chunkSlice.isDestroyed then
 				chunkSlice:destroy()
 				chunkSlice:destroyModel()
-				chunkSlice.enableBlockAndTilesModels = false
 				chunk.slices[i] = nil
 			end
 		end
+		chunk.slices = {}
 	end
-	_JPROFILER.pop("destroyChunkModel")
+	_JPROFILER.pop("destroyAllChunkModels")
 end
 
 function processChunkUpdates(chunk)
@@ -141,12 +146,11 @@ function processChunkUpdates(chunk)
 	elseif chunk.isPopulated == false then
 		populateChunk(chunk)
 		chunk.isPopulated = true
-	elseif ThePlayer.IsPlayerHasSpawned == false then
-		spawnPlayer()
-		ThePlayer.IsPlayerHasSpawned = true
 	elseif chunk.updatemodel == false then
 		updateChunkModel(chunk)
 		chunk.updatemodel = true
+	elseif ThePlayer.IsPlayerHasSpawned == false then
+		spawnPlayer()
 	else
 		addChunkToRenderQueue(chunk)
 		forceModelUpdatesForChunks(chunk)
@@ -212,10 +216,6 @@ function processRenderChunks()
 			if not chunk.slices[_] then
 				chunk.slices[_] = NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
 			end
-		end
-		for i = 1, #chunk.slices do
-			local chunkSlice = chunk.slices[i]
-			chunkSlice.enableBlockAndTilesModels = true
 		end
 		if #chunk.changes > 0 then
 			chunk:updateModel()

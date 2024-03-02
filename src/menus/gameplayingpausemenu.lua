@@ -58,20 +58,17 @@ function keysinitGamePlayingPauseMenu(k)
 				gamestate = gamestatePlayingGameSettings
 			elseif _GamePlayingPauseMenu.selection == 3 then
 				--TODO here add chunk saving system before going to MainMenu and during gameplay
-
 				for chunk in pairs(ChunkSet) do
 					for _, chunkSlice in ipairs(chunk.slices) do
 						chunkSlice.alreadyrendered = false
-						chunkSlice.model = nil 
+						chunkSlice.model = nil
 					end
 				end
 
 				ChunkSet = {}
 				ChunkHashTable = {}
 				CaveList = {}
-				ThePlayer.IsPlayerHasSpawned = false
 				gamestate = gamestateMainMenu
-				_GamePlayingPauseMenu.selection = 0
 			end
 		end
 	end
