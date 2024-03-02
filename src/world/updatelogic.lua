@@ -1,5 +1,6 @@
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
 --TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel() and many other
+--TODO FIX : some chunks models are not removed when there are outside of render distance
 
 ChunkSet = {}
 ChunkHashTable = {}
@@ -36,7 +37,6 @@ function renderdistancevalue()
 		RenderDistance = getRenderDistanceValue()
 		for _, chunk in ipairs(renderChunks) do
 			destroyChunkModel(chunk)
-			updateAllChunksModel()
 		end
 		renderdistancegetresetted = false
 	end
@@ -108,23 +108,31 @@ function removeChunksOutsideRenderDistance(chunk, chunkX, chunkZ, playerChunkX, 
 	_JPROFILER.push("removeChunksOutsideRenderDistance")
 	local chunkDistanceX = math.abs(chunk.x - playerChunkX)
 	local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
-	local chunkDistance = math.sqrt(chunkDistanceX ^ 2 + chunkDistanceZ ^ 2)
+	local chunkDistance = chunkDistanceX + chunkDistanceZ
 	if chunkDistance > RenderDistance / ChunkSize then
 		local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
 		coordCache[key] = nil
-		destroyChunkModel(chunk)
+		if renderdistancegetresetted == false then
+			destroyChunkModel(chunk)
+		end
 	end
 	_JPROFILER.pop("removeChunksOutsideRenderDistance")
 end
 
 function destroyChunkModel(chunk)
-	for i = 1, #chunk.slices do
-		local chunkSlice = chunk.slices[i]
-		chunkSlice:destroy()
-		chunkSlice:destroyModel()
-		chunkSlice.enableBlockAndTilesModels = false
-		chunk.slices[i] = nil
+	_JPROFILER.push("destroyChunkModel")
+	if chunk.slices then
+		for i = 1, #chunk.slices do
+			local chunkSlice = chunk.slices[i]
+			if chunkSlice then
+				chunkSlice:destroy()
+				chunkSlice:destroyModel()
+				chunkSlice.enableBlockAndTilesModels = false
+				chunk.slices[i] = nil
+			end
+		end
 	end
+	_JPROFILER.pop("destroyChunkModel")
 end
 
 function processChunkUpdates(chunk)
@@ -145,8 +153,8 @@ function processChunkUpdates(chunk)
 		addChunkToRenderQueue(chunk)
 		forceModelUpdatesForChunks(chunk)
 		processRenderChunks()
+		LightingUpdate()
 	end
-	LightingUpdate()
 	_JPROFILER.pop("processChunkUpdates")
 end
 
@@ -187,14 +195,14 @@ end
 function forceModelUpdatesForChunks(chunk)
 	_JPROFILER.push("forceModelUpdatesForChunks")
 	updateCounterForRemeshModel = updateCounterForRemeshModel + 1
-	--this is to force model updates for chunks : need to be optimized
+	-- This is to force model updates for chunks; need to be optimized
 	if updateCounterForRemeshModel > 1500 then
 		for i = 1, WorldHeight / SliceHeight do
 			if chunk.slices[i] and not chunk.slices[i].isUpdating then
 				chunk.slices[i]:updateModel()
 			end
-			updateCounterForRemeshModel = 0
 		end
+		updateCounterForRemeshModel = 0
 	end
 	_JPROFILER.pop("forceModelUpdatesForChunks")
 end
