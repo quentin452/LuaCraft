@@ -35,20 +35,10 @@ function GenerateWorld()
 end
 
 -- convert an index into a point on a 2d plane of given width and height
-coordCache = {}
 
 function NumberToCoord(n, w, h)
-	--	_JPROFILER.push("NumberToCoord")
-
-	local key = tostring(n) .. ":" .. tostring(w) .. ":" .. tostring(h)
-	if coordCache[key] then
-		return unpack(coordCache[key])
-	end
-
 	local y = math.floor(n / w)
 	local x = n - (y * w)
-	coordCache[key] = { x, y }
-	--	_JPROFILER.pop("NumberToCoord")
 
 	return x, y
 end

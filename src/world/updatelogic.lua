@@ -110,8 +110,6 @@ function removeChunksOutsideRenderDistance(chunk, chunkX, chunkZ, playerChunkX, 
 	local chunkDistanceZ = math.abs(chunk.z - playerChunkZ)
 	local chunkDistance = chunkDistanceX + chunkDistanceZ
 	if chunkDistance > RenderDistance / ChunkSize then
-		local key = ChunkHash(chunkX) .. ":" .. ChunkHash(chunkZ)
-		coordCache[key] = nil
 		if renderdistancegetresetted == false then
 			destroyChunkModel(chunk)
 		end
