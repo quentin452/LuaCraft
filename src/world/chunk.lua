@@ -180,11 +180,28 @@ function NewChunk(x, z)
 		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
 			--prevent block placements on the player
 			local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
+			local range1 = 1
+			local range2 = 0.1
+
 			if
-				gx == math.floor(playerX)
-				and gy >= math.floor(playerY)
-				and gy <= math.floor(playerY + 1)
-				and gz == math.floor(playerZ)
+				(
+					love.keyboard.isDown("space")
+					and gx >= math.floor(playerX + 0.5) - range1
+					and gx <= math.floor(playerX) + range1
+					and gy >= math.floor(playerY)
+					and gy <= math.floor(playerY + 1)
+					and gz >= math.floor(playerZ) - range1
+					and gz <= math.floor(playerZ + 0.5) + range1
+				)
+				or (
+					not love.keyboard.isDown("space")
+					and gx >= math.floor(playerX) - range2
+					and gx <= math.floor(playerX) + range2
+					and gy >= math.floor(playerY)
+					and gy <= math.floor(playerY + 1)
+					and gz >= math.floor(playerZ) - range2
+					and gz <= math.floor(playerZ) + range2
+				)
 			then
 				blockvalue = __AIR_Block
 			end
