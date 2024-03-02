@@ -186,7 +186,7 @@ function NewChunk(x, z)
 				and gy <= math.floor(playerY + 1)
 				and gz == math.floor(playerZ)
 			then
-				return
+				blockvalue = __AIR_Block
 			end
 
 			--prevent placing a block on an another block(like flowers)
