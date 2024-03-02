@@ -188,24 +188,7 @@ function NewChunk(x, z)
 			then
 				return
 			end
-			--prevent manually diagonal block placements
-			if manuallyPlaced == true and self:getVoxel(x, y - 1, z) == __AIR_Block then
-				local solidBlockNearby = false
-				for dx = -1, 1 do
-					for dz = -1, 1 do
-						if self:getVoxel(x + dx, y, z + dz) ~= __AIR_Block then
-							solidBlockNearby = true
-							break
-						end
-					end
-					if solidBlockNearby then
-						break
-					end
-				end
-				if not solidBlockNearby then
-					return
-				end
-			end
+
 			--prevent placing a block on an another block(like flowers)
 			local blockBelow = self:getVoxel(x, y - 1, z)
 			if

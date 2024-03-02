@@ -8,7 +8,6 @@ ChunkRequests = {}
 LightingQueue = {}
 LightingRemovalQueue = {}
 ThingList = {}
-local previousRenderDistance = nil
 local updateCounterForRemeshModel = 0
 RenderDistance = getRenderDistanceValue()
 function isChunkLoaded(chunkX, chunkZ)
