@@ -1,4 +1,5 @@
 local playerReach = 5
+
 function NewPlayer(x, y, z)
 	local t = NewThing(x, y, z)
 	t.friction = 0.85
@@ -6,7 +7,6 @@ function NewPlayer(x, y, z)
 	t.viewBob = 0
 	t.viewBobMult = 0
 	t.name = "player"
-	t.voxelCursor = CreateThing(NewVoxelCursor(0, 0, 0))
 	t.cursorpos = {}
 	t.cursorposPrev = {}
 	t.onGround = false
@@ -27,23 +27,20 @@ function NewPlayer(x, y, z)
 		self.viewBob = self.viewBob + speed * 2.75 * (dt * 60)
 		self.viewBobMult = math.min(speed, 1)
 
-		-- update camera position to new player position
-		Scene.camera.pos.x = self.x
-		Scene.camera.pos.y = self.y + math.sin(self.viewBob) * self.viewBobMult * 1 + self.eyeLevel
-		Scene.camera.pos.z = self.z
+		-- update camera position to the new player position
+		Scene.camera.pos.x, Scene.camera.pos.y, Scene.camera.pos.z =
+			self.x, self.y + math.sin(self.viewBob) * self.viewBobMult * 1 + self.eyeLevel, self.z
 
-		-- update voxel cursor position to whatever block currently pointing at
+		-- update voxel cursor position to whatever block is currently being pointed at
 		local rx, ry, rz = Scene.camera.pos.x, Scene.camera.pos.y, Scene.camera.pos.z
 		local step = 0.1
-		self.voxelCursor.model.visible = false
 		self.cursorHit = false
+
 		for i = 1, playerReach, step do
 			local chunk, cx, cy, cz, hashx, hashy = GetChunk(rx, ry, rz)
-			if chunk ~= nil and chunk:getVoxel(cx, cy, cz) ~= 0 then
+			if chunk and chunk:getVoxel(cx, cy, cz) ~= 0 then
 				self.cursorpos = { x = cx, y = cy, z = cz, chunk = chunk }
 				self.cursorHit = true
-				self.voxelCursor.model.visible = true
-				self.voxelCursor.model:setTransform({ math.floor(rx), math.floor(ry), math.floor(rz) })
 				break
 			end
 			self.cursorposPrev = { x = cx, y = cy, z = cz, chunk = chunk }
@@ -53,11 +50,8 @@ function NewPlayer(x, y, z)
 			ry = ry - math.sin(Scene.camera.angle.y) * step
 		end
 
-		-- Mise à jour de la rotation
-		self.rotation = Scene.camera.angle.x
-
-		-- Mise à jour de la hauteur de vue (pitch)
-		self.pitch = Scene.camera.angle.y
+		-- Update rotation and pitch
+		self.rotation, self.pitch = Scene.camera.angle.x, Scene.camera.angle.y
 
 		return true
 	end
@@ -97,29 +91,19 @@ function NewPlayer(x, y, z)
 
 		-- take player input
 		if fixinputforDrawCommandInput == false then
-			if love.keyboard.isDown("z") then
-				mx = mx + 0
-				my = my - 1
+			local directionKeys = {
+				z = { 0, -1 },
+				q = { -1, 0 },
+				s = { 0, 1 },
+				d = { 1, 0 },
+			}
 
-				moving = true
-			end
-			if love.keyboard.isDown("q") then
-				mx = mx - 1
-				my = my + 0
-
-				moving = true
-			end
-			if love.keyboard.isDown("s") then
-				mx = mx + 0
-				my = my + 1
-
-				moving = true
-			end
-			if love.keyboard.isDown("d") then
-				mx = mx + 1
-				my = my + 0
-
-				moving = true
+			for key, dir in pairs(directionKeys) do
+				if love.keyboard.isDown(key) then
+					mx = mx + dir[1]
+					my = my + dir[2]
+					moving = true
+				end
 			end
 
 			-- jump if on ground
@@ -204,63 +188,6 @@ function NewPlayer(x, y, z)
 			self.zSpeed = 0
 		end
 	end
-
-	return t
-end
-
--- the model for the wireframe outline of the block currently selected by ThePlayer in the world
-function NewVoxelCursor(x, y, z)
-	local t = NewThing(x, y, z)
-	t.name = "voxelcursor"
-	local model = {}
-	local scale = 1.002
-	local x, y, z = -0.001, -0.001, -0.001
-
-	-- top
-	model[#model + 1] = { x, y + scale, z }
-	model[#model + 1] = { x, y + scale, z }
-	model[#model + 1] = { x, y + scale, z + scale }
-	model[#model + 1] = { x + scale, y + scale, z + scale }
-	model[#model + 1] = { x + scale, y + scale, z + scale }
-	model[#model + 1] = { x + scale, y + scale, z }
-	model[#model + 1] = { x + scale, y + scale, z + scale }
-	model[#model + 1] = { x + scale, y + scale, z + scale }
-	model[#model + 1] = { x, y + scale, z + scale }
-	model[#model + 1] = { x + scale, y + scale, z }
-	model[#model + 1] = { x + scale, y + scale, z }
-	model[#model + 1] = { x, y + scale, z }
-
-	-- bottom
-	model[#model + 1] = { x, y, z }
-	model[#model + 1] = { x, y, z }
-	model[#model + 1] = { x, y, z + scale }
-	model[#model + 1] = { x + scale, y, z + scale }
-	model[#model + 1] = { x + scale, y, z + scale }
-	model[#model + 1] = { x + scale, y, z }
-	model[#model + 1] = { x + scale, y, z + scale }
-	model[#model + 1] = { x + scale, y, z + scale }
-	model[#model + 1] = { x, y, z + scale }
-	model[#model + 1] = { x + scale, y, z }
-	model[#model + 1] = { x + scale, y, z }
-	model[#model + 1] = { x, y, z }
-
-	-- sides
-	model[#model + 1] = { x, y + scale, z }
-	model[#model + 1] = { x, y + scale, z }
-	model[#model + 1] = { x, y, z }
-	model[#model + 1] = { x + scale, y + scale, z }
-	model[#model + 1] = { x + scale, y + scale, z }
-	model[#model + 1] = { x + scale, y, z }
-	model[#model + 1] = { x, y + scale, z + scale }
-	model[#model + 1] = { x, y + scale, z + scale }
-	model[#model + 1] = { x, y, z + scale }
-	model[#model + 1] = { x + scale, y + scale, z + scale }
-	model[#model + 1] = { x + scale, y + scale, z + scale }
-	model[#model + 1] = { x + scale, y, z + scale }
-
-	local compmodel = Engine.newModel(model, nil, { 0, 0, 0 }, { 0, 0, 0 })
-	compmodel.wireframe = true
-	t:assignModel(compmodel)
 
 	return t
 end
