@@ -181,12 +181,12 @@ function NewChunk(x, z)
 			--prevent block placements on the player
 			local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
 			if
-				gx >= math.floor(playerX)
+				gx == math.floor(playerX)
 				and gy >= math.floor(playerY)
 				and gy <= math.floor(playerY + 1)
-				and gz >= math.floor(playerZ)
+				and gz == math.floor(playerZ)
 			then
-				blockvalue = __AIR_Block
+				return
 			end
 
 			--prevent placing a block on an another block(like flowers)
