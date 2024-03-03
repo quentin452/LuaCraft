@@ -95,7 +95,7 @@ end
 
 -- Define function to get tile light source
 function TileLightSource(n)
-	if n == Tiles.GLOWSTONE then
+	if n == Tiles.GLOWSTONE_Block then
 		return LightSources[15]
 	end
 
