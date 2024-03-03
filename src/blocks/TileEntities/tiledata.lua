@@ -1,59 +1,69 @@
-__AIR_Block = 0
-__STONE_Block = 1
-__GRASS_Block = 2
-__DIRT_Block = 3
-__COBBLE_Block = 4
-__OAK_PLANK_Block = 5
-__OAK_SAPPLING_Block = 6
-__BEDROCK_Block = 7
-__WATER_BLock = 8
-__STATIONARY_WATER_BLock = 9
-__LAVA_BLock = 10
-__STATIONARY_LAVA_BLock = 11
-__SAND_BLock = 12
-__GRAVEL_BLock = 13
-__GOLD_BLock = 14
-__IRON_BLock = 15
-__COAL_BLock = 16
-__OAK_LOG_BLock = 17
-__OAK_LEAVE_BLock = 18
-__SPONGE_BLock = 19
-__GLASS_BLock = 20
-__YELLO_FLOWER_Block = 37
-__ROSE_FLOWER_Block = 38
-__STONE_BRICK_Block = 45
-__GLOWSTONE_BLock = 89
+-- Define tile enumeration
+Tiles = {
+	AIR_Block = 0,
+	STONE_Block = 1,
+	GRASS_Block = 2,
+	DIRT_Block = 3,
+	COBBLE_Block = 4,
+	OAK_PLANK_Block = 5,
+	OAK_SAPPLING_Block = 6,
+	BEDROCK_Block = 7,
+	WATER_Block = 8,
+	STATIONARY_WATER_Block = 9,
+	LAVA_Block = 10,
+	STATIONARY_LAVA_Block = 11,
+	SAND_Block = 12,
+	GRAVEL_Block = 13,
+	GOLD_Block = 14,
+	IRON_Block = 15,
+	COAL_Block = 16,
+	OAK_LOG_Block = 17,
+	OAK_LEAVE_Block = 18,
+	SPONGE_Block = 19,
+	GLASS_Block = 20,
+	YELLO_FLOWER_Block = 37,
+	ROSE_FLOWER_Block = 38,
+	STONE_BRICK_Block = 45,
+	GLOWSTONE_Block = 89,
+}
 
-__Light_Source0 = 0
-__Light_Source11 = 1
-__Light_Source12 = 2
-__Light_Source13 = 3
-__Light_Source14 = 4
-__Light_Source15 = 5
-__Light_Source16 = 6
-__Light_Source17 = 7
-__Light_Source18 = 8
-__Light_Source19 = 9
-__Light_Source10 = 10
-__Light_Source11 = 11
-__Light_Source12 = 12
-__Light_Source13 = 13
-__Light_Source14 = 14
-__Light_Source15 = 15
+-- Define light source enumeration
+LightSources = {
+	[0] = 0,
+	[1] = 1,
+	[2] = 2,
+	[3] = 3,
+	[4] = 4,
+	[5] = 5,
+	[6] = 6,
+	[7] = 7,
+	[8] = 8,
+	[9] = 9,
+	[10] = 10,
+	[11] = 11,
+	[12] = 12,
+	[13] = 13,
+	[14] = 14,
+	[15] = 15,
+}
 
--- tile enumerations stored as a function called by tile index (base 0 to accomodate air)
+-- Define tile collisions
 function TileCollisions(n)
-	if
-		n == __AIR_Block
-		or n == __OAK_SAPPLING_Block
-		or n == __WATER_BLock
-		or n == __STATIONARY_WATER_BLock
-		or n == __LAVA_BLock
-		or n == __STATIONARY_LAVA_BLock
-		or n == __YELLO_FLOWER_Block
-		or n == __ROSE_FLOWER_Block
-	then
-		return false
+	local nonCollidableTiles = {
+		Tiles.AIR_Block,
+		Tiles.OAK_SAPPLING_Block,
+		Tiles.WATER_Block,
+		Tiles.STATIONARY_WATER_Block,
+		Tiles.LAVA_Block,
+		Tiles.STATIONARY_LAVA_Block,
+		Tiles.YELLO_FLOWER_Block,
+		Tiles.ROSE_FLOWER_Block,
+	}
+
+	for _, tile in ipairs(nonCollidableTiles) do
+		if n == tile then
+			return false
+		end
 	end
 
 	return true
@@ -61,17 +71,18 @@ end
 
 -- Define a lookup table for tile transparency values
 local transparencyLookup = {
-	[__AIR_Block] = 0, -- air
-	[__YELLO_FLOWER_Block] = 0, -- yellow flower
-	[__ROSE_FLOWER_Block] = 0, -- rose
-	[__OAK_SAPPLING_Block] = 0, -- oaksappling
-	[__OAK_LEAVE_BLock] = 1, -- oakleaves
-	[__GLASS_BLock] = 2, -- glass
-	[__GLOWSTONE_BLock] = 2, -- glowstone
+	[Tiles.AIR_Block] = 0,
+	[Tiles.YELLO_FLOWER_Block] = 0,
+	[Tiles.ROSE_FLOWER_Block] = 0,
+	[Tiles.OAK_SAPPLING_Block] = 0,
+	[Tiles.OAK_LEAVE_Block] = 1,
+	[Tiles.GLASS_Block] = 2,
+	[Tiles.GLOWSTONE_Block] = 2,
 }
 
 local transparencyCache = {}
 
+-- Define function to get tile transparency
 function TileTransparency(n)
 	if transparencyCache[n] then
 		return transparencyCache[n]
@@ -82,20 +93,22 @@ function TileTransparency(n)
 	end
 end
 
+-- Define function to get tile light source
 function TileLightSource(n)
-	--i think this should be optimized
-	if n == __GLOWSTONE_BLock then -- glowstone
-		return __Light_Source15
+	if n == Tiles.GLOWSTONE then
+		return LightSources[15]
 	end
 
-	return __Light_Source0
+	return LightSources[0]
 end
 
+-- Define function to check if tile is lightable
 function TileLightable(n)
 	local t = TileTransparency(n)
 	return t == 0 or t == 2
 end
 
+-- Define function to check if tile is semi-lightable
 function TileSemiLightable(n)
 	local t = TileTransparency(n)
 	return t == 0 or t == 1 or t == 2
@@ -103,59 +116,55 @@ end
 
 local tileTexturesCache = {}
 
+-- Define function to get tile textures
 function TileTextures(n)
 	if tileTexturesCache[n] then
 		return tileTexturesCache[n]
 	end
 
 	local list = {
-		-- textures are in format: SIDE UP DOWN FRONT
-		-- at least one texture must be present
-		{ 0 }, -- 0 air
-		{ 1 }, -- 1 stone
-		{ 3, 0, 2 }, -- 2 grass
-		{ 2 }, -- 3 dirt
-		{ 16 }, -- 4 cobble
-		{ 4 }, -- 5 planks
-		{ 15 }, -- 6 sapling
-		{ 17 }, -- 7 bedrock
-		{ 14 }, -- 8 water
-		{ 14 }, -- 9 stationary water
-		{ 63 }, -- 10 lava
-		{ 63 }, -- 11 stationary lava
-		{ 18 }, -- 12 sand
-		{ 19 }, -- 13 gravel
-		{ 32 }, -- 14 gold
-		{ 33 }, -- 15 iron
-		{ 34 }, -- 16 coal
-		{ 20, 21, 21 }, -- 17 log
-		{ 52 }, -- 18 leaves
-		{ 48 }, -- 19 sponge
-		{ 49 }, -- 20 glass
+		[Tiles.AIR_Block] = { 0 },
+		[Tiles.STONE_Block] = { 1 },
+		[Tiles.GRASS_Block] = { 3, 0, 2 },
+		[Tiles.DIRT_Block] = { 2 },
+		[Tiles.COBBLE_Block] = { 16 },
+		[Tiles.OAK_PLANK_Block] = { 4 },
+		[Tiles.OAK_SAPPLING_Block] = { 15 },
+		[Tiles.BEDROCK_Block] = { 17 },
+		[Tiles.WATER_Block] = { 14 },
+		[Tiles.STATIONARY_WATER_Block] = { 14 },
+		[Tiles.LAVA_Block] = { 63 },
+		[Tiles.STATIONARY_LAVA_Block] = { 63 },
+		[Tiles.SAND_Block] = { 18 },
+		[Tiles.GRAVEL_Block] = { 19 },
+		[Tiles.GOLD_Block] = { 32 },
+		[Tiles.IRON_Block] = { 33 },
+		[Tiles.COAL_Block] = { 34 },
+		[Tiles.OAK_LOG_Block] = { 20, 21, 21 },
+		[Tiles.OAK_LEAVE_Block] = { 52 },
+		[Tiles.SPONGE_Block] = { 48 },
+		[Tiles.GLASS_Block] = { 49 },
+		[Tiles.ROSE_FLOWER_Block] = { 13 },
+		[Tiles.YELLO_FLOWER_Block] = { 12 },
+		[Tiles.STONE_BRICK_Block] = { 7 },
+		[Tiles.GLOWSTONE_Block] = { 105 },
 	}
-	list[38] = { 13 } -- 37 yellow flower
-	list[39] = { 12 } -- 38 rose
-	list[46] = { 7 } -- 18 leaves
-	list[90] = { 105 } -- 89 glowstone
 
-	tileTexturesCache[n] = list[n + 1]
+	tileTexturesCache[n] = list[n]
 
 	return tileTexturesCache[n]
 end
 
+-- Define function to get tile model
 function TileModel(n)
-	-- flowers and mushrooms have different models
-	if n == __YELLO_FLOWER_Block or n == __ROSE_FLOWER_Block or n == __OAK_SAPPLING_Block then
+	if n == Tiles.YELLO_FLOWER_Block or n == Tiles.ROSE_FLOWER_Block or n == Tiles.OAK_SAPPLING_Block then
 		return 1
 	end
 
 	return 0
 end
-function Tile2D(n)
-	--draw in DrawHudTile 2D Tiles
-	if n == __YELLO_FLOWER_Block or n == __ROSE_FLOWER_Block or n == __OAK_SAPPLING_Block then
-		return true
-	end
 
-	return false
+-- Define function to check if tile is 2D
+function Tile2D(n)
+	return n == Tiles.YELLO_FLOWER_Block or n == Tiles.ROSE_FLOWER_Block or n == Tiles.OAK_SAPPLING_Block
 end

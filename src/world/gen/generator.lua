@@ -28,22 +28,22 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				end
 
 				if j < chunk.floor then
-					temp[yy] = string.char(__STONE_Block)
+					temp[yy] = string.char(Tiles.STONE_Block)
 					sunlight = false
 				else
-					temp[yy] = string.char(__AIR_Block)
+					temp[yy] = string.char(Tiles.AIR_Block)
 
 					if generationFunction(chunk, xx, j, zz) then
 						if not grass then
 							if dirt > 0 then
 								dirt = dirt - 1
-								temp[yy] = string.char(__DIRT_Block)
+								temp[yy] = string.char(Tiles.DIRT_Block)
 							else
-								temp[yy] = string.char(__STONE_Block)
+								temp[yy] = string.char(Tiles.STONE_Block)
 							end
 						else
 							grass = false
-							temp[yy] = string.char(__GRASS_Block)
+							temp[yy] = string.char(Tiles.GRASS_Block)
 						end
 
 						if sunlight then

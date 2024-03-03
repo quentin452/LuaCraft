@@ -186,7 +186,7 @@ function NewSunlightSubtraction(x, y, z, value)
 
 		if fget > 0 and self.value >= 0 and TileSemiLightable(val) then
 			if fget < self.value then
-				cget:setVoxelFirstData(cx, cy, cz, __AIR_Block)
+				cget:setVoxelFirstData(cx, cy, cz, Tiles.AIR_Block)
 				NewSunlightSubtraction(self.x, self.y - 1, self.z, fget)
 				NewSunlightSubtraction(self.x, self.y + 1, self.z, fget)
 				NewSunlightSubtraction(self.x + 1, self.y, self.z, fget)
@@ -215,7 +215,7 @@ function NewSunlightDownSubtraction(x, y, z)
 
 	t.query = function(self)
 		if TileSemiLightable(GetVoxel(self.x, self.y, self.z)) then
-			SetVoxelFirstData(self.x, self.y, self.z, __AIR_Block)
+			SetVoxelFirstData(self.x, self.y, self.z, Tiles.AIR_Block)
 
 			NewSunlightDownSubtraction(self.x, self.y - 1, self.z)
 

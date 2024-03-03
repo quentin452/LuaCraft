@@ -249,15 +249,15 @@ function initPlayerInventory()
 	}
 
 	local defaultItems = {
-		__STONE_Block,
-		__COBBLE_Block,
-		__STONE_BRICK_Block,
-		__YELLO_FLOWER_Block,
-		__OAK_SAPPLING_Block,
-		__OAK_LOG_BLock,
-		__OAK_LEAVE_BLock,
-		__GLASS_BLock,
-		__GLOWSTONE_BLock,
+		Tiles.STONE_Block,
+		Tiles.COBBLE_Block,
+		Tiles.STONE_BRICK_Block,
+		Tiles.YELLO_FLOWER_Block,
+		Tiles.OAK_SAPPLING_Block,
+		Tiles.OAK_LOG_Block,
+		Tiles.OAK_LEAVE_Block,
+		Tiles.SAND_Block,
+		Tiles.GLOWSTONE_Block,
 	}
 	for i = 1, 36 do
 		PlayerInventory.items[i] = defaultItems[i] or 0

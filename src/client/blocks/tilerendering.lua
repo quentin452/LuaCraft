@@ -11,7 +11,7 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 		end
 
 		--create model dupplicata for flowers/sapplings
-		if this == __YELLO_FLOWER_Block or this == __ROSE_FLOWER_Block or this == __OAK_SAPPLING_Block then
+		if this == Tiles.YELLO_FLOWER_Block or this == Tiles.ROSE_FLOWER_Block or this == Tiles.OAK_SAPPLING_Block then
 			for _, v in ipairs(blockModelCache[this]) do
 				local originX = v[1] - 0.5
 				local originZ = v[3] - 0.5

@@ -203,21 +203,21 @@ function NewChunk(x, z)
 					and gz <= math.floor(playerZ) + range2
 				)
 			then
-				blockvalue = __AIR_Block
+				blockvalue = Tiles.AIR_Block
 			end
 
 			--prevent placing a block on an another block(like flowers)
 			local blockBelow = self:getVoxel(x, y - 1, z)
 			if
 				(
-					blockvalue == __YELLO_FLOWER_Block
-					or blockvalue == __ROSE_FLOWER_Block
-					or blockvalue == __OAK_SAPPLING_Block
+					blockvalue == Tiles.YELLO_FLOWER_Block
+					or blockvalue == Tiles.ROSE_FLOWER_Block
+					or blockvalue == Tiles.OAK_SAPPLING_Block
 				)
 				and (
-					blockBelow == __YELLO_FLOWER_Block
-					or blockBelow == __ROSE_FLOWER_Block
-					or blockBelow == __OAK_SAPPLING_Block
+					blockBelow == Tiles.YELLO_FLOWER_Block
+					or blockBelow == Tiles.ROSE_FLOWER_Block
+					or blockBelow == Tiles.OAK_SAPPLING_Block
 				)
 			then
 				return
@@ -281,7 +281,7 @@ function NewChunk(x, z)
 			end
 
 			local source = TileLightSource(self:getVoxel(x, y, z))
-			if source > 0 and TileLightSource(blockvalue) == __AIR_Block then
+			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block then
 				NewLocalLightSubtraction(gx, gy, gz, source + 1)
 				destroyLight = true
 			end
