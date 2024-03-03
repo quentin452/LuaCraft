@@ -124,28 +124,20 @@ function engine.newScene(renderWidth, renderHeight)
 
 	-- define the shaders used in rendering the scene
 	scene.threeShader = love.graphics.newShader([[
-        uniform mat4 view;
-        uniform mat4 model_matrix;
-
-        #ifdef VERTEX
-        vec4 position(mat4 transform_projection, vec4 vertex_position) {
-            return view * model_matrix * vertex_position;
-        }
-        #endif
-
-        #ifdef PIXEL
-        vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords) {
-            vec4 texturecolor = Texel(texture, texture_coords);
-            //if the alpha here is close to zero just don't draw anything here
-            if (texturecolor.a == 0.0)
-            {
-                discard;
-            }
-            return color*texturecolor;
-        }
-        #endif
-    ]])
-
+#ifndef PIXEL
+uniform mat4 view;
+uniform mat4 model_matrix;
+mat4 modelView = view * model_matrix;
+vec4 position(mat4 transform_projection, vec4 vertex_position) {
+return modelView * vertex_position;}
+#endif
+#ifdef PIXEL
+vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords) {
+vec4 texturecolor = Texel(texture, texture_coords);
+if (texturecolor.a < 0.01) discard;
+return color * texturecolor;}
+#endif
+]])
 	scene.renderWidth = renderWidth
 	scene.renderHeight = renderHeight
 
@@ -164,12 +156,9 @@ function engine.newScene(renderWidth, renderHeight)
 
 	-- should be called in love.update every frame
 	scene.update = function(self)
-		local i = 1
-		while i <= #self.modelList do
+		for i = #self.modelList, 1, -1 do
 			local thing = self.modelList[i]
-			if thing:deathQuery() then
-				i = i + 1
-			else
+			if not thing:deathQuery() then
 				table.remove(self.modelList, i)
 			end
 		end
@@ -200,8 +189,7 @@ function engine.newScene(renderWidth, renderHeight)
 	-- will draw threeCanvas if drawArg is not given or is true (use if you want to scale the game canvas to window)
 	scene.render = function(self, drawArg)
 		local windowWidth, windowHeight = love.graphics.getDimensions()
-		local scaleX = windowWidth / self.renderWidth
-		local scaleY = windowHeight / self.renderHeight
+		local scaleX, scaleY = windowWidth / self.renderWidth, windowHeight / self.renderHeight
 
 		love.graphics.setColor(1, 1, 1)
 		love.graphics.setCanvas({ self.threeCanvas, depth = true })
@@ -211,21 +199,16 @@ function engine.newScene(renderWidth, renderHeight)
 		local Camera = self.camera
 		Camera.transform = cpml.mat4()
 		local t, a, p = Camera.transform, Camera.angle, CopyTable(Camera.pos)
-		p.x = p.x * -1
-		p.y = p.y * -1
-		p.z = p.z * -1
 		t:rotate(t, a.y, cpml.vec3.unit_x)
 		t:rotate(t, a.x, cpml.vec3.unit_y)
 		t:rotate(t, a.z, cpml.vec3.unit_z)
-		t:translate(t, p)
-		self.threeShader:send("view", Camera.perspective * TransposeMatrix(Camera.transform))
+		t:translate(t, cpml.vec3(-p.x, -p.y, -p.z))
+		self.threeShader:send("view", Camera.perspective * TransposeMatrix(t))
 
 		for i = 1, #self.modelList do
 			local model = self.modelList[i]
-			if model ~= nil and model.visible and #model.verts > 0 then
+			if model and model.visible and #model.verts > 0 then
 				self.threeShader:send("model_matrix", model.transform)
-				-- need the inverse to compute normals when model is rotated
-				--self.threeShader:send("model_matrix_inverse", TransposeMatrix(InvertMatrix(model.transform)))
 				love.graphics.setWireframe(model.wireframe)
 				if model.culling then
 					love.graphics.setMeshCullMode("back")
@@ -240,7 +223,7 @@ function engine.newScene(renderWidth, renderHeight)
 		love.graphics.setCanvas()
 
 		love.graphics.setColor(1, 1, 1)
-		if drawArg == nil or drawArg == true then
+		if drawArg == nil or drawArg then
 			love.graphics.draw(
 				self.threeCanvas,
 				windowWidth / 2,
