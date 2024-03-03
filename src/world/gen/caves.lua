@@ -1,22 +1,25 @@
 function UpdateCaves()
 	_JPROFILER.push("UpdateCaves")
 
-	local continue = true
+	local i = 1
+	while i <= #CaveList do
+		_JPROFILER.push("CaveListQuery")
+		local shouldContinue = CaveList[i]:query()
+		_JPROFILER.pop("CaveListQuery")
 
-	while continue do
-		continue = false
+		if CaveList[i].lifeTimer <= 0 then
+			table.remove(CaveList, i)
+		else
+			i = i + 1
+		end
 
-		local i = 1
-		while i <= #CaveList do
-			continue = continue or CaveList[i]:query()
-
-			if CaveList[i].lifeTimer > 0 then
-				i = i + 1
-			else
-				table.remove(CaveList, i)
-			end
+		if shouldContinue then
+			_JPROFILER.push("RestartCaveListIteration")
+			i = 1
+			_JPROFILER.pop("RestartCaveListIteration")
 		end
 	end
+
 	_JPROFILER.pop("UpdateCaves")
 end
 
@@ -38,15 +41,11 @@ function NewCave(x, y, z)
 	t.carveIndex = 0
 
 	t.query = function(self)
-		local chunk, cx, cy, cz = GetChunk(self.x, self.y, self.z)
+		local sinThetaCosPhi = math.sin(self.theta) * math.cos(self.phi)
+		local sinPhi = math.sin(self.phi)
+		local cosThetaCosPhi = math.cos(self.theta) * math.cos(self.phi)
 
-		if chunk == nil then
-			return false
-		end
-
-		self.x = self.x + math.sin(self.theta) * math.cos(self.phi)
-		self.y = self.y + math.sin(self.phi)
-		self.z = self.z + math.cos(self.theta) * math.cos(self.phi)
+		self.x, self.y, self.z = self.x + sinThetaCosPhi, self.y + sinPhi, self.z + cosThetaCosPhi
 
 		self.theta = self.theta + self.deltaTheta * 0.2
 		self.deltaTheta = self.deltaTheta * 0.9 + love.math.random() - love.math.random()
@@ -60,19 +59,20 @@ function NewCave(x, y, z)
 		self.carveIndex = self.carveIndex + 1
 
 		self.lifeTimer = self.lifeTimer - 1
-		if self.lifeTimer <= 0 then
-			return false
-		end
-
-		return true
+		return self.lifeTimer > 0
 	end
 
 	t.carve = function(self)
-		if GetVoxel(self.x, self.y, self.z) ~= 0 then
+		local voxel = GetVoxel(self.x, self.y, self.z)
+
+		if voxel ~= 0 then
+			local halfRandom = love.math.random() / 2
+
 			for i = -self.radius, self.radius do
 				for j = -self.radius, self.radius do
 					for k = -self.radius, self.radius do
-						if math.dist3d(i, j, k, 0, 0, 0) + love.math.random() / 2 < self.radius then
+						local distance = math.dist3d(i, j, k, 0, 0, 0)
+						if distance + halfRandom < self.radius then
 							local gx, gy, gz = self.x + i, self.y + j, self.z + k
 							local chunk, cx, cy, cz = GetChunk(gx, gy, gz)
 
@@ -88,7 +88,6 @@ function NewCave(x, y, z)
 				end
 			end
 		end
-		--LightingUpdate()
 	end
 
 	CaveList[#CaveList + 1] = t

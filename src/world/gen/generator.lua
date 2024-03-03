@@ -1,24 +1,22 @@
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
-	-- chunk generation
+
 	local dirt = 4
 	local grass = true
 
-	-- iterate through chunk
-	-- voxel data is stored in strings in a 2d array to simulate a 3d array of bytes
 	for i = 1, ChunkSize do
 		chunk.voxels[i] = {}
+		local xx = (x - 1) * ChunkSize + i
+
 		for k = 1, ChunkSize do
 			local temp = {}
+			local zz = (z - 1) * ChunkSize + k
 			chunk.heightMap[i][k] = 0
 
-			-- for every x and z value start at top of world going down
-			-- when hit first solid block is grass, next four are dirt
 			local sunlight = true
 			for j = WorldHeight, 1, -1 do
-				local xx = (x - 1) * ChunkSize + i
-				local zz = (z - 1) * ChunkSize + k
 				local yy = (j - 1) * TileDataSize + 1
+				local genFuncResult = generationFunction(chunk, xx, j, zz)
 
 				for a = 1, TileDataSize - 1 do
 					temp[yy + a] = string.char(0)
@@ -33,7 +31,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				else
 					temp[yy] = string.char(Tiles.AIR_Block)
 
-					if generationFunction(chunk, xx, j, zz) then
+					if genFuncResult then
 						if not grass then
 							if dirt > 0 then
 								dirt = dirt - 1
@@ -60,6 +58,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 			chunk.voxels[i][k] = table.concat(temp)
 		end
 	end
+
 	_JPROFILER.pop("GenerateTerrain")
 end
 

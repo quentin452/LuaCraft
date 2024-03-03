@@ -132,23 +132,43 @@ end
 
 function processChunkUpdates(chunk)
 	_JPROFILER.push("processChunkUpdates")
+
 	if chunk.updatedSunLight == false then
+		_JPROFILER.push("updateSunlight")
 		updateSunlight(chunk)
+		_JPROFILER.pop("updateSunlight")
 		chunk.updatedSunLight = true
 	elseif chunk.isPopulated == false then
+		_JPROFILER.push("populateChunk")
 		populateChunk(chunk)
+		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = true
 	elseif chunk.updatemodel == false then
+		_JPROFILER.push("updateChunkModel")
 		updateChunkModel(chunk)
+		_JPROFILER.pop("updateChunkModel")
+		_JPROFILER.push("LightingUpdate")
+		LightingUpdate()
+		_JPROFILER.pop("LightingUpdate")
 		chunk.updatemodel = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then
+		_JPROFILER.push("spawnPlayer")
 		spawnPlayer()
+		_JPROFILER.pop("spawnPlayer")
 	else
+		_JPROFILER.push("addChunkToRenderQueue")
 		addChunkToRenderQueue(chunk)
+		_JPROFILER.pop("addChunkToRenderQueue")
+
+		_JPROFILER.push("forceModelUpdatesForChunks")
 		forceModelUpdatesForChunks(chunk)
+		_JPROFILER.pop("forceModelUpdatesForChunks")
+
+		_JPROFILER.push("processRenderChunks")
 		processRenderChunks()
-		LightingUpdate()
+		_JPROFILER.pop("processRenderChunks")
 	end
+
 	_JPROFILER.pop("processChunkUpdates")
 end
 

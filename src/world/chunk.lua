@@ -92,21 +92,22 @@ function NewChunk(x, z)
 		--_JPROFILER.push("populate")
 
 		for i = 1, ChunkSize do
-			if self.heightMap[i] then
+			local heightMap_i = self.heightMap[i]
+			if heightMap_i then
 				for j = 1, ChunkSize do
-					if self.heightMap[i][j] then
-						local height = self.heightMap[i][j]
-						if TileCollisions(self:getVoxel(i, height, j)) then
-							for _, func in ipairs(populateChunkModLoader["chunkPopulateTag"]) do
-								func(self, i, height, j)
-							end
+					local height = heightMap_i[j]
+					if height and TileCollisions(self:getVoxel(i, height, j)) then
+						for _, func in ipairs(populateChunkModLoader["chunkPopulateTag"]) do
+							func(self, i, height, j)
 						end
 					end
 				end
 			end
 		end
+
 		--_JPROFILER.pop("populate")
 	end
+
 	-- get voxel id of the voxel in this chunk's coordinate space
 	chunk.getVoxel = function(self, x, y, z)
 		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then
@@ -466,9 +467,13 @@ function NewChunkSlice(x, y, z, parent)
 		end
 		self.isUpdating = true
 		reusableModel = {}
+
 		for i = 1, ChunkSize do
+			_JPROFILER.push("IterateI")
 			for j = self.y, self.y + SliceHeight - 1 do
+				_JPROFILER.push("IterateJ")
 				for k = 1, ChunkSize do
+					_JPROFILER.push("IterateK")
 					local this, thisSunlight, thisLocalLight = self.parent:getVoxel(i, j, k)
 					local thisLight = math.max(thisSunlight, thisLocalLight)
 					local thisTransparency = TileTransparency(this)
@@ -476,15 +481,28 @@ function NewChunkSlice(x, y, z, parent)
 					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * scale, (self.z - 1) * ChunkSize + k - 1
 
 					if thisTransparency < transparency3 then
+						_JPROFILER.push("TileRendering")
 						TileRendering(self, i, j, k, x, y, z, thisLight, reusableModel, scale)
+						_JPROFILER.pop("TileRendering")
+
+						_JPROFILER.push("BlockRendering")
 						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, reusableModel, scale)
+						_JPROFILER.pop("BlockRendering")
 					end
+
+					_JPROFILER.pop("IterateK")
 				end
+				_JPROFILER.pop("IterateJ")
 			end
+			_JPROFILER.pop("IterateI")
 		end
+
+		_JPROFILER.push("SetVerts")
 		if self.model then
 			self.model:setVerts(reusableModel)
 		end
+		_JPROFILER.pop("SetVerts")
+
 		self.isUpdating = false
 		_JPROFILER.pop("ChunkSliceUpdateModel")
 	end
