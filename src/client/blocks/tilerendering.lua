@@ -1,6 +1,7 @@
 local blockModelCache = {}
 
 function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
+	_JPROFILER.push("TileRendering")
 	local this = self.parent:getVoxel(i, j, k)
 
 	if TileModel(this) == 1 then
@@ -28,9 +29,11 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 			end
 		end
 	end
+	_JPROFILER.pop("TileRendering")
 end
 
 function createTileModel(tileID, thisLight, scale)
+	_JPROFILER.push("createTileModel")
 	local otx, oty = NumberToCoord(TileTextures(tileID)[1], 16, 16)
 	otx = otx + 16 * thisLight
 	local otx2, oty2 = otx + 1, oty + 1
@@ -48,6 +51,6 @@ function createTileModel(tileID, thisLight, scale)
 		{ diagLong, scale, diagLong, tx, ty },
 		{ diagShort, scale, diagShort, tx2, ty },
 	}
-
+	_JPROFILER.pop("createTileModel")
 	return vertices
 end

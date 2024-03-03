@@ -14,19 +14,21 @@ local function CanDrawFace(get, thisTransparency)
 end
 
 local function addFaceToModel(model, x, y, z, otx, oty, thisLight, scale, txModifier, tyModifier)
+	_JPROFILER.push("addFaceToModel")
 	local otx2, oty2 = otx + 1, oty + 1
 	local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
 	local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
 	model[#model + 1] = { x, y, z, tx + txModifier, ty + tyModifier }
 	model[#model + 1] = { x + scale, y, z, tx2 + txModifier, ty + tyModifier }
 	model[#model + 1] = { x, y, z + scale, tx + txModifier, ty2 + tyModifier }
 	model[#model + 1] = { x + scale, y, z, tx2 + txModifier, ty + tyModifier }
 	model[#model + 1] = { x + scale, y, z + scale, tx2 + txModifier, ty2 + tyModifier }
 	model[#model + 1] = { x, y, z + scale, tx + txModifier, ty2 + tyModifier }
+	_JPROFILER.pop("addFaceToModel")
 end
 
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
+	_JPROFILER.push("BlockRendering")
 	-- top and bottom
 	local getTop = self.parent:getVoxel(i, j - 1, k)
 	local getBottom = self.parent:getVoxel(i, j + 1, k)
@@ -134,4 +136,5 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
 		model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
 	end
+	_JPROFILER.pop("BlockRendering")
 end
