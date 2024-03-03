@@ -12,7 +12,7 @@ function math.dist3d(x1, y1, z1, x2, y2, z2)
 end
 
 function choose(arr)
-	return arr[math.floor(love.math.random() * #arr) + 1]
+	return arr[math.floor(math.random() * #arr) + 1]
 end
 function rand(min, max, interval)
 	local interval = interval or 1

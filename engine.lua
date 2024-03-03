@@ -20,7 +20,7 @@ function engine.newModel(verts, texture, coords, color, format)
 
 	local m = {}
 
-	-- default values if no arguments are given
+	-- Set default values if no arguments are given
 	coords = coords or { 0, 0, 0 }
 	color = color or { 1, 1, 1 }
 	format = format or {
@@ -30,23 +30,22 @@ function engine.newModel(verts, texture, coords, color, format)
 	texture = texture or love.graphics.newCanvas(1, 1)
 	verts = verts or {}
 
-	-- translate verts by given coords
+	-- Translate verts by given coords and add random UV coordinates if not given
+	local randomUV = #verts > 0 and #verts[1] < 5
 	for i = 1, #verts do
 		verts[i][1] = verts[i][1] + coords[1]
 		verts[i][2] = verts[i][2] + coords[2]
 		verts[i][3] = verts[i][3] + coords[3]
 
-		-- if not given uv coordinates, put in random ones
-		if #verts[i] < 5 then
-			verts[i][4] = love.math.random()
-			verts[i][5] = love.math.random()
+		if randomUV then
+			verts[i][4] = math.random()
+			verts[i][5] = math.random()
 		end
 	end
 
-	-- define the Model object's properties
-	m.mesh = nil
-	if #verts > 0 then
-		m.mesh = love.graphics.newMesh(format, verts, "triangles")
+	-- Define the Model object's properties
+	m.mesh = #verts > 0 and love.graphics.newMesh(format, verts, "triangles") or nil
+	if m.mesh then
 		m.mesh:setTexture(texture)
 	end
 	m.texture = texture
@@ -59,38 +58,35 @@ function engine.newModel(verts, texture, coords, color, format)
 	m.wireframe = false
 	m.culling = false
 
-	m.setVerts = function(self, verts)
-		if #verts > 0 then
-			self.mesh = love.graphics.newMesh(self.format, verts, "triangles")
+	m.setVerts = function(self, newVerts)
+		if #newVerts > 0 then
+			self.mesh = love.graphics.newMesh(self.format, newVerts, "triangles")
 			self.mesh:setTexture(self.texture)
 		end
-		self.verts = verts
+		self.verts = newVerts
 	end
 
-	-- translate and rotate the Model
-	m.setTransform = function(self, coords, rotations)
-		if rotations == nil then
-			rotations = {}
-		end
-		self.transform = cpml.mat4.identity()
-		self.transform:translate(self.transform, cpml.vec3(unpack(coords)))
+	-- Translate and rotate the Model
+	m.setTransform = function(self, newCoords, rotations)
+		rotations = rotations or {}
+		self.transform = TransposeMatrix(cpml.mat4.identity())
+		self.transform:translate(self.transform, cpml.vec3(unpack(newCoords)))
 		for i = 1, #rotations, 2 do
 			self.transform:rotate(self.transform, rotations[i], rotations[i + 1])
 		end
 		self.transform = TransposeMatrix(self.transform)
 	end
 
-	-- returns a list of the verts this Model contains
+	-- Returns a list of the verts this Model contains
 	m.getVerts = function(self)
 		local ret = {}
 		for i = 1, #self.verts do
 			ret[#ret + 1] = { self.verts[i][1], self.verts[i][2], self.verts[i][3] }
 		end
-
 		return ret
 	end
 
-	-- prints a list of the verts this Model contains
+	-- Prints a list of the verts this Model contains
 	m.printVerts = function(self)
 		local verts = self:getVerts()
 		for i = 1, #verts do
@@ -101,16 +97,18 @@ function engine.newModel(verts, texture, coords, color, format)
 		end
 	end
 
-	-- set a texture to this Model
+	-- Set a texture to this Model
 	m.setTexture = function(self, tex)
-		self.mesh:setTexture(tex)
+		if self.mesh then
+			self.mesh:setTexture(tex)
+		end
 	end
 
-	-- check if this Model must be destroyed
-	-- (called by the parent Scene model's update function automatically)
+	-- Check if this Model must be destroyed (called by the parent Scene model's update function automatically)
 	m.deathQuery = function(self)
 		return not self.dead
 	end
+
 	_JPROFILER.pop("engine.newModel")
 	return m
 end

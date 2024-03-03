@@ -32,9 +32,9 @@ function NewCave(x, y, z)
 	t.z = z
 	t.lifeTimer = rand(64, 256)
 
-	t.theta = love.math.random() * math.pi * 2
+	t.theta = math.random() * math.pi * 2
 	t.deltaTheta = 0
-	t.phi = love.math.random() * math.pi * 2
+	t.phi = math.random() * math.pi * 2
 	t.deltaPhi = 0
 
 	t.radius = rand(2, 3, 0.1)
@@ -48,9 +48,9 @@ function NewCave(x, y, z)
 		self.x, self.y, self.z = self.x + sinThetaCosPhi, self.y + sinPhi, self.z + cosThetaCosPhi
 
 		self.theta = self.theta + self.deltaTheta * 0.2
-		self.deltaTheta = self.deltaTheta * 0.9 + love.math.random() - love.math.random()
+		self.deltaTheta = self.deltaTheta * 0.9 + math.random() - math.random()
 		self.phi = self.phi / 2 + self.deltaPhi / 4
-		self.deltaPhi = self.deltaPhi * 0.75 + love.math.random() - love.math.random()
+		self.deltaPhi = self.deltaPhi * 0.75 + math.random() - math.random()
 
 		if self.carveIndex >= self.radius then
 			self:carve()
@@ -66,7 +66,7 @@ function NewCave(x, y, z)
 		local voxel = GetVoxel(self.x, self.y, self.z)
 
 		if voxel ~= 0 then
-			local halfRandom = love.math.random() / 2
+			local halfRandom = math.random() / 2
 
 			for i = -self.radius, self.radius do
 				for j = -self.radius, self.radius do

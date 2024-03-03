@@ -16,7 +16,7 @@ function initGlobalRandomNumbers()
 
 	Salt = {}
 	for i = 1, 128 do
-		Salt[i] = love.math.random()
+		Salt[i] = math.random()
 	end
 	if enablePROFIProfiler then
 		ProFi:checkMemory(2, "Second profil")

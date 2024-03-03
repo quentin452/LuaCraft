@@ -3,10 +3,10 @@ function ExampleMod_GenerateTree(chunk, x, y, z)
 
 	local treeBlocks = {}
 
-	local treeHeight = 4 + math.floor(love.math.random() * 2 + 0.5)
+	local treeHeight = 4 + math.floor(math.random() * 2 + 0.5)
 	for tr = 1, treeHeight do
 		local gx, gy, gz = Globalize(chunk.x, chunk.z, x, y + tr, z)
-		table.insert(treeBlocks, { gx, gy, gz, Tiles.OAK_LOG_Block  })
+		table.insert(treeBlocks, { gx, gy, gz, Tiles.OAK_LOG_Block })
 	end
 
 	local leafWidth = 2
@@ -17,11 +17,11 @@ function ExampleMod_GenerateTree(chunk, x, y, z)
 				chance = 0.5
 			end
 
-			if love.math.random() < chance then
+			if math.random() < chance then
 				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 2, z + ly)
 				table.insert(treeBlocks, { gx, gy, gz, Tiles.OAK_LEAVE_Block })
 			end
-			if love.math.random() < chance then
+			if math.random() < chance then
 				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight - 1, z + ly)
 				table.insert(treeBlocks, { gx, gy, gz, Tiles.OAK_LEAVE_Block })
 			end
@@ -36,7 +36,7 @@ function ExampleMod_GenerateTree(chunk, x, y, z)
 				chance = 0.5
 			end
 
-			if love.math.random() < chance then
+			if math.random() < chance then
 				local gx, gy, gz = Globalize(chunk.x, chunk.z, x + lx, y + treeHeight, z + ly)
 				table.insert(treeBlocks, { gx, gy, gz, Tiles.OAK_LEAVE_Block })
 			end
