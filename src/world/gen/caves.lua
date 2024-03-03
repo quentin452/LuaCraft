@@ -1,30 +1,23 @@
 function UpdateCaves()
 	_JPROFILER.push("UpdateCaves")
-	UpdateIndividualCaves()
+
+	local continue = true
+
+	while continue do
+		continue = false
+
+		local i = 1
+		while i <= #CaveList do
+			continue = continue or CaveList[i]:query()
+
+			if CaveList[i].lifeTimer > 0 then
+				i = i + 1
+			else
+				table.remove(CaveList, i)
+			end
+		end
+	end
 	_JPROFILER.pop("UpdateCaves")
-end
-
-function UpdateIndividualCaves()
-	_JPROFILER.push("UpdateIndividualCaves")
-	local continue = false
-	for i = #CaveList, 1, -1 do
-		continue = continue or UpdateSingleCave(i)
-	end
-	_JPROFILER.pop("UpdateIndividualCaves")
-	return continue
-end
-
-function UpdateSingleCave(index)
-	_JPROFILER.push("UpdateSingleCave")
-	local cave = CaveList[index]
-	if cave:query() then
-		_JPROFILER.pop("UpdateSingleCave")
-		return true
-	else
-		table.remove(CaveList, index)
-		_JPROFILER.pop("UpdateSingleCave")
-		return true
-	end
 end
 
 function NewCave(x, y, z)
@@ -34,6 +27,7 @@ function NewCave(x, y, z)
 	t.x = x
 	t.y = y
 	t.z = z
+	t.lifeTimer = rand(64, 256)
 
 	t.theta = love.math.random() * math.pi * 2
 	t.deltaTheta = 0
@@ -44,11 +38,9 @@ function NewCave(x, y, z)
 	t.carveIndex = 0
 
 	t.query = function(self)
-		_JPROFILER.push("CaveQuery")
 		local chunk, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 
 		if chunk == nil then
-			_JPROFILER.pop("CaveQuery")
 			return false
 		end
 
@@ -66,12 +58,16 @@ function NewCave(x, y, z)
 			self.carveIndex = 0
 		end
 		self.carveIndex = self.carveIndex + 1
-		_JPROFILER.pop("CaveQuery")
+
+		self.lifeTimer = self.lifeTimer - 1
+		if self.lifeTimer <= 0 then
+			return false
+		end
+
 		return true
 	end
 
 	t.carve = function(self)
-		_JPROFILER.push("CaveCarve")
 		if GetVoxel(self.x, self.y, self.z) ~= 0 then
 			for i = -self.radius, self.radius do
 				for j = -self.radius, self.radius do
@@ -92,7 +88,7 @@ function NewCave(x, y, z)
 				end
 			end
 		end
-		_JPROFILER.pop("CaveCarve")
+		--LightingUpdate()
 	end
 
 	CaveList[#CaveList + 1] = t
