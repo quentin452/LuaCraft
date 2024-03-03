@@ -1,3 +1,4 @@
+math.randomseed(os.time())
 lovez = love
 lovefilesystem = lovez.filesystem
 lovegraphics = lovez.graphics
