@@ -177,8 +177,8 @@ end
 
 function populateChunk(chunk)
 	_JPROFILER.push("populateChunk")
-	UpdateCaves()
 	chunk:populate()
+	UpdateCaves()
 	chunk:processRequests()
 	_JPROFILER.pop("populateChunk")
 end
