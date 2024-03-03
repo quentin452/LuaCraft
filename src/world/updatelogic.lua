@@ -191,14 +191,20 @@ function forceModelUpdatesForChunks(chunk)
 	updateCounterForRemeshModel = updateCounterForRemeshModel + 1
 	-- This is to force model updates for chunks; need to be optimized
 	if updateCounterForRemeshModel > 1500 then
-		for i = 1, WorldHeight / SliceHeight do
-			if chunk.slices[i] and not chunk.slices[i].isUpdating then
-				chunk.slices[i]:updateModel()
-			end
-		end
+		updateSlicesForChunk(chunk)
 		updateCounterForRemeshModel = 0
 	end
 	_JPROFILER.pop("forceModelUpdatesForChunks")
+end
+
+function updateSlicesForChunk(chunk)
+	_JPROFILER.push("updateSlicesForChunk")
+	for i = 1, WorldHeight / SliceHeight do
+		if chunk.slices[i] and not chunk.slices[i].isUpdating then
+			chunk.slices[i]:updateModel()
+		end
+	end
+	_JPROFILER.pop("updateSlicesForChunk")
 end
 
 function processRenderChunks()

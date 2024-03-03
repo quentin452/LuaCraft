@@ -379,7 +379,7 @@ function NewChunk(x, z)
 	end
 
 	local function findUpdatedSlices(self, sliceUpdates)
-		--_JPROFILER.push("findUpdatedSlices")
+		_JPROFILER.push("findUpdatedSlices")
 
 		local INDEX, NEG_X, POS_X, NEG_Z, POS_Z = 1, 2, 3, 4, 5
 
@@ -416,11 +416,11 @@ function NewChunk(x, z)
 				end
 			end
 		end
-		--_JPROFILER.pop("findUpdatedSlices")
+		_JPROFILER.pop("findUpdatedSlices")
 	end
 
 	function updateFlaggedSlices(self, sliceUpdates)
-		--_JPROFILER.push("updateFlaggedSlices")
+		_JPROFILER.push("updateFlaggedSlices")
 
 		for i = 1, WorldHeight / SliceHeight do
 			if sliceUpdates[i][1] then
@@ -429,27 +429,21 @@ function NewChunk(x, z)
 				end
 			end
 		end
-		--_JPROFILER.pop("updateFlaggedSlices")
+		_JPROFILER.pop("updateFlaggedSlices")
 	end
 
 	chunk.updateModel = function(self)
-		--_JPROFILER.push("chunk.updateModel")
+		_JPROFILER.push("chunk.updateModel")
 		local sliceUpdates = initSliceUpdates()
 		findUpdatedSlices(self, sliceUpdates)
 		updateFlaggedSlices(self, sliceUpdates)
 
 		self.changes = {}
-		--_JPROFILER.pop("chunk.updateModel")
+		_JPROFILER.pop("chunk.updateModel")
 	end
 	_JPROFILER.pop("NewChunk")
 
 	return chunk
-end
-
-function updateAllChunksModel()
-	for _, chunk in ipairs(renderChunks) do
-		chunk:updateModel()
-	end
 end
 
 local transparency3 = 3
@@ -466,14 +460,12 @@ function NewChunkSlice(x, y, z, parent)
 	t:assignModel(compmodel)
 	t.isUpdating = false
 	t.updateModel = function(self)
+		_JPROFILER.push("ChunkSliceUpdateModel")
 		if not self or not self.parent or not self.model then
 			return
 		end
-
 		self.isUpdating = true
-
 		reusableModel = {}
-
 		for i = 1, ChunkSize do
 			for j = self.y, self.y + SliceHeight - 1 do
 				for k = 1, ChunkSize do
@@ -490,11 +482,11 @@ function NewChunkSlice(x, y, z, parent)
 				end
 			end
 		end
-
 		if self.model then
 			self.model:setVerts(reusableModel)
 		end
 		self.isUpdating = false
+		_JPROFILER.pop("ChunkSliceUpdateModel")
 	end
 
 	t.destroyModel = function(self)

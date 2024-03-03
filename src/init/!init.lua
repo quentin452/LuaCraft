@@ -16,9 +16,16 @@ function initWorldGenerationVariables()
 end
 
 function InitializeGame()
+	_JPROFILER.push("InitializeGame")
+	_JPROFILER.push("SettingsHandlingInit")
 	SettingsHandlingInit()
+	_JPROFILER.pop("SettingsHandlingInit")
+	_JPROFILER.push("loadAndSaveLuaCraftFileSystem")
 	loadAndSaveLuaCraftFileSystem()
+	_JPROFILER.pop("loadAndSaveLuaCraftFileSystem")
+	_JPROFILER.push("LoadMods")
 	LoadMods()
+	_JPROFILER.pop("LoadMods")
 	if
 		EnableLuaCraftLoggingError == nil
 		or EnableLuaCraftLoggingWarn == nil
@@ -27,14 +34,31 @@ function InitializeGame()
 		--TODO FIX EnableLuaCraftLoggingError + EnableLuaCraftLoggingWarn + EnableLuaCraftPrintLoggingNormalLogging are nil at first game launch
 		love.event.quit()
 	end
+	_JPROFILER.push("saveLogsToOldLogsFolder")
 	saveLogsToOldLogsFolder()
+	_JPROFILER.pop("saveLogsToOldLogsFolder")
+	_JPROFILER.push("InitializeWindowSettings")
 	InitializeWindowSettings()
+	_JPROFILER.pop("InitializeWindowSettings")
 	LogicAccumulator = 0
 	PhysicsStep = true
+	_JPROFILER.push("InitializeAssets")
 	InitializeAssets()
+	_JPROFILER.pop("InitializeAssets")
+	_JPROFILER.push("InitializeGuisAndHud")
 	InitializeGuisAndHud()
+	_JPROFILER.pop("InitializeGuisAndHud")
+	_JPROFILER.push("InitializeShaders")
 	InitializeShaders()
+	_JPROFILER.pop("InitializeShaders")
+	_JPROFILER.push("InitializeTileCanevas")
 	InitializeTileCanevas()
+	_JPROFILER.pop("InitializeTileCanevas")
+	_JPROFILER.push("InitalizeLightningCanevas")
 	InitalizeLightningCanevas()
+	_JPROFILER.pop("InitalizeLightningCanevas")
+	_JPROFILER.push("initWorldGenerationVariables")
 	initWorldGenerationVariables()
+	_JPROFILER.pop("initWorldGenerationVariables")
+	_JPROFILER.pop("InitializeGame")
 end
