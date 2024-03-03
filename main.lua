@@ -1,4 +1,3 @@
---if i don't use math.randomseed(os.time()) ,math.random calls will not work 
 math.randomseed(os.time())
 lovez = love
 lovefilesystem = lovez.filesystem

@@ -1,61 +1,48 @@
 --TODO put lightning into another thread
+local SIXDIRECTIONS = {
+	{ x = 0, y = -1, z = 0 }, -- Down
+	{ x = 0, y = 1, z = 0 }, -- Up
+	{ x = 1, y = 0, z = 0 }, -- Right
+	{ x = -1, y = 0, z = 0 }, -- Left
+	{ x = 0, y = 0, z = 1 }, -- Forward
+	{ x = 0, y = 0, z = -1 }, -- Backward
+}
+
+local FOURDIRECTIONS = {
+	{ x = 1, y = 0, z = 0 }, -- Right
+	{ x = -1, y = 0, z = 0 }, -- Left
+	{ x = 0, y = 0, z = 1 }, -- Forward
+	{ x = 0, y = 0, z = -1 }, -- Backward
+}
+
 local LightingQueue = {}
 local LightingRemovalQueue = {}
 
 -- Function to add an item to the lighting queue
 local function LightingQueueAdd(lthing)
-	--_JPROFILER.push("frame")
-
-	--_JPROFILER.push("LightingQueueAdd")
-
 	LightingQueue[#LightingQueue + 1] = lthing
-	--_JPROFILER.pop("LightingQueueAdd")
-	--_JPROFILER.pop("frame")
-
 	return lthing
 end
 
 -- Function to add an item to the lighting removal queue
 local function LightingRemovalQueueAdd(lthing)
-	--_JPROFILER.push("LightingRemovalQueueAdd")
-
 	LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
-	--_JPROFILER.pop("LightingRemovalQueueAdd")
-
 	return lthing
 end
 
--- Function to process lighting updates
 function LightingUpdate()
-	--_JPROFILER.push("frame")
-
-	--_JPROFILER.push("LightingUpdate")
-
-	-- Process removals and additions
 	for _, lthing in ipairs(LightingRemovalQueue) do
 		lthing:query()
 	end
-
 	for _, lthing in ipairs(LightingQueue) do
 		lthing:query()
 	end
-
-	-- Clear both queues
 	LightingRemovalQueue = {}
 	LightingQueue = {}
-	--_JPROFILER.pop("LightingUpdate")
-	--_JPROFILER.pop("frame")
 end
 
 function NewSunlightAddition(x, y, z, value)
-	--_JPROFILER.push("NewSunlightAddition")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.value = value
-
+	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
@@ -63,30 +50,18 @@ function NewSunlightAddition(x, y, z, value)
 		end
 		local val = cget:getVoxel(cx, cy, cz)
 		local dat = cget:getVoxelFirstData(cx, cy, cz)
-
 		if self.value >= 0 and TileSemiLightable(val) and dat < self.value then
 			cget:setVoxelFirstData(cx, cy, cz, self.value)
-			NewSunlightAddition(self.x, self.y - 1, self.z, self.value - 1)
-			NewSunlightAddition(self.x, self.y + 1, self.z, self.value - 1)
-			NewSunlightAddition(self.x + 1, self.y, self.z, self.value - 1)
-			NewSunlightAddition(self.x - 1, self.y, self.z, self.value - 1)
-			NewSunlightAddition(self.x, self.y, self.z + 1, self.value - 1)
-			NewSunlightAddition(self.x, self.y, self.z - 1, self.value - 1)
+			for _, dir in ipairs(SIXDIRECTIONS) do
+				NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+			end
 		end
 	end
-
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewSunlightAddition")
 end
 
 function NewSunlightAdditionCreation(x, y, z)
-	--_JPROFILER.push("NewSunlightAdditionCreation")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-
+	local t = { x = x, y = y, z = z }
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
@@ -94,25 +69,15 @@ function NewSunlightAdditionCreation(x, y, z)
 		end
 		local val = cget:getVoxel(cx, cy, cz)
 		local dat = cget:getVoxelFirstData(cx, cy, cz)
-
 		if TileSemiLightable(val) and dat > 0 then
 			NewSunlightForceAddition(self.x, self.y, self.z, dat)
 		end
 	end
-
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewSunlightAdditionCreation")
 end
 
 function NewSunlightForceAddition(x, y, z, value)
-	--_JPROFILER.push("NewSunlightForceAddition")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.value = value
-
+	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
@@ -122,28 +87,16 @@ function NewSunlightForceAddition(x, y, z, value)
 
 		if self.value >= 0 and TileSemiLightable(val) then
 			cget:setVoxelFirstData(cx, cy, cz, self.value)
-			NewSunlightAddition(self.x, self.y - 1, self.z, self.value - 1)
-			NewSunlightAddition(self.x, self.y + 1, self.z, self.value - 1)
-			NewSunlightAddition(self.x + 1, self.y, self.z, self.value - 1)
-			NewSunlightAddition(self.x - 1, self.y, self.z, self.value - 1)
-			NewSunlightAddition(self.x, self.y, self.z + 1, self.value - 1)
-			NewSunlightAddition(self.x, self.y, self.z - 1, self.value - 1)
+			for _, dir in ipairs(SIXDIRECTIONS) do
+				NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+			end
 		end
 	end
-
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewSunlightForceAddition")
 end
 
 function NewSunlightDownAddition(x, y, z, value)
-	--_JPROFILER.push("NewSunlightDownAddition")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.value = value
-
+	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
@@ -151,31 +104,19 @@ function NewSunlightDownAddition(x, y, z, value)
 		end
 		local val = cget:getVoxel(cx, cy, cz)
 		local dat = cget:getVoxelFirstData(cx, cy, cz)
-
 		if TileLightable(val) and dat <= self.value then
 			cget:setVoxelFirstData(cx, cy, cz, self.value)
 			NewSunlightDownAddition(self.x, self.y - 1, self.z, self.value)
-
-			NewSunlightAddition(self.x + 1, self.y, self.z, self.value - 1)
-			NewSunlightAddition(self.x - 1, self.y, self.z, self.value - 1)
-			NewSunlightAddition(self.x, self.y, self.z + 1, self.value - 1)
-			NewSunlightAddition(self.x, self.y, self.z - 1, self.value - 1)
+			for _, dir in ipairs(FOURDIRECTIONS) do
+				NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+			end
 		end
 	end
-
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewSunlightDownAddition")
 end
 
 function NewSunlightSubtraction(x, y, z, value)
-	--_JPROFILER.push("NewSunlightSubtraction")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.value = value
-
+	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
@@ -183,16 +124,12 @@ function NewSunlightSubtraction(x, y, z, value)
 		end
 		local val = cget:getVoxel(cx, cy, cz)
 		local fget = cget:getVoxelFirstData(cx, cy, cz)
-
 		if fget > 0 and self.value >= 0 and TileSemiLightable(val) then
 			if fget < self.value then
 				cget:setVoxelFirstData(cx, cy, cz, Tiles.AIR_Block)
-				NewSunlightSubtraction(self.x, self.y - 1, self.z, fget)
-				NewSunlightSubtraction(self.x, self.y + 1, self.z, fget)
-				NewSunlightSubtraction(self.x + 1, self.y, self.z, fget)
-				NewSunlightSubtraction(self.x - 1, self.y, self.z, fget)
-				NewSunlightSubtraction(self.x, self.y, self.z + 1, fget)
-				NewSunlightSubtraction(self.x, self.y, self.z - 1, fget)
+				for _, dir in ipairs(SIXDIRECTIONS) do
+					NewSunlightSubtraction(self.x + dir.x, self.y + dir.y, self.z + dir.z, fget)
+				end
 			else
 				NewSunlightForceAddition(self.x, self.y, self.z, fget)
 			end
@@ -200,48 +137,26 @@ function NewSunlightSubtraction(x, y, z, value)
 			return false
 		end
 	end
-
 	LightingRemovalQueueAdd(t)
-	--_JPROFILER.pop("NewSunlightSubtraction")
 end
 
 function NewSunlightDownSubtraction(x, y, z)
-	--_JPROFILER.push("NewSunlightDownSubtraction")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-
+	local t = { x = x, y = y, z = z }
 	t.query = function(self)
 		if TileSemiLightable(GetVoxel(self.x, self.y, self.z)) then
 			SetVoxelFirstData(self.x, self.y, self.z, Tiles.AIR_Block)
-
 			NewSunlightDownSubtraction(self.x, self.y - 1, self.z)
-
-			NewSunlightSubtraction(self.x + 1, self.y, self.z, 15)
-			NewSunlightSubtraction(self.x - 1, self.y, self.z, 15)
-			NewSunlightSubtraction(self.x, self.y, self.z + 1, 15)
-			NewSunlightSubtraction(self.x, self.y, self.z - 1, 15)
-			-- NewSunlightSubtraction(self.x,self.y-1,self.z, 15)
-
+			for _, dir in ipairs(FOURDIRECTIONS) do
+				NewSunlightSubtraction(self.x + dir.x, self.y + dir.y, self.z + dir.z, 15)
+			end
 			return true
 		end
 	end
-
 	LightingRemovalQueueAdd(t)
-	--_JPROFILER.pop("NewSunlightDownSubtraction")
 end
 
 function NewLocalLightAddition(x, y, z, value)
-	--_JPROFILER.push("NewLocalLightAddition")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.value = value
-
+	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self) --, x,y,z, value, chunk)
 		local chunk = GetChunk(self.x, self.y, self.z)
 		if chunk == nil then
@@ -249,51 +164,35 @@ function NewLocalLightAddition(x, y, z, value)
 		end
 		local cx, cy, cz = Localize(self.x, self.y, self.z)
 		local val, dis, dat = chunk:getVoxel(cx, cy, cz)
-
 		if TileSemiLightable(val) and dat < self.value then
 			chunk:setVoxelSecondData(cx, cy, cz, self.value)
-
 			if self.value > 1 then
-				NewLocalLightAddition(self.x, self.y - 1, self.z, self.value - 1)
-				NewLocalLightAddition(self.x, self.y + 1, self.z, self.value - 1)
-				NewLocalLightAddition(self.x + 1, self.y, self.z, self.value - 1)
-				NewLocalLightAddition(self.x - 1, self.y, self.z, self.value - 1)
-				NewLocalLightAddition(self.x, self.y, self.z + 1, self.value - 1)
-				NewLocalLightAddition(self.x, self.y, self.z - 1, self.value - 1)
+				for _, dir in ipairs(SIXDIRECTIONS) do
+					NewLocalLightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+				end
 			end
 		end
 	end
-
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewLocalLightAddition")
 end
 
 function NewLocalLightSubtraction(x, y, z, value)
-	--_JPROFILER.push("NewLocalLightSubtraction")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.value = value
+	local t = { x = x, y = y, z = z, value = value }
 
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
-		local val, dat = cget:getVoxel(cx, cy, cz)
+		local val = cget:getVoxel(cx, cy, cz)
 		local fget = cget:getVoxelSecondData(cx, cy, cz)
 
 		if fget > 0 and self.value >= 0 and TileSemiLightable(val) then
 			if fget < self.value then
 				cget:setVoxelSecondData(cx, cy, cz, 0)
-				NewLocalLightSubtraction(self.x, self.y - 1, self.z, fget)
-				NewLocalLightSubtraction(self.x, self.y + 1, self.z, fget)
-				NewLocalLightSubtraction(self.x + 1, self.y, self.z, fget)
-				NewLocalLightSubtraction(self.x - 1, self.y, self.z, fget)
-				NewLocalLightSubtraction(self.x, self.y, self.z + 1, fget)
-				NewLocalLightSubtraction(self.x, self.y, self.z - 1, fget)
+				for _, dir in ipairs(SIXDIRECTIONS) do
+					NewLocalLightSubtraction(self.x + dir.x, self.y + dir.y, self.z + dir.z, fget)
+				end
 			else
 				NewLocalLightForceAddition(self.x, self.y, self.z, fget)
 			end
@@ -303,67 +202,38 @@ function NewLocalLightSubtraction(x, y, z, value)
 	end
 
 	LightingRemovalQueueAdd(t)
-	--_JPROFILER.pop("NewLocalLightSubtraction")
 end
 
 function NewLocalLightForceAddition(x, y, z, value)
-	--_JPROFILER.push("NewLocalLightForceAddition")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.value = value
-
+	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
-		local val, dis, dat = cget:getVoxel(cx, cy, cz)
+		local val = cget:getVoxel(cx, cy, cz)
 
 		if self.value >= 0 and TileSemiLightable(val) then
 			cget:setVoxelSecondData(cx, cy, cz, self.value)
-			NewLocalLightAddition(self.x, self.y - 1, self.z, self.value - 1)
-			NewLocalLightAddition(self.x, self.y + 1, self.z, self.value - 1)
-			NewLocalLightAddition(self.x + 1, self.y, self.z, self.value - 1)
-			NewLocalLightAddition(self.x - 1, self.y, self.z, self.value - 1)
-			NewLocalLightAddition(self.x, self.y, self.z + 1, self.value - 1)
-			NewLocalLightAddition(self.x, self.y, self.z - 1, self.value - 1)
+			for _, dir in ipairs(SIXDIRECTIONS) do
+				NewLocalLightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+			end
 		end
 	end
-
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewLocalLightForceAddition")
 end
 
 function NewLocalLightAdditionCreation(x, y, z)
-	--_JPROFILER.push("NewLocalLightAdditionCreation")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-
+	local t = { x = x, y = y, z = z }
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
-		local val, dis, dat = cget:getVoxel(cx, cy, cz)
-
+		local val, dat = cget:getVoxel(cx, cy, cz)
 		if TileSemiLightable(val) and dat > 0 then
-			-- NewLocalLightForceAddition(self.x,self.y,self.z, dat)
-			-- cget:setVoxelSecondData(cx,cy,cz, dat)
 			NewLocalLightForceAddition(self.x, self.y, self.z, dat)
-			-- NewLocalLightForceAddition(self.x,self.y+1,self.z, dat-1)
-			-- NewLocalLightForceAddition(self.x+1,self.y,self.z, dat-1)
-			-- NewLocalLightForceAddition(self.x-1,self.y,self.z, dat-1)
-			-- NewLocalLightForceAddition(self.x,self.y,self.z+1, dat-1)
-			-- NewLocalLightForceAddition(self.x,self.y,self.z-1, dat-1)
 		end
 	end
-
 	LightingQueueAdd(t)
-	--_JPROFILER.pop("NewLocalLightAdditionCreation")
 end
