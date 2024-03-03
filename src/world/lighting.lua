@@ -7,14 +7,12 @@ local SIXDIRECTIONS = {
 	{ x = 0, y = 0, z = 1 }, -- Forward
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
-
 local FOURDIRECTIONS = {
 	{ x = 1, y = 0, z = 0 }, -- Right
 	{ x = -1, y = 0, z = 0 }, -- Left
 	{ x = 0, y = 0, z = 1 }, -- Forward
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
-
 local LightingQueue = {}
 local LightingRemovalQueue = {}
 
@@ -84,7 +82,6 @@ function NewSunlightForceAddition(x, y, z, value)
 			return
 		end
 		local val = cget:getVoxel(cx, cy, cz)
-
 		if self.value >= 0 and TileSemiLightable(val) then
 			cget:setVoxelFirstData(cx, cy, cz, self.value)
 			for _, dir in ipairs(SIXDIRECTIONS) do
@@ -133,7 +130,6 @@ function NewSunlightSubtraction(x, y, z, value)
 			else
 				NewSunlightForceAddition(self.x, self.y, self.z, fget)
 			end
-
 			return false
 		end
 	end
@@ -149,6 +145,7 @@ function NewSunlightDownSubtraction(x, y, z)
 			for _, dir in ipairs(FOURDIRECTIONS) do
 				NewSunlightSubtraction(self.x + dir.x, self.y + dir.y, self.z + dir.z, 15)
 			end
+			-- NewSunlightSubtraction(self.x,self.y-1,self.z, 15)
 			return true
 		end
 	end
@@ -178,15 +175,13 @@ end
 
 function NewLocalLightSubtraction(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
-
 	t.query = function(self)
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
-		local val = cget:getVoxel(cx, cy, cz)
+		local val, dat = cget:getVoxel(cx, cy, cz)
 		local fget = cget:getVoxelSecondData(cx, cy, cz)
-
 		if fget > 0 and self.value >= 0 and TileSemiLightable(val) then
 			if fget < self.value then
 				cget:setVoxelSecondData(cx, cy, cz, 0)
@@ -196,11 +191,9 @@ function NewLocalLightSubtraction(x, y, z, value)
 			else
 				NewLocalLightForceAddition(self.x, self.y, self.z, fget)
 			end
-
 			return false
 		end
 	end
-
 	LightingRemovalQueueAdd(t)
 end
 
@@ -211,8 +204,7 @@ function NewLocalLightForceAddition(x, y, z, value)
 		if cget == nil then
 			return
 		end
-		local val = cget:getVoxel(cx, cy, cz)
-
+		local val, dis, dat = cget:getVoxel(cx, cy, cz)
 		if self.value >= 0 and TileSemiLightable(val) then
 			cget:setVoxelSecondData(cx, cy, cz, self.value)
 			for _, dir in ipairs(SIXDIRECTIONS) do
@@ -230,9 +222,16 @@ function NewLocalLightAdditionCreation(x, y, z)
 		if cget == nil then
 			return
 		end
-		local val, dat = cget:getVoxel(cx, cy, cz)
+		local val, dis, dat = cget:getVoxel(cx, cy, cz)
 		if TileSemiLightable(val) and dat > 0 then
+			-- NewLocalLightForceAddition(self.x,self.y,self.z, dat)
+			-- cget:setVoxelSecondData(cx,cy,cz, dat)
 			NewLocalLightForceAddition(self.x, self.y, self.z, dat)
+			-- NewLocalLightForceAddition(self.x,self.y+1,self.z, dat-1)
+			-- NewLocalLightForceAddition(self.x+1,self.y,self.z, dat-1)
+			-- NewLocalLightForceAddition(self.x-1,self.y,self.z, dat-1)
+			-- NewLocalLightForceAddition(self.x,self.y,self.z+1, dat-1)
+			-- NewLocalLightForceAddition(self.x,self.y,self.z-1, dat-1)
 		end
 	end
 	LightingQueueAdd(t)
