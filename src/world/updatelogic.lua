@@ -12,14 +12,6 @@ local destroyChunkModels = 0
 local updateCounterForRemeshModel = 0
 
 RenderDistance = getRenderDistanceValue()
-function isChunkLoaded(chunkX, chunkZ)
-	return ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
-end
---how to call isChunkLoaded
---local gx, gy, gz = (self.x - 1) * ChunkSize + i, height, (self.z - 1) * ChunkSize + j
---local chunkX, chunkZ = math.floor(gx / ChunkSize), math.floor(gz / ChunkSize)
---if isChunkLoaded(chunkX, chunkZ) then
---end
 
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")

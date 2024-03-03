@@ -451,22 +451,6 @@ function updateAllChunksModel()
 		chunk:updateModel()
 	end
 end
-function CanDrawFace(get, thisTransparency)
-	local tget = TileTransparency(get)
-
-	-- Transparency of 0 is air, so can't draw any face
-	if tget == 0 then
-		return false
-	end
-
-	-- For tree leaves, transparency of 1 allows drawing all faces
-	if tget == 1 then
-		return true
-	end
-
-	-- Draw faces if the transparencies are different
-	return tget ~= thisTransparency
-end
 
 local transparency3 = 3
 local reusableModel = {}

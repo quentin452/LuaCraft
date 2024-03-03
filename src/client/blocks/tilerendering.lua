@@ -1,16 +1,18 @@
 local blockModelCache = {}
+
 function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 	local this = self.parent:getVoxel(i, j, k)
+
 	if TileModel(this) == 1 then
 		if not blockModelCache[this] then
-			blockModelCache[this] = createTileModel(self, this, thisLight, scale)
+			blockModelCache[this] = createTileModel(this, thisLight, scale)
 		end
 
 		for _, v in ipairs(blockModelCache[this]) do
 			model[#model + 1] = { x + v[1], y + v[2], z + v[3], v[4], v[5] }
 		end
 
-		--create model dupplicata for flowers/sapplings
+		-- create model dupplicata for flowers/sapplings
 		if this == Tiles.YELLO_FLOWER_Block or this == Tiles.ROSE_FLOWER_Block or this == Tiles.OAK_SAPPLING_Block then
 			for _, v in ipairs(blockModelCache[this]) do
 				local originX = v[1] - 0.5
@@ -28,7 +30,7 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 	end
 end
 
-function createTileModel(self, tileID, thisLight, scale)
+function createTileModel(tileID, thisLight, scale)
 	local otx, oty = NumberToCoord(TileTextures(tileID)[1], 16, 16)
 	otx = otx + 16 * thisLight
 	local otx2, oty2 = otx + 1, oty + 1
@@ -38,18 +40,14 @@ function createTileModel(self, tileID, thisLight, scale)
 	local diagLong = 0.7071 * scale * 0.5 + 0.5
 	local diagShort = -0.7071 * scale * 0.5 + 0.5
 
-	local vertices = {}
-
-	for _, v in ipairs({
+	local vertices = {
 		{ diagShort, 0, diagShort, tx2, ty2 },
 		{ diagLong, 0, diagLong, tx, ty2 },
 		{ diagShort, scale, diagShort, tx2, ty },
 		{ diagLong, 0, diagLong, tx, ty2 },
 		{ diagLong, scale, diagLong, tx, ty },
 		{ diagShort, scale, diagShort, tx2, ty },
-	}) do
-		table.insert(vertices, v)
-	end
+	}
 
 	return vertices
 end
