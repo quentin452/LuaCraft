@@ -4,9 +4,6 @@
 ChunkSet = {}
 ChunkHashTable = {}
 CaveList = {}
-ChunkRequests = {}
-LightingQueue = {}
-LightingRemovalQueue = {}
 ThingList = {}
 local destroyChunkModels = 0
 local updateCounterForRemeshModel = 0

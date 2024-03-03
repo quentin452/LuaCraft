@@ -29,12 +29,10 @@ function DrawF3()
 	end
 
 	love.graphics.print("FPS: " .. love.timer.getFPS(), 0, 70)
-	love.graphics.print("#LightingQueue: " .. #LightingQueue, 0, 90)
-	love.graphics.print("#LightingRQueue: " .. #LightingRemovalQueue, 0, 110)
 
 	local playerDirection = GetPlayerDirection(ThePlayer.rotation, ThePlayer.pitch)
 	if playerDirection then
-		love.graphics.print("Direction: " .. playerDirection, 0, 130)
+		love.graphics.print("Direction: " .. playerDirection, 0, 90)
 	else
 		love.graphics.print("Direction: Unknown", 0, 130)
 	end
