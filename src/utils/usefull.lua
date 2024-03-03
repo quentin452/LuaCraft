@@ -62,15 +62,3 @@ function setFont()
 	end
 	_JPROFILER.pop("setFont")
 end
-
-function IsStructureIsGenerated(x, y, z)
-	local blockKey = string.format("%d/%d/%d", x, y, z)
-	return StructureMap[blockKey]
-end
-
-function isChunkFullyGenerated(scene, chunkX, chunkY, chunkZ)
-	local chunkKey = ("%d/%d/%d"):format(chunkX, chunkY, chunkZ)
-	local chunk = scene.chunkMap[chunkKey]
-
-	return chunk and chunk.data
-end
