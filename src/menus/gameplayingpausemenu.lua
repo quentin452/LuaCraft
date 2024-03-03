@@ -68,6 +68,7 @@ function keysinitGamePlayingPauseMenu(k)
 				ChunkSet = {}
 				ChunkHashTable = {}
 				CaveList = {}
+				ThePlayer.IsPlayerHasSpawned = false
 				gamestate = gamestateMainMenu
 			end
 		end

@@ -238,6 +238,7 @@ function ChooseSpawnLocation()
 	ThePlayer.y = playerY + 1.1
 	ThePlayer.z = playerZ
 	ThePlayer.IsPlayerHasSpawned = true
+	currentTry = 0
 end
 
 function initPlayerInventory()
