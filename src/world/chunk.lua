@@ -204,7 +204,7 @@ function NewChunk(x, z)
 					and gz <= math.floor(playerZ) + range2
 				)
 			then
-				blockvalue = Tiles.AIR_Block
+				return
 			end
 
 			--prevent placing a block on an another block(like flowers)
