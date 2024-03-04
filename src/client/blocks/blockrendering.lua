@@ -2,29 +2,89 @@ local AIR_TRANSPARENCY = 0
 local LEAVES_TRANSPARENCY = 1
 
 local function CanDrawFace(get, thisTransparency)
+	_JPROFILER.push("CanDrawFace")
 	local tget = TileTransparency(get)
 
 	if tget == AIR_TRANSPARENCY then
+		_JPROFILER.pop("CanDrawFace")
 		return false
 	elseif tget == LEAVES_TRANSPARENCY then
+		_JPROFILER.pop("CanDrawFace")
 		return true
 	else
+		_JPROFILER.pop("CanDrawFace")
 		return tget ~= thisTransparency
 	end
 end
 
-local function addFaceToModel(model, x, y, z, otx, oty, thisLight, scale, txModifier, tyModifier)
-	_JPROFILER.push("addFaceToModel")
+local function calculationotxoty(otx, oty)
+	_JPROFILER.push("calculationotxoty")
 	local otx2, oty2 = otx + 1, oty + 1
-	local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-	local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-	model[#model + 1] = { x, y, z, tx + txModifier, ty + tyModifier }
-	model[#model + 1] = { x + scale, y, z, tx2 + txModifier, ty + tyModifier }
-	model[#model + 1] = { x, y, z + scale, tx + txModifier, ty2 + tyModifier }
-	model[#model + 1] = { x + scale, y, z, tx2 + txModifier, ty + tyModifier }
-	model[#model + 1] = { x + scale, y, z + scale, tx2 + txModifier, ty2 + tyModifier }
-	model[#model + 1] = { x, y, z + scale, tx + txModifier, ty2 + tyModifier }
+	local tx = otx * TileWidth / LightValues
+	local ty = oty * TileHeight
+	local tx2 = otx2 * TileWidth / LightValues
+	local ty2 = oty2 * TileHeight
+	_JPROFILER.pop("calculationotxoty")
+	return tx, ty, tx2, ty2
+end
+
+local function addFaceToModel(model, x, y, z, otx, oty, scale)
+	_JPROFILER.push("addFaceToModel")
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+	model[#model + 1] = { x, y, z, tx, ty }
+	model[#model + 1] = { x + scale, y, z, tx2, ty }
+	model[#model + 1] = { x, y, z + scale, tx, ty2 }
+	model[#model + 1] = { x + scale, y, z, tx2, ty }
+	model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
+	model[#model + 1] = { x, y, z + scale, tx, ty2 }
 	_JPROFILER.pop("addFaceToModel")
+end
+local function addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
+	_JPROFILER.push("addFaceToModelPositiveX")
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+	model[#model + 1] = { x, y + scale, z, tx2, ty }
+	model[#model + 1] = { x, y, z, tx2, ty2 }
+	model[#model + 1] = { x, y, z + scale, tx, ty2 }
+	model[#model + 1] = { x, y + scale, z + scale, tx, ty }
+	model[#model + 1] = { x, y + scale, z, tx2, ty }
+	model[#model + 1] = { x, y, z + scale, tx, ty2 }
+	_JPROFILER.pop("addFaceToModelPositiveX")
+end
+local function addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
+	_JPROFILER.push("addFaceToModelNegativeX")
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+	model[#model + 1] = { x + scale, y, z, tx, ty2 }
+	model[#model + 1] = { x + scale, y + scale, z, tx, ty }
+	model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
+	model[#model + 1] = { x + scale, y + scale, z, tx, ty }
+	model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty }
+	model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
+	_JPROFILER.pop("addFaceToModelNegativeX")
+end
+
+local function addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
+	_JPROFILER.push("addFaceToModelPositiveZ")
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+	model[#model + 1] = { x, y, z, tx, ty2 }
+	model[#model + 1] = { x, y + scale, z, tx, ty }
+	model[#model + 1] = { x + scale, y, z, tx2, ty2 }
+	model[#model + 1] = { x, y + scale, z, tx, ty }
+	model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
+	model[#model + 1] = { x + scale, y, z, tx2, ty2 }
+	_JPROFILER.pop("addFaceToModelPositiveZ")
+end
+
+local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
+	_JPROFILER.push("addFaceToModelNegativeZ")
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+
+	model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
+	model[#model + 1] = { x, y, z + scale, tx2, ty2 }
+	model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
+	model[#model + 1] = { x + scale, y + scale, z + scale, tx, ty }
+	model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
+	model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
+	_JPROFILER.pop("addFaceToModelNegativeZ")
 end
 
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
@@ -36,13 +96,13 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 	if CanDrawFace(getTop, thisTransparency) then
 		local otx, oty = NumberToCoord(TileTextures(getTop)[math.min(2, #TileTextures(getTop))], 16, 16)
 		otx = otx + 16 * thisLight
-		addFaceToModel(model, x, y, z, otx, oty, thisLight, scale, 0, 0)
+		addFaceToModel(model, x, y, z, otx, oty, scale)
 	end
 
 	if CanDrawFace(getBottom, thisTransparency) then
 		local otx, oty = NumberToCoord(TileTextures(getBottom)[math.min(3, #TileTextures(getBottom))], 16, 16)
 		otx = otx + 16 * math.max(thisLight - 3, 0)
-		addFaceToModel(model, x, y + scale, z, otx, oty, thisLight, scale, 0, 0)
+		addFaceToModel(model, x, y + scale, z, otx, oty, scale)
 	end
 
 	-- positive x
@@ -56,16 +116,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 	if CanDrawFace(getPositiveX, thisTransparency) then
 		local otx, oty = NumberToCoord(TileTextures(getPositiveX)[1], 16, 16)
 		otx = otx + 16 * math.max(thisLight - 2, 0)
-		local otx2, oty2 = otx + 1, oty + 1
-		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-		model[#model + 1] = { x, y + scale, z, tx2, ty }
-		model[#model + 1] = { x, y, z, tx2, ty2 }
-		model[#model + 1] = { x, y, z + scale, tx, ty2 }
-		model[#model + 1] = { x, y + scale, z + scale, tx, ty }
-		model[#model + 1] = { x, y + scale, z, tx2, ty }
-		model[#model + 1] = { x, y, z + scale, tx, ty2 }
+		addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
 	end
 
 	-- negative x
@@ -79,16 +130,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 	if CanDrawFace(getNegativeX, thisTransparency) then
 		local otx, oty = NumberToCoord(TileTextures(getNegativeX)[1], 16, 16)
 		otx = otx + 16 * math.max(thisLight - 2, 0)
-		local otx2, oty2 = otx + 1, oty + 1
-		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-		model[#model + 1] = { x + scale, y, z, tx, ty2 }
-		model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-		model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-		model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-		model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty }
-		model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
+		addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
 	end
 
 	-- positive z
@@ -102,16 +144,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 	if CanDrawFace(getPositiveZ, thisTransparency) then
 		local otx, oty = NumberToCoord(TileTextures(getPositiveZ)[1], 16, 16)
 		otx = otx + 16 * math.max(thisLight - 1, 0)
-		local otx2, oty2 = otx + 1, oty + 1
-		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-		model[#model + 1] = { x, y, z, tx, ty2 }
-		model[#model + 1] = { x, y + scale, z, tx, ty }
-		model[#model + 1] = { x + scale, y, z, tx2, ty2 }
-		model[#model + 1] = { x, y + scale, z, tx, ty }
-		model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-		model[#model + 1] = { x + scale, y, z, tx2, ty2 }
+		addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
 	end
 
 	-- negative z
@@ -125,16 +158,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 	if CanDrawFace(getNegativeZ, thisTransparency) then
 		local otx, oty = NumberToCoord(TileTextures(getNegativeZ)[1], 16, 16)
 		otx = otx + 16 * math.max(thisLight - 1, 0)
-		local otx2, oty2 = otx + 1, oty + 1
-		local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-		local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
-
-		model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-		model[#model + 1] = { x, y, z + scale, tx2, ty2 }
-		model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
-		model[#model + 1] = { x + scale, y + scale, z + scale, tx, ty }
-		model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-		model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
+		addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	end
 	_JPROFILER.pop("BlockRendering")
 end
