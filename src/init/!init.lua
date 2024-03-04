@@ -16,6 +16,9 @@ function initWorldGenerationVariables()
 end
 
 function InitializeGame()
+	_JPROFILER.push("InitializeAssets")
+	InitializeAssets()
+	_JPROFILER.pop("InitializeAssets")
 	_JPROFILER.push("InitializeGame")
 	_JPROFILER.push("SettingsHandlingInit")
 	SettingsHandlingInit()
@@ -42,9 +45,6 @@ function InitializeGame()
 	_JPROFILER.pop("InitializeWindowSettings")
 	LogicAccumulator = 0
 	PhysicsStep = true
-	_JPROFILER.push("InitializeAssets")
-	InitializeAssets()
-	_JPROFILER.pop("InitializeAssets")
 	_JPROFILER.push("InitializeGuisAndHud")
 	InitializeGuisAndHud()
 	_JPROFILER.pop("InitializeGuisAndHud")

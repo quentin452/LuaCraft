@@ -14,7 +14,7 @@ require("src/menus/gameplayingpausemenu")
 require("src/menus/playinggamesettings")
 require("src/menus/worldcreationmenu")
 --blocks
-require("src/blocks/TileEntities/tiledata")
+require("src/blocksandtiles/tiledata")
 --utils
 require("src/utils/things")
 require("src/utils/math")
@@ -97,12 +97,12 @@ function love.resize(w, h)
 
 	local scaleX = w / GraphicsWidth
 	local scaleY = h / GraphicsHeight
-	love.graphics.scale(scaleX, scaleY)
-	local newCanvas = love.graphics.newCanvas(w, h)
+	lovegraphics.scale(scaleX, scaleY)
+	local newCanvas = lovegraphics.newCanvas(w, h)
 
-	love.graphics.setCanvas(newCanvas)
-	love.graphics.draw(Scene.twoCanvas)
-	love.graphics.setCanvas()
+	lovegraphics.setCanvas(newCanvas)
+	lovegraphics.draw(Scene.twoCanvas)
+	lovegraphics.setCanvas()
 
 	Scene.twoCanvas = newCanvas
 
@@ -137,8 +137,8 @@ function love.draw()
 
 	DrawGame()
 	if hudMessage ~= nil then
-		local width, height = love.graphics.getDimensions()
-		local font = love.graphics.getFont()
+		local width, height = lovegraphics.getDimensions()
+		local font = lovegraphics.getFont()
 
 		-- Calculate the width and height of the text
 		local textWidth = font:getWidth(hudMessage)
@@ -148,7 +148,7 @@ function love.draw()
 		local x = (width - textWidth) / 2
 		local y = (height - textHeight) / 2 + 280
 
-		love.graphics.print(hudMessage, x, y)
+		lovegraphics.print(hudMessage, x, y)
 	end
 	if enablePROFIProfiler then
 		ProFi:stop()
