@@ -87,6 +87,14 @@ local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	_JPROFILER.pop("addFaceToModelNegativeZ")
 end
 
+function getTextureCoordinatesAndLight(texture, lightOffset)
+	_JPROFILER.push("getTextureCoordinatesAndLight")
+	local otx, oty = NumberToCoord(texture, 16, 16)
+	otx = otx + 16 * lightOffset
+	_JPROFILER.pop("getTextureCoordinatesAndLight")
+	return otx, oty
+end
+
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
 	_JPROFILER.push("BlockRendering")
 	-- top and bottom
@@ -94,14 +102,16 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 	local getBottom = self.parent:getVoxel(i, j + 1, k)
 
 	if CanDrawFace(getTop, thisTransparency) then
-		local otx, oty = NumberToCoord(TileTextures(getTop)[math.min(2, #TileTextures(getTop))], 16, 16)
-		otx = otx + 16 * thisLight
+		local otx, oty =
+			getTextureCoordinatesAndLight(TileTextures(getTop)[math.min(2, #TileTextures(getTop))], thisLight)
 		addFaceToModel(model, x, y, z, otx, oty, scale)
 	end
 
 	if CanDrawFace(getBottom, thisTransparency) then
-		local otx, oty = NumberToCoord(TileTextures(getBottom)[math.min(3, #TileTextures(getBottom))], 16, 16)
-		otx = otx + 16 * math.max(thisLight - 3, 0)
+		local otx, oty = getTextureCoordinatesAndLight(
+			TileTextures(getBottom)[math.min(3, #TileTextures(getBottom))],
+			math.max(thisLight - 3, 0)
+		)
 		addFaceToModel(model, x, y + scale, z, otx, oty, scale)
 	end
 
@@ -114,8 +124,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		end
 	end
 	if CanDrawFace(getPositiveX, thisTransparency) then
-		local otx, oty = NumberToCoord(TileTextures(getPositiveX)[1], 16, 16)
-		otx = otx + 16 * math.max(thisLight - 2, 0)
+		local otx, oty = getTextureCoordinatesAndLight(TileTextures(getPositiveX)[1], math.max(thisLight - 2, 0))
 		addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
 	end
 
@@ -128,8 +137,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		end
 	end
 	if CanDrawFace(getNegativeX, thisTransparency) then
-		local otx, oty = NumberToCoord(TileTextures(getNegativeX)[1], 16, 16)
-		otx = otx + 16 * math.max(thisLight - 2, 0)
+		local otx, oty = getTextureCoordinatesAndLight(TileTextures(getNegativeX)[1], math.max(thisLight - 2, 0))
 		addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
 	end
 
@@ -142,8 +150,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		end
 	end
 	if CanDrawFace(getPositiveZ, thisTransparency) then
-		local otx, oty = NumberToCoord(TileTextures(getPositiveZ)[1], 16, 16)
-		otx = otx + 16 * math.max(thisLight - 1, 0)
+		local otx, oty = getTextureCoordinatesAndLight(TileTextures(getPositiveZ)[1], math.max(thisLight - 1, 0))
 		addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
 	end
 
@@ -156,8 +163,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		end
 	end
 	if CanDrawFace(getNegativeZ, thisTransparency) then
-		local otx, oty = NumberToCoord(TileTextures(getNegativeZ)[1], 16, 16)
-		otx = otx + 16 * math.max(thisLight - 1, 0)
+		local otx, oty = getTextureCoordinatesAndLight(TileTextures(getNegativeZ)[1], math.max(thisLight - 1, 0))
 		addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	end
 	_JPROFILER.pop("BlockRendering")
