@@ -3,6 +3,9 @@ lovez = love
 lovefilesystem = lovez.filesystem
 lovegraphics = lovez.graphics
 lovewindow = lovez.window
+loveimage = love.image
+lovetimer = love.timer
+mathpi = math.pi
 userDirectory = lovez.filesystem.getUserDirectory()
 luacraftconfig = userDirectory .. ".LuaCraft\\luacraftconfig.txt"
 

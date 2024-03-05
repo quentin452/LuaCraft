@@ -31,6 +31,7 @@ Tiles = {
 	STONE_BRICK_Block = 45,
 	GLOWSTONE_Block = 89,
 }
+
 local transparencyLookup = {
 	[Tiles.AIR_Block] = 0,
 	[Tiles.YELLO_FLOWER_Block] = 0,
@@ -40,6 +41,7 @@ local transparencyLookup = {
 	[Tiles.GLASS_Block] = 2,
 	[Tiles.GLOWSTONE_Block] = 2,
 }
+
 LightSources = {
 	[0] = 0,
 	[1] = 1,
@@ -112,42 +114,16 @@ function TileSemiLightable(n)
 	local t = TileTransparency(n)
 	return t == 0 or t == 1 or t == 2
 end
-local list = {
-	[Tiles.AIR_Block] = { 0 },
-	[Tiles.STONE_Block] = { 1 },
-	[Tiles.GRASS_Block] = { 3, 0, 2 },
-	[Tiles.DIRT_Block] = { 2 },
-	[Tiles.COBBLE_Block] = { 16 },
-	[Tiles.OAK_PLANK_Block] = { 4 },
-	[Tiles.OAK_SAPPLING_Block] = { 15 },
-	[Tiles.BEDROCK_Block] = { 17 },
-	[Tiles.WATER_Block] = { 14 },
-	[Tiles.STATIONARY_WATER_Block] = { 14 },
-	[Tiles.LAVA_Block] = { 63 },
-	[Tiles.STATIONARY_LAVA_Block] = { 63 },
-	[Tiles.SAND_Block] = { 18 },
-	[Tiles.GRAVEL_Block] = { 19 },
-	[Tiles.GOLD_Block] = { 32 },
-	[Tiles.IRON_Block] = { 33 },
-	[Tiles.COAL_Block] = { 34 },
-	[Tiles.OAK_LOG_Block] = { 20, 21, 21 },
-	[Tiles.OAK_LEAVE_Block] = { 52 },
-	[Tiles.SPONGE_Block] = { 48 },
-	[Tiles.GLASS_Block] = { 49 },
-	[Tiles.ROSE_FLOWER_Block] = { 13 },
-	[Tiles.YELLO_FLOWER_Block] = { 12 },
-	[Tiles.STONE_BRICK_Block] = { 7 },
-	[Tiles.GLOWSTONE_Block] = { 105 },
-}
+
 function TileTextures(n)
 	if tileTexturesCache[n] then
 		return tileTexturesCache[n]
 	end
-
-	tileTexturesCache[n] = list[n]
+	tileTexturesCache[n] = TilesTextureList[n]
 
 	return tileTexturesCache[n]
 end
+
 function TileModel(n)
 	if tileModelCache[n] then
 		return tileModelCache[n]

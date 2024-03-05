@@ -1,25 +1,28 @@
+local mult = 1
+local tileSize = 16
+TileCanvas = {}
+--todo remove lovegraphics.newCanvas + use individuals textures instead of a Global
 function InitializeHUDTileCanvas()
-    TileCanvas = {}
-    local tileSize = 16
-    for i = 1, 16 do
-        local xx = (i - 1) * tileSize
-        for j = 1, 16 do
-            local yy = (j - 1) * tileSize
-            local index = (j - 1) * 16 + i
-            TileCanvas[index] = lovegraphics.newCanvas(tileSize, tileSize)
-            local this = TileCanvas[index]
-            lovegraphics.setCanvas(this)
-            lovegraphics.draw(TileTexture, -xx, -yy)
-        end
-    end
+	local atlassSize = finalAtlasSize / tileSize -- 256x256 terrain.png , every texture is 16x16 for a total of 256 blocs
+	for i = 1, atlassSize do
+		for j = 1, atlassSize do
+			local index = (j - 1) * atlassSize + i
+			if not TileCanvas[index] then
+				TileCanvas[index] = lovegraphics.newCanvas(tileSize, tileSize)
+				lovegraphics.setCanvas(TileCanvas[index])
+				lovegraphics.draw(TileTexture, -(i - 1) * tileSize, -(j - 1) * tileSize)
+				lovegraphics.setCanvas()
+			end
+		end
+	end
 end
 
 function InitializeGameTileCanvas()
 	-- create lighting value textures on LightingTexture canvas
 	LightValues = 16
 	local width, height = TileTexture:getWidth(), TileTexture:getHeight()
-	LightingTexture = love.graphics.newCanvas(width * LightValues, height)
-	local mult = 1
+	local lightingWidth = width * LightValues
+	LightingTexture = lovegraphics.newCanvas(lightingWidth, height)
 	lovegraphics.setCanvas(LightingTexture)
 	lovegraphics.clear(1, 1, 1, 0)
 	for i = LightValues, 1, -1 do
@@ -28,6 +31,6 @@ function InitializeGameTileCanvas()
 		lovegraphics.draw(TileTexture, xx, 0)
 		mult = mult * 0.8
 	end
-    lovegraphics.setColor(1, 1, 1)
+	lovegraphics.setColor(1, 1, 1)
 	lovegraphics.setCanvas()
 end

@@ -26,7 +26,7 @@ function DrawGame()
 			DrawTestBlock()
 			DrawCrossHair()
 
-			love.graphics.setShader()
+			lovegraphics.setShader()
 
 			DrawHotBar()
 
@@ -36,7 +36,7 @@ function DrawGame()
 			DrawCommandInput()
 		end, false)
 
-		love.graphics.setColor(1, 1, 1)
+		lovegraphics.setColor(1, 1, 1)
 		DrawCanevas()
 		_JPROFILER.pop("DrawGameScene")
 	end

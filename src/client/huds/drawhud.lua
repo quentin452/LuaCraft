@@ -1,9 +1,9 @@
 function DrawCanevas()
-	local scale = love.graphics.getWidth() / InterfaceWidth
-	love.graphics.draw(
+	local scale = lovegraphics.getWidth() / InterfaceWidth
+	lovegraphics.draw(
 		Scene.twoCanvas,
-		love.graphics.getWidth() / 2,
-		love.graphics.getHeight() / 2 + 1,
+		lovegraphics.getWidth() / 2,
+		lovegraphics.getHeight() / 2 + 1,
 		0,
 		scale,
 		scale,
@@ -13,8 +13,8 @@ function DrawCanevas()
 end
 
 function DrawF3()
-	love.graphics.setColor(1, 1, 1)
-	love.graphics.print(
+	lovegraphics.setColor(1, 1, 1)
+	lovegraphics.print(
 		"x: "
 			.. math.floor(ThePlayer.x + 0.5)
 			.. "\ny: "
@@ -22,20 +22,46 @@ function DrawF3()
 			.. "\nz: "
 			.. math.floor(ThePlayer.z + 0.5)
 	)
-
-	local chunk, cx, cy, cz, hashx, hashy = GetChunk(ThePlayer.x, ThePlayer.y, ThePlayer.z)
-	if chunk ~= nil then
-		love.graphics.print("kB: " .. math.floor(collectgarbage("count")), 0, 50)
-	end
-
-	love.graphics.print("FPS: " .. love.timer.getFPS(), 0, 70)
-
+	lovegraphics.print("Memory Usage: " .. math.floor(collectgarbage("count")) .. " kB", 0, 50)
+	lovegraphics.print("FPS: " .. lovetimer.getFPS(), 0, 70)
 	local playerDirection = GetPlayerDirection(ThePlayer.rotation, ThePlayer.pitch)
 	if playerDirection then
-		love.graphics.print("Direction: " .. playerDirection, 0, 90)
+		lovegraphics.print("Direction: " .. playerDirection, 0, 90)
 	else
-		love.graphics.print("Direction: Unknown", 0, 130)
+		lovegraphics.print("Direction: Unknown", 0, 130)
 	end
+
+	-- Print the number of elements in each cache
+	local tiletexturecount = 0
+	for _ in pairs(tileTexturesCache) do
+		tiletexturecount = tiletexturecount + 1
+	end
+	lovegraphics.print("tileTexturesCache size: " .. tiletexturecount, 0, 150)
+	local tilemodelcount = 0
+	for _ in pairs(tileModelCache) do
+		tilemodelcount = tilemodelcount + 1
+	end
+	lovegraphics.print("tileModelCache size: " .. tilemodelcount, 0, 170)
+	local tile2Dcount = 0
+	for _ in pairs(tile2DCache) do
+		tile2Dcount = tile2Dcount + 1
+	end
+	lovegraphics.print("tile2DCache size: " .. tile2Dcount, 0, 190)
+	local lightsourcecount = 0
+	for _ in pairs(lightSourceCache) do
+		lightsourcecount = lightsourcecount + 1
+	end
+	lovegraphics.print("lightSourceCache size: " .. lightsourcecount, 0, 210)
+	local transparencycount = 0
+	for _ in pairs(transparencyCache) do
+		transparencycount = transparencycount + 1
+	end
+	lovegraphics.print("transparencyCache size: " .. transparencycount, 0, 230)
+	local tilescount = 0
+	for _ in pairs(Tiles) do
+		tilescount = tilescount + 1
+	end
+	lovegraphics.print("Number of Tiles: " .. tilescount, 0, 250)
 end
 
 -- Fonction pour obtenir la direction du joueur
@@ -323,25 +349,25 @@ end
 
 function DrawCrossHair()
 	-- draw crosshair
-	love.graphics.setColor(1, 1, 1)
+	lovegraphics.setColor(1, 1, 1)
 	CrosshairShader:send("source", Scene.threeCanvas)
 	CrosshairShader:send("xProportion", 32 / GraphicsWidth)
 	CrosshairShader:send("yProportion", 32 / GraphicsHeight)
-	love.graphics.setShader(CrosshairShader)
+	lovegraphics.setShader(CrosshairShader)
 
 	-- draw crosshair
-	love.graphics.setColor(1, 1, 1)
+	lovegraphics.setColor(1, 1, 1)
 	CrosshairShader:send("source", Scene.threeCanvas)
 	CrosshairShader:send("xProportion", 32 / GraphicsWidth)
 	CrosshairShader:send("yProportion", 32 / GraphicsHeight)
-	love.graphics.draw(GuiSprites, GuiCrosshair, InterfaceWidth / 2 - 16, InterfaceHeight / 2 - 16, 0, 2, 2)
+	lovegraphics.draw(GuiSprites, GuiCrosshair, InterfaceWidth / 2 - 16, InterfaceHeight / 2 - 16, 0, 2, 2)
 end
 
 function DrawHotBar()
 	-- draw hotbar
-	love.graphics.setColor(1, 1, 1)
-	love.graphics.draw(GuiSprites, GuiHotbarQuad, InterfaceWidth / 2 - 182, InterfaceHeight - 22 * 2, 0, 2, 2)
-	love.graphics.draw(
+	lovegraphics.setColor(1, 1, 1)
+	lovegraphics.draw(GuiSprites, GuiHotbarQuad, InterfaceWidth / 2 - 182, InterfaceHeight - 22 * 2, 0, 2, 2)
+	lovegraphics.draw(
 		GuiSprites,
 		GuiHotbarSelectQuad,
 		InterfaceWidth / 2 - 182 + 40 * (PlayerInventory.hotbarSelect - 1) - 2,
@@ -372,33 +398,33 @@ function DrawCommandInput()
 		end
 
 		-- Dessiner le fond gris transparent
-		love.graphics.setColor(0.5, 0.5, 0.5, 0.5) -- Gris semi-transparent
-		love.graphics.rectangle("fill", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
+		lovegraphics.setColor(0.5, 0.5, 0.5, 0.5) -- Gris semi-transparent
+		lovegraphics.rectangle("fill", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
 
 		-- Dessiner la zone de saisie des commandes (rectangle, texte, etc.)
-		love.graphics.setColor(1, 1, 1)
-		love.graphics.rectangle("line", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
+		lovegraphics.setColor(1, 1, 1)
+		lovegraphics.rectangle("line", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
 
 		-- Dessiner le texte de la commande actuelle
 		local cleanedCommand = cleanString(CurrentCommand)
 
 		-- Limiter le texte à la largeur du rectangle
 		local maxTextWidth = 600 -- La largeur du rectangle
-		while love.graphics.getFont():getWidth(cleanedCommand) > maxTextWidth do
+		while lovegraphics.getFont():getWidth(cleanedCommand) > maxTextWidth do
 			cleanedCommand = cleanedCommand:sub(2) -- Supprimer le premier caractère
 		end
 
-		love.graphics.print(cleanedCommand, InterfaceWidth / 2 - 300, InterfaceHeight - 75)
+		lovegraphics.print(cleanedCommand, InterfaceWidth / 2 - 300, InterfaceHeight - 75)
 
 		-- Dessiner le curseur
-		local cursorX = InterfaceWidth / 2 - 300 + love.graphics.getFont():getWidth(cleanedCommand)
-		love.graphics.line(cursorX, InterfaceHeight - 80, cursorX, InterfaceHeight - 50)
+		local cursorX = InterfaceWidth / 2 - 300 + lovegraphics.getFont():getWidth(cleanedCommand)
+		lovegraphics.line(cursorX, InterfaceHeight - 80, cursorX, InterfaceHeight - 50)
 	end
 end
 
 function FixHudHotbarandTileScaling()
 	local scaleCoefficient = 0.7
 
-	InterfaceWidth = love.graphics.getWidth() * scaleCoefficient
-	InterfaceHeight = love.graphics.getHeight() * scaleCoefficient
+	InterfaceWidth = lovegraphics.getWidth() * scaleCoefficient
+	InterfaceHeight = lovegraphics.getHeight() * scaleCoefficient
 end

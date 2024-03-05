@@ -19,8 +19,8 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 				local originX = v[1] - 0.5
 				local originZ = v[3] - 0.5
 
-				local rotatedX = originX * math.cos(math.pi / 2) - originZ * math.sin(math.pi / 2)
-				local rotatedZ = originX * math.sin(math.pi / 2) + originZ * math.cos(math.pi / 2)
+				local rotatedX = originX * math.cos(mathpi / 2) - originZ * math.sin(mathpi / 2)
+				local rotatedZ = originX * math.sin(mathpi / 2) + originZ * math.cos(mathpi / 2)
 
 				rotatedX = rotatedX + 0.5
 				rotatedZ = rotatedZ + 0.5
