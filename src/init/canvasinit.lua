@@ -1,9 +1,9 @@
 local mult = 1
 local tileSize = 16
 TileCanvas = {}
---todo remove lovegraphics.newCanvas + use individuals textures instead of a Global
+--TODO DON4T USE CANVAS FOR HUD TILE CANVAS
 function InitializeHUDTileCanvas()
-	local atlassSize = finalAtlasSize / tileSize -- 256x256 terrain.png , every texture is 16x16 for a total of 256 blocs
+	local atlassSize = finalAtlasSize / tileSize
 	for i = 1, atlassSize do
 		for j = 1, atlassSize do
 			local index = (j - 1) * atlassSize + i
