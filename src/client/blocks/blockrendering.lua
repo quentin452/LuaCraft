@@ -4,7 +4,6 @@ local LEAVES_TRANSPARENCY = 1
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
 	local tget = TileTransparency(get)
-
 	if tget == AIR_TRANSPARENCY then
 		_JPROFILER.pop("CanDrawFace")
 		return false
@@ -19,13 +18,26 @@ end
 
 local function calculationotxoty(otx, oty)
 	_JPROFILER.push("calculationotxoty")
-	local otx2, oty2 = otx + 1, oty + 1
-	local tx = otx * TileWidth / LightValues
-	local ty = oty * TileHeight
-	local tx2 = otx2 * TileWidth / LightValues
-	local ty2 = oty2 * TileHeight
+	local function calculateCoordinate(coordinate)
+		return coordinate * TileWidth / LightValues
+	end
+	--THIS SEEM TO WORK CORRECTLY
+	local adjustmentFactor = 256 / finalAtlasSize
+	local otx2, oty2 = otx + adjustmentFactor, oty + adjustmentFactor
+	local tx, ty, tx2, ty2 = calculateCoordinate(otx), oty * TileHeight, calculateCoordinate(otx2), oty2 * TileHeight
 	_JPROFILER.pop("calculationotxoty")
 	return tx, ty, tx2, ty2
+end
+
+local function getTextureCoordinatesAndLight(texture, lightOffset)
+	_JPROFILER.push("getTextureCoordinatesAndLight")
+	local textureindex = texture
+	--TODO NEED TO FIX HE USE THE WRONG TEXTURE WILL USING finalAtlasSize ~= 256
+	local adjustmentFactor = 256 / finalAtlasSize
+	local otx = (textureindex % LightValues + 16 * lightOffset) * adjustmentFactor
+	local oty = math.floor(textureindex / LightValues) * adjustmentFactor
+	_JPROFILER.pop("getTextureCoordinatesAndLight")
+	return otx, oty
 end
 
 local function addFaceToModel(model, x, y, z, otx, oty, scale)
@@ -39,6 +51,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale)
 	model[#model + 1] = { x, y, z + scale, tx, ty2 }
 	_JPROFILER.pop("addFaceToModel")
 end
+
 local function addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelPositiveX")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
@@ -50,6 +63,7 @@ local function addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
 	model[#model + 1] = { x, y, z + scale, tx, ty2 }
 	_JPROFILER.pop("addFaceToModelPositiveX")
 end
+
 local function addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelNegativeX")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
@@ -77,7 +91,6 @@ end
 local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelNegativeZ")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-
 	model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
 	model[#model + 1] = { x, y, z + scale, tx2, ty2 }
 	model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
@@ -87,37 +100,23 @@ local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	_JPROFILER.pop("addFaceToModelNegativeZ")
 end
 
-function getTextureCoordinatesAndLight(texture, lightOffset)
-	_JPROFILER.push("getTextureCoordinatesAndLight")
-
-	local textureindex = texture
-	local otx = textureindex % LightValues + 16 * lightOffset
-	local oty = math.floor(textureindex / LightValues)
-
-	_JPROFILER.pop("getTextureCoordinatesAndLight")
-	return otx, oty
-end
-
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
 	_JPROFILER.push("BlockRendering")
 	-- top and bottom
 	local getTop = self.parent:getVoxel(i, j - 1, k)
 	local getBottom = self.parent:getVoxel(i, j + 1, k)
-
 	if CanDrawFace(getTop, thisTransparency) then
 		local textureIndex = math.min(2, #TileTextures(getTop))
 		local texture = TileTextures(getTop)[textureIndex]
 		local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
 		addFaceToModel(model, x, y, z, otx, oty, scale)
 	end
-
 	if CanDrawFace(getBottom, thisTransparency) then
 		local textureIndex = math.min(3, #TileTextures(getBottom))
 		local texture = TileTextures(getBottom)[textureIndex]
 		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 3, 0))
 		addFaceToModel(model, x, y + scale, z, otx, oty, scale)
 	end
-
 	-- positive x
 	local getPositiveX = self.parent:getVoxel(i - 1, j, k)
 	if i == 1 then
@@ -131,7 +130,6 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 2, 0))
 		addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
 	end
-
 	-- negative x
 	local getNegativeX = self.parent:getVoxel(i + 1, j, k)
 	if i == ChunkSize then
@@ -145,7 +143,6 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 2, 0))
 		addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
 	end
-
 	-- positive z
 	local getPositiveZ = self.parent:getVoxel(i, j, k - 1)
 	if k == 1 then
@@ -159,7 +156,6 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 1, 0))
 		addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
 	end
-
 	-- negative z
 	local getNegativeZ = self.parent:getVoxel(i, j, k + 1)
 	if k == ChunkSize then

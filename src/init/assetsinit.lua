@@ -118,14 +118,13 @@ end
 finalAtlasSize = 256
 
 function createTextureAtlas()
+	--TODO MADE INRAM ATLAS instead of using the png Atlas.png or probably i will not remove the Atlas.png creation(for debug) and making its creation into an another thread, but will use the INRAM ATLAS
 	local totalTimeStart = os.clock()
 
 	local function initializeAtlas(atlasSize)
 		local atlas = loveimage.newImageData(atlasSize, atlasSize)
 		local x, y = 0, 0
 		textureAtlassCoordinates = {}
-
-		local totalTimeStart = os.clock()
 
 		local needResize = false
 		repeat
@@ -140,11 +139,9 @@ function createTextureAtlas()
 					local fileExist = lovefilesystem.getInfo(texturePath)
 
 					if fileExist then
-						local readStartTime = os.clock()
 						local fileData = lovefilesystem.read(texturePath)
 						local fileDataObject = lovefilesystem.newFileData(fileData, texturePath)
 						local imageData = loveimage.newImageData(fileDataObject)
-						local readEndTime = os.clock()
 
 						local width, height = imageData:getDimensions()
 
@@ -165,11 +162,9 @@ function createTextureAtlas()
 							needResize = false
 						end
 
-						local pasteStartTime = os.clock()
 						atlas:paste(imageData, x, y)
-						local pasteEndTime = os.clock()
 
-						local tileWidth, tileHeight = 16, 16 -- Adjust this based on your actual tile size
+						local tileWidth, tileHeight = 16, 16
 						local index = x / tileWidth + y / tileHeight * (finalAtlasSize / tileHeight)
 
 						textureAtlassCoordinates[blockType] = { index }

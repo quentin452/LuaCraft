@@ -16,17 +16,15 @@ function InitializeHUDTileCanvas()
 		end
 	end
 end
-
 function InitializeGameTileCanvas()
 	-- create lighting value textures on LightingTexture canvas
 	LightValues = 16
-	local width, height = TileTexture:getWidth(), TileTexture:getHeight()
-	local lightingWidth = width * LightValues
-	LightingTexture = lovegraphics.newCanvas(lightingWidth, height)
+	local lightingWidth = finalAtlasSize * LightValues
+	LightingTexture = lovegraphics.newCanvas(lightingWidth, finalAtlasSize)
 	lovegraphics.setCanvas(LightingTexture)
 	lovegraphics.clear(1, 1, 1, 0)
 	for i = LightValues, 1, -1 do
-		local xx = (i - 1) * width
+		local xx = (i - 1) * finalAtlasSize
 		lovegraphics.setColor(mult, mult, mult)
 		lovegraphics.draw(TileTexture, xx, 0)
 		mult = mult * 0.8
