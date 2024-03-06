@@ -301,7 +301,7 @@ function DrawChunkBorders3D()
 	end
 end
 local TILE_SIZE = 16
-local SHADING_FACTOR1 = 0.8 ^ 3
+local SHADING_FACTOR1 = 0.8 ^ 2
 local SHADING_FACTOR2 = 0.8 ^ 2
 local ANGLE = 3.14159 / 3
 local angleSin = math.sin(ANGLE)
