@@ -54,90 +54,85 @@ extern vec2 v4;
 extern vec2 p0;
 extern vec2 rep;
 
-vec2 one=vec2(1.0,1.0);
+vec2 one = vec2(1.0, 1.0);
 
-number c(vec2 v1,vec2 v2)
+number c(vec2 v1, vec2 v2)
 {
-   return v1.x*v2.y-v2.x*v1.y;
+   return v1.x * v2.y - v2.x * v1.y;
 }
-number intersect(vec2 v1,vec2 d1,vec2 v2,vec2 d2)
+
+number intersect(vec2 v1, vec2 d1, vec2 v2, vec2 d2)
 {
-   //v1+d1*
-   return c(v2-v1,d2)/c(d1,d2);
+   return c(v2 - v1, d2) / c(d1, d2);
 }
-vec4 mask(vec4 base,vec4 over)
+
+vec4 mask(vec4 base, vec4 over)
 {
    return base * over;
 }
-vec4 effect(vec4 colour,Image UNUSED1,vec2 UNUSED2,vec2 inverted)
+
+vec4 effect(vec4 colour, Image UNUSED1, vec2 UNUSED2, vec2 inverted)
 {
-   vec2 p=vec2(inverted.x,inverted.y);
+   vec2 p = vec2(inverted.x, inverted.y);
 
-   vec2 A1=normalize(v2-v1);
-   vec2 A2=normalize(v3-v4);
+   vec2 A1 = normalize(v2 - v1);
+   vec2 A2 = normalize(v3 - v4);
 
-   vec2 B1=normalize(v2-v3);
-   vec2 B2=normalize(v1-v4);
+   vec2 B1 = normalize(v2 - v3);
+   vec2 B2 = normalize(v1 - v4);
 
-   number Adiv=c(A1,A2);
-   number Bdiv=c(B1,B2);
+   number Adiv = c(A1, A2);
+   number Bdiv = c(B1, B2);
 
    vec2 uv;
 
-   bvec2 eq0=bvec2(abs(Adiv)<=0.0001,abs(Bdiv)<=0.0001);
-   if(eq0.x && eq0.y){
-      //Both edges are parallel, therefore the shape is a parallelogram (Isometric)
-      number dis=dot(p-v1,A1);
+   bvec2 eq0 = bvec2(abs(Adiv) <= 0.0001, abs(Bdiv) <= 0.0001);
 
-      //cos theta
-      number ct=dot(A1,B1);
+   if (all(eq0))
+   {
+      // Both edges are parallel, therefore the shape is a parallelogram (Isometric)
+      number dis = dot(p - v1, A1);
+      number ct = dot(A1, B1);
+      vec2 pA = v1 + A1 * dis;
+      number r = length(p - pA) / sqrt(1.0 - ct * ct);
+      uv = vec2(1.0 - r / length(v2 - v3), (dis + r * ct) / length(v2 - v1));
+   }
+   else
+   {
+      vec2 Vp;
+      vec2 D;
+      number u;
+      number v;
+      number len;
 
-      //Closest point on v1->A1 to p
-      vec2 pA=v1+A1*dis;
-
-      //uv
-      number r=length(p-pA)/sqrt(1-ct*ct);
-      uv=vec2(1-r/length(v2-v3),(dis+r*ct)/length(v2-v1));
-   }else if(eq0.x){
-      //One Vanishing point occurs in numerically set scenarios in 3D, and is a feature of 2.5D
-
-      //Horizon is A1 (=A2) from B
-      vec2 Vp=v3+B1*c(v4-v3,B2)/Bdiv;
-
-      //Some point in the distance that diagonals go to
-      vec2 D=Vp+A1*intersect(Vp,A1,v4,normalize(v2-v4));
-
-      //uv
-      number u=intersect(v1,A1,Vp,normalize(p-Vp));
-      number v=intersect(v1,A1,D,normalize(p-D))-u;
-
-      number len=length(v2-v1);
-      uv=vec2(len-v,u)/len;//Reversed components to match up with other one
-   }else if(eq0.y){
-      //If the other edge is the parallel one
-      vec2 Vp=v1+A1*c(v4-v1,A2)/Adiv;
-      vec2 D=Vp+B1*intersect(Vp,B1,v4,normalize(v2-v4));
-      number u=intersect(v3,B1,Vp,normalize(p-Vp));
-      number len=length(v2-v3);
-      uv=vec2(u,len-intersect(v3,B1,D,normalize(p-D))+u)/len;
-   }else{
-      //Else, two vanishing points
-
-      //*intersect(v1,A1,v4,A2)
-      //*intersect(v3,B1,v4,B2)
-
-      //Vanishing points
-      vec2 A=v1+A1*c(v4-v1,A2)/Adiv;
-      vec2 B=v3+B1*c(v4-v3,B2)/Bdiv;
-
-      //Horizon
-      vec2 H=normalize(A-B);
-
-      //Pixel
-      uv=vec2(intersect(v4,-H,A,normalize(p-A))/intersect(v4,-H,v2,-A1),intersect(v4,H,B,normalize(p-B))/intersect(v4,H,v2,-B1));
+      if (eq0.x)
+      {
+         Vp = v3 + B1 * c(v4 - v3, B2) / Bdiv;
+         D = Vp + A1 * intersect(Vp, A1, v4, normalize(v2 - v4));
+         u = intersect(v1, A1, Vp, normalize(p - Vp));
+         v = intersect(v1, A1, D, normalize(p - D)) - u;
+         len = length(v2 - v1);
+         uv = vec2(len - v, u) / len;
+      }
+      else if (eq0.y)
+      {
+         Vp = v1 + A1 * c(v4 - v1, A2) / Adiv;
+         D = Vp + B1 * intersect(Vp, B1, v4, normalize(v2 - v4));
+         u = intersect(v3, B1, Vp, normalize(p - Vp));
+         len = length(v2 - v3);
+         uv = vec2(u, len - intersect(v3, B1, D, normalize(p - D)) + u) / len;
+      }
+      else
+      {
+         vec2 A = v1 + A1 * c(v4 - v1, A2) / Adiv;
+         vec2 B = v3 + B1 * c(v4 - v3, B2) / Bdiv;
+         vec2 H = normalize(A - B);
+         uv = vec2(intersect(v4, -H, A, normalize(p - A)) / intersect(v4, -H, v2, -A1),
+                   intersect(v4, H, B, normalize(p - B)) / intersect(v4, H, v2, -B1));
+      }
    }
 
-   return mask(colour,Texel(img,mod(uv*rep+vec2(p0.x-1,p0.y),one)));
+   return mask(colour, Texel(img, mod(uv * rep + vec2(p0.x - 1, p0.y), one)));
 }
 ]])
 local pers = {}
@@ -184,40 +179,71 @@ end
 
 function pers.quad(img, v1, v2, v3, v4, h)
 	_JPROFILER.push("pers.quad")
+
 	if h then
-		gl_send(glsl, "SIZEY", h)
+		sendHeightToShader(h)
 	end
 
 	if img and v4 then
-		setEffect(glsl)
-
-		local v1_, v2_, v3_, v4_
-
-		if pers.cw and not pers.flip then
-			v1_, v2_, v3_, v4_ = v2, v3, v4, v1
-		elseif pers.cw and pers.flip then
-			v1_, v2_, v3_, v4_ = v1, v4, v3, v2
-		else
-			v1_, v2_, v3_, v4_ = v2, v1, v4, v3
-		end
-
-		gl_send(glsl, "img", img)
-		gl_send(glsl, "v1", v1_)
-		gl_send(glsl, "v2", v2_)
-		gl_send(glsl, "v3", v3_)
-		gl_send(glsl, "v4", v4_)
-	else
-		setEffect()
+		setupEffect(glsl)
+		sendVerticesToShader(img, v1, v2, v3, v4)
+		renderPolygon(v1, v2, v3, v4, img)
+		resetEffect()
 	end
 
+	_JPROFILER.pop("pers.quad")
+end
+
+function sendHeightToShader(h)
+	_JPROFILER.push("sendHeightToShader")
+	gl_send(glsl, "SIZEY", h)
+	_JPROFILER.pop("sendHeightToShader")
+end
+
+function setupEffect(glsl)
+	_JPROFILER.push("setupEffect")
+	setEffect(glsl)
+	_JPROFILER.pop("setupEffect")
+end
+
+function sendVerticesToShader(img, v1, v2, v3, v4)
+	_JPROFILER.push("sendVerticesToShader")
+
+	local v1_, v2_, v3_, v4_
+
+	if pers.cw then
+		if not pers.flip then
+			v1_, v2_, v3_, v4_ = v2, v3, v4, v1
+		else
+			v1_, v2_, v3_, v4_ = v1, v4, v3, v2
+		end
+	else
+		v1_, v2_, v3_, v4_ = v2, v1, v4, v3
+	end
+
+	gl_send(glsl, "img", img)
+	gl_send(glsl, "v1", v1_)
+	gl_send(glsl, "v2", v2_)
+	gl_send(glsl, "v3", v3_)
+	gl_send(glsl, "v4", v4_)
+
+	_JPROFILER.pop("sendVerticesToShader")
+end
+
+function resetEffect()
+	_JPROFILER.push("resetEffect")
+	setEffect()
+	_JPROFILER.pop("resetEffect")
+end
+
+function renderPolygon(v1, v2, v3, v4, img)
+	_JPROFILER.push("renderPolygon")
 	if v4 then
 		polygon("fill", v1[1], v1[2], v2[1], v2[2], v3[1], v3[2], v4[1], v4[2])
-	else -- img acts as a vertex
+	else
 		polygon("fill", img[1], img[2], v1[1], v1[2], v2[1], v2[2], v3[1], v3[2])
 	end
-
-	setEffect()
-	_JPROFILER.pop("pers.quad")
+	_JPROFILER.pop("renderPolygon")
 end
 
 return pers

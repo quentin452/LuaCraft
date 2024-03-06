@@ -1,4 +1,5 @@
 function DrawCanevas()
+	_JPROFILER.push("DrawCanevas")
 	local scale = lovegraphics.getWidth() / InterfaceWidth
 	lovegraphics.draw(
 		Scene.twoCanvas,
@@ -10,9 +11,11 @@ function DrawCanevas()
 		InterfaceWidth / 2,
 		InterfaceHeight / 2
 	)
+	_JPROFILER.pop("DrawCanevas")
 end
 
 function DrawF3()
+	_JPROFILER.push("DrawF3")
 	lovegraphics.setColor(1, 1, 1)
 	lovegraphics.print(
 		"x: "
@@ -62,27 +65,31 @@ function DrawF3()
 		tilescount = tilescount + 1
 	end
 	lovegraphics.print("Number of Tiles: " .. tilescount, 0, 250)
+	_JPROFILER.pop("DrawF3")
 end
 
 -- Fonction pour obtenir la direction du joueur
 function GetPlayerDirection(rotation, pitch)
+	_JPROFILER.push("GetPlayerDirection")
 	if pitch then
-		local seuilVersLeHaut = math.pi / 4
-		local seuilVersLeBas = -math.pi / 4
+		local seuilVersLeHaut = mathpi / 4
+		local seuilVersLeBas = -mathpi / 4
 
 		if pitch > seuilVersLeHaut then
+			_JPROFILER.pop("GetPlayerDirection")
 			return "Bas"
 		elseif pitch < seuilVersLeBas then
+			_JPROFILER.pop("GetPlayerDirection")
 			return "Haut"
 		end
 	end
 
 	if rotation then
 		local directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N" }
-		local index = math.floor(((rotation + math.pi / 8) % (2 * math.pi)) / (math.pi / 4)) + 1
+		local index = math.floor(((rotation + mathpi / 8) % (2 * mathpi)) / (mathpi / 4)) + 1
 		return directions[index]
 	end
-
+	_JPROFILER.pop("GetPlayerDirection")
 	return nil
 end
 
@@ -293,61 +300,82 @@ function DrawChunkBorders3D()
 		ChunkBorderAlreadyCreated = 1
 	end
 end
+local TILE_SIZE = 16
+local SHADING_FACTOR1 = 0.8 ^ 3
+local SHADING_FACTOR2 = 0.8 ^ 2
+local ANGLE = 3.14159 / 3
+local angleSin = math.sin(ANGLE)
+local angleCos = math.cos(ANGLE)
+local size = TILE_SIZE
+local xsize = angleSin * size
+local ysize = angleCos * size
 
 function DrawHudTile(tile, hudX, hudY)
+	_JPROFILER.push("DrawHudTile")
 	local textures = TileTextures(tile)
 
 	if tile == 0 or not textures then
 		return
 	end
 
-	local x, y = hudX + 16 + 6, hudY + 16 + 6
-	local size = 16
-	local angle = 3.14159 / 3
-	local xsize = math.sin(angle) * size
-	local ysize = math.cos(angle) * size
+	local tileSizePlus6 = TILE_SIZE + 6
+	local x, y = hudX + tileSizePlus6, hudY + tileSizePlus6
 
 	local centerPoint = { x, y }
 
+	_JPROFILER.push("DrawTileQuad")
 	if Tile2D(tile) then
-		DrawTileQuad(
-			textures[1] + 1,
-			{ { x - size, y - size }, { x + size, y - size }, { x + size, y + size }, { x - size, y + size } }
-		)
+		DrawTileQuad2D(textures[1] + 1, x, y, size)
 	else
-		-- Draw top
-		DrawTileQuad(
-			textures[math.min(#textures, 2)] + 1,
-			{ { x, y - size }, { x + xsize, y - ysize }, centerPoint, { x - xsize, y - ysize } }
-		)
+		local topQuadVertices = {
+			{ x, y - size },
+			{ x + xsize, y - ysize },
+			centerPoint,
+			{ x - xsize, y - ysize },
+		}
+		local rightFrontQuadVertices = {
+			centerPoint,
+			{ x + xsize, y - ysize },
+			{ x + xsize, y + ysize },
+			{ x, y + size },
+		}
+		local leftSideQuadVertices = {
+			centerPoint,
+			{ x - xsize, y - ysize },
+			{ x - xsize, y + ysize },
+			{ x, y + size },
+		}
 
-		-- Draw right side front
-		local shade1 = 0.8 ^ 3
-		love.graphics.setColor(shade1, shade1, shade1)
+		DrawTileQuad(textures[math.min(#textures, 2)] + 1, topQuadVertices)
+		lovegraphics.setColor(SHADING_FACTOR1, SHADING_FACTOR1, SHADING_FACTOR1)
 		local index = (#textures == 4) and 4 or 1
-		DrawTileQuad(
-			textures[index] + 1,
-			{ centerPoint, { x + xsize, y - ysize }, { x + xsize, y + ysize }, { x, y + size } }
-		)
-
-		-- Draw left side side
-		local shade2 = 0.8 ^ 2
-		love.graphics.setColor(shade2, shade2, shade2)
+		DrawTileQuad(textures[index] + 1, rightFrontQuadVertices)
+		lovegraphics.setColor(SHADING_FACTOR2, SHADING_FACTOR2, SHADING_FACTOR2)
 		Perspective.flip = true
-		DrawTileQuad(
-			textures[1] + 1,
-			{ centerPoint, { x - xsize, y - ysize }, { x - xsize, y + ysize }, { x, y + size } }
-		)
+		DrawTileQuad(textures[1] + 1, leftSideQuadVertices)
 		Perspective.flip = false
 	end
-end
+	_JPROFILER.pop("DrawTileQuad")
 
+	_JPROFILER.pop("DrawHudTile")
+end
 function DrawTileQuad(textureIndex, points)
+	_JPROFILER.push("DrawTileQuad")
 	local canvas = TileCanvas[textureIndex]
 	Perspective.quad(canvas, unpack(points))
+
+	_JPROFILER.pop("DrawTileQuad")
+end
+
+function DrawTileQuad2D(textureIndex, x, y, size)
+	_JPROFILER.push("DrawTileQuad2D")
+	local canvas = TileCanvas[textureIndex]
+	lovegraphics.draw(canvas, x - size, y - size, 0, size * 2 / canvas:getWidth(), size * 2 / canvas:getHeight())
+	_JPROFILER.pop("DrawTileQuad2D")
 end
 
 function DrawCrossHair()
+	_JPROFILER.push("DrawCrossHair")
 	-- draw crosshair
 	lovegraphics.setColor(1, 1, 1)
 	CrosshairShader:send("source", Scene.threeCanvas)
@@ -361,9 +389,11 @@ function DrawCrossHair()
 	CrosshairShader:send("xProportion", 32 / GraphicsWidth)
 	CrosshairShader:send("yProportion", 32 / GraphicsHeight)
 	lovegraphics.draw(GuiSprites, GuiCrosshair, InterfaceWidth / 2 - 16, InterfaceHeight / 2 - 16, 0, 2, 2)
+	_JPROFILER.pop("DrawCrossHair")
 end
 
 function DrawHotBar()
+	_JPROFILER.push("DrawHotBar")
 	-- draw hotbar
 	lovegraphics.setColor(1, 1, 1)
 	lovegraphics.draw(GuiSprites, GuiHotbarQuad, InterfaceWidth / 2 - 182, InterfaceHeight - 22 * 2, 0, 2, 2)
@@ -376,9 +406,11 @@ function DrawHotBar()
 		2,
 		2
 	)
+	_JPROFILER.pop("DrawHotBar")
 end
 
 function cleanString(str)
+	_JPROFILER.push("cleanString")
 	-- Cette fonction supprime les caractères non valides en UTF-8 de la chaîne donnée
 	local cleaned = ""
 	for i = 1, #str do
@@ -387,10 +419,12 @@ function cleanString(str)
 			cleaned = cleaned .. c
 		end
 	end
+	_JPROFILER.pop("cleanString")
 	return cleaned
 end
 
 function DrawCommandInput()
+	_JPROFILER.push("DrawCommandInput")
 	if enableCommandHUD == true then
 		if fixinputforDrawCommandInput == false then
 			CurrentCommand = ""
@@ -420,6 +454,7 @@ function DrawCommandInput()
 		local cursorX = InterfaceWidth / 2 - 300 + lovegraphics.getFont():getWidth(cleanedCommand)
 		lovegraphics.line(cursorX, InterfaceHeight - 80, cursorX, InterfaceHeight - 50)
 	end
+	_JPROFILER.pop("DrawCommandInput")
 end
 
 function FixHudHotbarandTileScaling()
