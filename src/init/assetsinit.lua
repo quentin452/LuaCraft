@@ -113,14 +113,16 @@ function InitializeAssets()
 		end
 	end
 end
---TODO FIX POTENTIALS BUGS WHEN USING HIHER or lower atlas size than 256
 --TODO REDUCE TIME TO SAVE ATLAS IF THE ATLAS IS TOO MUCH LARGER
+--TODO ADD finalAtlasSize 128 and 64 support
 finalAtlasSize = 256
 
 function createTextureAtlas()
 	--TODO MADE INRAM ATLAS instead of using the png Atlas.png or probably i will not remove the Atlas.png creation(for debug) and making its creation into an another thread, but will use the INRAM ATLAS
 	local totalTimeStart = os.clock()
-
+	if finalAtlasSize < 256 or finalAtlasSize % 256 ~= 0 then
+		error("finalAtlasSize must be a multiple of 256 and not less than 256")
+	end
 	local function initializeAtlas(atlasSize)
 		local atlas = loveimage.newImageData(atlasSize, atlasSize)
 		local x, y = 0, 0
@@ -200,6 +202,9 @@ function createTextureAtlas()
 	lovefilesystem.createDirectory(atlasDirectory)
 
 	local saveStartTime = os.clock()
+	if finalAtlasSize < 256 or finalAtlasSize % 256 ~= 0 then
+		error("finalAtlasSize must be a multiple of 256 and not less than 256")
+	end
 	local atlasImagePath = atlasDirectory .. "/Atlas.png"
 	local pngData = atlas:encode("png")
 	lovefilesystem.write(atlasImagePath, pngData)

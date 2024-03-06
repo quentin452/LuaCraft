@@ -32,10 +32,9 @@ end
 local function getTextureCoordinatesAndLight(texture, lightOffset)
 	_JPROFILER.push("getTextureCoordinatesAndLight")
 	local textureindex = texture
-	--TODO NEED TO FIX HE USE THE WRONG TEXTURE WILL USING finalAtlasSize ~= 256
-	local adjustmentFactor = 256 / finalAtlasSize
-	local otx = (textureindex % LightValues + 16 * lightOffset) * adjustmentFactor
-	local oty = math.floor(textureindex / LightValues) * adjustmentFactor
+	local adjustmentFactor = finalAtlasSize / 256
+	local otx = ((textureindex / adjustmentFactor) % LightValues + 16 * lightOffset)
+	local oty = math.floor((textureindex / adjustmentFactor) / LightValues)
 	_JPROFILER.pop("getTextureCoordinatesAndLight")
 	return otx, oty
 end
