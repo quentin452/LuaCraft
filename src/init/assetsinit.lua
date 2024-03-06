@@ -114,7 +114,6 @@ function InitializeAssets()
 	end
 end
 --TODO REDUCE TIME TO SAVE ATLAS IF THE ATLAS IS TOO MUCH LARGER
---TODO ADD finalAtlasSize 128 and 64 support
 finalAtlasSize = 256
 
 function createTextureAtlas()
