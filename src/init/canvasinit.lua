@@ -10,12 +10,13 @@ function InitializeHUDTileCanvas()
 			if not TileCanvas[index] then
 				TileCanvas[index] = lovegraphics.newCanvas(tileSize, tileSize)
 				lovegraphics.setCanvas(TileCanvas[index])
-				lovegraphics.draw(TileTexture, -(i - 1) * tileSize, -(j - 1) * tileSize)
+				lovegraphics.draw(atlasImage, -(i - 1) * tileSize, -(j - 1) * tileSize)
 				lovegraphics.setCanvas()
 			end
 		end
 	end
 end
+
 function InitializeGameTileCanvas()
 	-- create lighting value textures on LightingTexture canvas
 	LightValues = 16
@@ -26,7 +27,7 @@ function InitializeGameTileCanvas()
 	for i = LightValues, 1, -1 do
 		local xx = (i - 1) * finalAtlasSize
 		lovegraphics.setColor(mult, mult, mult)
-		lovegraphics.draw(TileTexture, xx, 0)
+		lovegraphics.draw(atlasImage, xx, 0)
 		mult = mult * 0.8
 	end
 	lovegraphics.setColor(1, 1, 1)

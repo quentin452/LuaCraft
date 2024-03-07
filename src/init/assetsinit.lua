@@ -93,8 +93,10 @@ function InitializeAssets()
 		[Tiles.STONE_BRICK_Block] = stone_brickTexture,
 		[Tiles.GLOWSTONE_Block] = glowstoneTexture,
 	}
-	createTextureAtlas()
-	TileTexture = lovegraphics.newImage("Atlass/Atlas.png")
+	createTextureAtlas("PNG")
+	--	TileTexture = lovegraphics.newImage("Atlass/Atlas.png")
+	atlasInRAM, TilesTextureList = createTextureAtlas("RAM")
+	atlasImage = lovegraphics.newImage(atlasInRAM)
 	TilesTextureList = {
 		-- textures are in format: FRONT UP DOWN
 		-- at least one texture must be present
@@ -107,7 +109,7 @@ function InitializeAssets()
 	end
 	for blockType, _ in pairs(TilesTextureAtlasList) do
 		if not blockTypeExists(blockType) then
-			TilesTextureList[blockType] = { unpack(textureAtlassCoordinates[blockType]) }
+			TilesTextureList[blockType] = { unpack(textureAtlasCoordinates[blockType]) }
 		else
 			print("This BlockType " .. blockType .. " Has been already registered in TilesTextureList")
 		end
@@ -117,22 +119,26 @@ end
 --TODO ADD EASY texture size changer (for now only support 16x16)
 finalAtlasSize = 256
 
-function createTextureAtlas()
-	--TODO MADE INRAM ATLAS instead of using the png Atlas.png or probably i will not remove the Atlas.png creation(for debug) and making its creation into an another thread, but will use the INRAM ATLAS
+function createTextureAtlas(mode)
 	local totalTimeStart = os.clock()
+
 	if finalAtlasSize < 256 or finalAtlasSize % 256 ~= 0 then
 		error("finalAtlasSize must be a multiple of 256 and not less than 256")
 	end
+
 	local function initializeAtlas(atlasSize)
 		local atlas = loveimage.newImageData(atlasSize, atlasSize)
 		local x, y = 0, 0
-		textureAtlassCoordinates = {}
+		textureAtlasCoordinates = {}
 
 		local needResize = false
+
 		repeat
 			local loopStartTime = os.clock()
 
-			for blockType, texturePaths in pairs(TilesTextureAtlasList) do
+			local textureList = (mode == "PNG") and TilesTextureAtlasList or TilesTextureAtlasList
+
+			for blockType, texturePaths in pairs(textureList) do
 				if type(texturePaths) ~= "table" then
 					texturePaths = { texturePaths }
 				end
@@ -157,7 +163,7 @@ function createTextureAtlas()
 							finalAtlasSize = atlasSize
 							atlas = loveimage.newImageData(atlasSize, atlasSize)
 							x, y = 0, 0
-							textureAtlassCoordinates = {}
+							textureAtlasCoordinates = {}
 							needResize = true
 							break
 						else
@@ -169,7 +175,7 @@ function createTextureAtlas()
 						local tileWidth, tileHeight = 16, 16
 						local index = x / tileWidth + y / tileHeight * (finalAtlasSize / tileHeight)
 
-						textureAtlassCoordinates[blockType] = { index }
+						textureAtlasCoordinates[blockType] = { index }
 
 						x = x + width
 					else
@@ -184,33 +190,43 @@ function createTextureAtlas()
 
 			local loopEndTime = os.clock()
 			local loopElapsedTime = loopEndTime - loopStartTime
-			print("Atlas Time taken in loop: " .. loopElapsedTime .. " seconds")
+			print(mode .. " Atlas Time taken in loop: " .. loopElapsedTime .. " seconds")
 		until not needResize
 
 		local totalTimeEnd = os.clock()
 		local totalTimeElapsed = totalTimeEnd - totalTimeStart
-		print("Atlas Total time taken: " .. totalTimeElapsed .. " seconds")
+		print(mode .. " Atlas Total time taken: " .. totalTimeElapsed .. " seconds")
 
 		return atlas
 	end
 
 	local atlasSize = finalAtlasSize
-
 	local atlas = initializeAtlas(atlasSize)
 
-	local atlasDirectory = "Atlass"
-	lovefilesystem.createDirectory(atlasDirectory)
+	if mode == "PNG" then
+		local atlasDirectory = "Atlas"
+		lovefilesystem.createDirectory(atlasDirectory)
 
-	local saveStartTime = os.clock()
-	local atlasImagePath = atlasDirectory .. "/Atlas.png"
-	local pngData = atlas:encode("png")
-	lovefilesystem.write(atlasImagePath, pngData)
-	local saveEndTime = os.clock()
+		local saveStartTime = os.clock()
+		local atlasImagePath = atlasDirectory .. "/Atlas.png"
+		local pngData = atlas:encode("png")
+		lovefilesystem.write(atlasImagePath, pngData)
+		local saveEndTime = os.clock()
 
-	local saveElapsedTime = saveEndTime - saveStartTime
-	print("Atlas Time taken for saving: " .. saveElapsedTime .. " seconds")
+		local saveElapsedTime = saveEndTime - saveStartTime
+		print("PNG Atlas Time taken for saving: " .. saveElapsedTime .. " seconds")
 
-	print("Created Atlas.png at " .. lovefilesystem.getSaveDirectory() .. "/Atlass , with size " .. atlasSize)
+		print(
+			"PNG Created "
+				.. mode
+				.. ".png at "
+				.. lovefilesystem.getSaveDirectory()
+				.. "/"
+				.. atlasDirectory
+				.. " with size "
+				.. atlasSize
+		)
+	end
 
-	return atlas, TilesTextureList
+	return atlas, textureAtlasCoordinates
 end
