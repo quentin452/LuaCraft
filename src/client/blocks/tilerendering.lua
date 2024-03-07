@@ -34,11 +34,9 @@ end
 
 function createTileModel(tileID, thisLight, scale)
 	_JPROFILER.push("createTileModel")
-	local otx, oty = NumberToCoord(TileTextures(tileID)[1], 16, 16)
-	otx = otx + 16 * thisLight
-	local otx2, oty2 = otx + 1, oty + 1
-	local tx, ty = otx * TileWidth / LightValues, oty * TileHeight
-	local tx2, ty2 = otx2 * TileWidth / LightValues, oty2 * TileHeight
+	local texture = TileTextures(tileID)[1]
+	local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
 
 	local diagLong = 0.7071 * scale * 0.5 + 0.5
 	local diagShort = -0.7071 * scale * 0.5 + 0.5

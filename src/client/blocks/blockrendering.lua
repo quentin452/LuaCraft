@@ -16,26 +16,26 @@ local function CanDrawFace(get, thisTransparency)
 	end
 end
 
-local function calculationotxoty(otx, oty)
+ function calculationotxoty(otx, oty)
 	_JPROFILER.push("calculationotxoty")
-	local function calculateCoordinate(coordinate)
-		return coordinate * TileWidth / LightValues
-	end
-	--THIS SEEM TO WORK CORRECTLY
 	local adjustmentFactor = 256 / finalAtlasSize
-	local otx2, oty2 = otx + adjustmentFactor, oty + adjustmentFactor
-	local tx, ty, tx2, ty2 = calculateCoordinate(otx), oty * TileHeight, calculateCoordinate(otx2), oty2 * TileHeight
+	local tx = otx * TileWidth / LightValues
+	local ty = oty * TileHeight
+	local tx2 = (otx + adjustmentFactor) * TileWidth / LightValues
+	local ty2 = (oty + adjustmentFactor) * TileHeight
 	_JPROFILER.pop("calculationotxoty")
+	-- LuaCraftPrintLoggingNormal("tx: " .. tx .. ", ty: " .. ty .. ", tx2: " .. tx2 .. ", ty2: " .. ty2)
 	return tx, ty, tx2, ty2
 end
 
-local function getTextureCoordinatesAndLight(texture, lightOffset)
+function getTextureCoordinatesAndLight(texture, lightOffset)
 	_JPROFILER.push("getTextureCoordinatesAndLight")
 	local textureindex = texture
 	local adjustmentFactor = finalAtlasSize / 256
 	local otx = ((textureindex / adjustmentFactor) % LightValues + 16 * lightOffset)
-	local oty = math.floor((textureindex / adjustmentFactor) / LightValues)
+	local oty = math.floor(textureindex / (adjustmentFactor * LightValues))
 	_JPROFILER.pop("getTextureCoordinatesAndLight")
+	-- LuaCraftPrintLoggingNormal("Texture Index: " .. textureindex .. ", otx: " .. otx .. ", oty: " .. oty)
 	return otx, oty
 end
 
@@ -110,6 +110,7 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
 		addFaceToModel(model, x, y, z, otx, oty, scale)
 	end
+
 	if CanDrawFace(getBottom, thisTransparency) then
 		local textureIndex = math.min(3, #TileTextures(getBottom))
 		local texture = TileTextures(getBottom)[textureIndex]

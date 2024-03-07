@@ -114,6 +114,7 @@ function InitializeAssets()
 	end
 end
 --TODO REDUCE TIME TO SAVE ATLAS IF THE ATLAS IS TOO MUCH LARGER
+--TODO ADD EASY texture size changer (for now only support 16x16)
 finalAtlasSize = 256
 
 function createTextureAtlas()
@@ -201,9 +202,6 @@ function createTextureAtlas()
 	lovefilesystem.createDirectory(atlasDirectory)
 
 	local saveStartTime = os.clock()
-	if finalAtlasSize < 256 or finalAtlasSize % 256 ~= 0 then
-		error("finalAtlasSize must be a multiple of 256 and not less than 256")
-	end
 	local atlasImagePath = atlasDirectory .. "/Atlas.png"
 	local pngData = atlas:encode("png")
 	lovefilesystem.write(atlasImagePath, pngData)

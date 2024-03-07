@@ -34,15 +34,6 @@ function GenerateWorld()
 	_JPROFILER.pop("GenerateWorld")
 end
 
--- convert an index into a point on a 2d plane of given width and height
-
-function NumberToCoord(n, w, h)
-	local y = math.floor(n / w)
-	local x = n - (y * w)
-
-	return x, y
-end
-
 -- hash function used in chunk hash table
 function ChunkHash(x)
 	return x < 0 and 2 * math.abs(x) or 1 + 2 * x
