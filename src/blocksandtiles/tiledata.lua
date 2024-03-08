@@ -148,6 +148,7 @@ LightSources = {
 }
 
 function TileCollisions(n)
+	_JPROFILER.push("TileCollisions")
 	local nonCollidableTiles = {
 		Tiles.AIR_Block,
 		Tiles.OAK_SAPPLING_Block,
@@ -161,50 +162,64 @@ function TileCollisions(n)
 
 	for _, tile in ipairs(nonCollidableTiles) do
 		if n == tile then
+			_JPROFILER.pop("TileCollisions")
 			return false
 		end
 	end
-
+	_JPROFILER.pop("TileCollisions")
 	return true
 end
 
 local function getTileName(n)
+	_JPROFILER.push("getTileNameTILEDATA")
 	for key, value in pairs(Tiles) do
 		if value == n then
+			_JPROFILER.pop("getTileNameTILEDATA")
 			return TilesString[key]
 		end
 	end
+	_JPROFILER.pop("getTileNameTILEDATA")
 	return "Unknown"
 end
 
 function TileTransparency(n)
+	_JPROFILER.push("TileTransparency")
 	if transparencyCache[n] then
+		_JPROFILER.pop("TileTransparency")
 		return transparencyCache[n]
 	else
 		assert(transparencyLookup[n] ~= nil, "Key not found in transparencyLookup: " .. getTileName(n))
 		local transparency = transparencyLookup[n]
 		transparencyCache[n] = transparency
+		_JPROFILER.pop("TileTransparency")
 		return transparency
 	end
 end
 
 function TileLightSource(n)
+	_JPROFILER.push("TileLightSource")
 	if lightSourceCache[n] ~= nil then
+		_JPROFILER.pop("TileLightSource")
 		return lightSourceCache[n]
 	end
 	assert(lightSourceLookup[n] ~= nil, "Key not found in lightSourceLookup: " .. getTileName(n))
 	local result = lightSourceLookup[n]
 	lightSourceCache[n] = result
+	_JPROFILER.pop("TileLightSource")
 	return result
 end
 
 function TileLightable(n)
+	_JPROFILER.push("TileLightable")
 	local t = TileTransparency(n)
+	_JPROFILER.pop("TileLightable")
 	return t == TilesTransparency.FULL or t == TilesTransparency.NONE
 end
 
 function TileSemiLightable(n)
+	_JPROFILER.push("TileSemiLightable")
 	local t = TileTransparency(n)
+	_JPROFILER.pop("TileSemiLightable")
 	return t == TilesTransparency.FULL or t == TilesTransparency.PARTIAL or t == TilesTransparency.NONE
 end
 
@@ -217,6 +232,7 @@ function TileTexturesFORHUD(n)
 	return TilesTextureListHUD[n]
 end
 function TileModel(n)
+	_JPROFILER.push("TileModel")
 	if tileModelCache[n] then
 		return tileModelCache[n]
 	end
@@ -227,14 +243,17 @@ function TileModel(n)
 		result = 0
 	end
 	tileModelCache[n] = result
+	_JPROFILER.pop("TileModel")
 	return result
 end
 
 function Tile2D(n)
+	_JPROFILER.push("Tile2D")
 	if tile2DCache[n] then
 		return tile2DCache[n]
 	end
 	local result = n == Tiles.YELLO_FLOWER_Block or n == Tiles.ROSE_FLOWER_Block or n == Tiles.OAK_SAPPLING_Block
 	tile2DCache[n] = result
+	_JPROFILER.pop("Tile2D")
 	return result
 end
