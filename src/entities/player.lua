@@ -252,7 +252,7 @@ function initPlayerInventory()
 	local defaultItems = {
 		Tiles.STONE_Block,
 		Tiles.COBBLE_Block,
-		Tiles.STONE_BRICK_Block,
+		Tiles.GRASS_Block,
 		Tiles.YELLO_FLOWER_Block,
 		Tiles.OAK_SAPPLING_Block,
 		Tiles.OAK_LOG_Block,

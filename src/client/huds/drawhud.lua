@@ -312,7 +312,7 @@ local ysize = angleCos * size
 
 function DrawHudTile(tile, hudX, hudY)
 	_JPROFILER.push("DrawHudTile")
-	local textures = TileTextures(tile)
+	local textures = TileTexturesFORHUD(tile)
 
 	if tile == 0 or not textures then
 		return
@@ -346,31 +346,59 @@ function DrawHudTile(tile, hudX, hudY)
 			{ x, y + size },
 		}
 
-		DrawTileQuad(textures[math.min(#textures, 2)] + 1, topQuadVertices)
-		lovegraphics.setColor(SHADING_FACTOR1, SHADING_FACTOR1, SHADING_FACTOR1)
-		local index = (#textures == 4) and 4 or 1
-		DrawTileQuad(textures[index] + 1, rightFrontQuadVertices)
-		lovegraphics.setColor(SHADING_FACTOR2, SHADING_FACTOR2, SHADING_FACTOR2)
-		Perspective.flip = true
-		DrawTileQuad(textures[1] + 1, leftSideQuadVertices)
-		Perspective.flip = false
+		if tile == Tiles.GRASS_Block then
+			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassTopTexture, topQuadVertices)
+			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassSideTexture, rightFrontQuadVertices)
+			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassSideTexture, leftSideQuadVertices)
+		elseif tile == Tiles.OAK_LOG_Block then
+			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.oak_logsTopTexture, topQuadVertices)
+			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.oak_logsSideTexture, rightFrontQuadVertices)
+			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.oak_logsSideTexture, leftSideQuadVertices)
+		else
+			DrawTileQuad(textures[math.min(#textures, 2)] + 1, topQuadVertices)
+			love.graphics.setColor(SHADING_FACTOR1, SHADING_FACTOR1, SHADING_FACTOR1)
+			local index = (#textures == 4) and 4 or 1
+			DrawTileQuad(textures[index] + 1, rightFrontQuadVertices)
+			love.graphics.setColor(SHADING_FACTOR2, SHADING_FACTOR2, SHADING_FACTOR2)
+			Perspective.flip = true
+			DrawTileQuad(textures[1] + 1, leftSideQuadVertices)
+			Perspective.flip = false
+		end
 	end
 	_JPROFILER.pop("DrawTileQuad")
 
 	_JPROFILER.pop("DrawHudTile")
 end
+function DrawTileQuadPersonalized(texture, points)
+	_JPROFILER.push("DrawTileQuadPersonalized")
+	Perspective.quad(texture, unpack(points))
+	_JPROFILER.pop("DrawTileQuadPersonalized")
+end
+
 function DrawTileQuad(textureIndex, points)
 	_JPROFILER.push("DrawTileQuad")
-	local canvas = TileCanvas[textureIndex]
-	Perspective.quad(canvas, unpack(points))
-
+	local textureData = HUDTilesTextureList[textureIndex]
+	if textureData == nil then
+		LuaCraftErrorLogging("No texture for index ", textureIndex)
+		return
+	end
+	local texture = textureData[1]
+	Perspective.quad(texture, unpack(points))
 	_JPROFILER.pop("DrawTileQuad")
 end
 
 function DrawTileQuad2D(textureIndex, x, y, size)
 	_JPROFILER.push("DrawTileQuad2D")
-	local canvas = TileCanvas[textureIndex]
-	lovegraphics.draw(canvas, x - size, y - size, 0, size * 2 / canvas:getWidth(), size * 2 / canvas:getHeight())
+	local textureData = HUDTilesTextureList[textureIndex]
+	if textureData == nil then
+		LuaCraftErrorLogging("No texture for index ", textureIndex)
+		return
+	end
+	local texture = textureData[1]
+	local prevFilter = texture:getFilter()
+	texture:setFilter("nearest", "nearest")
+	lovegraphics.draw(texture, x - size, y - size, 0, size * 2 / texture:getWidth(), size * 2 / texture:getHeight())
+	texture:setFilter(prevFilter)
 	_JPROFILER.pop("DrawTileQuad2D")
 end
 

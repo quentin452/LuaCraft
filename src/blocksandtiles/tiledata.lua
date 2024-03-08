@@ -1,4 +1,5 @@
 tileTexturesCache = {}
+tileTexturesCacheHUD = {}
 tileModelCache = {}
 tile2DCache = {}
 lightSourceCache = {}
@@ -26,10 +27,10 @@ Tiles = {
 	OAK_LEAVE_Block = 18,
 	SPONGE_Block = 19,
 	GLASS_Block = 20,
-	YELLO_FLOWER_Block = 37,
-	ROSE_FLOWER_Block = 38,
-	STONE_BRICK_Block = 45,
-	GLOWSTONE_Block = 89,
+	YELLO_FLOWER_Block = 21,
+	ROSE_FLOWER_Block = 22,
+	STONE_BRICK_Block = 23,
+	GLOWSTONE_Block = 24,
 }
 
 local transparencyLookup = {
@@ -114,7 +115,6 @@ function TileSemiLightable(n)
 	local t = TileTransparency(n)
 	return t == 0 or t == 1 or t == 2
 end
-
 function TileTextures(n)
 	if tileTexturesCache[n] then
 		return tileTexturesCache[n]
@@ -123,7 +123,14 @@ function TileTextures(n)
 
 	return tileTexturesCache[n]
 end
+function TileTexturesFORHUD(n)
+	if tileTexturesCacheHUD[n] then
+		return tileTexturesCacheHUD[n]
+	end
+	tileTexturesCacheHUD[n] = TilesTextureListHUD[n]
 
+	return tileTexturesCacheHUD[n]
+end
 function TileModel(n)
 	if tileModelCache[n] then
 		return tileModelCache[n]
