@@ -5,30 +5,6 @@ transparencyCache = {}
 
 Tiles = {
 	AIR_Block = 0,
-	--	STONE_Block = 1,
-	--	GRASS_Block = 2,
-	--	DIRT_Block = 3,
-	--COBBLE_Block = 4,
-	--OAK_PLANK_Block = 5,
-	--OAK_SAPPLING_Block = 6,
-	--BEDROCK_Block = 7,
-	--WATER_Block = 8,
-	--STATIONARY_WATER_Block = 9,
-	--LAVA_Block = 10,
-	--STATIONARY_LAVA_Block = 11,
-	--SAND_Block = 12,
-	--GRAVEL_Block = 13,
-	--GOLD_Block = 14,
-	--IRON_Block = 15,
-	--	COAL_Block = 16,
-	--OAK_LOG_Block = 17,
-	--OAK_LEAVE_Block = 18,
-	--SPONGE_Block = 19,
-	--GLASS_Block = 20,
-	--YELLO_FLOWER_Block = 21,
-	--	ROSE_FLOWER_Block = 22,
-	--STONE_BRICK_Block = 23,
-	--GLOWSTONE_Block = 24,
 }
 function InitializeTilesNumberAndName()
 	LuaCraftPrintLoggingNormal("Initializing tiles...")
