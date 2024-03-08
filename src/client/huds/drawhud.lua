@@ -35,11 +35,6 @@ function DrawF3()
 	end
 
 	-- Print the number of elements in each cache
-	local tiletexturecount = 0
-	for _ in pairs(tileTexturesCache) do
-		tiletexturecount = tiletexturecount + 1
-	end
-	lovegraphics.print("tileTexturesCache size: " .. tiletexturecount, 0, 150)
 	local tilemodelcount = 0
 	for _ in pairs(tileModelCache) do
 		tilemodelcount = tilemodelcount + 1

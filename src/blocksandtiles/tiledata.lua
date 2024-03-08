@@ -1,5 +1,3 @@
-tileTexturesCache = {}
-tileTexturesCacheHUD = {}
 tileModelCache = {}
 tile2DCache = {}
 lightSourceCache = {}
@@ -116,20 +114,10 @@ function TileSemiLightable(n)
 	return t == 0 or t == 1 or t == 2
 end
 function TileTextures(n)
-	if tileTexturesCache[n] then
-		return tileTexturesCache[n]
-	end
-	tileTexturesCache[n] = TilesTextureList[n]
-
-	return tileTexturesCache[n]
+	return TilesTextureList[n]
 end
 function TileTexturesFORHUD(n)
-	if tileTexturesCacheHUD[n] then
-		return tileTexturesCacheHUD[n]
-	end
-	tileTexturesCacheHUD[n] = TilesTextureListHUD[n]
-
-	return tileTexturesCacheHUD[n]
+	return TilesTextureListHUD[n]
 end
 function TileModel(n)
 	if tileModelCache[n] then
