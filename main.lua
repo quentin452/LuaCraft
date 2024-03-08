@@ -43,7 +43,7 @@ require("src/init/!init")
 require("src/client/huds/!draw")
 require("src/client/blocks/blockrendering")
 require("src/client/blocks/tilerendering")
-
+require("src/client/textures/texturestatic")
 --libs
 PROF_CAPTURE = false
 _JPROFILER = require("libs/jprofiler/jprof")

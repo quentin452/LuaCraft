@@ -31,7 +31,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 	end
 
 	local function initializeAtlas(atlasSize)
-		local atlas = love.image.newImageData(atlasSize, atlasSize)
+		local atlas = loveimage.newImageData(atlasSize, atlasSize)
 		local x, y = 0, 0
 		local needResize = false
 
@@ -47,12 +47,12 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 				end
 
 				for _, texturePath in ipairs(texturePaths) do
-					local fileExist = love.filesystem.getInfo(texturePath)
+					local fileExist = lovefilesystem.getInfo(texturePath)
 
 					if fileExist then
-						local fileData = love.filesystem.read(texturePath)
-						local fileDataObject = love.filesystem.newFileData(fileData, texturePath)
-						local imageData = love.image.newImageData(fileDataObject)
+						local fileData = lovefilesystem.read(texturePath)
+						local fileDataObject = lovefilesystem.newFileData(fileData, texturePath)
+						local imageData = loveimage.newImageData(fileDataObject)
 
 						local width, height = imageData:getDimensions()
 
@@ -64,7 +64,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 						if y + height > atlasSize then
 							atlasSize = atlasSize * 2
 							finalAtlasSize = atlasSize
-							atlas = love.image.newImageData(atlasSize, atlasSize)
+							atlas = loveimage.newImageData(atlasSize, atlasSize)
 							x, y = 0, 0
 							textureAtlasCoordinates = {}
 							textureAtlasCoordinatesFORHUD = {}
@@ -112,7 +112,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 
 	if memoryorpng == "PNG" then
 		local atlasDirectory = "Atlas"
-		love.filesystem.createDirectory(atlasDirectory)
+		lovefilesystem.createDirectory(atlasDirectory)
 
 		local saveStartTime = os.clock()
 		local atlasImagePath = atlasDirectory .. "/Atlas"
@@ -121,7 +121,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 		end
 		atlasImagePath = atlasImagePath .. ".png"
 		local pngData = atlas:encode("png")
-		love.filesystem.write(atlasImagePath, pngData)
+		lovefilesystem.write(atlasImagePath, pngData)
 		local saveEndTime = os.clock()
 
 		local saveElapsedTime = saveEndTime - saveStartTime
@@ -131,7 +131,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 			"PNG Created "
 				.. memoryorpng
 				.. ".png at "
-				.. love.filesystem.getSaveDirectory()
+				.. lovefilesystem.getSaveDirectory()
 				.. "/"
 				.. atlasDirectory
 				.. " with size "
@@ -149,30 +149,30 @@ end
 local function createTILEHUDAssets()
 	TilesTextureFORAtlasListHUD = {
 		--[Tiles.AIR_Block] = airTexture,
-		[Tiles.STONE_Block] = { stoneTexture },
-		[Tiles.GRASS_Block] = { grassTopTexture },
-		[Tiles.DIRT_Block] = { dirtTexture },
-		[Tiles.COBBLE_Block] = { cobbleTexture },
-		[Tiles.OAK_PLANK_Block] = { oak_planksTexture },
-		[Tiles.OAK_SAPPLING_Block] = { oak_sapplingsTexture },
-		[Tiles.BEDROCK_Block] = { bedrockTexture },
-		[Tiles.WATER_Block] = { waterTexture },
-		[Tiles.STATIONARY_WATER_Block] = { waterstationaryTexture },
-		[Tiles.LAVA_Block] = { lavaTexture },
-		[Tiles.STATIONARY_LAVA_Block] = { lavastationaryTexture },
-		[Tiles.SAND_Block] = { sandTexture },
-		[Tiles.GRAVEL_Block] = { gravelTexture },
-		[Tiles.GOLD_Block] = { goldTexture },
-		[Tiles.IRON_Block] = { ironTexture },
-		[Tiles.COAL_Block] = { coalTexture },
-		[Tiles.OAK_LOG_Block] = { oak_logsTopTexture },
-		[Tiles.OAK_LEAVE_Block] = { oak_leavesTexture },
-		[Tiles.SPONGE_Block] = { spongeTexture },
-		[Tiles.GLASS_Block] = { glassTexture },
-		[Tiles.ROSE_FLOWER_Block] = { roseflowerTexture },
-		[Tiles.YELLO_FLOWER_Block] = { yellowflowerTexture },
-		[Tiles.STONE_BRICK_Block] = { stone_brickTexture },
-		[Tiles.GLOWSTONE_Block] = { glowstoneTexture },
+		[Tiles.STONE_Block] = { LuaCraftTextures.stoneTexture },
+		[Tiles.GRASS_Block] = { LuaCraftTextures.grassTopTexture },
+		[Tiles.DIRT_Block] = { LuaCraftTextures.dirtTexture },
+		[Tiles.COBBLE_Block] = { LuaCraftTextures.cobbleTexture },
+		[Tiles.OAK_PLANK_Block] = { LuaCraftTextures.oak_planksTexture },
+		[Tiles.OAK_SAPPLING_Block] = { LuaCraftTextures.oak_sapplingsTexture },
+		[Tiles.BEDROCK_Block] = { LuaCraftTextures.bedrockTexture },
+		[Tiles.WATER_Block] = { LuaCraftTextures.waterTexture },
+		[Tiles.STATIONARY_WATER_Block] = { LuaCraftTextures.waterstationaryTexture },
+		[Tiles.LAVA_Block] = { LuaCraftTextures.lavaTexture },
+		[Tiles.STATIONARY_LAVA_Block] = { LuaCraftTextures.lavastationaryTexture },
+		[Tiles.SAND_Block] = { LuaCraftTextures.sandTexture },
+		[Tiles.GRAVEL_Block] = { LuaCraftTextures.gravelTexture },
+		[Tiles.GOLD_Block] = { LuaCraftTextures.goldTexture },
+		[Tiles.IRON_Block] = { LuaCraftTextures.ironTexture },
+		[Tiles.COAL_Block] = { LuaCraftTextures.coalTexture },
+		[Tiles.OAK_LOG_Block] = { LuaCraftTextures.oak_logsTopTexture },
+		[Tiles.OAK_LEAVE_Block] = { LuaCraftTextures.oak_leavesTexture },
+		[Tiles.SPONGE_Block] = { LuaCraftTextures.spongeTexture },
+		[Tiles.GLASS_Block] = { LuaCraftTextures.glassTexture },
+		[Tiles.ROSE_FLOWER_Block] = { LuaCraftTextures.roseflowerTexture },
+		[Tiles.YELLO_FLOWER_Block] = { LuaCraftTextures.yellowflowerTexture },
+		[Tiles.STONE_BRICK_Block] = { LuaCraftTextures.stone_brickTexture },
+		[Tiles.GLOWSTONE_Block] = { LuaCraftTextures.glowstoneTexture },
 	}
 
 	HUDTilesTextureList = {}
@@ -190,13 +190,10 @@ local function createTILEHUDAssets()
 		end
 	end
 	TilesTextureFORAtlasListHUDPersonalized = {
-		--[Tiles.AIR_Block] = airTexture,
-		grassTopTexture = grassTopTexture,
-		grassBottomTexture = grassBottomTexture,
-		grassSideTexture = grassSideTexture,
-		oak_logsTopTexture = oak_logsTopTexture,
-		oak_logsBottomTexture = oak_logsBottomTexture,
-		oak_logsSideTexture = oak_logsSideTexture,
+		grassTopTexture = LuaCraftTextures.grassTopTexture,
+		grassSideTexture = LuaCraftTextures.grassSideTexture,
+		oak_logsTopTexture = LuaCraftTextures.oak_logsTopTexture,
+		oak_logsSideTexture = LuaCraftTextures.oak_logsSideTexture,
 	}
 	HUDTilesTextureListPersonalized = {}
 	for key, value in pairs(TilesTextureFORAtlasListHUDPersonalized) do
@@ -213,16 +210,7 @@ local function createTILEHUDAssets()
 		end
 	end
 	createTextureAtlas("PNG", "HUD")
-	TilesTextureListHUD = {
-		-- textures are in format: UP DOWN FRONT
-		-- at least one texture must be present
-		--	[Tiles.GRASS_Block] = { 1, 3, 2 },
-		--	[Tiles.OAK_LOG_Block] = { 19, 20, 21 },
-	}
-	--REVERT UP DOWN FRONT to be FRONT UP DOWN
-	--	for key, textures in pairs(TilesTextureListHUD) do
-	--		TilesTextureListHUD[key] = { textures[3], textures[1], textures[2] }
-	--	end
+	TilesTextureListHUD = {}
 	local function blockTypeExists(blockType)
 		return TilesTextureListHUD[blockType] ~= nil
 	end
@@ -237,30 +225,38 @@ end
 local function createTILEINGameAssets()
 	TilesTextureFORAtlasList = {
 		--[Tiles.AIR_Block] = airTexture,
-		[Tiles.STONE_Block] = { stoneTexture },
-		[Tiles.GRASS_Block] = { grassTopTexture, grassBottomTexture, grassSideTexture },
-		[Tiles.DIRT_Block] = { dirtTexture },
-		[Tiles.COBBLE_Block] = { cobbleTexture },
-		[Tiles.OAK_PLANK_Block] = { oak_planksTexture },
-		[Tiles.OAK_SAPPLING_Block] = { oak_sapplingsTexture },
-		[Tiles.BEDROCK_Block] = { bedrockTexture },
-		[Tiles.WATER_Block] = { waterTexture },
-		[Tiles.STATIONARY_WATER_Block] = { waterstationaryTexture },
-		[Tiles.LAVA_Block] = { lavaTexture },
-		[Tiles.STATIONARY_LAVA_Block] = { lavastationaryTexture },
-		[Tiles.SAND_Block] = { sandTexture },
-		[Tiles.GRAVEL_Block] = { gravelTexture },
-		[Tiles.GOLD_Block] = { goldTexture },
-		[Tiles.IRON_Block] = { ironTexture },
-		[Tiles.COAL_Block] = { coalTexture },
-		[Tiles.OAK_LOG_Block] = { oak_logsTopTexture, oak_logsBottomTexture, oak_logsSideTexture },
-		[Tiles.OAK_LEAVE_Block] = { oak_leavesTexture },
-		[Tiles.SPONGE_Block] = { spongeTexture },
-		[Tiles.GLASS_Block] = { glassTexture },
-		[Tiles.ROSE_FLOWER_Block] = { roseflowerTexture },
-		[Tiles.YELLO_FLOWER_Block] = { yellowflowerTexture },
-		[Tiles.STONE_BRICK_Block] = { stone_brickTexture },
-		[Tiles.GLOWSTONE_Block] = { glowstoneTexture },
+		[Tiles.STONE_Block] = { LuaCraftTextures.stoneTexture },
+		[Tiles.GRASS_Block] = {
+			LuaCraftTextures.grassTopTexture,
+			LuaCraftTextures.grassBottomTexture,
+			LuaCraftTextures.grassSideTexture,
+		},
+		[Tiles.DIRT_Block] = { LuaCraftTextures.dirtTexture },
+		[Tiles.COBBLE_Block] = { LuaCraftTextures.cobbleTexture },
+		[Tiles.OAK_PLANK_Block] = { LuaCraftTextures.oak_planksTexture },
+		[Tiles.OAK_SAPPLING_Block] = { LuaCraftTextures.oak_sapplingsTexture },
+		[Tiles.BEDROCK_Block] = { LuaCraftTextures.bedrockTexture },
+		[Tiles.WATER_Block] = { LuaCraftTextures.waterTexture },
+		[Tiles.STATIONARY_WATER_Block] = { LuaCraftTextures.waterstationaryTexture },
+		[Tiles.LAVA_Block] = { LuaCraftTextures.lavaTexture },
+		[Tiles.STATIONARY_LAVA_Block] = { LuaCraftTextures.lavastationaryTexture },
+		[Tiles.SAND_Block] = { LuaCraftTextures.sandTexture },
+		[Tiles.GRAVEL_Block] = { LuaCraftTextures.gravelTexture },
+		[Tiles.GOLD_Block] = { LuaCraftTextures.goldTexture },
+		[Tiles.IRON_Block] = { LuaCraftTextures.ironTexture },
+		[Tiles.COAL_Block] = { LuaCraftTextures.coalTexture },
+		[Tiles.OAK_LOG_Block] = {
+			LuaCraftTextures.oak_logsTopTexture,
+			LuaCraftTextures.oak_logsBottomTexture,
+			LuaCraftTextures.oak_logsSideTexture,
+		},
+		[Tiles.OAK_LEAVE_Block] = { LuaCraftTextures.oak_leavesTexture },
+		[Tiles.SPONGE_Block] = { LuaCraftTextures.spongeTexture },
+		[Tiles.GLASS_Block] = { LuaCraftTextures.glassTexture },
+		[Tiles.ROSE_FLOWER_Block] = { LuaCraftTextures.roseflowerTexture },
+		[Tiles.YELLO_FLOWER_Block] = { LuaCraftTextures.yellowflowerTexture },
+		[Tiles.STONE_BRICK_Block] = { LuaCraftTextures.stone_brickTexture },
+		[Tiles.GLOWSTONE_Block] = { LuaCraftTextures.glowstoneTexture },
 	}
 	createTextureAtlas("PNG", "INGAME")
 	--	TileTexture = lovegraphics.newImage("Atlass/Atlas.png")
@@ -288,72 +284,17 @@ local function createTILEINGameAssets()
 	end
 end
 local function InitializeImages()
-	BlockTest = lovegraphics.newImage("resources/assets/textures/debug/defaulttexture.png")
-	DefaultTexture = lovegraphics.newImage("resources/assets/textures/debug/defaulttexture.png")
-	GuiSprites = lovegraphics.newImage("resources/assets/textures/guis/gui.png")
+	local texturepath = "resources/assets/textures/"
+	-- Load images
+	BlockTest = lovegraphics.newImage(texturepath .. "debug/defaulttexture.png")
+	DefaultTexture = BlockTest -- Reuse the same image reference
+	GuiSprites = lovegraphics.newImage(texturepath .. "guis/gui.png")
 	mainMenuBackground = lovegraphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
 	mainMenuSettingsBackground = lovegraphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
-	gameplayingpausemenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
-	playinggamesettings = lovegraphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
+	playingGamePauseMenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
+	playingGameSettings = lovegraphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
 	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
-	ChunkBorders = lovegraphics.newImage("resources/assets/textures/debug/chunkborders.png")
-
-	-- Blocks/Tiles/liquids
-	grassTopTexture = "resources/assets/textures/blocksandtiles/blocks/grass/grass_top.png"
-	grassBottomTexture = "resources/assets/textures/blocksandtiles/blocks/grass/grass_bottom.png"
-	grassSideTexture = "resources/assets/textures/blocksandtiles/blocks/grass/grass_side.png"
-
-	airTexture = "resources/assets/textures/blocksandtiles/blocks/air.png"
-
-	bedrockTexture = "resources/assets/textures/blocksandtiles/blocks/bedrock.png"
-
-	coalTexture = "resources/assets/textures/blocksandtiles/blocks/coal.png"
-
-	cobbleTexture = "resources/assets/textures/blocksandtiles/blocks/cobble.png"
-
-	dirtTexture = "resources/assets/textures/blocksandtiles/blocks/dirt.png"
-
-	glassTexture = "resources/assets/textures/blocksandtiles/blocks/glass.png"
-
-	glowstoneTexture = "resources/assets/textures/blocksandtiles/blocks/glowstone.png"
-
-	goldTexture = "resources/assets/textures/blocksandtiles/blocks/gold.png"
-
-	gravelTexture = "resources/assets/textures/blocksandtiles/blocks/gravel.png"
-
-	ironTexture = "resources/assets/textures/blocksandtiles/blocks/iron.png"
-
-	oak_leavesTexture = "resources/assets/textures/blocksandtiles/blocks/oak_leaves.png"
-
-	oak_logsTopTexture = "resources/assets/textures/blocksandtiles/blocks/oak_logs/oak_top.png"
-	oak_logsBottomTexture = "resources/assets/textures/blocksandtiles/blocks/oak_logs/oak_botton.png"
-	oak_logsSideTexture = "resources/assets/textures/blocksandtiles/blocks/oak_logs/oak_side.png"
-
-	oak_planksTexture = "resources/assets/textures/blocksandtiles/blocks/oak_planks.png"
-
-	sandTexture = "resources/assets/textures/blocksandtiles/blocks/sand.png"
-
-	spongeTexture = "resources/assets/textures/blocksandtiles/blocks/sponge.png"
-
-	stoneTexture = "resources/assets/textures/blocksandtiles/blocks/stone.png"
-
-	stone_brickTexture = "resources/assets/textures/blocksandtiles/blocks/stone_brick.png"
-
-	bedrockTexture = "resources/assets/textures/blocksandtiles/blocks/bedrock.png"
-
-	lavaTexture = "resources/assets/textures/blocksandtiles/liquid/lava.png"
-
-	lavastationaryTexture = "resources/assets/textures/blocksandtiles/liquid/lava_stationary.png"
-
-	waterTexture = "resources/assets/textures/blocksandtiles/liquid/water.png"
-
-	waterstationaryTexture = "resources/assets/textures/blocksandtiles/liquid/water_stationary.png"
-
-	oak_sapplingsTexture = "resources/assets/textures/blocksandtiles/tiles/oak_sapplings.png"
-
-	roseflowerTexture = "resources/assets/textures/blocksandtiles/tiles/rose_flower.png"
-
-	yellowflowerTexture = "resources/assets/textures/blocksandtiles/tiles/yellow_flower.png"
+	ChunkBorders = lovegraphics.newImage(texturepath .. "debug/chunkborders.png")
 end
 
 function InitializeAssets()
