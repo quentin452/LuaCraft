@@ -86,7 +86,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 						end
 						x = x + width
 					else
-						print("Failed to read file:", texturePath)
+						LuaCraftPrintLoggingNormal("Failed to read file:", texturePath)
 					end
 				end
 			end
@@ -97,12 +97,12 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 
 			local loopEndTime = os.clock()
 			local loopElapsedTime = loopEndTime - loopStartTime
-			print(interfacemode .. " Atlas Time taken in loop: " .. loopElapsedTime .. " seconds")
+			LuaCraftPrintLoggingNormal(interfacemode .. " Atlas Time taken in loop: " .. loopElapsedTime .. " seconds")
 		until not needResize
 
 		local totalTimeEnd = os.clock()
 		local totalTimeElapsed = totalTimeEnd - totalTimeStart
-		print(interfacemode .. " Atlas Total time taken: " .. totalTimeElapsed .. " seconds")
+		LuaCraftPrintLoggingNormal(interfacemode .. " Atlas Total time taken: " .. totalTimeElapsed .. " seconds")
 
 		return atlas
 	end
@@ -125,9 +125,9 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 		local saveEndTime = os.clock()
 
 		local saveElapsedTime = saveEndTime - saveStartTime
-		print("PNG Atlas Time taken for saving: " .. saveElapsedTime .. " seconds")
+		LuaCraftPrintLoggingNormal("PNG Atlas Time taken for saving: " .. saveElapsedTime .. " seconds")
 
-		print(
+		LuaCraftPrintLoggingNormal(
 			"PNG Created "
 				.. memoryorpng
 				.. ".png at "
@@ -189,7 +189,9 @@ local function createTILEHUDAssets()
 		if not blockTypeExists(blockType) then
 			TilesTextureListHUD[blockType] = { unpack(textureAtlasCoordinatesFORHUD[blockType]) }
 		else
-			print("This BlockType " .. blockType .. " Has been already registered in TilesTextureListHUD")
+			LuaCraftPrintLoggingNormal(
+				"This BlockType " .. blockType .. " Has been already registered in TilesTextureListHUD"
+			)
 		end
 	end
 end
@@ -217,7 +219,9 @@ local function createTILEINGameAssets()
 		if not blockTypeExists(blockType) then
 			TilesTextureList[blockType] = { unpack(textureAtlasCoordinates[blockType]) }
 		else
-			print("This BlockType " .. blockType .. " Has been already registered in TilesTextureList")
+			LuaCraftPrintLoggingNormal(
+				"This BlockType " .. blockType .. " Has been already registered in TilesTextureList"
+			)
 		end
 	end
 end

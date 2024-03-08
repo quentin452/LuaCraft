@@ -4,6 +4,7 @@ lightSourceCache = {}
 transparencyCache = {}
 
 function InitializeTilesNumberAndName()
+	LuaCraftPrintLoggingNormal("Initializing tiles...")
 	Tiles = {
 		AIR_Block = 0,
 		STONE_Block = 1,
@@ -58,14 +59,6 @@ function InitializeTilesNumberAndName()
 		STONE_BRICK_Block = "STONE_BRICK_Block",
 		GLOWSTONE_Block = "GLOWSTONE_Block",
 	}
-	local indices = {}
-	for key, value in pairs(Tiles) do
-		assert(indices[value] == nil, "Duplicate index in Tiles Table: " .. tostring(value))
-		assert(TilesString[key] ~= nil, "Key not found in TilesString: " .. tostring(key))
-		indices[value] = key
-	end
-	indices = {}
-
 	TilesTransparency = {
 		FULL = 0,
 		PARTIAL = 1,
@@ -126,6 +119,25 @@ function InitializeTilesNumberAndName()
 		[Tiles.STONE_BRICK_Block] = LightSources[0],
 		[Tiles.GLOWSTONE_Block] = LightSources[15],
 	}
+	local indices = {}
+	for key, value in pairs(Tiles) do
+		assert(indices[value] == nil, "Duplicate index in Tiles Table: " .. tostring(value))
+		assert(TilesString[key] ~= nil, "Key not found in TilesString: " .. tostring(key))
+		indices[value] = key
+		LuaCraftPrintLoggingNormal(
+			"Tile Name: "
+				.. key
+				.. " Tile Index: "
+				.. tostring(value)
+				.. " Tile Transparency: "
+				.. tostring(transparencyLookup[value])
+				.. " Tile Light Source: "
+				.. tostring(lightSourceLookup[value])
+				.. "\n-----------------------------------------------------------------------------------------------------------------------"
+		)
+	end
+	indices = {}
+	LuaCraftPrintLoggingNormal("Tiles initialized!")
 end
 
 LightSources = {
