@@ -13,10 +13,10 @@ _PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object
 
 function drawPlayingMenuSettings()
 	local w, h = lovegraphics.getDimensions()
-	local scaleX = w / playinggamesettings:getWidth()
-	local scaleY = h / playinggamesettings:getHeight()
+	local scaleX = w / playingGameSettings:getWidth()
+	local scaleY = h / playingGameSettings:getHeight()
 
-	lovegraphics.draw(playinggamesettings, 0, 0, 0, scaleX, scaleY)
+	lovegraphics.draw(playingGameSettings, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _PlayingGameSettings.y
 	local lineHeight = font25:getHeight("X")
