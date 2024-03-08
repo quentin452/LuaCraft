@@ -5,7 +5,6 @@ function addFunctionToTag(tag, func)
 	end
 	table.insert(ModLoaderTable[tag], func)
 end
-
 local nextId = 1
 
 function addBlock(key, block)
@@ -18,93 +17,102 @@ function addBlock(key, block)
 	return id
 end
 
+function addTransparencyLookup(block, transparency)
+	if transparencyLookup[block] ~= nil then
+		error("Key already exists in transparencyLookup: " .. getTileName(block))
+	end
+	transparencyLookup[block] = transparency
+end
+
+function addLightSourceLookup(block, lightsourcing)
+	if lightSourceLookup[block] ~= nil then
+		error("Key already exists in lightSourceLookup: " .. getTileName(block))
+	end
+	lightSourceLookup[block] = lightsourcing
+end
+
+function addTileNonCollidable(block)
+	if nonCollidableTiles[block] ~= nil then
+		error("Key already exists in nonCollidableTiles: " .. getTileName(block))
+	end
+	nonCollidableTiles[block] = true
+end
+function madeTile2DRenderedOnHUD(block)
+	if Tile2DHUDTable[block] ~= nil then
+		error("Key already exists in Tile2DHUDTable: " .. getTileName(block))
+	end
+	Tile2DHUDTable[block] = true
+end
+function transform3DBlockToA2DTile(block)
+	if TileModelTable[block] ~= nil then
+		error("Key already exists in TileModelTable: " .. getTileName(block))
+	end
+	TileModelTable[block] = 1
+end
+
+function preventBlockPlacingOnHisBlock(block)
+	if TileModelTable[block] ~= nil then
+		error("Key already exists in TileModelTable: " .. getTileName(block))
+	end
+	TileModelTable[block] = 1
+end
+
+
 function LoadMods()
-	-- ModsRequireIteration
-	-- Specify the path to the mods directory
 	local modsDirectory = "mods/"
 
-	-- Print debugging information
-	print("Checking mods directory:", modsDirectory)
-
-	-- Iterate over all items in the mods directory
 	local items = lovefilesystem.getDirectoryItems(modsDirectory)
 	for _, item in ipairs(items) do
 		local fullPath = modsDirectory .. item
 
 		if lovefilesystem.getInfo(fullPath, "directory") then
 			local modName = item
-			print("Attempting to load mod:", modName)
-
-			-- Get the start time
 			local startTime = os.clock()
 
-			-- Load the mod
 			local success, mod = pcall(require, "mods." .. modName .. "." .. modName)
 
-			-- Check if the mod loaded successfully
 			if success then
-				print("Mod loaded successfully:", modName)
-				-- Assuming the mod has an initialization function
 				if mod.initialize then
 					mod.initialize()
 				end
 
-				-- Get the end time after initialization
 				local endTime = os.clock()
 
-				-- Calculate the load time
 				local loadTime = endTime - startTime
 
-				-- Print the load time
 				print("Load time for", modName, ":", loadTime, "seconds")
 			else
-				print("Failed to load mod:", modName)
-				print("Error:", mod)
+				error("Failed to load mod:", modName)
 			end
 		end
 	end
 end
 
 function LoadBlocksAndTiles(directory)
-	-- Imprimez des informations de débogage
-	print("Vérification du répertoire des blocs :", directory)
-
-	-- Parcourez tous les éléments dans le répertoire
 	local items = love.filesystem.getDirectoryItems(directory)
 	for _, item in ipairs(items) do
 		local fullPath = directory .. "/" .. item
 
-		-- Vérifiez si l'élément est un répertoire
 		if love.filesystem.getInfo(fullPath).type == "directory" then
-			-- Si c'est un répertoire, appelez la fonction récursivement
 			LoadBlocksAndTiles(fullPath)
-		elseif item:match("%.lua$") and item ~= "tiledata.lua" then -- Vérifiez si l'élément est un script Lua
-			local blockName = item:sub(1, -5) -- Nom du bloc (nom du fichier sans l'extension .lua)
-			print("Tentative de chargement du bloc :", blockName)
+		elseif item:match("%.lua$") and item ~= "tiledata.lua" then
+			local blockName = item:sub(1, -5)
 
-			-- Obtenez l'heure de début
 			local startTime = os.clock()
 
-			-- Chargez le bloc
 			local success, block = pcall(require, directory:gsub("/", ".") .. "." .. blockName)
 
-			-- Vérifiez si le bloc a été chargé avec succès
 			if success then
-				print("Bloc chargé avec succès :", blockName)
 				if block and type(block) == "table" and block.initialize then
 					block.initialize()
 				end
-				-- Obtenez l'heure de fin après l'initialisation
 				local endTime = os.clock()
 
-				-- Calculez le temps de chargement
 				local loadTime = endTime - startTime
 
-				-- Imprimez le temps de chargement
-				print("Temps de chargement pour", blockName, ":", loadTime, "secondes")
+				print("Loading time for", blockName, ":", loadTime, "secondes")
 			else
-				print("Échec du chargement du bloc :", blockName)
-				print("Erreur :", block)
+				error("Failed to load block:", blockName)
 			end
 		end
 	end

@@ -34,32 +34,11 @@ function DrawF3()
 		lovegraphics.print("Direction: Unknown", 0, 130)
 	end
 
-	-- Print the number of elements in each cache
-	local tilemodelcount = 0
-	for _ in pairs(tileModelCache) do
-		tilemodelcount = tilemodelcount + 1
-	end
-	lovegraphics.print("tileModelCache size: " .. tilemodelcount, 0, 170)
-	local tile2Dcount = 0
-	for _ in pairs(tile2DCache) do
-		tile2Dcount = tile2Dcount + 1
-	end
-	lovegraphics.print("tile2DCache size: " .. tile2Dcount, 0, 190)
-	local lightsourcecount = 0
-	for _ in pairs(lightSourceCache) do
-		lightsourcecount = lightsourcecount + 1
-	end
-	lovegraphics.print("lightSourceCache size: " .. lightsourcecount, 0, 210)
-	local transparencycount = 0
-	for _ in pairs(transparencyCache) do
-		transparencycount = transparencycount + 1
-	end
-	lovegraphics.print("transparencyCache size: " .. transparencycount, 0, 230)
 	local tilescount = 0
 	for _ in pairs(Tiles) do
 		tilescount = tilescount + 1
 	end
-	lovegraphics.print("Number of Tiles: " .. tilescount, 0, 250)
+	lovegraphics.print("Number of Tiles: " .. tilescount, 0, 150)
 	_JPROFILER.pop("DrawF3")
 end
 
@@ -319,7 +298,7 @@ function DrawHudTile(tile, hudX, hudY)
 	local centerPoint = { x, y }
 
 	_JPROFILER.push("DrawTileQuad")
-	if Tile2D(tile) then
+	if Tile2DHUD(tile) then
 		DrawTileQuad2D(textures[1] + 1, x, y, size)
 	else
 		local topQuadVertices = {
@@ -340,7 +319,7 @@ function DrawHudTile(tile, hudX, hudY)
 			{ x - xsize, y + ysize },
 			{ x, y + size },
 		}
-
+		--TODO ADD MOD SUPPORT TILES CATEGORY
 		if tile == Tiles.GRASS_Block then
 			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassTopTexture, topQuadVertices)
 			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassSideTexture, rightFrontQuadVertices)

@@ -4,6 +4,7 @@ local blocktexturepath = blockandtilesfolder .. "/blocks/"
 local liquidtexturepath = blockandtilesfolder .. "/liquid/"
 local tilestexturepath = blockandtilesfolder .. "/tiles/"
 function InitalizeTextureStatic()
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	LuaCraftTextures = {
 		grassTopTexture = texturepath .. blocktexturepath .. "grass/grass_top.png",
 		grassBottomTexture = texturepath .. blocktexturepath .. "grass/grass_bottom.png",
@@ -35,7 +36,7 @@ function InitalizeTextureStatic()
 		roseflowerTexture = texturepath .. tilestexturepath .. "rose_flower.png",
 		yellowflowerTexture = texturepath .. tilestexturepath .. "yellow_flower.png",
 	}
-
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	TilesTextureFORAtlasList = {
 		[Tiles.STONE_Block] = { LuaCraftTextures.stoneTexture },
 		[Tiles.GRASS_Block] = {
@@ -70,7 +71,7 @@ function InitalizeTextureStatic()
 		[Tiles.STONE_BRICK_Block] = { LuaCraftTextures.stone_brickTexture },
 		[Tiles.GLOWSTONE_Block] = { LuaCraftTextures.glowstoneTexture },
 	}
-
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	TilesTextureFORAtlasListHUDPersonalized = {
 		grassTopTexture = LuaCraftTextures.grassTopTexture,
 		grassSideTexture = LuaCraftTextures.grassSideTexture,

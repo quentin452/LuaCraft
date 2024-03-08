@@ -165,6 +165,7 @@ function NewChunk(x, z)
 		end
 		--_JPROFILER.pop("setVoxelRaw")
 	end
+
 	-- set voxel id of the voxel in this chunk's coordinate space
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		--_JPROFILER.push("frame")
@@ -206,23 +207,22 @@ function NewChunk(x, z)
 			then
 				return
 			end
-			--TODO ADD MOD SUPPORT TILES CATEGORY
 			--prevent placing a block on an another block(like flowers)
 			local blockBelow = self:getVoxel(x, y - 1, z)
+			local blockAbove = self:getVoxel(x, y + 1, z)
+
+			local function isBlockInTileModelTable(block)
+				return TileModelTable[block] or 0
+			end
+			
 			if
-				(
-					blockvalue == Tiles.YELLO_FLOWER_Block
-					or blockvalue == Tiles.ROSE_FLOWER_Block
-					or blockvalue == Tiles.OAK_SAPPLING_Block
-				)
-				and (
-					blockBelow == Tiles.YELLO_FLOWER_Block
-					or blockBelow == Tiles.ROSE_FLOWER_Block
-					or blockBelow == Tiles.OAK_SAPPLING_Block
-				)
+				(isBlockInTileModelTable(blockvalue) == 1)
+				and ((isBlockInTileModelTable(blockBelow) == 1) or (isBlockInTileModelTable(blockAbove) == 1))
 			then
 				return
 			end
+			
+
 			local sunget = self:getVoxel(x, y + 1, z)
 			local sunlight = self:getVoxelFirstData(x, y + 1, z)
 
