@@ -3,35 +3,41 @@ tile2DCache = {}
 lightSourceCache = {}
 transparencyCache = {}
 
+Tiles = {
+	AIR_Block = 0,
+	--	STONE_Block = 1,
+	--	GRASS_Block = 2,
+	--	DIRT_Block = 3,
+	--COBBLE_Block = 4,
+	--OAK_PLANK_Block = 5,
+	--OAK_SAPPLING_Block = 6,
+	--BEDROCK_Block = 7,
+	--WATER_Block = 8,
+	--STATIONARY_WATER_Block = 9,
+	--LAVA_Block = 10,
+	--STATIONARY_LAVA_Block = 11,
+	--SAND_Block = 12,
+	--GRAVEL_Block = 13,
+	--GOLD_Block = 14,
+	--IRON_Block = 15,
+	--	COAL_Block = 16,
+	--OAK_LOG_Block = 17,
+	--OAK_LEAVE_Block = 18,
+	--SPONGE_Block = 19,
+	--GLASS_Block = 20,
+	--YELLO_FLOWER_Block = 21,
+	--	ROSE_FLOWER_Block = 22,
+	--STONE_BRICK_Block = 23,
+	--GLOWSTONE_Block = 24,
+}
 function InitializeTilesNumberAndName()
 	LuaCraftPrintLoggingNormal("Initializing tiles...")
-	Tiles = {
-		AIR_Block = 0,
-		STONE_Block = 1,
-		GRASS_Block = 2,
-		DIRT_Block = 3,
-		COBBLE_Block = 4,
-		OAK_PLANK_Block = 5,
-		OAK_SAPPLING_Block = 6,
-		BEDROCK_Block = 7,
-		WATER_Block = 8,
-		STATIONARY_WATER_Block = 9,
-		LAVA_Block = 10,
-		STATIONARY_LAVA_Block = 11,
-		SAND_Block = 12,
-		GRAVEL_Block = 13,
-		GOLD_Block = 14,
-		IRON_Block = 15,
-		COAL_Block = 16,
-		OAK_LOG_Block = 17,
-		OAK_LEAVE_Block = 18,
-		SPONGE_Block = 19,
-		GLASS_Block = 20,
-		YELLO_FLOWER_Block = 21,
-		ROSE_FLOWER_Block = 22,
-		STONE_BRICK_Block = 23,
-		GLOWSTONE_Block = 24,
-	}
+	for _, func in ipairs(ModLoaderTable["addBlock"]) do
+		func()
+	end
+
+	LuaCraftPrintLoggingNormal(STONE_Block)
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	TilesString = {
 		AIR_Block = "AIR_Block",
 		STONE_Block = "STONE_Block",
@@ -59,12 +65,14 @@ function InitializeTilesNumberAndName()
 		STONE_BRICK_Block = "STONE_BRICK_Block",
 		GLOWSTONE_Block = "GLOWSTONE_Block",
 	}
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	TilesTransparency = {
 		FULL = 0,
 		PARTIAL = 1,
 		NONE = 2,
 		OPAQUE = 3,
 	}
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	transparencyLookup = {
 		[Tiles.AIR_Block] = TilesTransparency.FULL,
 		[Tiles.YELLO_FLOWER_Block] = TilesTransparency.FULL,
@@ -92,6 +100,7 @@ function InitializeTilesNumberAndName()
 		[Tiles.SPONGE_Block] = TilesTransparency.OPAQUE,
 		[Tiles.STONE_BRICK_Block] = TilesTransparency.OPAQUE,
 	}
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	lightSourceLookup = {
 		[Tiles.AIR_Block] = LightSources[0],
 		[Tiles.STONE_Block] = LightSources[0],
@@ -139,7 +148,7 @@ function InitializeTilesNumberAndName()
 	indices = {}
 	LuaCraftPrintLoggingNormal("Tiles initialized!")
 end
-
+--TODO ADD MOD SUPPORT TILES CATEGORY
 LightSources = {
 	[0] = 0,
 	[1] = 1,
@@ -160,6 +169,7 @@ LightSources = {
 }
 
 function TileCollisions(n)
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	_JPROFILER.push("TileCollisions")
 	local nonCollidableTiles = {
 		Tiles.AIR_Block,
@@ -220,14 +230,14 @@ function TileLightSource(n)
 	_JPROFILER.pop("TileLightSource")
 	return result
 end
-
+--TODO ADD MOD SUPPORT TILES CATEGORY
 function TileLightable(n)
 	_JPROFILER.push("TileLightable")
 	local t = TileTransparency(n)
 	_JPROFILER.pop("TileLightable")
 	return t == TilesTransparency.FULL or t == TilesTransparency.NONE
 end
-
+--TODO ADD MOD SUPPORT TILES CATEGORY
 function TileSemiLightable(n)
 	_JPROFILER.push("TileSemiLightable")
 	local t = TileTransparency(n)
@@ -244,6 +254,7 @@ function TileTexturesFORHUD(n)
 	return TilesTextureListHUD[n]
 end
 function TileModel(n)
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	_JPROFILER.push("TileModel")
 	if tileModelCache[n] then
 		return tileModelCache[n]
@@ -260,6 +271,7 @@ function TileModel(n)
 end
 
 function Tile2D(n)
+	--TODO ADD MOD SUPPORT TILES CATEGORY
 	_JPROFILER.push("Tile2D")
 	if tile2DCache[n] then
 		return tile2DCache[n]

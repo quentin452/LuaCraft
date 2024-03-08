@@ -80,10 +80,16 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 						local index = x / tileWidth + y / tileHeight * (finalAtlasSize / tileHeight)
 
 						if interfacemode == "INGAME" then
-							textureAtlasCoordinates[blockType] = { index }
+							--TODO ADD MOD SUPPORT TILES CATEGORY
+							if blockType == Tiles.GRASS_Block or blockType == Tiles.OAK_LOG_Block then
+								textureAtlasCoordinates[blockType] = { index, index - 2, index - 1 }
+							else
+								textureAtlasCoordinates[blockType] = { index }
+							end
 						elseif interfacemode == "HUD" then
 							textureAtlasCoordinatesFORHUD[blockType] = { index }
 						end
+
 						x = x + width
 					else
 						LuaCraftPrintLoggingNormal("Failed to read file:", texturePath)
@@ -197,25 +203,14 @@ local function createTILEHUDAssets()
 end
 local function createTILEINGameAssets()
 	createTextureAtlas("PNG", "INGAME")
-	--	TileTexture = lovegraphics.newImage("Atlass/Atlas.png")
 	atlasInRAM, TilesTextureList = createTextureAtlas("RAM", "INGAME")
 	atlasImage = lovegraphics.newImage(atlasInRAM)
-	TilesTextureList = {
-		-- textures are in format: UP DOWN FRONT
-		-- at least one texture must be present
-		[Tiles.GRASS_Block] = { 1, 2, 3 },
-		[Tiles.OAK_LOG_Block] = { 18, 19, 20 },
-	}
-	--REVERT UP DOWN FRONT to be FRONT UP DOWN
-	for key, textures in pairs(TilesTextureList) do
-		if textures[3] and textures[1] and textures[2] then
-			TilesTextureList[key] = { textures[3], textures[1], textures[2] }
-		end
-	end
+	TilesTextureList = {}
+
 	local function blockTypeExists(blockType)
 		return TilesTextureList[blockType] ~= nil
 	end
-	for blockType, _ in pairs(TilesTextureFORAtlasList) do
+	for blockType, _ in pairs(textureAtlasCoordinates) do
 		if not blockTypeExists(blockType) then
 			TilesTextureList[blockType] = { unpack(textureAtlasCoordinates[blockType]) }
 		else
@@ -225,6 +220,7 @@ local function createTILEINGameAssets()
 		end
 	end
 end
+
 local function InitializeImages()
 	local texturepath = "resources/assets/textures/"
 	-- Load images

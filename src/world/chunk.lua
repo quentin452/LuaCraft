@@ -97,7 +97,7 @@ function NewChunk(x, z)
 				for j = 1, ChunkSize do
 					local height = heightMap_i[j]
 					if height and TileCollisions(self:getVoxel(i, height, j)) then
-						for _, func in ipairs(populateChunkModLoader["chunkPopulateTag"]) do
+						for _, func in ipairs(ModLoaderTable["chunkPopulateTag"]) do
 							func(self, i, height, j)
 						end
 					end
@@ -206,7 +206,7 @@ function NewChunk(x, z)
 			then
 				return
 			end
-
+			--TODO ADD MOD SUPPORT TILES CATEGORY
 			--prevent placing a block on an another block(like flowers)
 			local blockBelow = self:getVoxel(x, y - 1, z)
 			if

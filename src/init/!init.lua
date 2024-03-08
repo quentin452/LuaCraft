@@ -5,8 +5,6 @@ require("src/init/shadersinit")
 require("src/init/windowsettingsinit")
 require("src/init/worldinit")
 
---modloader
-require("src/modloader/modloaderinit")
 function initWorldGenerationVariables()
 	ChunkSize = 16
 	SliceHeight = 8

@@ -12,7 +12,7 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 		for _, v in ipairs(blockModelCache[this]) do
 			model[#model + 1] = { x + v[1], y + v[2], z + v[3], v[4], v[5] }
 		end
-
+		--TODO ADD MOD SUPPORT TILES CATEGORY
 		-- create model dupplicata for flowers/sapplings
 		if this == Tiles.YELLO_FLOWER_Block or this == Tiles.ROSE_FLOWER_Block or this == Tiles.OAK_SAPPLING_Block then
 			for _, v in ipairs(blockModelCache[this]) do

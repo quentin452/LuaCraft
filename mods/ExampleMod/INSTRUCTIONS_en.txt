@@ -20,4 +20,5 @@ end
 
 --In Every mod you need to add at the root of the mod folder a main lua like you can see in ExampleMod.lua to init things
 
---For now the mod support only chunk.populate : see mods that call addFunctionToTag("chunkPopulateTag", function(self, i, height, j) 
+--For now the mod support chunk.populate : see mods that call addFunctionToTag("chunkPopulateTag", function(self, i, height, j) 
+addBlock : see mods that call addBlock("DIRT_Block", DIRT_Block)

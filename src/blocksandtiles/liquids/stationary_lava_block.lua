@@ -1,10 +1,10 @@
-local DIRT_Block = nil
+local STATIONARY_LAVA_Block = nil
 
 local stone_block = {}
 
 function stone_block.initialize()
 	addFunctionToTag("addBlock", function()
-		addBlock("DIRT_Block", DIRT_Block)
+		addBlock("STATIONARY_LAVA_Block", STATIONARY_LAVA_Block)
 	end)
 end
 
