@@ -11,36 +11,11 @@ function InitializeTilesNumberAndName()
 	for _, func in ipairs(ModLoaderTable["addBlock"]) do
 		func()
 	end
-
+	TilesString = {}
+	for key, _ in pairs(Tiles) do
+		TilesString[key] = key
+	end
 	LuaCraftPrintLoggingNormal(STONE_Block)
-	--TODO ADD MOD SUPPORT TILES CATEGORY
-	TilesString = {
-		AIR_Block = "AIR_Block",
-		STONE_Block = "STONE_Block",
-		GRASS_Block = "GRASS_Block",
-		DIRT_Block = "DIRT_Block",
-		COBBLE_Block = "COBBLE_Block",
-		OAK_PLANK_Block = "OAK_PLANK_Block",
-		OAK_SAPPLING_Block = "OAK_SAPPLING_Block",
-		BEDROCK_Block = "BEDROCK_Block",
-		WATER_Block = "WATER_Block",
-		STATIONARY_WATER_Block = "STATIONARY_WATER_Block",
-		LAVA_Block = "LAVA_Block",
-		STATIONARY_LAVA_Block = "STATIONARY_LAVA_Block",
-		SAND_Block = "SAND_Block",
-		GRAVEL_Block = "GRAVEL_Block",
-		GOLD_Block = "GOLD_Block",
-		IRON_Block = "IRON_Block",
-		COAL_Block = "COAL_Block",
-		OAK_LOG_Block = "OAK_LOG_Block",
-		OAK_LEAVE_Block = "OAK_LEAVE_Block",
-		SPONGE_Block = "SPONGE_Block",
-		GLASS_Block = "GLASS_Block",
-		YELLO_FLOWER_Block = "YELLO_FLOWER_Block",
-		ROSE_FLOWER_Block = "ROSE_FLOWER_Block",
-		STONE_BRICK_Block = "STONE_BRICK_Block",
-		GLOWSTONE_Block = "GLOWSTONE_Block",
-	}
 	--TODO ADD MOD SUPPORT TILES CATEGORY
 	TilesTransparency = {
 		FULL = 0,
@@ -107,7 +82,6 @@ function InitializeTilesNumberAndName()
 	local indices = {}
 	for key, value in pairs(Tiles) do
 		assert(indices[value] == nil, "Duplicate index in Tiles Table: " .. tostring(value))
-		assert(TilesString[key] ~= nil, "Key not found in TilesString: " .. tostring(key))
 		indices[value] = key
 		LuaCraftPrintLoggingNormal(
 			"Tile Name: "
