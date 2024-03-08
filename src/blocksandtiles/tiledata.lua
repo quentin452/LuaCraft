@@ -3,6 +3,7 @@ tile2DCache = {}
 lightSourceCache = {}
 transparencyCache = {}
 
+--TODO CHANGES NUMBER HERE TO BE STRING FOR MAINTAINABILITY
 Tiles = {
 	AIR_Block = 0,
 	STONE_Block = 1,
@@ -31,14 +32,38 @@ Tiles = {
 	GLOWSTONE_Block = 24,
 }
 
+local Transparency = {
+	FULL = 0,
+	PARTIAL = 1,
+	NONE = 2,
+	OPAQUE = 3,
+}
 local transparencyLookup = {
-	[Tiles.AIR_Block] = 0,
-	[Tiles.YELLO_FLOWER_Block] = 0,
-	[Tiles.ROSE_FLOWER_Block] = 0,
-	[Tiles.OAK_SAPPLING_Block] = 0,
-	[Tiles.OAK_LEAVE_Block] = 1,
-	[Tiles.GLASS_Block] = 2,
-	[Tiles.GLOWSTONE_Block] = 2,
+	[Tiles.AIR_Block] = Transparency.FULL,
+	[Tiles.YELLO_FLOWER_Block] = Transparency.FULL,
+	[Tiles.ROSE_FLOWER_Block] = Transparency.FULL,
+	[Tiles.OAK_SAPPLING_Block] = Transparency.FULL,
+	[Tiles.OAK_LEAVE_Block] = Transparency.PARTIAL,
+	[Tiles.GLASS_Block] = Transparency.NONE,
+	[Tiles.GLOWSTONE_Block] = Transparency.NONE,
+	[Tiles.STONE_Block] = Transparency.OPAQUE,
+	[Tiles.GRASS_Block] = Transparency.OPAQUE,
+	[Tiles.DIRT_Block] = Transparency.OPAQUE,
+	[Tiles.COBBLE_Block] = Transparency.OPAQUE,
+	[Tiles.OAK_PLANK_Block] = Transparency.OPAQUE,
+	[Tiles.BEDROCK_Block] = Transparency.OPAQUE,
+	[Tiles.WATER_Block] = Transparency.OPAQUE,
+	[Tiles.STATIONARY_WATER_Block] = Transparency.OPAQUE,
+	[Tiles.LAVA_Block] = Transparency.OPAQUE,
+	[Tiles.STATIONARY_LAVA_Block] = Transparency.OPAQUE,
+	[Tiles.SAND_Block] = Transparency.OPAQUE,
+	[Tiles.GRAVEL_Block] = Transparency.OPAQUE,
+	[Tiles.GOLD_Block] = Transparency.OPAQUE,
+	[Tiles.IRON_Block] = Transparency.OPAQUE,
+	[Tiles.COAL_Block] = Transparency.OPAQUE,
+	[Tiles.OAK_LOG_Block] = Transparency.OPAQUE,
+	[Tiles.SPONGE_Block] = Transparency.OPAQUE,
+	[Tiles.STONE_BRICK_Block] = Transparency.OPAQUE,
 }
 
 LightSources = {
@@ -59,6 +84,34 @@ LightSources = {
 	[14] = 14,
 	[15] = 15,
 }
+local lightSourceLookup = {
+	[Tiles.AIR_Block] = LightSources[0],
+	[Tiles.STONE_Block] = LightSources[0],
+	[Tiles.GRASS_Block] = LightSources[0],
+	[Tiles.DIRT_Block] = LightSources[0],
+	[Tiles.COBBLE_Block] = LightSources[0],
+	[Tiles.OAK_PLANK_Block] = LightSources[0],
+	[Tiles.OAK_SAPPLING_Block] = LightSources[0],
+	[Tiles.BEDROCK_Block] = LightSources[0],
+	[Tiles.WATER_Block] = LightSources[0],
+	[Tiles.STATIONARY_WATER_Block] = LightSources[0],
+	[Tiles.LAVA_Block] = LightSources[0],
+	[Tiles.STATIONARY_LAVA_Block] = LightSources[0],
+	[Tiles.SAND_Block] = LightSources[0],
+	[Tiles.GRAVEL_Block] = LightSources[0],
+	[Tiles.GOLD_Block] = LightSources[0],
+	[Tiles.IRON_Block] = LightSources[0],
+	[Tiles.COAL_Block] = LightSources[0],
+	[Tiles.OAK_LOG_Block] = LightSources[0],
+	[Tiles.OAK_LEAVE_Block] = LightSources[0],
+	[Tiles.SPONGE_Block] = LightSources[0],
+	[Tiles.GLASS_Block] = LightSources[0],
+	[Tiles.YELLO_FLOWER_Block] = LightSources[0],
+	[Tiles.ROSE_FLOWER_Block] = LightSources[0],
+	[Tiles.STONE_BRICK_Block] = LightSources[0],
+	[Tiles.GLOWSTONE_Block] = LightSources[15],
+}
+
 function TileCollisions(n)
 	local nonCollidableTiles = {
 		Tiles.AIR_Block,
@@ -84,7 +137,8 @@ function TileTransparency(n)
 	if transparencyCache[n] then
 		return transparencyCache[n]
 	else
-		local transparency = transparencyLookup[n] or 3
+		assert(transparencyLookup[n] ~= nil, "Key not found in transparencyLookup: " .. tostring(n))
+		local transparency = transparencyLookup[n]
 		transparencyCache[n] = transparency
 		return transparency
 	end
@@ -94,29 +148,28 @@ function TileLightSource(n)
 	if lightSourceCache[n] ~= nil then
 		return lightSourceCache[n]
 	end
-	local result
-	if n == Tiles.GLOWSTONE_Block then
-		result = LightSources[15]
-	else
-		result = LightSources[0]
-	end
+	assert(lightSourceLookup[n] ~= nil, "Key not found in lightSourceLookup: " .. tostring(n))
+	local result = lightSourceLookup[n]
 	lightSourceCache[n] = result
 	return result
 end
 
 function TileLightable(n)
 	local t = TileTransparency(n)
-	return t == 0 or t == 2
+	return t == Transparency.FULL or t == Transparency.NONE
 end
 
 function TileSemiLightable(n)
 	local t = TileTransparency(n)
-	return t == 0 or t == 1 or t == 2
+	return t == Transparency.FULL or t == Transparency.PARTIAL or t == Transparency.NONE
 end
+
 function TileTextures(n)
+	assert(TilesTextureList[n] ~= nil, "Key not found in TilesTextureList: " .. tostring(n))
 	return TilesTextureList[n]
 end
 function TileTexturesFORHUD(n)
+	assert(TilesTextureListHUD[n] ~= nil, "Key not found in TilesTextureListHUD: " .. tostring(n))
 	return TilesTextureListHUD[n]
 end
 function TileModel(n)

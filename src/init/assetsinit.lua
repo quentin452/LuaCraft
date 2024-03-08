@@ -206,7 +206,9 @@ local function createTILEINGameAssets()
 	}
 	--REVERT UP DOWN FRONT to be FRONT UP DOWN
 	for key, textures in pairs(TilesTextureList) do
-		TilesTextureList[key] = { textures[3], textures[1], textures[2] }
+		if textures[3] and textures[1] and textures[2] then
+			TilesTextureList[key] = { textures[3], textures[1], textures[2] }
+		end
 	end
 	local function blockTypeExists(blockType)
 		return TilesTextureList[blockType] ~= nil
