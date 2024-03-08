@@ -50,14 +50,6 @@ function transform3DBlockToA2DTile(block)
 	TileModelTable[block] = 1
 end
 
-function preventBlockPlacingOnHisBlock(block)
-	if TileModelTable[block] ~= nil then
-		error("Key already exists in TileModelTable: " .. getTileName(block))
-	end
-	TileModelTable[block] = 1
-end
-
-
 function LoadMods()
 	local modsDirectory = "mods/"
 
