@@ -1,4 +1,4 @@
-# Voxel3DEngine
+# LuaCraft
 Minecraft Like written in Lua using Love2D
 
 # libraries
@@ -14,7 +14,3 @@ ProFi : https://gist.github.com/perky/2838755
 # Voxel engine base
 
 lovecraft : https://github.com/groverburger/lovecraft
-
-# Recommanded love2d fork to use : 
-
-love2dfork : https://github.com/quentin452/love-experiments
