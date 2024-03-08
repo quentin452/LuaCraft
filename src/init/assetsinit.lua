@@ -11,7 +11,8 @@ local function getKeysInOrder(tbl)
 	_JPROFILER.pop("getKeysInOrder")
 	return keys
 end
-
+--TODO REDUCE TIME TO SAVE ATLAS IF THE ATLAS IS TOO MUCH LARGER
+--TODO ADD EASY texture size changer (for now only support 16x16)
 local function createTextureAtlas(memoryorpng, interfacemode)
 	local totalTimeStart = os.clock()
 
