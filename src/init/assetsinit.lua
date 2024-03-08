@@ -147,34 +147,10 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 end
 
 local function createTILEHUDAssets()
-	TilesTextureFORAtlasListHUD = {
-		--[Tiles.AIR_Block] = airTexture,
-		[Tiles.STONE_Block] = { LuaCraftTextures.stoneTexture },
-		[Tiles.GRASS_Block] = { LuaCraftTextures.grassTopTexture },
-		[Tiles.DIRT_Block] = { LuaCraftTextures.dirtTexture },
-		[Tiles.COBBLE_Block] = { LuaCraftTextures.cobbleTexture },
-		[Tiles.OAK_PLANK_Block] = { LuaCraftTextures.oak_planksTexture },
-		[Tiles.OAK_SAPPLING_Block] = { LuaCraftTextures.oak_sapplingsTexture },
-		[Tiles.BEDROCK_Block] = { LuaCraftTextures.bedrockTexture },
-		[Tiles.WATER_Block] = { LuaCraftTextures.waterTexture },
-		[Tiles.STATIONARY_WATER_Block] = { LuaCraftTextures.waterstationaryTexture },
-		[Tiles.LAVA_Block] = { LuaCraftTextures.lavaTexture },
-		[Tiles.STATIONARY_LAVA_Block] = { LuaCraftTextures.lavastationaryTexture },
-		[Tiles.SAND_Block] = { LuaCraftTextures.sandTexture },
-		[Tiles.GRAVEL_Block] = { LuaCraftTextures.gravelTexture },
-		[Tiles.GOLD_Block] = { LuaCraftTextures.goldTexture },
-		[Tiles.IRON_Block] = { LuaCraftTextures.ironTexture },
-		[Tiles.COAL_Block] = { LuaCraftTextures.coalTexture },
-		[Tiles.OAK_LOG_Block] = { LuaCraftTextures.oak_logsTopTexture },
-		[Tiles.OAK_LEAVE_Block] = { LuaCraftTextures.oak_leavesTexture },
-		[Tiles.SPONGE_Block] = { LuaCraftTextures.spongeTexture },
-		[Tiles.GLASS_Block] = { LuaCraftTextures.glassTexture },
-		[Tiles.ROSE_FLOWER_Block] = { LuaCraftTextures.roseflowerTexture },
-		[Tiles.YELLO_FLOWER_Block] = { LuaCraftTextures.yellowflowerTexture },
-		[Tiles.STONE_BRICK_Block] = { LuaCraftTextures.stone_brickTexture },
-		[Tiles.GLOWSTONE_Block] = { LuaCraftTextures.glowstoneTexture },
-	}
-
+	TilesTextureFORAtlasListHUD = {}
+	for k, v in pairs(TilesTextureFORAtlasList) do
+		TilesTextureFORAtlasListHUD[k] = { v[1] }
+	end
 	HUDTilesTextureList = {}
 	for key, value in pairs(TilesTextureFORAtlasListHUD) do
 		if HUDTilesTextureList[key] == nil then
@@ -189,12 +165,7 @@ local function createTILEHUDAssets()
 			end
 		end
 	end
-	TilesTextureFORAtlasListHUDPersonalized = {
-		grassTopTexture = LuaCraftTextures.grassTopTexture,
-		grassSideTexture = LuaCraftTextures.grassSideTexture,
-		oak_logsTopTexture = LuaCraftTextures.oak_logsTopTexture,
-		oak_logsSideTexture = LuaCraftTextures.oak_logsSideTexture,
-	}
+
 	HUDTilesTextureListPersonalized = {}
 	for key, value in pairs(TilesTextureFORAtlasListHUDPersonalized) do
 		if HUDTilesTextureListPersonalized[key] == nil then
@@ -223,41 +194,6 @@ local function createTILEHUDAssets()
 	end
 end
 local function createTILEINGameAssets()
-	TilesTextureFORAtlasList = {
-		--[Tiles.AIR_Block] = airTexture,
-		[Tiles.STONE_Block] = { LuaCraftTextures.stoneTexture },
-		[Tiles.GRASS_Block] = {
-			LuaCraftTextures.grassTopTexture,
-			LuaCraftTextures.grassBottomTexture,
-			LuaCraftTextures.grassSideTexture,
-		},
-		[Tiles.DIRT_Block] = { LuaCraftTextures.dirtTexture },
-		[Tiles.COBBLE_Block] = { LuaCraftTextures.cobbleTexture },
-		[Tiles.OAK_PLANK_Block] = { LuaCraftTextures.oak_planksTexture },
-		[Tiles.OAK_SAPPLING_Block] = { LuaCraftTextures.oak_sapplingsTexture },
-		[Tiles.BEDROCK_Block] = { LuaCraftTextures.bedrockTexture },
-		[Tiles.WATER_Block] = { LuaCraftTextures.waterTexture },
-		[Tiles.STATIONARY_WATER_Block] = { LuaCraftTextures.waterstationaryTexture },
-		[Tiles.LAVA_Block] = { LuaCraftTextures.lavaTexture },
-		[Tiles.STATIONARY_LAVA_Block] = { LuaCraftTextures.lavastationaryTexture },
-		[Tiles.SAND_Block] = { LuaCraftTextures.sandTexture },
-		[Tiles.GRAVEL_Block] = { LuaCraftTextures.gravelTexture },
-		[Tiles.GOLD_Block] = { LuaCraftTextures.goldTexture },
-		[Tiles.IRON_Block] = { LuaCraftTextures.ironTexture },
-		[Tiles.COAL_Block] = { LuaCraftTextures.coalTexture },
-		[Tiles.OAK_LOG_Block] = {
-			LuaCraftTextures.oak_logsTopTexture,
-			LuaCraftTextures.oak_logsBottomTexture,
-			LuaCraftTextures.oak_logsSideTexture,
-		},
-		[Tiles.OAK_LEAVE_Block] = { LuaCraftTextures.oak_leavesTexture },
-		[Tiles.SPONGE_Block] = { LuaCraftTextures.spongeTexture },
-		[Tiles.GLASS_Block] = { LuaCraftTextures.glassTexture },
-		[Tiles.ROSE_FLOWER_Block] = { LuaCraftTextures.roseflowerTexture },
-		[Tiles.YELLO_FLOWER_Block] = { LuaCraftTextures.yellowflowerTexture },
-		[Tiles.STONE_BRICK_Block] = { LuaCraftTextures.stone_brickTexture },
-		[Tiles.GLOWSTONE_Block] = { LuaCraftTextures.glowstoneTexture },
-	}
 	createTextureAtlas("PNG", "INGAME")
 	--	TileTexture = lovegraphics.newImage("Atlass/Atlas.png")
 	atlasInRAM, TilesTextureList = createTextureAtlas("RAM", "INGAME")
@@ -296,6 +232,26 @@ local function InitializeImages()
 	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 	ChunkBorders = lovegraphics.newImage(texturepath .. "debug/chunkborders.png")
 end
+local function finalCheckAssets()
+	for key, value in pairs(HUDTilesTextureList) do
+		if #value > 1 then
+			error(
+				"Block with several textures detected in HUDTilesTextureList: "
+					.. key
+					.. " this table only accept one texture per block"
+			)
+		end
+	end
+	for key, value in pairs(TilesTextureFORAtlasListHUD) do
+		if #value > 1 then
+			error(
+				"Block with several textures detected in  TilesTextureFORAtlasListHUD: "
+					.. key
+					.. " this table only accept one texture per block"
+			)
+		end
+	end
+end
 
 function InitializeAssets()
 	_JPROFILER.push("InitializeImages")
@@ -307,4 +263,7 @@ function InitializeAssets()
 	_JPROFILER.push("createTILEHUDAssets")
 	createTILEHUDAssets()
 	_JPROFILER.pop("createTILEHUDAssets")
+	_JPROFILER.push("finalCheckAssets")
+	finalCheckAssets()
+	_JPROFILER.pop("finalCheckAssets")
 end
