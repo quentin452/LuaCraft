@@ -106,3 +106,43 @@ OTHER CHANGES:
 REMOVED FEATURES:
 
     Structure generation because not compatible for now 
+
+**LuaCraft V0.3**
+  
+This version is compatible with LOVE2D 11.5, [11.5experiment1](https://github.com/quentin452/love-experiments/releases/tag/11.5experiment1), and probably newer versions.
+The 11.5experiment1 version is not recommanded anymore , i customized love.run to remove love.timer.sleep that causing fps lags
+
+NEW FEATURES/IMPROVEMENTS:
+
+    Bugfixes, Performances, Logic improvments for Procedural generation/Render Distance
+    Fix some issues with prevent block placements on player
+    Fix player spawn location 
+    Fix chunks are removed wrongly
+    Improve block placement logic
+    Optimize abit player.lua 
+    Optimize a bit engine.lua  
+    Update TileImplementation to increase performances
+    Start optimize block/tile rendering/canvas/shaders 
+    Make CavernGeneration/generator/chunk more performant
+    Optimize engine.newModel
+    Optimize lightning.lua by alot
+    Switch from love.math.random() to math.random() (should improve by 40% performances of the random)
+    Fix a lightning problem in Cavern by inverting by inverting UpdateCaves() and chunk:populate() call in updatelogic.lua
+    Made return instead of Tiles.AIR_Block call if chunk.setVoxel is not correct to prevent bugs
+    Rewrite Atlas texture to be dynamic and many small improvments
+    Rewrite HUD RENDERING (FIXED LAGS/MEMORY USAGE/BOTTLENECKS CAUSED BY USAGE OF CANVAS ON HUD)
+    Shading factor coherence for DrawHudTile
+    Optimize assets usage
+    avoid creating two times the crosshair render
+    Customize love.run (don't need my love2d fork anymore)
+
+REMOVED FEATURES:
+
+    Remove "prevent manually diagonal block placements" (causing issues accross chunks borders)
+    Remove VoxelCursor model (dead code)
+    Remove some caches such has coordCache, tileTexturesCache, tileTexturesCacheHUD (unecessary caches)
+    Remove structureinit (dead code)
+    Remove dead codes in usefull.lua
+    Remove unecessary list creation 
+    Remove some infos in F3
+    Remove unused png/obj
