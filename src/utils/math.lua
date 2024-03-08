@@ -15,13 +15,6 @@ function choose(arr)
 	return arr[math.floor(math.random() * #arr) + 1]
 end
 function rand(min, max, interval)
-	local interval = interval or 1
-	local c = {}
-	local index = 1
-	for i = min, max, interval do
-		c[index] = i
-		index = index + 1
-	end
-
-	return choose(c)
+	interval = interval or 1
+	return math.random(min / interval, max / interval) * interval
 end
