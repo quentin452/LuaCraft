@@ -13,6 +13,8 @@ function ExampleMod_generatesomething()
    ExampleMod_size = 16
 end
 
+--Prefix all your scripts with ExampleMod_
+
 -- This naming convention helps maintain clarity, prevent naming clashes, and ensures a smooth integration
 -- with other parts of the game. You can call methods from the core game without the "ExampleMod_" prefix.
 

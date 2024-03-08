@@ -1,8 +1,8 @@
 --dependencies (if you had error caused by something like attempt to index global nil then try to add deps)
 require("src/modloader/modloaderinit")
 --mod dependencies (here you should add all lua of your mod here to don't had problems during initialize)
-require("mods/ExampleMod/structures/generatestructures")
-require("mods/ExampleMod/structures/generatetree")
+require("mods/ExampleMod/structures/ExampleMod_generatestructures")
+require("mods/ExampleMod/structures/ExampleMod_generatetree")
 
 local ExampleMod = {}
 
