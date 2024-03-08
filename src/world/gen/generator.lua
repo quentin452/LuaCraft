@@ -19,10 +19,10 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				local genFuncResult = generationFunction(chunk, xx, j, zz)
 
 				for a = 1, TileDataSize - 1 do
-					temp[yy + a] = string.char(0)
+					temp[yy + a] = string.char(LightSources[0])
 				end
 				if sunlight then
-					temp[yy + 1] = string.char(15)
+					temp[yy + 1] = string.char(LightSources[15])
 				end
 
 				if j < chunk.floor then

@@ -256,6 +256,12 @@ local function finalCheckAssets()
 end
 
 function InitializeAssets()
+	_JPROFILER.push("InitializeTilesNumberAndName")
+	InitializeTilesNumberAndName()
+	_JPROFILER.pop("InitializeTilesNumberAndName")
+	_JPROFILER.push("InitalizeTextureStatic")
+	InitalizeTextureStatic()
+	_JPROFILER.pop("InitalizeTextureStatic")
 	_JPROFILER.push("InitializeImages")
 	InitializeImages()
 	_JPROFILER.pop("InitializeImages")

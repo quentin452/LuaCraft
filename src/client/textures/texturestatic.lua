@@ -3,6 +3,7 @@ local blockandtilesfolder = "blocksandtiles/"
 local blocktexturepath = blockandtilesfolder .. "/blocks/"
 local liquidtexturepath = blockandtilesfolder .. "/liquid/"
 local tilestexturepath = blockandtilesfolder .. "/tiles/"
+function InitalizeTextureStatic()
 LuaCraftTextures = {
 	grassTopTexture = texturepath .. blocktexturepath .. "grass/grass_top.png",
 	grassBottomTexture = texturepath .. blocktexturepath .. "grass/grass_bottom.png",
@@ -35,7 +36,6 @@ LuaCraftTextures = {
 	yellowflowerTexture = texturepath .. tilestexturepath .. "yellow_flower.png",
 }
 TilesTextureFORAtlasList = {
-	--[Tiles.AIR_Block] = airTexture,
 	[Tiles.STONE_Block] = { LuaCraftTextures.stoneTexture },
 	[Tiles.GRASS_Block] = {
 		LuaCraftTextures.grassTopTexture,
@@ -76,3 +76,4 @@ TilesTextureFORAtlasListHUDPersonalized = {
 	oak_logsTopTexture = LuaCraftTextures.oak_logsTopTexture,
 	oak_logsSideTexture = LuaCraftTextures.oak_logsSideTexture,
 }
+end

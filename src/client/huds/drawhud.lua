@@ -364,17 +364,25 @@ function DrawHudTile(tile, hudX, hudY)
 
 	_JPROFILER.pop("DrawHudTile")
 end
+
 function DrawTileQuadPersonalized(texture, points)
 	_JPROFILER.push("DrawTileQuadPersonalized")
 	Perspective.quad(texture, unpack(points))
 	_JPROFILER.pop("DrawTileQuadPersonalized")
 end
-
+local function getTileName(n)
+	for key, value in pairs(Tiles) do
+		if value == n then
+			return TilesString[key]
+		end
+	end
+	return "Unknown"
+end
 function DrawTileQuad(textureIndex, points)
 	_JPROFILER.push("DrawTileQuad")
 	local textureData = HUDTilesTextureList[textureIndex]
 	if textureData == nil then
-		LuaCraftErrorLogging("No texture for index ", textureIndex)
+		LuaCraftErrorLogging("No texture for index ", getTileName(textureIndex))
 		return
 	end
 	local texture = textureData[1]
@@ -386,7 +394,7 @@ function DrawTileQuad2D(textureIndex, x, y, size)
 	_JPROFILER.push("DrawTileQuad2D")
 	local textureData = HUDTilesTextureList[textureIndex]
 	if textureData == nil then
-		LuaCraftErrorLogging("No texture for index ", textureIndex)
+		LuaCraftErrorLogging("No texture for index ", getTileName(textureIndex))
 		return
 	end
 	local texture = textureData[1]
