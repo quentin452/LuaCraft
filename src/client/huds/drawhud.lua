@@ -409,13 +409,6 @@ function DrawCrossHair()
 	CrosshairShader:send("source", Scene.threeCanvas)
 	CrosshairShader:send("xProportion", 32 / GraphicsWidth)
 	CrosshairShader:send("yProportion", 32 / GraphicsHeight)
-	lovegraphics.setShader(CrosshairShader)
-
-	-- draw crosshair
-	lovegraphics.setColor(1, 1, 1)
-	CrosshairShader:send("source", Scene.threeCanvas)
-	CrosshairShader:send("xProportion", 32 / GraphicsWidth)
-	CrosshairShader:send("yProportion", 32 / GraphicsHeight)
 	lovegraphics.draw(GuiSprites, GuiCrosshair, InterfaceWidth / 2 - 16, InterfaceHeight / 2 - 16, 0, 2, 2)
 	_JPROFILER.pop("DrawCrossHair")
 end
