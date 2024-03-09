@@ -319,21 +319,17 @@ function DrawHudTile(tile, hudX, hudY)
 			{ x - xsize, y + ysize },
 			{ x, y + size },
 		}
-		--TODO ADD MOD SUPPORT TILES CATEGORY
-		if tile == Tiles.GRASS_Block then
-			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassTopTexture, topQuadVertices)
-			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassSideTexture, rightFrontQuadVertices)
-			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.grassSideTexture, leftSideQuadVertices)
-		elseif tile == Tiles.OAK_LOG_Block then
-			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.oak_logsTopTexture, topQuadVertices)
-			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.oak_logsSideTexture, rightFrontQuadVertices)
-			DrawTileQuadPersonalized(HUDTilesTextureListPersonalized.oak_logsSideTexture, leftSideQuadVertices)
+		local tileTextures = HUDTilesTextureListPersonalizedLookup[tile]
+		if tileTextures then
+			DrawTileQuadPersonalized(tileTextures.top, topQuadVertices)
+			DrawTileQuadPersonalized(tileTextures.side, rightFrontQuadVertices)
+			DrawTileQuadPersonalized(tileTextures.side, leftSideQuadVertices)
 		else
 			DrawTileQuad(textures[math.min(#textures, 2)] + 1, topQuadVertices)
-			love.graphics.setColor(SHADING_FACTOR1, SHADING_FACTOR1, SHADING_FACTOR1)
+			lovegraphics.setColor(SHADING_FACTOR1, SHADING_FACTOR1, SHADING_FACTOR1)
 			local index = (#textures == 4) and 4 or 1
 			DrawTileQuad(textures[index] + 1, rightFrontQuadVertices)
-			love.graphics.setColor(SHADING_FACTOR2, SHADING_FACTOR2, SHADING_FACTOR2)
+			lovegraphics.setColor(SHADING_FACTOR2, SHADING_FACTOR2, SHADING_FACTOR2)
 			Perspective.flip = true
 			DrawTileQuad(textures[1] + 1, leftSideQuadVertices)
 			Perspective.flip = false

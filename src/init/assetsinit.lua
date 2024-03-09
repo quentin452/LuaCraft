@@ -186,6 +186,10 @@ local function createTILEHUDAssets()
 			end
 		end
 	end
+	HUDTilesTextureListPersonalizedLookup = {}
+	for _, func in ipairs(ModLoaderTable["useCustomTextureFORHUDTile"]) do
+		func()
+	end
 	createTextureAtlas("PNG", "HUD")
 	TilesTextureListHUD = {}
 	local function blockTypeExists(blockType)

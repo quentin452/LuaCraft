@@ -12,6 +12,9 @@ function grass_block.initialize()
 	addFunctionToTag("addLightSourceLookup", function()
 		addLightSourceLookup(Tiles.GRASS_Block, LightSources[0])
 	end)
+	addFunctionToTag("useCustomTextureFORHUDTile", function()
+		useCustomTextureFORHUDTile(Tiles.GRASS_Block, HUDTilesTextureListPersonalized.grassTopTexture, HUDTilesTextureListPersonalized.grassSideTexture)
+	end)
 end
 
 return grass_block

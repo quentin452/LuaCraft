@@ -50,6 +50,17 @@ function transform3DBlockToA2DTile(block)
 	TileModelTable[block] = 1
 end
 
+function useCustomTextureFORHUDTile(block, textureTOP, textureSIDE)
+	if HUDTilesTextureListPersonalizedLookup[block] ~= nil then
+		error("Key already exists in HUDTilesTextureListPersonalizedLookup: " .. getTileName(block))
+
+	end
+	if textureTOP == nil or textureSIDE == nil then
+		LuaCraftErrorLogging("Both textureTOP and textureSIDE must be provided")
+	end
+	HUDTilesTextureListPersonalizedLookup[block] = { top = textureTOP, side = textureSIDE }
+end
+
 function LoadMods()
 	local modsDirectory = "mods/"
 
@@ -98,11 +109,6 @@ function LoadBlocksAndTiles(directory)
 				if block and type(block) == "table" and block.initialize then
 					block.initialize()
 				end
-				local endTime = os.clock()
-
-				local loadTime = endTime - startTime
-
-				print("Loading time for", blockName, ":", loadTime, "secondes")
 			else
 				error("Failed to load block:", blockName)
 			end

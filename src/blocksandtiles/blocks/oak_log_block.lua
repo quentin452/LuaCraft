@@ -12,6 +12,9 @@ function stone_block.initialize()
 	addFunctionToTag("addLightSourceLookup", function()
 		addLightSourceLookup(Tiles.OAK_LOG_Block, LightSources[0])
 	end)
+	addFunctionToTag("useCustomTextureFORHUDTile", function()
+		useCustomTextureFORHUDTile(Tiles.OAK_LOG_Block, HUDTilesTextureListPersonalized.oak_logsTopTexture, HUDTilesTextureListPersonalized.oak_logsSideTexture)
+	end)
 end
 
 return stone_block
