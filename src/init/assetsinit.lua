@@ -1,6 +1,7 @@
 finalAtlasSize = 256 -- TODO ADD Support for atlas 4096 size and more
 textureAtlasCoordinates = {}
 textureAtlasCoordinatesFORHUD = {}
+--TODO IT SEEM THATS DOESN4T WORK THE ORDER THING
 local function getKeysInOrder(tbl)
 	_JPROFILER.push("getKeysInOrder")
 	local keys = {}
@@ -11,6 +12,7 @@ local function getKeysInOrder(tbl)
 	_JPROFILER.pop("getKeysInOrder")
 	return keys
 end
+
 --TODO REDUCE TIME TO SAVE ATLAS IF THE ATLAS IS TOO MUCH LARGER
 --TODO ADD EASY texture size changer (for now only support 16x16)
 local function createTextureAtlas(memoryorpng, interfacemode)
@@ -81,7 +83,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 
 						if interfacemode == "INGAME" then
 							--TODO ADD MOD SUPPORT TILES CATEGORY
-							if blockType == Tiles.GRASS_Block or blockType == Tiles.OAK_LOG_Block then
+							if blockType == Tiles.GRASS_Block.id or blockType == Tiles.OAK_LOG_Block.id then
 								textureAtlasCoordinates[blockType] = { index, index - 2, index - 1 }
 							else
 								textureAtlasCoordinates[blockType] = { index }
@@ -214,6 +216,7 @@ local function createTILEINGameAssets()
 	local function blockTypeExists(blockType)
 		return TilesTextureList[blockType] ~= nil
 	end
+
 	for blockType, _ in pairs(textureAtlasCoordinates) do
 		if not blockTypeExists(blockType) then
 			TilesTextureList[blockType] = { unpack(textureAtlasCoordinates[blockType]) }

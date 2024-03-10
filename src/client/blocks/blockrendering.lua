@@ -16,7 +16,7 @@ local function CanDrawFace(get, thisTransparency)
 	end
 end
 
- function calculationotxoty(otx, oty)
+function calculationotxoty(otx, oty)
 	_JPROFILER.push("calculationotxoty")
 	local adjustmentFactor = 256 / finalAtlasSize
 	local tx = otx * TileWidth / LightValues
@@ -101,6 +101,17 @@ end
 
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
 	_JPROFILER.push("BlockRendering")
+	-- Do not render block with TileMode.None
+	local this = self.parent:getVoxel(i, j, k)
+	local value = TilesById[this]
+	if value then
+		local blockstringname = value.blockstringname
+		if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.None then
+			_JPROFILER.pop("BlockRendering")
+			return
+		end
+	end
+
 	-- top and bottom
 	local getTop = self.parent:getVoxel(i, j - 1, k)
 	local getBottom = self.parent:getVoxel(i, j + 1, k)

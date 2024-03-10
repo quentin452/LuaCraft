@@ -249,22 +249,25 @@ function initPlayerInventory()
 		hotbarSelect = 1,
 	}
 
-	local defaultItems = {
-		Tiles.STONE_Block,
-		Tiles.COBBLE_Block,
-		Tiles.GRASS_Block,
-		Tiles.YELLO_FLOWER_Block,
-		Tiles.OAK_SAPPLING_Block,
-		Tiles.OAK_LOG_Block,
-		Tiles.OAK_LEAVE_Block,
-		Tiles.SAND_Block,
-		Tiles.GLOWSTONE_Block,
+	local defaultTileIDs = {
+		Tiles.STONE_Block.id,
+		Tiles.COBBLE_Block.id,
+		Tiles.GRASS_Block.id,
+		Tiles.YELLO_FLOWER_Block.id,
+		Tiles.OAK_SAPPLING_Block.id,
+		Tiles.OAK_LOG_Block.id,
+		Tiles.OAK_LEAVE_Block.id,
+		Tiles.SAND_Block.id,
+		Tiles.GLOWSTONE_Block.id,
 	}
+
 	for i = 1, 36 do
-		PlayerInventory.items[i] = defaultItems[i] or 0
+		PlayerInventory.items[i] = defaultTileIDs[i] or Tiles.AIR_Block.id
 	end
+
 	if enablePROFIProfiler then
 		ProFi:checkMemory(5, "5eme profil")
 	end
+
 	_JPROFILER.pop("initPlayerInventory")
 end

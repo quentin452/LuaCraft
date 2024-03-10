@@ -21,4 +21,4 @@ end
 --In Every mod you need to add at the root of the mod folder a main lua like you can see in ExampleMod.lua to init things
 
 --For now the mod support chunk.populate : see mods that call addFunctionToTag("chunkPopulateTag", function(self, i, height, j) 
-For making tiles/blocks : see mods that call addBlock + addTransparencyLookup + addLightSourceLookup + addTileNonCollidable + madeTile2DRenderedOnHUD + transform3DBlockToA2DTile + useCustomTextureFORHUDTile
+For making tiles/blocks : see mods that call addBlock

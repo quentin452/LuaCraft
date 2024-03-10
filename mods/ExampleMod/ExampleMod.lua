@@ -13,7 +13,7 @@ function ExampleMod.initialize()
 		--generate Trees
 		if math.random() < love.math.noise(xx / 64, zz / 64) * 0.02 then
 			ExampleMod_GenerateTree(self, i, height, j)
-			self:setVoxelRaw(i, height, j, Tiles.DIRT_Block, 15)
+			self:setVoxelRaw(i, height, j, Tiles.DIRT_Block.id, LightSources[15])
 		end
 	end)
 	addFunctionToTag("chunkPopulateTag", function(self, i, height, j)
@@ -21,8 +21,8 @@ function ExampleMod.initialize()
 		local zz = (self.z - 1) * ChunkSize + j
 		--generate flowers YELLOW/ROSE
 		if love.math.noise(xx / 32, zz / 32) > 0.9 and math.random() < 0.2 then
-			local flowerID = love.math.random(Tiles.YELLO_FLOWER_Block, Tiles.ROSE_FLOWER_Block)
-			self:setVoxelRaw(i, height + 1, j, flowerID, 15)
+			local flowerID = love.math.random(Tiles.YELLO_FLOWER_Block.id, Tiles.ROSE_FLOWER_Block.id)
+			self:setVoxelRaw(i, height + 1, j, flowerID, LightSources[15])
 		end
 	end)
 end

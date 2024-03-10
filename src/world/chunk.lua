@@ -168,10 +168,6 @@ function NewChunk(x, z)
 
 	-- set voxel id of the voxel in this chunk's coordinate space
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
-		--_JPROFILER.push("frame")
-
-		--_JPROFILER.push("setVoxel")
-
 		if manuallyPlaced == nil then
 			manuallyPlaced = false
 		end
@@ -212,21 +208,28 @@ function NewChunk(x, z)
 			local blockAbove = self:getVoxel(x, y + 1, z)
 
 			local function isBlockInTileModelTable(block)
-				return TileModelTable[block] or 0
+				local value = TilesById[block]
+				if value then
+					local blockstringname = value.blockstringname
+					if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.TileMode then
+						print(value)
+						return true
+					end
+				end
+				return false
 			end
-			
+
 			if
-				(isBlockInTileModelTable(blockvalue) == 1)
-				and ((isBlockInTileModelTable(blockBelow) == 1) or (isBlockInTileModelTable(blockAbove) == 1))
+				(isBlockInTileModelTable(blockvalue))
+				and ((isBlockInTileModelTable(blockBelow)) or (isBlockInTileModelTable(blockAbove)))
 			then
 				return
 			end
-			
 
 			local sunget = self:getVoxel(x, y + 1, z)
 			local sunlight = self:getVoxelFirstData(x, y + 1, z)
 
-			local inDirectSunlight = TileLightable(sunget) and sunlight == 15
+			local inDirectSunlight = TileLightable(sunget) and sunlight == LightSources[15]
 			local placingLocalSource = false
 			local destroyLight = false
 
@@ -282,7 +285,7 @@ function NewChunk(x, z)
 			end
 
 			local source = TileLightSource(self:getVoxel(x, y, z))
-			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block then
+			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
 				NewLocalLightSubtraction(gx, gy, gz, source + 1)
 				destroyLight = true
 			end
@@ -317,15 +320,9 @@ function NewChunk(x, z)
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
 		end
-
-		--LightingUpdate()
-		--_JPROFILER.pop("setVoxel")
-		--_JPROFILER.pop("frame")
 	end
 
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)
-		--_JPROFILER.push("setVoxelData")
-
 		x = math.floor(x)
 		y = math.floor(y)
 		z = math.floor(z)
@@ -334,7 +331,6 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
-		--_JPROFILER.pop("setVoxelData")
 	end
 
 	-- sunlight data
@@ -479,7 +475,6 @@ function NewChunkSlice(x, y, z, parent)
 					local thisTransparency = TileTransparency(this)
 					local scale = 1
 					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * scale, (self.z - 1) * ChunkSize + k - 1
-
 					if thisTransparency < transparency3 then
 						_JPROFILER.push("TileRendering")
 						TileRendering(self, i, j, k, x, y, z, thisLight, reusableModel, scale)

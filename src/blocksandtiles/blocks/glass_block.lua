@@ -1,16 +1,8 @@
-local GLASS_Block = nil
-
 local stone_block = {}
 
 function stone_block.initialize()
 	addFunctionToTag("addBlock", function()
-		addBlock("GLASS_Block", GLASS_Block)
-	end)
-	addFunctionToTag("addTransparencyLookup", function()
-		addTransparencyLookup(Tiles.GLASS_Block, TilesTransparency.NONE)
-	end)
-	addFunctionToTag("addLightSourceLookup", function()
-		addLightSourceLookup(Tiles.GLASS_Block, LightSources[0])
+		addBlock("GLASS_Block", TileMode.BlockMode, CollideMode.YesCanCollide, TilesTransparency.NONE, LightSources[0])
 	end)
 end
 

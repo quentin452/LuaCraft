@@ -19,7 +19,7 @@ function MouseLogicOnPlay(x, y, b)
 
 	if b == 2 and fixinputforDrawCommandInput == false then
 		pos = ThePlayer and ThePlayer.cursorposPrev
-		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or 0
+		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or Tiles.AIR_Block.id
 	end
 
 	local chunk = pos and pos.chunk

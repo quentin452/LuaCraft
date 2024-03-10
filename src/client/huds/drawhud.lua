@@ -345,14 +345,7 @@ function DrawTileQuadPersonalized(texture, points)
 	Perspective.quad(texture, unpack(points))
 	_JPROFILER.pop("DrawTileQuadPersonalized")
 end
-local function getTileName(n)
-	for key, value in pairs(Tiles) do
-		if value == n then
-			return TilesString[key]
-		end
-	end
-	return "Unknown"
-end
+
 function DrawTileQuad(textureIndex, points)
 	_JPROFILER.push("DrawTileQuad")
 	local textureData = HUDTilesTextureList[textureIndex]

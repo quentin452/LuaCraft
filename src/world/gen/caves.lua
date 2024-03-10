@@ -77,10 +77,10 @@ function NewCave(x, y, z)
 							local chunk, cx, cy, cz = GetChunk(gx, gy, gz)
 
 							if chunk ~= nil then
-								chunk:setVoxelRaw(cx, cy, cz, Tiles.AIR_Block, 0)
+								chunk:setVoxelRaw(cx, cy, cz, Tiles.AIR_Block.id, 0)
 
 								if cy == chunk.heightMap[cx][cz] then
-									NewSunlightDownAddition(gx, gy, gz, 15)
+									NewSunlightDownAddition(gx, gy, gz, LightSources[15])
 								end
 							end
 						end

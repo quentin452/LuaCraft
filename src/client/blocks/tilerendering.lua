@@ -12,22 +12,21 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 		for _, v in ipairs(blockModelCache[this]) do
 			model[#model + 1] = { x + v[1], y + v[2], z + v[3], v[4], v[5] }
 		end
-		-- create model dupplicata for flowers/sapplings
-		if TileModelTable[this] then
-			for _, v in ipairs(blockModelCache[this]) do
-				local originX = v[1] - 0.5
-				local originZ = v[3] - 0.5
 
-				local rotatedX = originX * math.cos(mathpi / 2) - originZ * math.sin(mathpi / 2)
-				local rotatedZ = originX * math.sin(mathpi / 2) + originZ * math.cos(mathpi / 2)
+		for _, v in ipairs(blockModelCache[this]) do
+			local originX = v[1] - 0.5
+			local originZ = v[3] - 0.5
 
-				rotatedX = rotatedX + 0.5
-				rotatedZ = rotatedZ + 0.5
+			local rotatedX = originX * math.cos(mathpi / 2) - originZ * math.sin(mathpi / 2)
+			local rotatedZ = originX * math.sin(mathpi / 2) + originZ * math.cos(mathpi / 2)
 
-				model[#model + 1] = { x + rotatedX, y + v[2], z + rotatedZ, v[4], v[5] }
-			end
+			rotatedX = rotatedX + 0.5
+			rotatedZ = rotatedZ + 0.5
+
+			model[#model + 1] = { x + rotatedX, y + v[2], z + rotatedZ, v[4], v[5] }
 		end
 	end
+
 	_JPROFILER.pop("TileRendering")
 end
 
