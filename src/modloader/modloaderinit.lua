@@ -25,50 +25,6 @@ function addBlock(
 		return
 	end
 
-	local properties =
-		{ "transparency", "LightSources", "Cancollide", "BlockOrLiquidOrTile", "blockBottomMasterTexture" }
-	local block = {
-		BlockOrLiquidOrTile = BlockOrLiquidOrTile,
-		Cancollide = Cancollide,
-		transparency = transparency,
-		LightSources = LightSources,
-		blockBottomMasterTexture = blockBottomMasterTexture,
-	}
-
-	if blockSideTexture ~= nil then
-		block.blockSideTexture = blockSideTexture
-	end
-
-	if blockTopTexture ~= nil then
-		block.blockTopTexture = blockTopTexture
-	end
-
-	local seen = {}
-
-	for _, prop in ipairs(properties) do
-		if block[prop] ~= nil then
-			if seen[prop] then
-				LuaCraftErrorLogging(
-					"Error: Property " .. prop .. " is defined more than once in block " .. tostring(blockstringname)
-				)
-			else
-				seen[prop] = true
-			end
-		else
-			if prop == "LightSources" then
-				LuaCraftErrorLogging(
-					"Error: Missing property or not in range property for "
-						.. prop
-						.. " in block "
-						.. tostring(blockstringname)
-						.. ". please ensure that 'LightSources' is within the range of 0 to 15"
-				)
-			else
-				LuaCraftErrorLogging("Error: Missing property " .. prop .. " in block " .. tostring(blockstringname))
-			end
-		end
-	end
-	seen = {}
 	local id = nextId
 	Tiles[blockstringname] = {
 		id = id,
@@ -89,13 +45,6 @@ function addBlock(
 		end
 		if type(blockSideTexture) == "string" then
 			blockSideTexture = lovegraphics.newImage(blockSideTexture)
-		end
-
-		if BlockThatUseCustomTexturesForTopandSide[id] then
-			LuaCraftErrorLogging(
-				"Key already exists in BlockThatUseCustomTexturesForTopandSide: " .. block.blockstringname
-			)
-			return
 		end
 
 		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTexture, side = blockSideTexture }
