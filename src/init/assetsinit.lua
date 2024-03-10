@@ -19,7 +19,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 	local totalTimeStart = os.clock()
 
 	if finalAtlasSize < 256 or finalAtlasSize % 256 ~= 0 then
-		error("finalAtlasSize must be a multiple of 256 and not less than 256")
+		LuaCraftErrorLogging("finalAtlasSize must be a multiple of 256 and not less than 256")
 	end
 
 	local TilesTextureList
@@ -29,7 +29,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 	elseif interfacemode == "HUD" then
 		TilesTextureList = TilesTextureFORAtlasListHUD
 	else
-		error("Invalid mode specified")
+		LuaCraftErrorLogging("Invalid mode specified")
 	end
 
 	local function initializeAtlas(atlasSize)
@@ -82,8 +82,8 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 						local index = x / tileWidth + y / tileHeight * (finalAtlasSize / tileHeight)
 
 						if interfacemode == "INGAME" then
-							--TODO ADD MOD SUPPORT TILES CATEGORY
-							if blockType == Tiles.GRASS_Block.id or blockType == Tiles.OAK_LOG_Block.id then
+							local ids = BlockThatUseCustomTexturesForTopandSide[blockType]
+							if ids then
 								textureAtlasCoordinates[blockType] = { index, index - 2, index - 1 }
 							else
 								textureAtlasCoordinates[blockType] = { index }
@@ -150,7 +150,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 	if interfacemode == "INGAME" then
 		return atlas, textureAtlasCoordinates
 	elseif interfacemode == "HUD" then
-		return atlas, nil, textureAtlasCoordinatesFORHUD
+		return atlas, textureAtlasCoordinatesFORHUD
 	end
 end
 
@@ -174,30 +174,12 @@ local function createTILEHUDAssets()
 		end
 	end
 
-	HUDTilesTextureListPersonalized = {}
-	for key, value in pairs(TilesTextureFORAtlasListHUDPersonalized) do
-		if HUDTilesTextureListPersonalized[key] == nil then
-			if type(value) == "table" then
-				local newValue = {}
-				for i, v in ipairs(value) do
-					newValue[i] = lovegraphics.newImage(v)
-				end
-				HUDTilesTextureListPersonalized[key] = newValue
-			else
-				HUDTilesTextureListPersonalized[key] = lovegraphics.newImage(value)
-			end
-		end
-	end
-	HUDTilesTextureListPersonalizedLookup = {}
-	for _, func in ipairs(ModLoaderTable["useCustomTextureFORHUDTile"]) do
-		func()
-	end
 	createTextureAtlas("PNG", "HUD")
 	TilesTextureListHUD = {}
 	local function blockTypeExists(blockType)
 		return TilesTextureListHUD[blockType] ~= nil
 	end
-	for blockType, _ in pairs(TilesTextureFORAtlasListHUD) do
+	for blockType, _ in pairs(textureAtlasCoordinatesFORHUD) do
 		if not blockTypeExists(blockType) then
 			TilesTextureListHUD[blockType] = { unpack(textureAtlasCoordinatesFORHUD[blockType]) }
 		else
@@ -241,26 +223,6 @@ local function InitializeImages()
 	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 	ChunkBorders = lovegraphics.newImage(texturepath .. "debug/chunkborders.png")
 end
-local function finalCheckAssets()
-	for key, value in pairs(HUDTilesTextureList) do
-		if #value > 1 then
-			error(
-				"Block with several textures detected in HUDTilesTextureList: "
-					.. key
-					.. " this table only accept one texture per block"
-			)
-		end
-	end
-	for key, value in pairs(TilesTextureFORAtlasListHUD) do
-		if #value > 1 then
-			error(
-				"Block with several textures detected in  TilesTextureFORAtlasListHUD: "
-					.. key
-					.. " this table only accept one texture per block"
-			)
-		end
-	end
-end
 
 function InitializeAssets()
 	_JPROFILER.push("InitializeTilesNumberAndName")
@@ -278,7 +240,4 @@ function InitializeAssets()
 	_JPROFILER.push("createTILEHUDAssets")
 	createTILEHUDAssets()
 	_JPROFILER.pop("createTILEHUDAssets")
-	_JPROFILER.push("finalCheckAssets")
-	finalCheckAssets()
-	_JPROFILER.pop("finalCheckAssets")
 end

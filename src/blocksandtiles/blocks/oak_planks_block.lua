@@ -1,3 +1,4 @@
+local oak_planksTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "oak_planks.png"
 local stone_block = {}
 
 function stone_block.initialize()
@@ -7,7 +8,10 @@ function stone_block.initialize()
 			TileMode.BlockMode,
 			CollideMode.YesCanCollide,
 			TilesTransparency.OPAQUE,
-			LightSources[0]
+			LightSources[0],
+			oak_planksTexture,
+			nil,
+			nil
 		)
 	end)
 end

@@ -1,3 +1,4 @@
+local glowstoneTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "glowstone.png"
 local stone_block = {}
 
 function stone_block.initialize()
@@ -7,7 +8,10 @@ function stone_block.initialize()
 			TileMode.BlockMode,
 			CollideMode.YesCanCollide,
 			TilesTransparency.NONE,
-			LightSources[15]
+			LightSources[15],
+			glowstoneTexture,
+			nil,
+			nil
 		)
 	end)
 end

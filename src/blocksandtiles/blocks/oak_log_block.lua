@@ -1,17 +1,19 @@
+local oak_logsBottomTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "oak_logs/oak_botton.png"
+local oak_logsTopTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "oak_logs/oak_top.png"
+local oak_logsSideTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "oak_logs/oak_side.png"
 local stone_block = {}
 
 function stone_block.initialize()
 	addFunctionToTag("addBlock", function()
-		addBlock("OAK_LOG_Block", 	 TileMode.BlockMode,
-	CollideMode.YesCanCollide,
-		TilesTransparency.OPAQUE,
-		LightSources[0])
-	end)
-	addFunctionToTag("useCustomTextureFORHUDTile", function()
-		useCustomTextureFORHUDTile(
-			Tiles.OAK_LOG_Block.id,
-			HUDTilesTextureListPersonalized.oak_logsTopTexture,
-			HUDTilesTextureListPersonalized.oak_logsSideTexture
+		addBlock(
+			"OAK_LOG_Block",
+			TileMode.BlockMode,
+			CollideMode.YesCanCollide,
+			TilesTransparency.OPAQUE,
+			LightSources[0],
+			oak_logsBottomTexture,
+			oak_logsSideTexture,
+			oak_logsTopTexture
 		)
 	end)
 end

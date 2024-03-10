@@ -319,11 +319,13 @@ function DrawHudTile(tile, hudX, hudY)
 			{ x - xsize, y + ysize },
 			{ x, y + size },
 		}
-		local tileTextures = HUDTilesTextureListPersonalizedLookup[tile]
-		if tileTextures then
-			DrawTileQuadPersonalized(tileTextures.top, topQuadVertices)
-			DrawTileQuadPersonalized(tileTextures.side, rightFrontQuadVertices)
-			DrawTileQuadPersonalized(tileTextures.side, leftSideQuadVertices)
+		local tileData = BlockThatUseCustomTexturesForTopandSide[tile]
+		if tileData then
+			if tileData.top and tileData.side then
+				DrawTileQuadPersonalized(tileData.top, topQuadVertices)
+				DrawTileQuadPersonalized(tileData.side, rightFrontQuadVertices)
+				DrawTileQuadPersonalized(tileData.side, leftSideQuadVertices)
+			end
 		else
 			DrawTileQuad(textures[math.min(#textures, 2)] + 1, topQuadVertices)
 			lovegraphics.setColor(SHADING_FACTOR1, SHADING_FACTOR1, SHADING_FACTOR1)
@@ -350,7 +352,7 @@ function DrawTileQuad(textureIndex, points)
 	_JPROFILER.push("DrawTileQuad")
 	local textureData = HUDTilesTextureList[textureIndex]
 	if textureData == nil then
-		LuaCraftErrorLogging("No texture for index ", getTileName(textureIndex))
+		LuaCraftErrorLogging("No texture for index ", textureIndex)
 		return
 	end
 	local texture = textureData[1]
@@ -362,7 +364,7 @@ function DrawTileQuad2D(textureIndex, x, y, size)
 	_JPROFILER.push("DrawTileQuad2D")
 	local textureData = HUDTilesTextureList[textureIndex]
 	if textureData == nil then
-		LuaCraftErrorLogging("No texture for index ", getTileName(textureIndex))
+		LuaCraftErrorLogging("No texture for index ", textureIndex)
 		return
 	end
 	local texture = textureData[1]

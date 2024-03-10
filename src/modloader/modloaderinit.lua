@@ -9,20 +9,39 @@ local nextId = 1
 TilesById = { [0] = {
 	blockstringname = "AIR_Block",
 } }
-
-function addBlock(blockstringname, BlockOrLiquidOrTile, Cancollide, transparency, LightSources)
+BlockThatUseCustomTexturesForTopandSide = {}
+function addBlock(
+	blockstringname,
+	BlockOrLiquidOrTile,
+	Cancollide,
+	transparency,
+	LightSources,
+	blockBottomMasterTexture,
+	blockSideTexture,
+	blockTopTexture
+)
 	if Tiles[blockstringname] then
 		LuaCraftErrorLogging("Error: Duplicate blockstringname detected: " .. tostring(blockstringname))
 		return
 	end
 
-	local properties = { "transparency", "LightSources", "Cancollide", "BlockOrLiquidOrTile" }
+	local properties =
+		{ "transparency", "LightSources", "Cancollide", "BlockOrLiquidOrTile", "blockBottomMasterTexture" }
 	local block = {
 		BlockOrLiquidOrTile = BlockOrLiquidOrTile,
 		Cancollide = Cancollide,
 		transparency = transparency,
 		LightSources = LightSources,
+		blockBottomMasterTexture = blockBottomMasterTexture,
 	}
+
+	if blockSideTexture ~= nil then
+		block.blockSideTexture = blockSideTexture
+	end
+
+	if blockTopTexture ~= nil then
+		block.blockTopTexture = blockTopTexture
+	end
 
 	local seen = {}
 
@@ -49,7 +68,7 @@ function addBlock(blockstringname, BlockOrLiquidOrTile, Cancollide, transparency
 			end
 		end
 	end
-
+	seen = {}
 	local id = nextId
 	Tiles[blockstringname] = {
 		id = id,
@@ -58,23 +77,32 @@ function addBlock(blockstringname, BlockOrLiquidOrTile, Cancollide, transparency
 		LightSources = LightSources,
 		Cancollide = Cancollide,
 		BlockOrLiquidOrTile = BlockOrLiquidOrTile,
+		blockBottomMasterTexture = blockBottomMasterTexture,
+		blockSideTexture = blockSideTexture,
+		blockTopTexture = blockTopTexture,
 	}
 
 	TilesById[id] = Tiles[blockstringname]
+	if blockTopTexture ~= nil or blockSideTexture ~= nil then
+		if type(blockTopTexture) == "string" then
+			blockTopTexture = lovegraphics.newImage(blockTopTexture)
+		end
+		if type(blockSideTexture) == "string" then
+			blockSideTexture = lovegraphics.newImage(blockSideTexture)
+		end
 
+		if BlockThatUseCustomTexturesForTopandSide[id] then
+			LuaCraftErrorLogging(
+				"Key already exists in BlockThatUseCustomTexturesForTopandSide: " .. block.blockstringname
+			)
+			return
+		end
+
+		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTexture, side = blockSideTexture }
+	end
 	nextId = nextId + 1
 
 	return id
-end
---TODO MADE THIS MORE EFFICIANT
-function useCustomTextureFORHUDTile(block, textureTOP, textureSIDE)
-	if HUDTilesTextureListPersonalizedLookup[block] ~= nil then
-		LuaCraftErrorLogging("Key already exists in HUDTilesTextureListPersonalizedLookup: " .. getTileName(block))
-	end
-	if textureTOP == nil or textureSIDE == nil then
-		LuaCraftErrorLogging("Both textureTOP and textureSIDE must be provided")
-	end
-	HUDTilesTextureListPersonalizedLookup[block] = { top = textureTOP, side = textureSIDE }
 end
 
 function LoadMods()

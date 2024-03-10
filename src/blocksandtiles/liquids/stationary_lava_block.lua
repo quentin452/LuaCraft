@@ -1,3 +1,4 @@
+local lavastationaryTexture = texturepathLuaCraft .. liquidtexturepathLuaCraft .. "lava_stationary.png"
 local stone_block = {}
 
 function stone_block.initialize()
@@ -7,7 +8,10 @@ function stone_block.initialize()
 			TileMode.LiquidMode,
 			CollideMode.NoCannotCollide,
 			TilesTransparency.OPAQUE,
-			LightSources[0]
+			LightSources[0],
+			lavastationaryTexture,
+			nil,
+			nil
 		)
 	end)
 end

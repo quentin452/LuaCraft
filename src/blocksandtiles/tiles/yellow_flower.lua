@@ -1,3 +1,4 @@
+local yellowflowerTexture = texturepathLuaCraft .. tilestexturepathLuaCraft .. "yellow_flower.png"
 local stone_block = {}
 
 function stone_block.initialize()
@@ -7,7 +8,10 @@ function stone_block.initialize()
 			TileMode.TileMode,
 			CollideMode.NoCannotCollide,
 			TilesTransparency.FULL,
-			LightSources[0]
+			LightSources[0],
+			yellowflowerTexture,
+			nil,
+			nil
 		)
 	end)
 end

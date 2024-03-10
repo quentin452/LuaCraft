@@ -1,3 +1,8 @@
+local texturepathLuaCraft = "resources/assets/textures/"
+local blockandtilesfolderLuaCraft = "blocksandtiles/"
+local blocktexturepathLuaCraft = blockandtilesfolderLuaCraft .. "blocks/"
+local airTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "air.png"
+
 TileMode = {
 	BlockMode = "3DBlock",
 	TileMode = "2DTile",
@@ -31,6 +36,7 @@ Tiles = {
 		LightSources = LightSources[0],
 		Cancollide = CollideMode.NoCannotCollide,
 		BlockOrLiquidOrTile = TileMode.BlockMode,
+		blockBottomMasterTexture = airTexture,
 	},
 }
 
@@ -44,15 +50,29 @@ function InitializeTilesNumberAndName()
 	end
 
 	for _, value in pairs(Tiles) do
+		local blockTopTexture = value.blockTopTexture or "N/A"
+		local blockSideTexture = value.blockSideTexture or "N/A"
+		local blockBottomMasterTexture = value.blockBottomMasterTexture or "N/A"
+
 		LuaCraftPrintLoggingNormal(
 			"Tile Name: "
 				.. value.blockstringname
-				.. " Tile Index: "
+				.. " Index: "
 				.. value.id
-				.. " Tile Transparency: "
+				.. " Transparency: "
 				.. value.transparency
-				.. " Tile Light Source: "
+				.. " Light Source: "
 				.. value.LightSources
+				.. " Can Collide?: "
+				.. value.Cancollide
+				.. " Type: "
+				.. value.BlockOrLiquidOrTile
+				.. " BottomMaster Texture: "
+				.. blockBottomMasterTexture
+				.. " Side Texture: "
+				.. blockSideTexture
+				.. " Top Texture: "
+				.. blockTopTexture
 				.. "\n-----------------------------------------------------------------------------------------------------------------------"
 		)
 	end
@@ -81,7 +101,7 @@ function TileLightSource(n)
 		return Tiles[blockstringname].LightSources
 	end
 end
-
+--TODO MERGE THESE TWO METHODS
 function TileLightable(n)
 	local t = TileTransparency(n)
 	return t == TilesTransparency.FULL or t == TilesTransparency.NONE
@@ -113,9 +133,4 @@ end
 function Tile2DHUD(n)
 	local tileData = TilesById[n]
 	return tileData and tileData.BlockOrLiquidOrTile == TileMode.TileMode
-end
-
-function getTileName(n)
-	local tileData = TilesById[n]
-	return tileData and tileData.blockname or "Unknown"
 end

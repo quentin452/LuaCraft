@@ -212,7 +212,6 @@ function NewChunk(x, z)
 				if value then
 					local blockstringname = value.blockstringname
 					if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.TileMode then
-						print(value)
 						return true
 					end
 				end
