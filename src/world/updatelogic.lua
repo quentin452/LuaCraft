@@ -59,7 +59,9 @@ end
 
 function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
 	_JPROFILER.push("UpdateChunksWithinRenderDistance")
-	for distance = 0, RenderDistance / ChunkSize do
+	local maxChunkDistance = RenderDistance / ChunkSize
+
+	for distance = 0, maxChunkDistance do
 		for i = -distance, distance do
 			for j = -distance, distance do
 				local chunkX = playerChunkX + i
@@ -67,7 +69,7 @@ function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDist
 
 				local chunk = GetOrCreateChunk(chunkX, chunkZ)
 
-				if distance < RenderDistance / ChunkSize then
+				if distance < maxChunkDistance then
 					processChunkUpdates(chunk)
 				else
 					removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
@@ -96,15 +98,17 @@ function removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDis
 	local maxChunkDistanceSquared = (RenderDistance / ChunkSize) ^ 2
 
 	for otherChunk, _ in pairs(ChunkSet) do
-		local otherChunkXCenter = otherChunk.x + 0.5
-		local otherChunkZCenter = otherChunk.z + 0.5
+		local otherChunkXCenter = otherChunk.x
+		local otherChunkZCenter = otherChunk.z
 
-		local dx = otherChunkXCenter - (playerChunkX + 0.5)
-		local dz = otherChunkZCenter - (playerChunkZ + 0.5)
+		local dx = otherChunkXCenter - playerChunkX
+		local dz = otherChunkZCenter - playerChunkZ
 
 		local distanceSquared = dx ^ 2 + dz ^ 2
 
-		if distanceSquared > maxChunkDistanceSquared then
+		local diagonalDistanceSquared = (dx ^ 2 + dz ^ 2) / 2
+
+		if distanceSquared > maxChunkDistanceSquared and diagonalDistanceSquared > maxChunkDistanceSquared then
 			forceChunkModelsRemoval(otherChunk)
 		end
 	end
