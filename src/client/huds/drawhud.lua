@@ -329,9 +329,10 @@ function DrawHudTile(tile, hudX, hudY)
 		if textures[1] and textures[2] then
 			local topQuadVertices, rightFrontQuadVertices, leftSideQuadVertices = CalculateHudVertices(hudX, hudY)
 			DrawTileQuadPersonalized(textures[1], topQuadVertices)
-			DrawTileQuadPersonalized(textures[2], rightFrontQuadVertices)
-			DrawTileQuadPersonalized(textures[2], leftSideQuadVertices)
 			lovegraphics.setColor(SHADING_FACTOR, SHADING_FACTOR, SHADING_FACTOR)
+			DrawTileQuadPersonalized(textures[2], rightFrontQuadVertices)
+			lovegraphics.setColor(SHADING_FACTOR, SHADING_FACTOR, SHADING_FACTOR)
+			DrawTileQuadPersonalized(textures[2], leftSideQuadVertices)
 		end
 	end
 	_JPROFILER.pop("DrawHudTile")
