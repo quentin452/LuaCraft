@@ -13,118 +13,68 @@ end
 
 --TODO REDUCE TIME TO SAVE ATLAS IF THE ATLAS IS TOO MUCH LARGER
 --TODO ADD EASY texture size changer (for now only support 16x16)
-local function createTextureAtlas(memoryorpng, interfacemode)
-	assert(
-		finalAtlasSize >= 256 and finalAtlasSize % 256 == 0,
-		"finalAtlasSize must be a multiple of 256 and not less than 256"
-	)
-	local totalTimeStart = os.clock()
+local function createTextureAtlas(memoryorpng)
+    assert(
+        finalAtlasSize >= 256 and finalAtlasSize % 256 == 0,
+        "finalAtlasSize must be a multiple of 256 and not less than 256"
+    )
+    local totalTimeStart = os.clock()
 
-	local function mergeTextureLists()
-		local mergedList = {}
-		for blockType, texturePaths in pairs(TilesTextureFORAtlasList) do
-			mergedList[blockType] = (interfacemode == "HUD") and { texturePaths[1] } or texturePaths
-		end
-		return mergedList
-	end
+    local atlasSize = finalAtlasSize
+    local atlas = loveimage.newImageData(atlasSize, atlasSize)
+    local x, y = 0, 0
 
-	local TilesTextureList = mergeTextureLists()
+    for _, blockType in ipairs(getKeysInOrder(TilesTextureFORAtlasList)) do
+        local texturePaths = TilesTextureFORAtlasList[blockType] or { TilesTextureFORAtlasList[blockType] }
 
-	local atlasSize = finalAtlasSize
-	local atlas = loveimage.newImageData(atlasSize, atlasSize)
-	local x, y = 0, 0
+        for _, texturePath in ipairs(texturePaths) do
+            local fileExist = lovefilesystem.getInfo(texturePath)
+            if fileExist then
+                local fileData = lovefilesystem.read(texturePath)
+                local fileDataObject = lovefilesystem.newFileData(fileData, texturePath)
+                local imageData = loveimage.newImageData(fileDataObject)
+                local width, height = imageData:getDimensions()
 
-	for _, blockType in ipairs(getKeysInOrder(TilesTextureList)) do
-		local texturePaths = TilesTextureList[blockType] or { TilesTextureList[blockType] }
+                if x + width > atlasSize then
+                    x = 0
+                    y = y + height
+                end
+                if y + height > atlasSize then
+                    atlasSize = atlasSize + 256
+                    finalAtlasSize = atlasSize
+                    local newAtlas = loveimage.newImageData(atlasSize, atlasSize)
+                    newAtlas:paste(atlas, 0, 0)
+                    atlas = newAtlas
+                    x, y = 0, 0
+                end
 
-		for _, texturePath in ipairs(texturePaths) do
-			local fileExist = lovefilesystem.getInfo(texturePath)
-			if fileExist then
-				local fileData = lovefilesystem.read(texturePath)
-				local fileDataObject = lovefilesystem.newFileData(fileData, texturePath)
-				local imageData = loveimage.newImageData(fileDataObject)
-				local width, height = imageData:getDimensions()
+                atlas:paste(imageData, x, y)
+                local index = x / 16 + y / 16 * (finalAtlasSize / 16)
+                local ids = BlockThatUseCustomTexturesForTopandSide[blockType]
+                textureAtlasCoordinates[blockType] = ids and { index, index - 2, index - 1 } or { index }
+                x = x + width
+            else
+                LuaCraftPrintLoggingNormal("Failed to read file:", texturePath)
+            end
+        end
+    end
 
-				if x + width > atlasSize then
-					x = 0
-					y = y + height
-				end
-				if y + height > atlasSize then
-					atlasSize = atlasSize + 256
-					finalAtlasSize = atlasSize
-					local newAtlas = loveimage.newImageData(atlasSize, atlasSize)
-					newAtlas:paste(atlas, 0, 0)
-					atlas = newAtlas
-					x, y = 0, 0
-				end
+    local totalTimeElapsed = os.clock() - totalTimeStart
+    LuaCraftPrintLoggingNormal(" Atlas Total time taken: " .. totalTimeElapsed .. " seconds")
 
-				atlas:paste(imageData, x, y)
-				local index = x / 16 + y / 16 * (finalAtlasSize / 16)
-				if interfacemode == "INGAME" then
-					local ids = BlockThatUseCustomTexturesForTopandSide[blockType]
-					textureAtlasCoordinates[blockType] = ids and { index, index - 2, index - 1 } or { index }
-				elseif interfacemode == "HUD" then
-					textureAtlasCoordinates[blockType] = { index }
-				end
+    if memoryorpng == "PNG" then
+        local atlasDirectory = "Atlas"
+        lovefilesystem.createDirectory(atlasDirectory)
+        local atlasImagePath = atlasDirectory .. "/Atlas" .. ".png"
+        local pngData = atlas:encode("png")
+        lovefilesystem.write(atlasImagePath, pngData)
+    end
 
-				x = x + width
-			else
-				LuaCraftPrintLoggingNormal("Failed to read file:", texturePath)
-			end
-		end
-	end
-
-	local totalTimeElapsed = os.clock() - totalTimeStart
-	LuaCraftPrintLoggingNormal(interfacemode .. " Atlas Total time taken: " .. totalTimeElapsed .. " seconds")
-
-	if memoryorpng == "PNG" then
-		local atlasDirectory = "Atlas"
-		lovefilesystem.createDirectory(atlasDirectory)
-		local atlasImagePath = atlasDirectory .. "/Atlas" .. (interfacemode == "HUD" and "FORHUD" or "") .. ".png"
-		local pngData = atlas:encode("png")
-		lovefilesystem.write(atlasImagePath, pngData)
-	end
-
-	return (interfacemode == "INGAME" and atlas),
-		textureAtlasCoordinates or (interfacemode == "HUD" and atlas),
-		textureAtlasCoordinates
+    return atlas, textureAtlasCoordinates
 end
-
-local function createTextureList(textureList, textureCoordinates, atlasMode)
-	local textureListResult = {}
-	for key, value in pairs(textureList) do
-		if not textureListResult[key] then
-			local newValue = {}
-			if type(value) == "table" then
-				for i, v in ipairs(value) do
-					newValue[i] = lovegraphics.newImage(v)
-				end
-			else
-				newValue = lovegraphics.newImage(value)
-			end
-			textureListResult[key] = newValue
-		end
-	end
-	createTextureAtlas("PNG", atlasMode)
-	local result = {}
-	for blockType, _ in pairs(textureCoordinates) do
-		if not result[blockType] then
-			result[blockType] = { unpack(textureCoordinates[blockType]) }
-		else
-			LuaCraftPrintLoggingNormal("This BlockType " .. blockType .. " Has been already registered.")
-		end
-	end
-	return textureListResult, result
-end
-
-local function createTILEHUDAssets()
-	HUDTilesTextureList, TilesTextureListHUD =
-		createTextureList(TilesTextureFORAtlasList, textureAtlasCoordinates, "HUD")
-end
-
 local function createTILEINGameAssets()
-	createTextureAtlas("PNG", "INGAME")
-	local atlasInRAM = createTextureAtlas("RAM", "INGAME")
+	createTextureAtlas("PNG")
+	local atlasInRAM = createTextureAtlas("RAM")
 	atlasImage = lovegraphics.newImage(atlasInRAM)
 	TilesTextureList = {}
 	for blockType, _ in pairs(textureAtlasCoordinates) do
@@ -161,8 +111,5 @@ function InitializeAssets()
 	_JPROFILER.push("createTILEINGameAssets")
 	createTILEINGameAssets()
 	_JPROFILER.pop("createTILEINGameAssets")
-	_JPROFILER.push("createTILEHUDAssets")
-	createTILEHUDAssets()
-	_JPROFILER.pop("createTILEHUDAssets")
 	TilesTextureFORAtlasList = {}
 end

@@ -309,6 +309,7 @@ local function CalculateHudVertices(hudX, hudY)
 	_JPROFILER.pop("CalculateHudVertices")
 	return topQuadVertices, rightFrontQuadVertices, leftSideQuadVertices
 end
+
 --TODO remove Table_HudTextureCache
 local Table_HudTextureCache = {}
 
@@ -319,9 +320,7 @@ function DrawHudTile(tile, hudX, hudY)
 		return
 	end
 	if Tile2DHUD(tile) then
-		--TODO REMOVE TileTexturesFORHUD
-		local textures = TileTexturesFORHUD(tile)
-		DrawTileQuad2D(textures[1] + 1, hudX, hudY, size)
+		DrawTileQuad2D(tileData, hudX, hudY, size)
 	else
 		local textures = { tileData.blockTopTexture, tileData.blockSideTexture }
 		if not tileData.blockTopTexture and not tileData.blockSideTexture then
@@ -347,19 +346,23 @@ function DrawTileQuadPersonalized(texture, points)
 	_JPROFILER.pop("DrawTileQuadPersonalized")
 end
 
-function DrawTileQuad2D(textureIndex, x, y, size)
+function DrawTileQuad2D(tileData, x, y, size)
 	_JPROFILER.push("DrawTileQuad2D")
-	local textureData = HUDTilesTextureList[textureIndex]
-	if textureData == nil then
-		LuaCraftErrorLogging("No texture for index ", textureIndex)
-		_JPROFILER.pop("DrawTileQuad2D")
-		return
+	local texture = tileData.blockBottomMasterTexture
+	if not Table_HudTextureCache[texture] then
+		Table_HudTextureCache[texture] = lovegraphics.newImage(texture)
 	end
-	local texture = textureData[1]
-	local prevFilter = texture:getFilter()
-	texture:setFilter("nearest", "nearest")
-	lovegraphics.draw(texture, x + 6, y + 6, 0, size * 2 / texture:getWidth(), size * 2 / texture:getHeight())
-	texture:setFilter(prevFilter)
+	local prevFilter = Table_HudTextureCache[texture]:getFilter()
+	Table_HudTextureCache[texture]:setFilter("nearest", "nearest")
+	lovegraphics.draw(
+		Table_HudTextureCache[texture],
+		x + 6,
+		y + 6,
+		0,
+		size * 2 / Table_HudTextureCache[texture]:getWidth(),
+		size * 2 / Table_HudTextureCache[texture]:getHeight()
+	)
+	Table_HudTextureCache[texture]:setFilter(prevFilter)
 	_JPROFILER.pop("DrawTileQuad2D")
 end
 

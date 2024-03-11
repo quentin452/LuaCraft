@@ -116,10 +116,6 @@ function TileTextures(n)
 	return TilesTextureList[n]
 end
 
-function TileTexturesFORHUD(n)
-	return TilesTextureListHUD[n]
-end
-
 function TileModel(n)
 	if n ~= 0 then
 		local tileData = TilesById[n]
