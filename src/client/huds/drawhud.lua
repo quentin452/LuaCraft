@@ -39,6 +39,51 @@ function DrawF3()
 		tilescount = tilescount + 1
 	end
 	lovegraphics.print("Number of Tiles: " .. tilescount, 0, 150)
+	local ChunkSetcount = 0
+	for _ in pairs(ChunkSet) do
+		ChunkSetcount = ChunkSetcount + 1
+	end
+	lovegraphics.print("Number of Chunks in ChunkSet: " .. ChunkSetcount, 0, 170)
+	local ChunkHashTablecount = 0
+	for _ in pairs(ChunkHashTable) do
+		ChunkHashTablecount = ChunkHashTablecount + 1
+	end
+	lovegraphics.print("Number in ChunkHashTable: " .. ChunkHashTablecount, 0, 190)
+	local CaveListcount = 0
+	for _ in pairs(CaveList) do
+		CaveListcount = CaveListcount + 1
+	end
+	lovegraphics.print("Number in CaveList: " .. CaveListcount, 0, 210)
+	local ThingListcount = 0
+	for _ in pairs(ThingList) do
+		ThingListcount = ThingListcount + 1
+	end
+	lovegraphics.print("Number in ThingList: " .. ThingListcount, 0, 230)
+	local TilesTextureFORAtlasListcount = 0
+	for _ in pairs(TilesTextureFORAtlasList) do
+		TilesTextureFORAtlasListcount = TilesTextureFORAtlasListcount + 1
+	end
+	lovegraphics.print("Number in TilesTextureFORAtlasList: " .. TilesTextureFORAtlasListcount, 0, 250)
+	local renderChunkscount = 0
+	for _ in pairs(renderChunks) do
+		renderChunkscount = renderChunkscount + 1
+	end
+	lovegraphics.print("Number in renderChunks: " .. renderChunkscount, 0, 270)
+	local textureAtlasCoordinatescount = 0
+	for _ in pairs(textureAtlasCoordinates) do
+		textureAtlasCoordinatescount = textureAtlasCoordinatescount + 1
+	end
+	lovegraphics.print("Number in textureAtlasCoordinates: " .. textureAtlasCoordinatescount, 0, 290)
+	local ChunkSliceModelscount = 0
+	for _ in pairs(ChunkSliceModels) do
+		ChunkSliceModelscount = ChunkSliceModelscount + 1
+	end
+	lovegraphics.print("Number in ChunkSliceModels: " .. ChunkSliceModelscount, 0, 310)
+	local TileModelCachingcount = 0
+	for _ in pairs(TileModelCaching) do
+		TileModelCachingcount = TileModelCachingcount + 1
+	end
+	lovegraphics.print("Number in TileModelCaching: " .. TileModelCachingcount, 0, 330)
 	_JPROFILER.pop("DrawF3")
 end
 

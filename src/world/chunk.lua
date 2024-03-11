@@ -458,7 +458,7 @@ function NewChunk(x, z)
 end
 
 local transparency3 = 3
-local reusableModel = {}
+ChunkSliceModels = {}
 
 function NewChunkSlice(x, y, z, parent)
 	_JPROFILER.push("NewChunkSlice")
@@ -476,7 +476,7 @@ function NewChunkSlice(x, y, z, parent)
 			return
 		end
 		self.isUpdating = true
-		reusableModel = {}
+		ChunkSliceModels = {}
 
 		for i = 1, ChunkSize do
 			_JPROFILER.push("IterateI")
@@ -491,11 +491,11 @@ function NewChunkSlice(x, y, z, parent)
 					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * scale, (self.z - 1) * ChunkSize + k - 1
 					if thisTransparency < transparency3 then
 						_JPROFILER.push("TileRendering")
-						TileRendering(self, i, j, k, x, y, z, thisLight, reusableModel, scale)
+						TileRendering(self, i, j, k, x, y, z, thisLight, ChunkSliceModels, scale)
 						_JPROFILER.pop("TileRendering")
 
 						_JPROFILER.push("BlockRendering")
-						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, reusableModel, scale)
+						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, ChunkSliceModels, scale)
 						_JPROFILER.pop("BlockRendering")
 					end
 
@@ -508,7 +508,7 @@ function NewChunkSlice(x, y, z, parent)
 
 		_JPROFILER.push("SetVerts")
 		if self.model then
-			self.model:setVerts(reusableModel)
+			self.model:setVerts(ChunkSliceModels)
 		end
 		_JPROFILER.pop("SetVerts")
 

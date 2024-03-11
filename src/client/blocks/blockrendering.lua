@@ -99,6 +99,7 @@ local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	_JPROFILER.pop("addFaceToModelNegativeZ")
 end
 
+--TODO ADD A BLOCK MODEL CACHE
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
 	_JPROFILER.push("BlockRendering")
 	-- Do not render block with TileMode.None

@@ -1,5 +1,5 @@
 finalAtlasSize = 256 -- TODO ADD Support for atlas 4096 size and more
-local textureAtlasCoordinates = {}
+textureAtlasCoordinates = {}
 local function getKeysInOrder(tbl)
 	_JPROFILER.push("getKeysInOrder")
 	local keys = {}

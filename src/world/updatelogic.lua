@@ -105,11 +105,13 @@ function removeChunksOutsideRenderDistance(chunk, chunkX, chunkZ, playerChunkX, 
 end
 
 function forceChunkModelsRemoval(chunk)
+	_JPROFILER.push("forceChunkModelsRemoval")
 	destroyChunkModels = destroyChunkModels + 1
 	if destroyChunkModels > 50000 then
 		destroyAllChunkModels(chunk)
 		destroyChunkModels = 0
 	end
+	_JPROFILER.pop("forceChunkModelsRemoval")
 end
 function destroyAllChunkModels(chunk)
 	_JPROFILER.push("destroyAllChunkModels")
