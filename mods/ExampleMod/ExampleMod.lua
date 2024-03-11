@@ -21,7 +21,10 @@ function ExampleMod.initialize()
 		local zz = (self.z - 1) * ChunkSize + j
 		--generate flowers YELLOW/ROSE
 		if love.math.noise(xx / 32, zz / 32) > 0.9 and math.random() < 0.2 then
-			local flowerID = love.math.random(Tiles.YELLO_FLOWER_Block.id, Tiles.ROSE_FLOWER_Block.id)
+			local min = math.min(Tiles.YELLO_FLOWER_Block.id, Tiles.ROSE_FLOWER_Block.id)
+			local max = math.max(Tiles.YELLO_FLOWER_Block.id, Tiles.ROSE_FLOWER_Block.id)
+
+			local flowerID = math.random(min, max)
 			self:setVoxelRaw(i, height + 1, j, flowerID, LightSources[15])
 		end
 	end)
