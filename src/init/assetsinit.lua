@@ -1,7 +1,6 @@
 finalAtlasSize = 256 -- TODO ADD Support for atlas 4096 size and more
 textureAtlasCoordinates = {}
 textureAtlasCoordinatesFORHUD = {}
---TODO IT SEEM THATS DOESN4T WORK THE ORDER THING
 local function getKeysInOrder(tbl)
 	_JPROFILER.push("getKeysInOrder")
 	local keys = {}
@@ -46,7 +45,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 				local fileDataObject = lovefilesystem.newFileData(fileData, texturePath)
 				local imageData = loveimage.newImageData(fileDataObject)
 				local width, height = imageData:getDimensions()
-				
+
 				if x + width > atlasSize then
 					x = 0
 					y = y + height
