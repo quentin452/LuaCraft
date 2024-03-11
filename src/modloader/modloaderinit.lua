@@ -20,6 +20,11 @@ function addBlock(
 	blockSideTexture,
 	blockTopTexture
 )
+	if Tiles[blockstringname] then
+		LuaCraftErrorLogging("Error: Duplicate blockstringname detected: " .. tostring(blockstringname))
+		return
+	end
+
 	local id = nextId
 	Tiles[blockstringname] = {
 		id = id,
