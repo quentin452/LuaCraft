@@ -330,7 +330,7 @@ local ysize = angleCos * size
 local tileSizePlus6 = TILE_SIZE + 6
 
 local function CalculateHudVertices(hudX, hudY)
-	_JPROFILER.pop("CalculateHudVertices")
+	_JPROFILER.push("CalculateHudVertices")
 	local x, y = hudX + tileSizePlus6, hudY + tileSizePlus6
 	local centerPoint = { x, y }
 	local topQuadVertices = {
