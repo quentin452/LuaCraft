@@ -1,6 +1,5 @@
 finalAtlasSize = 256 -- TODO ADD Support for atlas 4096 size and more
 textureAtlasCoordinates = {}
-textureAtlasCoordinatesFORHUD = {}
 local function getKeysInOrder(tbl)
 	_JPROFILER.push("getKeysInOrder")
 	local keys = {}
@@ -65,7 +64,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 					local ids = BlockThatUseCustomTexturesForTopandSide[blockType]
 					textureAtlasCoordinates[blockType] = ids and { index, index - 2, index - 1 } or { index }
 				elseif interfacemode == "HUD" then
-					textureAtlasCoordinatesFORHUD[blockType] = { index }
+					textureAtlasCoordinates[blockType] = { index }
 				end
 
 				x = x + width
@@ -88,7 +87,7 @@ local function createTextureAtlas(memoryorpng, interfacemode)
 
 	return (interfacemode == "INGAME" and atlas),
 		textureAtlasCoordinates or (interfacemode == "HUD" and atlas),
-		textureAtlasCoordinatesFORHUD
+		textureAtlasCoordinates
 end
 
 local function createTextureList(textureList, textureCoordinates, atlasMode)
@@ -108,11 +107,8 @@ local function createTextureList(textureList, textureCoordinates, atlasMode)
 	end
 	createTextureAtlas("PNG", atlasMode)
 	local result = {}
-	local function blockTypeExists(blockType)
-		return result[blockType] ~= nil
-	end
 	for blockType, _ in pairs(textureCoordinates) do
-		if not blockTypeExists(blockType) then
+		if not result[blockType] then
 			result[blockType] = { unpack(textureCoordinates[blockType]) }
 		else
 			LuaCraftPrintLoggingNormal("This BlockType " .. blockType .. " Has been already registered.")
@@ -123,7 +119,7 @@ end
 
 local function createTILEHUDAssets()
 	HUDTilesTextureList, TilesTextureListHUD =
-		createTextureList(TilesTextureFORAtlasList, textureAtlasCoordinatesFORHUD, "HUD")
+		createTextureList(TilesTextureFORAtlasList, textureAtlasCoordinates, "HUD")
 end
 
 local function createTILEINGameAssets()
@@ -152,7 +148,6 @@ local function InitializeImages()
 	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 	ChunkBorders = lovegraphics.newImage(texturepath .. "debug/chunkborders.png")
 end
-
 function InitializeAssets()
 	_JPROFILER.push("InitializeTilesNumberAndName")
 	InitializeTilesNumberAndName()
@@ -169,4 +164,5 @@ function InitializeAssets()
 	_JPROFILER.push("createTILEHUDAssets")
 	createTILEHUDAssets()
 	_JPROFILER.pop("createTILEHUDAssets")
+	TilesTextureFORAtlasList = {}
 end
