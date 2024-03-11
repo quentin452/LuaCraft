@@ -233,8 +233,23 @@ function NewChunk(x, z)
 			local destroyLight = false
 
 			if TileLightable(blockvalue) then
-				if inDirectSunlight then
-					NewSunlightDownAddition(gx, gy, gz, sunlight)
+				local value = TilesById[blockvalue]
+				local blockstringname = value.blockstringname
+				if
+					TileTransparency(blockvalue) == TilesTransparency.NONE
+					and TileLightable(blockvalue)
+					and Tiles[blockstringname].LightSources ~= 0
+				then
+					local blockAboveExists = false
+					for checkY = y + 1, WorldHeight do
+						if self:getVoxel(x, checkY, z) ~= Tiles.AIR_Block.id then
+							blockAboveExists = true
+							break
+						end
+					end
+					if inDirectSunlight and not blockAboveExists then
+						NewSunlightDownAddition(gx, gy, gz, sunlight)
+					end
 				else
 					for dx = -1, 1 do
 						for dy = -1, 1 do
