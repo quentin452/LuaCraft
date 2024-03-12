@@ -14,6 +14,7 @@ local FOURDIRECTIONS = {
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
 local LightingQueue = {}
+local LightingRemovalQueue = {}
 
 -- Function to add an item to the lighting queue
 local function LightingQueueAdd(lthing)
@@ -21,25 +22,29 @@ local function LightingQueueAdd(lthing)
 	return lthing
 end
 
+-- Function to add an item to the lighting removal queue
+local function LightingRemovalQueueAdd(lthing)
+	LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
+	return lthing
+end
+
 function LightingUpdate()
 	_JPROFILER.push("LightingUpdate")
+	for _, lthing in ipairs(LightingRemovalQueue) do
+		lthing:query()
+	end
 	for _, lthing in ipairs(LightingQueue) do
 		lthing:query()
 	end
+	LightingRemovalQueue = {}
 	LightingQueue = {}
 	_JPROFILER.pop("LightingUpdate")
 end
 
-local function GetChunkFromCoordinates(x, y, z)
-	local cget, cx, cy, cz = GetChunk(x, y, z)
-	return cget, cx, cy, cz
-end
-
--- Utilisez cette méthode dans vos fonctions
 function NewSunlightAddition(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
@@ -58,7 +63,7 @@ end
 function NewSunlightAdditionCreation(x, y, z)
 	local t = { x = x, y = y, z = z }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
@@ -74,7 +79,7 @@ end
 function NewSunlightForceAddition(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
@@ -92,7 +97,7 @@ end
 function NewSunlightDownAddition(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
@@ -112,7 +117,7 @@ end
 function NewSunlightSubtraction(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
@@ -130,7 +135,7 @@ function NewSunlightSubtraction(x, y, z, value)
 			return false
 		end
 	end
-	LightingQueueAdd(t)
+	LightingRemovalQueueAdd(t)
 end
 
 function NewSunlightDownSubtraction(x, y, z)
@@ -145,13 +150,13 @@ function NewSunlightDownSubtraction(x, y, z)
 			return true
 		end
 	end
-	LightingQueueAdd(t)
+	LightingRemovalQueueAdd(t)
 end
 
 function NewLocalLightAddition(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self) --, x,y,z, value, chunk)
-		local chunk = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local chunk = GetChunk(self.x, self.y, self.z)
 		if chunk == nil then
 			return
 		end
@@ -172,7 +177,7 @@ end
 function NewLocalLightSubtraction(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
@@ -190,13 +195,13 @@ function NewLocalLightSubtraction(x, y, z, value)
 			return false
 		end
 	end
-	LightingQueueAdd(t)
+	LightingRemovalQueueAdd(t)
 end
 
 function NewLocalLightForceAddition(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
@@ -214,7 +219,7 @@ end
 function NewLocalLightAdditionCreation(x, y, z)
 	local t = { x = x, y = y, z = z }
 	t.query = function(self)
-		local cget, cx, cy, cz = GetChunkFromCoordinates(self.x, self.y, self.z)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
 			return
 		end
