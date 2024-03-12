@@ -53,17 +53,17 @@ function NewChunk(x, z)
 					local this = self.heightMap[i][j]
 
 					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
-						NewSunlightDownAddition(gx - 1, this, gz, LightSources[15])
+						NewSunlightUpDownOperation(gx - 1, this, gz, LightSources[15], "addition")
 					end
 
 					if j == 1 or this > self.heightMap[i][j - 1] then
-						NewSunlightDownAddition(gx, this, gz - 1, LightSources[15])
+						NewSunlightUpDownOperation(gx, this, gz - 1, LightSources[15], "addition")
 					end
 					if i == ChunkSize or this > self.heightMap[i + 1][j] then
-						NewSunlightDownAddition(gx + 1, this, gz, LightSources[15])
+						NewSunlightUpDownOperation(gx + 1, this, gz, LightSources[15], "addition")
 					end
 					if j == ChunkSize or this > self.heightMap[i][j + 1] then
-						NewSunlightDownAddition(gx, this, gz + 1, LightSources[15])
+						NewSunlightUpDownOperation(gx, this, gz + 1, LightSources[15], "addition")
 					end
 				end
 			end
@@ -244,7 +244,7 @@ function NewChunk(x, z)
 						end
 					end
 					if inDirectSunlight and not blockAboveExists then
-						NewSunlightDownAddition(gx, gy, gz, sunlight)
+						NewSunlightUpDownOperation(gx, gy, gz, sunlight, "addition")
 					end
 				else
 					for dx = -1, 1 do
@@ -272,7 +272,7 @@ function NewChunk(x, z)
 					end
 				end
 			else
-				NewSunlightDownSubtraction(gx, gy - 1, gz)
+				NewSunlightUpDownOperation(gx, gy - 1, gz, "substraction")
 
 				if TileSemiLightable(blockvalue) and inDirectSunlight and manuallyPlaced then
 					NewSunlightAdditionCreation(gx, gy + 1, gz)
@@ -286,7 +286,7 @@ function NewChunk(x, z)
 							for dz = -1, 1 do
 								local nget = GetVoxelFirstData(gx + dx, gy + dy, gz + dz)
 								if nget < 15 then
-									NewSunlightSubtraction(gx + dx, gy + dy, gz + dz, nget + 1)
+									NewSunlightUpDownOperation(gx + dx, gy + dy, gz + dz, nget + 1, "substraction")
 								end
 							end
 						end
