@@ -7,12 +7,7 @@ local SIXDIRECTIONS = {
 	{ x = 0, y = 0, z = 1 }, -- Forward
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
-local FOURDIRECTIONS = {
-	{ x = 1, y = 0, z = 0 }, -- Right
-	{ x = -1, y = 0, z = 0 }, -- Left
-	{ x = 0, y = 0, z = 1 }, -- Forward
-	{ x = 0, y = 0, z = -1 }, -- Backward
-}
+
 local LightingQueue = {}
 local LightingRemovalQueue = {}
 
@@ -48,7 +43,7 @@ function LightingUpdate()
 	_JPROFILER.pop("LightingUpdate_LightingQueueReset")
 	_JPROFILER.pop("LightingUpdate")
 end
-function NewSunlightAddition(x, y, z, value)
+local function NewSunlightAddition(x, y, z, value)
 	_JPROFILER.push("NewSunlightAddition")
 	local queue = {}
 	table.insert(queue, { x = x, y = y, z = z, value = value })
@@ -58,85 +53,59 @@ function NewSunlightAddition(x, y, z, value)
 		local item = table.remove(queue, 1)
 		local cget, cx, cy, cz = GetChunk(item.x, item.y, item.z)
 		if cget then
-			_JPROFILER.push("NewSunlightAddition_getVoxel")
 			local val = cget:getVoxel(cx, cy, cz)
-			_JPROFILER.pop("NewSunlightAddition_getVoxel")
-
-			_JPROFILER.push("NewSunlightAddition_getVoxelFirstData")
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
-			_JPROFILER.pop("NewSunlightAddition_getVoxelFirstData")
-
-			_JPROFILER.push("NewSunlightAddition_condition")
 			if item.value >= 0 and TileSemiLightable(val) and dat < item.value then
-				_JPROFILER.push("NewSunlightAddition_setVoxelFirstData")
 				cget:setVoxelFirstData(cx, cy, cz, item.value)
-				_JPROFILER.pop("NewSunlightAddition_setVoxelFirstData")
-
-				_JPROFILER.push("NewSunlightAddition_insert_queue")
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local nx, ny, nz = item.x + dir.x, item.y + dir.y, item.z + dir.z
 					table.insert(queue, { x = nx, y = ny, z = nz, value = item.value - 1 })
 				end
-				_JPROFILER.pop("NewSunlightAddition_insert_queue")
 			end
-			_JPROFILER.pop("NewSunlightAddition_condition")
 		end
 		_JPROFILER.pop("NewSunlightAddition_inner_loop")
 	end
 	_JPROFILER.pop("NewSunlightAddition")
 end
 
-function NewSunlightAdditionCreation(x, y, z)
+local function NewSunlightForceAddition(x, y, z, value)
+	_JPROFILER.push("NewSunlightForceAddition")
+	local t = { x = x, y = y, z = z, value = value }
+	t.query = function(self)
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
+		if cget == nil then
+			return
+		end
+		local val = cget:getVoxel(cx, cy, cz)
+		if self.value >= 0 and TileSemiLightable(val) then
+			cget:setVoxelFirstData(cx, cy, cz, self.value)
+			for _, dir in ipairs(SIXDIRECTIONS) do
+				NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+			end
+		end
+	end
+	LightingQueueAdd(t)
+	_JPROFILER.pop("NewSunlightForceAddition")
+end
+local function NewSunlightAdditionCreation(x, y, z)
 	_JPROFILER.push("NewSunlightAdditionCreation")
 	local t = { x = x, y = y, z = z }
 	t.query = function(self)
-		_JPROFILER.push("NewSunlightAdditionCreation_query")
 		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 		if cget == nil then
-			_JPROFILER.pop("NewSunlightAdditionCreation_query")
 			return
 		end
 		local val = cget:getVoxel(cx, cy, cz)
 		local dat = cget:getVoxelFirstData(cx, cy, cz)
 		if TileSemiLightable(val) and dat > 0 then
-			_JPROFILER.push("NewSunlightAdditionCreation_force_addition")
 			NewSunlightForceAddition(self.x, self.y, self.z, dat)
-			_JPROFILER.pop("NewSunlightAdditionCreation_force_addition")
 		end
-		_JPROFILER.pop("NewSunlightAdditionCreation_query")
 	end
 	LightingQueueAdd(t)
 	_JPROFILER.pop("NewSunlightAdditionCreation")
 end
 
-function NewSunlightForceAddition(x, y, z, value)
-	_JPROFILER.push("NewSunlightForceAddition")
-	local t = { x = x, y = y, z = z, value = value }
-	t.query = function(self)
-		_JPROFILER.push("NewSunlightForceAddition_query")
-		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-		if cget == nil then
-			_JPROFILER.pop("NewSunlightForceAddition_query")
-			return
-		end
-		local val = cget:getVoxel(cx, cy, cz)
-		if self.value >= 0 and TileSemiLightable(val) then
-			_JPROFILER.push("NewSunlightForceAddition_set_voxel_first_data")
-			cget:setVoxelFirstData(cx, cy, cz, self.value)
-			_JPROFILER.pop("NewSunlightForceAddition_set_voxel_first_data")
-			for _, dir in ipairs(SIXDIRECTIONS) do
-				_JPROFILER.push("NewSunlightForceAddition_loop")
-				NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
-				_JPROFILER.pop("NewSunlightForceAddition_loop")
-			end
-		end
-		_JPROFILER.pop("NewSunlightForceAddition_query")
-	end
-	LightingQueueAdd(t)
-	_JPROFILER.pop("NewSunlightForceAddition")
-end
-
-function NewSunlightDownAddition(x, y, z, value)
+local function NewSunlightDownAddition(x, y, z, value)
 	_JPROFILER.push("NewSunlightDownAddition")
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
@@ -155,7 +124,7 @@ function NewSunlightDownAddition(x, y, z, value)
 			_JPROFILER.push("NewSunlightDownAddition_recursive_call")
 			NewSunlightDownAddition(self.x, self.y - 1, self.z, self.value)
 			_JPROFILER.pop("NewSunlightDownAddition_recursive_call")
-			for _, dir in ipairs(FOURDIRECTIONS) do
+			for _, dir in ipairs(SIXDIRECTIONS) do
 				_JPROFILER.push("NewSunlightDownAddition_loop")
 				NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
 				_JPROFILER.pop("NewSunlightDownAddition_loop")
@@ -166,8 +135,53 @@ function NewSunlightDownAddition(x, y, z, value)
 	LightingQueueAdd(t)
 	_JPROFILER.pop("NewSunlightDownAddition")
 end
+local function NewLocalLightAddition(x, y, z, value)
+	local queue = {}
+	table.insert(queue, { x = x, y = y, z = z, value = value })
 
-function NewSunlightSubtraction(x, y, z, value)
+	while #queue > 0 do
+		local item = table.remove(queue, 1)
+		local chunk = GetChunk(item.x, item.y, item.z)
+		if chunk then
+			local cx, cy, cz = Localize(item.x, item.y, item.z)
+			local val, dis, dat = chunk:getVoxel(cx, cy, cz)
+			if TileSemiLightable(val) and dat < item.value then
+				chunk:setVoxelSecondData(cx, cy, cz, item.value)
+				if item.value > 1 then
+					for _, dir in ipairs(SIXDIRECTIONS) do
+						local nx, ny, nz = item.x + dir.x, item.y + dir.y, item.z + dir.z
+						table.insert(queue, { x = nx, y = ny, z = nz, value = item.value - 1 })
+					end
+				end
+			end
+		end
+	end
+end
+local function NewLocalLightForceAddition(x, y, z, value)
+	_JPROFILER.push("NewLocalLightForceAddition")
+	local t = { x = x, y = y, z = z, value = value }
+	t.query = function(self)
+		_JPROFILER.push("NewLocalLightForceAddition_query")
+		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
+		if cget == nil then
+			_JPROFILER.pop("NewLocalLightForceAddition_query")
+			return
+		end
+		local val, dis, dat = cget:getVoxel(cx, cy, cz)
+		if self.value >= 0 and TileSemiLightable(val) then
+			cget:setVoxelSecondData(cx, cy, cz, self.value)
+			for _, dir in ipairs(SIXDIRECTIONS) do
+				_JPROFILER.push("NewLocalLightForceAddition_loop")
+				NewLocalLightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+				_JPROFILER.pop("NewLocalLightForceAddition_loop")
+			end
+		end
+		_JPROFILER.pop("NewLocalLightForceAddition_query")
+	end
+	LightingQueueAdd(t)
+	_JPROFILER.pop("NewLocalLightForceAddition")
+end
+local function NewSunlightSubtraction(x, y, z, value)
 	_JPROFILER.push("NewSunlightSubtraction")
 	local queue = {}
 	table.insert(queue, { x = x, y = y, z = z, value = value })
@@ -198,7 +212,7 @@ function NewSunlightSubtraction(x, y, z, value)
 	_JPROFILER.pop("NewSunlightSubtraction")
 end
 
-function NewSunlightDownSubtraction(x, y, z)
+local function NewSunlightDownSubtraction(x, y, z)
 	_JPROFILER.push("NewSunlightDownSubtraction")
 	local queue = {}
 	table.insert(queue, { x = x, y = y, z = z })
@@ -207,8 +221,8 @@ function NewSunlightDownSubtraction(x, y, z)
 		local item = table.remove(queue, 1)
 		if TileSemiLightable(GetVoxel(item.x, item.y, item.z)) then
 			SetVoxelFirstData(item.x, item.y, item.z, Tiles.AIR_Block.id)
-			table.insert(queue, { x = item.x, y = item.y - 1, z = item.z }) -- Ajouter la case en dessous à la file d'attente
-			for _, dir in ipairs(FOURDIRECTIONS) do
+			table.insert(queue, { x = item.x, y = item.y - 1, z = item.z })
+			for _, dir in ipairs(SIXDIRECTIONS) do
 				local nx, ny, nz = item.x + dir.x, item.y + dir.y, item.z + dir.z
 				_JPROFILER.push("NewSunlightDownSubtraction_recursive_call")
 				NewSunlightSubtraction(nx, ny, nz, LightSources[15])
@@ -218,8 +232,7 @@ function NewSunlightDownSubtraction(x, y, z)
 	end
 	_JPROFILER.pop("NewSunlightDownSubtraction")
 end
-
-function NewLocalLightSubtraction(x, y, z, value)
+local function NewLocalLightSubtraction(x, y, z, value)
 	_JPROFILER.push("NewLocalLightSubtraction")
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = function(self)
@@ -253,54 +266,7 @@ function NewLocalLightSubtraction(x, y, z, value)
 	LightingRemovalQueueAdd(t)
 	_JPROFILER.pop("NewLocalLightSubtraction")
 end
-
-function NewLocalLightForceAddition(x, y, z, value)
-	_JPROFILER.push("NewLocalLightForceAddition")
-	local t = { x = x, y = y, z = z, value = value }
-	t.query = function(self)
-		_JPROFILER.push("NewLocalLightForceAddition_query")
-		local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-		if cget == nil then
-			_JPROFILER.pop("NewLocalLightForceAddition_query")
-			return
-		end
-		local val, dis, dat = cget:getVoxel(cx, cy, cz)
-		if self.value >= 0 and TileSemiLightable(val) then
-			cget:setVoxelSecondData(cx, cy, cz, self.value)
-			for _, dir in ipairs(SIXDIRECTIONS) do
-				_JPROFILER.push("NewLocalLightForceAddition_loop")
-				NewLocalLightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
-				_JPROFILER.pop("NewLocalLightForceAddition_loop")
-			end
-		end
-		_JPROFILER.pop("NewLocalLightForceAddition_query")
-	end
-	LightingQueueAdd(t)
-	_JPROFILER.pop("NewLocalLightForceAddition")
-end
-function NewLocalLightAddition(x, y, z, value)
-	local queue = {}
-	table.insert(queue, { x = x, y = y, z = z, value = value })
-
-	while #queue > 0 do
-		local item = table.remove(queue, 1)
-		local chunk = GetChunk(item.x, item.y, item.z)
-		if chunk then
-			local cx, cy, cz = Localize(item.x, item.y, item.z)
-			local val, dis, dat = chunk:getVoxel(cx, cy, cz)
-			if TileSemiLightable(val) and dat < item.value then
-				chunk:setVoxelSecondData(cx, cy, cz, item.value)
-				if item.value > 1 then
-					for _, dir in ipairs(SIXDIRECTIONS) do
-						local nx, ny, nz = item.x + dir.x, item.y + dir.y, item.z + dir.z
-						table.insert(queue, { x = nx, y = ny, z = nz, value = item.value - 1 })
-					end
-				end
-			end
-		end
-	end
-end
-function NewLocalLightAdditionCreation(x, y, z)
+local function NewLocalLightAdditionCreation(x, y, z)
 	_JPROFILER.push("NewLocalLightAdditionCreation")
 	local t = { x = x, y = y, z = z }
 	t.query = function(self)
@@ -320,4 +286,31 @@ function NewLocalLightAdditionCreation(x, y, z)
 	end
 	LightingQueueAdd(t)
 	_JPROFILER.pop("NewLocalLightAdditionCreation")
+end
+
+function LightOperation(x, y, z, operation, value)
+	if operation == "NewSunlightAddition" then
+		NewSunlightAddition(x, y, z, value)
+	elseif operation == "NewSunlightAdditionCreation" then
+		NewSunlightAdditionCreation(x, y, z)
+	elseif operation == "NewSunlightForceAddition" then
+		NewSunlightForceAddition(x, y, z, value)
+	elseif operation == "NewSunlightDownAddition" then
+		NewSunlightDownAddition(x, y, z, value)
+	elseif operation == "NewSunlightSubtraction" then
+		NewSunlightSubtraction(x, y, z, value)
+	elseif operation == "NewSunlightDownSubtraction" then
+		NewSunlightDownSubtraction(x, y, z)
+	elseif operation == "NewLocalLightSubtraction" then
+		NewLocalLightSubtraction(x, y, z, value)
+	elseif operation == "NewLocalLightForceAddition" then
+		NewLocalLightForceAddition(x, y, z, value)
+	elseif operation == "NewLocalLightAddition" then
+		NewLocalLightAddition(x, y, z, value)
+	elseif operation == "NewLocalLightAdditionCreation" then
+		NewLocalLightAdditionCreation(x, y, z)
+	else
+		LuaCraftErrorLogging("using wrong operation for NewSunlightOperation")
+		return
+	end
 end

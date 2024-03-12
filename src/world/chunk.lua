@@ -53,17 +53,17 @@ function NewChunk(x, z)
 					local this = self.heightMap[i][j]
 
 					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
-						NewSunlightDownAddition(gx - 1, this, gz, LightSources[15])
+						LightOperation(gx - 1, this, gz, "NewSunlightDownAddition", LightSources[15])
 					end
 
 					if j == 1 or this > self.heightMap[i][j - 1] then
-						NewSunlightDownAddition(gx, this, gz - 1, LightSources[15])
+						LightOperation(gx, this, gz - 1, "NewSunlightDownAddition", LightSources[15])
 					end
 					if i == ChunkSize or this > self.heightMap[i + 1][j] then
-						NewSunlightDownAddition(gx + 1, this, gz, LightSources[15])
+						LightOperation(gx + 1, this, gz, "NewSunlightDownAddition", LightSources[15])
 					end
 					if j == ChunkSize or this > self.heightMap[i][j + 1] then
-						NewSunlightDownAddition(gx, this, gz + 1, LightSources[15])
+						LightOperation(gx, this, gz + 1, "NewSunlightDownAddition", LightSources[15])
 					end
 				end
 			end
@@ -244,13 +244,13 @@ function NewChunk(x, z)
 						end
 					end
 					if inDirectSunlight and not blockAboveExists then
-						NewSunlightDownAddition(gx, gy, gz, sunlight)
+						LightOperation(gx, gy, gz, "NewSunlightDownAddition", sunlight)
 					end
 				else
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
-								NewSunlightAdditionCreation(gx + dx, gy + dy, gz + dz)
+								LightOperation(gx + dx, gy + dy, gz + dz, "NewSunlightAdditionCreation")
 							end
 						end
 					end
@@ -259,23 +259,23 @@ function NewChunk(x, z)
 				if manuallyPlaced then
 					local source = TileLightSource(blockvalue)
 					if source > 0 then
-						NewLocalLightAddition(gx, gy, gz, source)
+						LightOperation(gx, gy, gz, "NewLocalLightAddition", source)
 						placingLocalSource = true
 					else
 						for dx = -1, 1 do
 							for dy = -1, 1 do
 								for dz = -1, 1 do
-									NewLocalLightAdditionCreation(gx + dx, gy + dy, gz + dz)
+									LightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
 								end
 							end
 						end
 					end
 				end
 			else
-				NewSunlightDownSubtraction(gx, gy - 1, gz)
+				LightOperation(gx, gy - 1, gz, "NewSunlightDownSubtraction")
 
 				if TileSemiLightable(blockvalue) and inDirectSunlight and manuallyPlaced then
-					NewSunlightAdditionCreation(gx, gy + 1, gz)
+					LightOperation(gx, gy + 1, gz, "NewSunlightAdditionCreation")
 				end
 
 				if not TileSemiLightable(blockvalue) or manuallyPlaced then
@@ -286,7 +286,13 @@ function NewChunk(x, z)
 							for dz = -1, 1 do
 								local nget = GetVoxelFirstData(gx + dx, gy + dy, gz + dz)
 								if nget < 15 then
-									NewSunlightSubtraction(gx + dx, gy + dy, gz + dz, nget + 1)
+									LightOperation(
+										gx + dx,
+										gy + dy,
+										gz + dz,
+										"NewSunlightSubtraction",
+										nget + LightSources[1]
+									)
 								end
 							end
 						end
@@ -296,7 +302,7 @@ function NewChunk(x, z)
 
 			local source = TileLightSource(self:getVoxel(x, y, z))
 			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
-				NewLocalLightSubtraction(gx, gy, gz, source + 1)
+				LightOperation(gx, gy, gz,  "NewLocalLightSubtraction",source + LightSources[1])
 				destroyLight = true
 			end
 
@@ -307,7 +313,7 @@ function NewChunk(x, z)
 							for dz = -1, 1 do
 								local nget = GetVoxelSecondData(gx + dx, gy + dy, gz + dz)
 								if nget < 15 then
-									NewLocalLightSubtraction(gx + dx, gy + dy, gz + dz, nget + 1)
+									LightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightSubtraction",nget + LightSources[1])
 								end
 							end
 						end
@@ -318,7 +324,7 @@ function NewChunk(x, z)
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
-								NewLocalLightAdditionCreation(gx + dx, gy + dy, gz + dz)
+								LightOperation(gx + dx, gy + dy, gz + dz,"NewLocalLightAdditionCreation")
 							end
 						end
 					end
