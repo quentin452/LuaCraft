@@ -29,7 +29,7 @@ function NewChunk(x, z)
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
 
 	if choose({ true, false }) then
-		_JPROFILER.push("chooseCave")
+		--_JPROFILER.push("chooseCave")
 
 		local caveCount1 = rand(1, 3)
 		for i = 1, caveCount1 do
@@ -39,11 +39,11 @@ function NewChunk(x, z)
 		for i = 1, caveCount2 do
 			NewCave(gx, rand(48, 80), gz)
 		end
-		_JPROFILER.pop("chooseCave")
+		--_JPROFILER.pop("chooseCave")
 	end
 
 	chunk.sunlight = function(self)
-		_JPROFILER.push("sunlight")
+		--_JPROFILER.push("sunlight")
 
 		for i = 1, ChunkSize do
 			for j = 1, ChunkSize do
@@ -68,11 +68,11 @@ function NewChunk(x, z)
 				end
 			end
 		end
-		_JPROFILER.pop("sunlight")
+		--_JPROFILER.pop("sunlight")
 	end
 
 	chunk.processRequests = function(self)
-		_JPROFILER.push("processRequests")
+		--_JPROFILER.push("processRequests")
 
 		for j = 1, #self.requests do
 			local block = self.requests[j]
@@ -80,12 +80,12 @@ function NewChunk(x, z)
 				self:setVoxel(block.x, block.y, block.z, block.value, 15)
 			end
 		end
-		_JPROFILER.pop("processRequests")
+		--_JPROFILER.pop("processRequests")
 	end
 
 	-- populate chunk with trees and flowers
 	chunk.populate = function(self)
-		_JPROFILER.push("populate")
+		--_JPROFILER.push("populate")
 
 		for i = 1, ChunkSize do
 			local heightMap_i = self.heightMap[i]
@@ -101,7 +101,7 @@ function NewChunk(x, z)
 			end
 		end
 
-		_JPROFILER.pop("populate")
+		--_JPROFILER.pop("populate")
 	end
 
 	-- get voxel id of the voxel in this chunk's coordinate space
@@ -148,7 +148,7 @@ function NewChunk(x, z)
 	end
 
 	chunk.setVoxelRaw = function(self, x, y, z, blockvalue, light)
-		_JPROFILER.push("setVoxelRaw")
+		--_JPROFILER.push("setVoxelRaw")
 
 		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then
 			return 0, 0, 0
@@ -159,7 +159,7 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
-		_JPROFILER.pop("setVoxelRaw")
+		--_JPROFILER.pop("setVoxelRaw")
 	end
 
 	-- set voxel id of the voxel in this chunk's coordinate space
@@ -345,7 +345,7 @@ function NewChunk(x, z)
 
 	-- sunlight data
 	chunk.setVoxelFirstData = function(self, x, y, z, blockvalue)
-		_JPROFILER.push("setVoxelFirstData")
+		--_JPROFILER.push("setVoxelFirstData")
 
 		x = math.floor(x)
 		y = math.floor(y)
@@ -355,12 +355,12 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
-		_JPROFILER.pop("setVoxelFirstData")
+		--_JPROFILER.pop("setVoxelFirstData")
 	end
 
 	-- local light data
 	chunk.setVoxelSecondData = function(self, x, y, z, blockvalue)
-		_JPROFILER.push("setVoxelSecondData")
+		--_JPROFILER.push("setVoxelSecondData")
 
 		x = math.floor(x)
 		y = math.floor(y)
@@ -370,17 +370,17 @@ function NewChunk(x, z)
 
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
-		_JPROFILER.pop("setVoxelSecondData")
+		--_JPROFILER.pop("setVoxelSecondData")
 	end
 
 	local function initSliceUpdates()
-		_JPROFILER.push("initSliceUpdates")
+		--_JPROFILER.push("initSliceUpdates")
 
 		sliceUpdates = {}
 		for i = 1, WorldHeight / SliceHeight do
 			sliceUpdates[i] = { false, false, false, false, false }
 		end
-		_JPROFILER.pop("initSliceUpdates")
+		--_JPROFILER.pop("initSliceUpdates")
 
 		return sliceUpdates
 	end
