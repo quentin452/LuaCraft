@@ -310,7 +310,7 @@ function LightOperation(x, y, z, operation, value)
 	elseif operation == "NewLocalLightAdditionCreation" then
 		NewLocalLightAdditionCreation(x, y, z)
 	else
-		LuaCraftErrorLogging("using wrong operation for NewSunlightOperation")
+		LuaCraftErrorLogging("using wrong operation for LightOperation")
 		return
 	end
 end

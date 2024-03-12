@@ -31,39 +31,51 @@ function NewChunk(x, z)
 	if choose({ true, false }) then
 		--_JPROFILER.push("chooseCave")
 
-		local caveCount1 = rand(1, 3)
-		for i = 1, caveCount1 do
-			NewCave(gx, rand(8, 64), gz)
+		local caveConfigs = {
+			{ minHeight = 8, maxHeight = 64, count = rand(1, 3) },
+			{ minHeight = 48, maxHeight = 80, count = rand(1, 2) },
+		}
+
+		for _, config in ipairs(caveConfigs) do
+			for i = 1, config.count do
+				NewCave(gx, rand(config.minHeight, config.maxHeight), gz)
+			end
 		end
-		local caveCount2 = rand(1, 2)
-		for i = 1, caveCount2 do
-			NewCave(gx, rand(48, 80), gz)
-		end
+
 		--_JPROFILER.pop("chooseCave")
 	end
 
 	chunk.sunlight = function(self)
 		--_JPROFILER.push("sunlight")
-
 		for i = 1, ChunkSize do
 			for j = 1, ChunkSize do
-				local gx, gz = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
-
 				if self.heightMap[i] and self.heightMap[i][j] then
+					local gx, gz = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
 					local this = self.heightMap[i][j]
-
-					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
-						LightOperation(gx - 1, this, gz, "NewSunlightDownAddition", LightSources[15])
+					local above = self.heightMap[i][j] + 1
+					local below = self.heightMap[i][j] - 1
+					local left = (i == 1) and below or self.heightMap[i - 1][j]
+					local right = (i == ChunkSize) and below or self.heightMap[i + 1][j]
+					local top = (j == 1) and below or self.heightMap[i][j - 1]
+					local bottom = (j == ChunkSize) and below or self.heightMap[i][j + 1]
+					local operations = {}
+					if above > this then
+						table.insert(operations, { gx = gx, gy = above, gz = gz })
 					end
-
-					if j == 1 or this > self.heightMap[i][j - 1] then
-						LightOperation(gx, this, gz - 1, "NewSunlightDownAddition", LightSources[15])
+					if left > this then
+						table.insert(operations, { gx = gx - 1, gy = left, gz = gz })
 					end
-					if i == ChunkSize or this > self.heightMap[i + 1][j] then
-						LightOperation(gx + 1, this, gz, "NewSunlightDownAddition", LightSources[15])
+					if right > this then
+						table.insert(operations, { gx = gx + 1, gy = right, gz = gz })
 					end
-					if j == ChunkSize or this > self.heightMap[i][j + 1] then
-						LightOperation(gx, this, gz + 1, "NewSunlightDownAddition", LightSources[15])
+					if top > this then
+						table.insert(operations, { gx = gx, gy = top, gz = gz - 1 })
+					end
+					if bottom > this then
+						table.insert(operations, { gx = gx, gy = bottom, gz = gz + 1 })
+					end
+					for _, op in ipairs(operations) do
+						LightOperation(op.gx, op.gy, op.gz, "NewSunlightDownAddition", LightSources[15])
 					end
 				end
 			end
@@ -302,7 +314,7 @@ function NewChunk(x, z)
 
 			local source = TileLightSource(self:getVoxel(x, y, z))
 			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
-				LightOperation(gx, gy, gz,  "NewLocalLightSubtraction",source + LightSources[1])
+				LightOperation(gx, gy, gz, "NewLocalLightSubtraction", source + LightSources[1])
 				destroyLight = true
 			end
 
@@ -313,7 +325,13 @@ function NewChunk(x, z)
 							for dz = -1, 1 do
 								local nget = GetVoxelSecondData(gx + dx, gy + dy, gz + dz)
 								if nget < 15 then
-									LightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightSubtraction",nget + LightSources[1])
+									LightOperation(
+										gx + dx,
+										gy + dy,
+										gz + dz,
+										"NewLocalLightSubtraction",
+										nget + LightSources[1]
+									)
 								end
 							end
 						end
@@ -324,7 +342,7 @@ function NewChunk(x, z)
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
-								LightOperation(gx + dx, gy + dy, gz + dz,"NewLocalLightAdditionCreation")
+								LightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
 							end
 						end
 					end
