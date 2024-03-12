@@ -58,43 +58,43 @@ function UpdateLogic(dt)
 end
 
 function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
-    _JPROFILER.push("UpdateChunksWithinRenderDistance")
+	_JPROFILER.push("UpdateChunksWithinRenderDistance")
 
-    local maxChunkDistance = RenderDistance / ChunkSize
+	local maxChunkDistance = RenderDistance / ChunkSize
 
-    for distance = 0, maxChunkDistance do
-        UpdateChunksWithinRenderDistanceDistanceLoop(playerChunkX, playerChunkZ, distance, maxChunkDistance)
-    end
+	for distance = 0, maxChunkDistance do
+		UpdateChunksWithinRenderDistanceDistanceLoop(playerChunkX, playerChunkZ, distance, maxChunkDistance)
+	end
 
-    _JPROFILER.pop("UpdateChunksWithinRenderDistance")
+	_JPROFILER.pop("UpdateChunksWithinRenderDistance")
 end
 
 function UpdateChunksWithinRenderDistanceDistanceLoop(playerChunkX, playerChunkZ, distance, maxChunkDistance)
-    _JPROFILER.push("UpdateChunksWithinRenderDistanceDistanceLoop")
+	_JPROFILER.push("UpdateChunksWithinRenderDistanceDistanceLoop")
 
-    for i = -distance, distance do
-        for j = -distance, distance do
-            UpdateChunksWithinRenderDistanceChunkLoop(playerChunkX, playerChunkZ, i, j, distance, maxChunkDistance)
-        end
-    end
+	for i = -distance, distance do
+		for j = -distance, distance do
+			UpdateChunksWithinRenderDistanceChunkLoop(playerChunkX, playerChunkZ, i, j, distance, maxChunkDistance)
+		end
+	end
 
-    _JPROFILER.pop("UpdateChunksWithinRenderDistanceDistanceLoop")
+	_JPROFILER.pop("UpdateChunksWithinRenderDistanceDistanceLoop")
 end
 
 function UpdateChunksWithinRenderDistanceChunkLoop(playerChunkX, playerChunkZ, i, j, distance, maxChunkDistance)
-    _JPROFILER.push("UpdateChunksWithinRenderDistanceChunkLoop")
+	_JPROFILER.push("UpdateChunksWithinRenderDistanceChunkLoop")
 
-    local chunkX = playerChunkX + i
-    local chunkZ = playerChunkZ + j
-    local chunk = GetOrCreateChunk(chunkX, chunkZ)
+	local chunkX = playerChunkX + i
+	local chunkZ = playerChunkZ + j
+	local chunk = GetOrCreateChunk(chunkX, chunkZ)
 
-    if distance < maxChunkDistance then
-        processChunkUpdates(chunk)
-    else
-        removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
-    end
+	if distance < maxChunkDistance then
+		processChunkUpdates(chunk)
+	else
+		removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
+	end
 
-    _JPROFILER.pop("UpdateChunksWithinRenderDistanceChunkLoop")
+	_JPROFILER.pop("UpdateChunksWithinRenderDistanceChunkLoop")
 end
 function GetOrCreateChunk(chunkX, chunkZ)
 	_JPROFILER.push("GetOrCreateChunk")

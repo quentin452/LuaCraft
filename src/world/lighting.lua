@@ -29,6 +29,7 @@ local function LightingRemovalQueueAdd(lthing)
 end
 
 function LightingUpdate()
+	_JPROFILER.push("LightingUpdate")
 	for _, lthing in ipairs(LightingRemovalQueue) do
 		lthing:query()
 	end
@@ -37,6 +38,7 @@ function LightingUpdate()
 	end
 	LightingRemovalQueue = {}
 	LightingQueue = {}
+	_JPROFILER.pop("LightingUpdate")
 end
 
 function NewSunlightAddition(x, y, z, value)
@@ -145,7 +147,6 @@ function NewSunlightDownSubtraction(x, y, z)
 			for _, dir in ipairs(FOURDIRECTIONS) do
 				NewSunlightSubtraction(self.x + dir.x, self.y + dir.y, self.z + dir.z, LightSources[15])
 			end
-			-- NewSunlightSubtraction(self.x,self.y-1,self.z, 15)
 			return true
 		end
 	end
@@ -224,14 +225,7 @@ function NewLocalLightAdditionCreation(x, y, z)
 		end
 		local val, dis, dat = cget:getVoxel(cx, cy, cz)
 		if TileSemiLightable(val) and dat > 0 then
-			-- NewLocalLightForceAddition(self.x,self.y,self.z, dat)
-			-- cget:setVoxelSecondData(cx,cy,cz, dat)
 			NewLocalLightForceAddition(self.x, self.y, self.z, dat)
-			-- NewLocalLightForceAddition(self.x,self.y+1,self.z, dat-1)
-			-- NewLocalLightForceAddition(self.x+1,self.y,self.z, dat-1)
-			-- NewLocalLightForceAddition(self.x-1,self.y,self.z, dat-1)
-			-- NewLocalLightForceAddition(self.x,self.y,self.z+1, dat-1)
-			-- NewLocalLightForceAddition(self.x,self.y,self.z-1, dat-1)
 		end
 	end
 	LightingQueueAdd(t)
