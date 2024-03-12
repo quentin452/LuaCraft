@@ -44,9 +44,6 @@ require("src/client/huds/!draw")
 require("src/client/blocks/blockrendering")
 require("src/client/blocks/tilerendering")
 require("src/client/textures/texturestatic")
---modloader
-require("src/modloader/modloaderinit")
-LoadBlocksAndTiles("src/blocksandtiles")
 --libs
 PROF_CAPTURE = false
 _JPROFILER = require("libs/jprofiler/jprof")
@@ -56,7 +53,9 @@ _JPROFILER = require("libs/jprofiler/jprof")
 --3 : exiting game
 --4 : open a CMD on Jprofiler (SRC)
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
-
+--modloader
+require("src/modloader/modloaderinit")
+LoadBlocksAndTiles("src/blocksandtiles")
 gamestateMainMenuSettings = "MainMenuSettings"
 gamestateMainMenu = "MainMenu"
 
