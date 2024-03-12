@@ -38,64 +38,88 @@ function getTextureCoordinatesAndLight(texture, lightOffset)
 	-- LuaCraftPrintLoggingNormal("Texture Index: " .. textureindex .. ", otx: " .. otx .. ", oty: " .. oty)
 	return otx, oty
 end
-
 local function addFaceToModel(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModel")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	model[#model + 1] = { x, y, z, tx, ty }
-	model[#model + 1] = { x + scale, y, z, tx2, ty }
-	model[#model + 1] = { x, y, z + scale, tx, ty2 }
-	model[#model + 1] = { x + scale, y, z, tx2, ty }
-	model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-	model[#model + 1] = { x, y, z + scale, tx, ty2 }
-	_JPROFILER.pop("addFaceToModel")
+    _JPROFILER.push("addFaceToModel")
+    local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+    local vertices = {
+        { x, y, z, tx, ty },
+        { x + scale, y, z, tx2, ty },
+        { x, y, z + scale, tx, ty2 },
+        { x + scale, y, z, tx2, ty },
+        { x + scale, y, z + scale, tx2, ty2 },
+        { x, y, z + scale, tx, ty2 }
+    }
+    for _, vertex in ipairs(vertices) do
+        model[#model + 1] = vertex
+    end
+    _JPROFILER.pop("addFaceToModel")
 end
 
 local function addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModelPositiveX")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	model[#model + 1] = { x, y + scale, z, tx2, ty }
-	model[#model + 1] = { x, y, z, tx2, ty2 }
-	model[#model + 1] = { x, y, z + scale, tx, ty2 }
-	model[#model + 1] = { x, y + scale, z + scale, tx, ty }
-	model[#model + 1] = { x, y + scale, z, tx2, ty }
-	model[#model + 1] = { x, y, z + scale, tx, ty2 }
-	_JPROFILER.pop("addFaceToModelPositiveX")
+    _JPROFILER.push("addFaceToModelPositiveX")
+    local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+    local vertices = {
+        { x, y + scale, z, tx2, ty },
+        { x, y, z, tx2, ty2 },
+        { x, y, z + scale, tx, ty2 },
+        { x, y + scale, z + scale, tx, ty },
+        { x, y + scale, z, tx2, ty },
+        { x, y, z + scale, tx, ty2 }
+    }
+    for _, vertex in ipairs(vertices) do
+        model[#model + 1] = vertex
+    end
+    _JPROFILER.pop("addFaceToModelPositiveX")
 end
 
 local function addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModelNegativeX")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	model[#model + 1] = { x + scale, y, z, tx, ty2 }
-	model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-	model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-	model[#model + 1] = { x + scale, y + scale, z, tx, ty }
-	model[#model + 1] = { x + scale, y + scale, z + scale, tx2, ty }
-	model[#model + 1] = { x + scale, y, z + scale, tx2, ty2 }
-	_JPROFILER.pop("addFaceToModelNegativeX")
+    _JPROFILER.push("addFaceToModelNegativeX")
+    local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+    local vertices = {
+        { x + scale, y, z, tx, ty2 },
+        { x + scale, y + scale, z, tx, ty },
+        { x + scale, y, z + scale, tx2, ty2 },
+        { x + scale, y + scale, z, tx, ty },
+        { x + scale, y + scale, z + scale, tx2, ty },
+        { x + scale, y, z + scale, tx2, ty2 }
+    }
+    for _, vertex in ipairs(vertices) do
+        model[#model + 1] = vertex
+    end
+    _JPROFILER.pop("addFaceToModelNegativeX")
 end
 
 local function addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModelPositiveZ")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	model[#model + 1] = { x, y, z, tx, ty2 }
-	model[#model + 1] = { x, y + scale, z, tx, ty }
-	model[#model + 1] = { x + scale, y, z, tx2, ty2 }
-	model[#model + 1] = { x, y + scale, z, tx, ty }
-	model[#model + 1] = { x + scale, y + scale, z, tx2, ty }
-	model[#model + 1] = { x + scale, y, z, tx2, ty2 }
-	_JPROFILER.pop("addFaceToModelPositiveZ")
+    _JPROFILER.push("addFaceToModelPositiveZ")
+    local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+    local vertices = {
+        { x, y, z, tx, ty2 },
+        { x, y + scale, z, tx, ty },
+        { x + scale, y, z, tx2, ty2 },
+        { x, y + scale, z, tx, ty },
+        { x + scale, y + scale, z, tx2, ty },
+        { x + scale, y, z, tx2, ty2 }
+    }
+    for _, vertex in ipairs(vertices) do
+        model[#model + 1] = vertex
+    end
+    _JPROFILER.pop("addFaceToModelPositiveZ")
 end
 
 local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelNegativeZ")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-	model[#model + 1] = { x, y, z + scale, tx2, ty2 }
-	model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
-	model[#model + 1] = { x + scale, y + scale, z + scale, tx, ty }
-	model[#model + 1] = { x, y + scale, z + scale, tx2, ty }
-	model[#model + 1] = { x + scale, y, z + scale, tx, ty2 }
+	local vertices = {
+		{ x, y + scale, z + scale, tx2, ty },
+		{ x, y, z + scale, tx2, ty2 },
+		{ x + scale, y, z + scale, tx, ty2 },
+		{ x + scale, y + scale, z + scale, tx, ty },
+		{ x, y + scale, z + scale, tx2, ty },
+		{ x + scale, y, z + scale, tx, ty2 },
+	}
+	for _, vertex in ipairs(vertices) do
+		model[#model + 1] = vertex
+	end
 	_JPROFILER.pop("addFaceToModelNegativeZ")
 end
 
