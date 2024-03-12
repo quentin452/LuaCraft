@@ -1,7 +1,21 @@
 LightingQueue = love.thread.newChannel()
 LightingRemovalQueue = love.thread.newChannel()
 
+local queryHandlers = {
+	["NewSunlightSubtraction"] = queryNewSunlightSubtraction,
+	["NewSunlightDownSubtraction"] = queryNewSunlightDownSubtraction,
+	["NewLocalLightSubtraction"] = queryNewLocalLightSubtraction,
+	["NewSunlightAddition"] = queryNewSunlightAddition,
+	["NewSunlightDownAddition"] = queryNewSunlightDownAddition,
+	["NewSunlightAdditionCreation"] = queryNewSunlightAdditionCreation,
+	["NewSunlightForceAddition"] = queryNewSunlightForceAddition,
+	["NewLocalLightAddition"] = queryNewLocalLightAddition,
+	["NewLocalLightAdditionCreation"] = queryNewLocalLightAdditionCreation,
+	["NewLocalLightForceAddition"] = queryNewLocalLightForceAddition,
+}
+
 function LightingUpdate()
+	_JPROFILER.push("LightingUpdate_LightingThread")
 	while true do
 		local lthing = LightingRemovalQueue:pop()
 		if lthing == nil then
@@ -11,26 +25,10 @@ function LightingUpdate()
 			end
 		end
 
-		if lthing.queryType == "NewSunlightSubtraction" then
-			queryNewSunlightSubtraction(lthing)
-		elseif lthing.queryType == "NewSunlightDownSubtraction" then
-			queryNewSunlightDownSubtraction(lthing)
-		elseif lthing.queryType == "NewLocalLightSubtraction" then
-			queryNewLocalLightSubtraction(lthing)
-		elseif lthing.queryType == "NewSunlightAddition" then
-			queryNewSunlightAddition(lthing)
-		elseif lthing.queryType == "NewSunlightDownAddition" then
-			queryNewSunlightDownAddition(lthing)
-		elseif lthing.queryType == "NewSunlightAdditionCreation" then
-			queryNewSunlightAdditionCreation(lthing)
-		elseif lthing.queryType == "NewSunlightForceAddition" then
-			queryNewSunlightForceAddition(lthing)
-		elseif lthing.queryType == "NewLocalLightAddition" then
-			queryNewLocalLightAddition(lthing)
-		elseif lthing.queryType == "NewLocalLightAdditionCreation" then
-			queryNewLocalLightAdditionCreation(lthing)
-		elseif lthing.queryType == "NewLocalLightForceAddition" then
-			queryNewLocalLightForceAddition(lthing)
+		local handler = queryHandlers[lthing.queryType]
+		if handler then
+			handler(lthing)
 		end
 	end
+	_JPROFILER.pop("LightingUpdate_LightingThread")
 end
