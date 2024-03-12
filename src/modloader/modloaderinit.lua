@@ -1,11 +1,12 @@
+--TODO : FIX CRASH WHILE PROFILING
 ModLoaderTable = {}
 function addFunctionToTag(tag, func)
-	_JPROFILER.push("addFunctionToTag")
+	--_JPROFILER.push("addFunctionToTag")
 	if not ModLoaderTable[tag] then
 		ModLoaderTable[tag] = {}
 	end
 	table.insert(ModLoaderTable[tag], func)
-	_JPROFILER.pop("addFunctionToTag")
+	--_JPROFILER.pop("addFunctionToTag")
 end
 local nextId = 1
 TilesById = { [0] = {
@@ -22,7 +23,7 @@ function addBlock(
 	blockSideTexture,
 	blockTopTexture
 )
-	_JPROFILER.push("addBlock")
+	--_JPROFILER.push("addBlock")
 	if Tiles[blockstringname] then
 		LuaCraftErrorLogging("Error: Duplicate blockstringname detected: " .. tostring(blockstringname))
 		return
@@ -104,13 +105,13 @@ function addBlock(
 		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTexture, side = blockSideTexture }
 	end
 	nextId = nextId + 1
-	_JPROFILER.pop("addBlock")
+	--_JPROFILER.pop("addBlock")
 
 	return id
 end
 
 function LoadMods()
-	_JPROFILER.push("LoadMods")
+	--_JPROFILER.push("LoadMods")
 	local modsDirectory = "mods/"
 	local items = lovefilesystem.getDirectoryItems(modsDirectory)
 	for _, item in ipairs(items) do
@@ -131,11 +132,11 @@ function LoadMods()
 			end
 		end
 	end
-	_JPROFILER.pop("LoadMods")
+	--_JPROFILER.pop("LoadMods")
 end
 
 function LoadBlocksAndTiles(directory)
-	_JPROFILER.push("LoadBlocksAndTiles")
+	--_JPROFILER.push("LoadBlocksAndTiles")
 	local items = love.filesystem.getDirectoryItems(directory)
 	for _, item in ipairs(items) do
 		local fullPath = directory .. "/" .. item
@@ -153,5 +154,5 @@ function LoadBlocksAndTiles(directory)
 			end
 		end
 	end
-	_JPROFILER.pop("LoadBlocksAndTiles")
+	--_JPROFILER.pop("LoadBlocksAndTiles")
 end
