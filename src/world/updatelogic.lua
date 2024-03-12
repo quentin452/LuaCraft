@@ -174,9 +174,9 @@ function processChunkUpdates(chunk)
 		_JPROFILER.push("updateChunkModel")
 		updateChunkModel(chunk)
 		_JPROFILER.pop("updateChunkModel")
-		_JPROFILER.push("LightingUpdate_UpdateLogic")
+		_JPROFILER.push("LightingUpdate")
 		LightingUpdate()
-		_JPROFILER.pop("LightingUpdate_UpdateLogic")
+		_JPROFILER.pop("LightingUpdate")
 		chunk.updatemodel = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then
 		_JPROFILER.push("spawnPlayer")
