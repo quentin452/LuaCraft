@@ -1,8 +1,3 @@
-local texturepathLuaCraft = "resources/assets/textures/"
-local blockandtilesfolderLuaCraft = "blocksandtiles/"
-local blocktexturepathLuaCraft = blockandtilesfolderLuaCraft .. "blocks/"
-local airTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "air.png"
-
 TileMode = {
 	BlockMode = "3DBlock",
 	TileMode = "2DTile",
@@ -36,7 +31,6 @@ Tiles = {
 		LightSources = LightSources[0],
 		Cancollide = CollideMode.NoCannotCollide,
 		BlockOrLiquidOrTile = TileMode.BlockMode,
-		blockBottomMasterTexture = airTexture,
 	},
 }
 
