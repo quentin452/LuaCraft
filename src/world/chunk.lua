@@ -118,22 +118,14 @@ function NewChunk(x, z)
 
 	-- get voxel id of the voxel in this chunk's coordinate space
 	chunk.getVoxel = function(self, x, y, z)
-		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then
-			return 0, 0, 0
+		if self.voxels and self.voxels[x] and self.voxels[x][z] then
+			if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+				local startIndex = (y - 1) * TileDataSize + 1
+				local endIndex = startIndex + 2
+				local byte1, byte2, byte3 = string.byte(self.voxels[x][z], startIndex, endIndex)
+				return byte1, byte2, byte3
+			end
 		end
-		x, y, z = math.floor(x), math.floor(y), math.floor(z)
-
-		-- Calculate string indices once
-		local startIndex = (y - 1) * TileDataSize + 1
-		local endIndex = startIndex + 2
-
-		-- Check if coordinates are within bounds
-		if x >= 1 and x <= ChunkSize and z >= 1 and z <= ChunkSize and y >= 1 and y <= WorldHeight then
-			-- Extract all three bytes at once
-			local byte1, byte2, byte3 = string.byte(self.voxels[x][z], startIndex, endIndex)
-			return byte1, byte2, byte3
-		end
-
 		return 0, 0, 0
 	end
 
@@ -176,9 +168,8 @@ function NewChunk(x, z)
 
 	-- set voxel id of the voxel in this chunk's coordinate space
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
-		if manuallyPlaced == nil then
-			manuallyPlaced = false
-		end
+		_JPROFILER.push("setVoxel")
+		manuallyPlaced = manuallyPlaced or false
 		x, y, z = math.floor(x), math.floor(y), math.floor(z)
 
 		local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
@@ -189,24 +180,28 @@ function NewChunk(x, z)
 			local range1 = 1
 			local range2 = 0.1
 
+			local playerXFloor = math.floor(playerX)
+			local playerYFloor = math.floor(playerY)
+			local playerZFloor = math.floor(playerZ)
+
 			if
 				(
 					love.keyboard.isDown("space")
-					and gx >= math.floor(playerX + 0.5) - range1
-					and gx <= math.floor(playerX) + range1
-					and gy >= math.floor(playerY)
-					and gy <= math.floor(playerY + 1)
-					and gz >= math.floor(playerZ) - range1
-					and gz <= math.floor(playerZ + 0.5) + range1
+					and gx >= playerXFloor + 0.5 - range1
+					and gx <= playerXFloor + range1
+					and gy >= playerYFloor
+					and gy <= playerYFloor + 1
+					and gz >= playerZFloor - range1
+					and gz <= playerZFloor + 0.5 + range1
 				)
 				or (
 					not love.keyboard.isDown("space")
-					and gx >= math.floor(playerX) - range2
-					and gx <= math.floor(playerX) + range2
-					and gy >= math.floor(playerY)
-					and gy <= math.floor(playerY + 1)
-					and gz >= math.floor(playerZ) - range2
-					and gz <= math.floor(playerZ) + range2
+					and gx >= playerXFloor - range2
+					and gx <= playerXFloor + range2
+					and gy >= playerYFloor
+					and gy <= playerYFloor + 1
+					and gz >= playerZFloor - range2
+					and gz <= playerZFloor + range2
 				)
 			then
 				return
@@ -245,7 +240,6 @@ function NewChunk(x, z)
 				local blockstringname = value.blockstringname
 				if
 					TileTransparency(blockvalue) == TilesTransparency.NONE
-					and TileLightable(blockvalue)
 					and Tiles[blockstringname].LightSources ~= 0
 				then
 					local blockAboveExists = false
@@ -284,27 +278,23 @@ function NewChunk(x, z)
 					end
 				end
 			else
+				local semiLightable = TileSemiLightable(blockvalue)
+
 				LightOperation(gx, gy - 1, gz, "NewSunlightDownSubtraction")
 
-				if TileSemiLightable(blockvalue) and inDirectSunlight and manuallyPlaced then
+				if semiLightable and inDirectSunlight and manuallyPlaced then
 					LightOperation(gx, gy + 1, gz, "NewSunlightAdditionCreation")
 				end
 
-				if not TileSemiLightable(blockvalue) or manuallyPlaced then
+				if not semiLightable or manuallyPlaced then
 					destroyLight = not TileSemiLightable(blockvalue)
-
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
-								local nget = GetVoxelFirstData(gx + dx, gy + dy, gz + dz)
-								if nget < 15 then
-									LightOperation(
-										gx + dx,
-										gy + dy,
-										gz + dz,
-										"NewSunlightSubtraction",
-										nget + LightSources[1]
-									)
+								local nx, ny, nz = gx + dx, gy + dy, gz + dz
+								local nget = GetVoxelFirstData(nx, ny, nz)
+								if nget < LightSources[15] then
+									LightOperation(nx, ny, nz, "NewSunlightSubtraction", nget + LightSources[1])
 								end
 							end
 						end
@@ -324,7 +314,7 @@ function NewChunk(x, z)
 						for dy = -1, 1 do
 							for dz = -1, 1 do
 								local nget = GetVoxelSecondData(gx + dx, gy + dy, gz + dz)
-								if nget < 15 then
+								if nget < LightSources[15] then
 									LightOperation(
 										gx + dx,
 										gy + dy,
@@ -354,6 +344,7 @@ function NewChunk(x, z)
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
 		end
+		_JPROFILER.pop("setVoxel")
 	end
 
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)

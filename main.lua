@@ -45,7 +45,7 @@ require("src/client/blocks/blockrendering")
 require("src/client/blocks/tilerendering")
 require("src/client/textures/texturestatic")
 --libs
-PROF_CAPTURE = false
+PROF_CAPTURE = true
 _JPROFILER = require("libs/jprofiler/jprof")
 --profs instruction
 --1 : enable PROF_CAPTURE to enable profiler
