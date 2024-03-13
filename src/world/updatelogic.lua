@@ -101,31 +101,31 @@ end
 
 function removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
 	_JPROFILER.push("removeChunksOutsideRenderDistance")
-	local maxChunkDistanceSquared = (RenderDistance / ChunkSize) ^ 2
+	destroyChunkModels = destroyChunkModels + 1
+	if destroyChunkModels > 50000 then
+		local maxChunkDistanceSquared = (RenderDistance / ChunkSize) ^ 2
 
-	for otherChunk, _ in pairs(ChunkSet) do
-		local otherChunkXCenter = otherChunk.x
-		local otherChunkZCenter = otherChunk.z
+		for otherChunk, _ in pairs(ChunkSet) do
+			local otherChunkXCenter = otherChunk.x
+			local otherChunkZCenter = otherChunk.z
 
-		local dx = otherChunkXCenter - playerChunkX
-		local dz = otherChunkZCenter - playerChunkZ
+			local dx = otherChunkXCenter - playerChunkX
+			local dz = otherChunkZCenter - playerChunkZ
 
-		local distanceSquared = dx ^ 2 + dz ^ 2
+			local distanceSquared = dx ^ 2 + dz ^ 2
 
-		if distanceSquared > maxChunkDistanceSquared then
-			forceChunkModelsRemoval(otherChunk)
+			if distanceSquared > maxChunkDistanceSquared then
+				forceChunkModelsRemoval(otherChunk)
+			end
 		end
+		destroyChunkModels = 0
 	end
 	_JPROFILER.pop("removeChunksOutsideRenderDistance")
 end
 
 function forceChunkModelsRemoval(chunk)
 	_JPROFILER.push("forceChunkModelsRemoval")
-	destroyChunkModels = destroyChunkModels + 1
-	if destroyChunkModels > 50000 then
-		destroyAllChunkModels(chunk)
-		destroyChunkModels = 0
-	end
+	destroyAllChunkModels(chunk)
 	_JPROFILER.pop("forceChunkModelsRemoval")
 end
 
