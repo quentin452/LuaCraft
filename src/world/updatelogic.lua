@@ -41,11 +41,9 @@ end
 function UpdateAndGenerateChunks(RenderDistance)
 	_JPROFILER.push("UpdateAndGenerateChunks")
 	renderChunks = {}
-
 	local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
 	local playerChunkX = math.ceil(playerX / ChunkSize)
 	local playerChunkZ = math.ceil(playerZ / ChunkSize)
-
 	UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
 	_JPROFILER.pop("UpdateAndGenerateChunks")
 end
@@ -59,41 +57,33 @@ end
 
 function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
 	_JPROFILER.push("UpdateChunksWithinRenderDistance")
-
 	local maxChunkDistance = RenderDistance / ChunkSize
-
 	for distance = 0, maxChunkDistance do
 		UpdateChunksWithinRenderDistanceDistanceLoop(playerChunkX, playerChunkZ, distance, maxChunkDistance)
 	end
-
 	_JPROFILER.pop("UpdateChunksWithinRenderDistance")
 end
 
 function UpdateChunksWithinRenderDistanceDistanceLoop(playerChunkX, playerChunkZ, distance, maxChunkDistance)
 	_JPROFILER.push("UpdateChunksWithinRenderDistanceDistanceLoop")
-
 	for i = -distance, distance do
 		for j = -distance, distance do
 			UpdateChunksWithinRenderDistanceChunkLoop(playerChunkX, playerChunkZ, i, j, distance, maxChunkDistance)
 		end
 	end
-
 	_JPROFILER.pop("UpdateChunksWithinRenderDistanceDistanceLoop")
 end
 
 function UpdateChunksWithinRenderDistanceChunkLoop(playerChunkX, playerChunkZ, i, j, distance, maxChunkDistance)
 	_JPROFILER.push("UpdateChunksWithinRenderDistanceChunkLoop")
-
 	local chunkX = playerChunkX + i
 	local chunkZ = playerChunkZ + j
 	local chunk = GetOrCreateChunk(chunkX, chunkZ)
-
 	if distance < maxChunkDistance then
 		processChunkUpdates(chunk)
 	else
 		removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
 	end
-
 	_JPROFILER.pop("UpdateChunksWithinRenderDistanceChunkLoop")
 end
 function GetOrCreateChunk(chunkX, chunkZ)
@@ -122,9 +112,7 @@ function removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDis
 
 		local distanceSquared = dx ^ 2 + dz ^ 2
 
-		local diagonalDistanceSquared = (dx ^ 2 + dz ^ 2) / 2
-
-		if distanceSquared > maxChunkDistanceSquared and diagonalDistanceSquared > maxChunkDistanceSquared then
+		if distanceSquared > maxChunkDistanceSquared then
 			forceChunkModelsRemoval(otherChunk)
 		end
 	end
@@ -159,43 +147,23 @@ end
 
 function processChunkUpdates(chunk)
 	_JPROFILER.push("processChunkUpdates")
-
 	if chunk.updatedSunLight == false then
-		_JPROFILER.push("updateSunlight")
 		updateSunlight(chunk)
-		_JPROFILER.pop("updateSunlight")
 		chunk.updatedSunLight = true
 	elseif chunk.isPopulated == false then
-		_JPROFILER.push("populateChunk")
 		populateChunk(chunk)
-		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = true
 	elseif chunk.updatemodel == false then
-		_JPROFILER.push("updateChunkModel")
 		updateChunkModel(chunk)
-		_JPROFILER.pop("updateChunkModel")
-		_JPROFILER.push("LightingUpdate")
 		LightingUpdate()
-		_JPROFILER.pop("LightingUpdate")
 		chunk.updatemodel = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then
-		_JPROFILER.push("spawnPlayer")
 		spawnPlayer()
-		_JPROFILER.pop("spawnPlayer")
 	else
-		_JPROFILER.push("addChunkToRenderQueue")
 		addChunkToRenderQueue(chunk)
-		_JPROFILER.pop("addChunkToRenderQueue")
-
-		_JPROFILER.push("forceModelUpdatesForChunks")
 		forceModelUpdatesForChunks(chunk)
-		_JPROFILER.pop("forceModelUpdatesForChunks")
-
-		_JPROFILER.push("processRenderChunks")
 		processRenderChunks()
-		_JPROFILER.pop("processRenderChunks")
 	end
-
 	_JPROFILER.pop("processChunkUpdates")
 end
 
@@ -236,7 +204,6 @@ end
 function forceModelUpdatesForChunks(chunk)
 	_JPROFILER.push("forceModelUpdatesForChunks")
 	updateCounterForRemeshModel = updateCounterForRemeshModel + 1
-	-- This is to force model updates for chunks; need to be optimized
 	if updateCounterForRemeshModel > 1500 then
 		updateSlicesForChunk(chunk)
 		updateCounterForRemeshModel = 0
