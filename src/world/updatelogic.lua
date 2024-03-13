@@ -148,49 +148,35 @@ end
 function processChunkUpdates(chunk)
 	_JPROFILER.push("processChunkUpdates")
 	if chunk.updatedSunLight == false then
-		updateSunlight(chunk)
+		_JPROFILER.push("updateSunlight")
+		chunk:sunlight()
+		_JPROFILER.pop("updateSunlight")
 		chunk.updatedSunLight = true
 	elseif chunk.isPopulated == false then
-		populateChunk(chunk)
+		_JPROFILER.push("populateChunk")
+		chunk:populate()
+		UpdateCaves()
+		chunk:processRequests()
+		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = true
 	elseif chunk.updatemodel == false then
-		updateChunkModel(chunk)
+		_JPROFILER.push("updateChunkModel")
+		chunk:updateModel()
+		_JPROFILER.pop("updateChunkModel")
+		_JPROFILER.push("LightingUpdate_processChunkUpdates")
 		LightingUpdate()
+		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
 		chunk.updatemodel = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then
-		spawnPlayer()
+		_JPROFILER.push("spawnPlayer")
+		ChooseSpawnLocation()
+		_JPROFILER.pop("spawnPlayer")
 	else
 		addChunkToRenderQueue(chunk)
 		forceModelUpdatesForChunks(chunk)
 		processRenderChunks()
 	end
 	_JPROFILER.pop("processChunkUpdates")
-end
-
-function updateSunlight(chunk)
-	_JPROFILER.push("updateSunlight")
-	chunk:sunlight()
-	_JPROFILER.pop("updateSunlight")
-end
-
-function populateChunk(chunk)
-	_JPROFILER.push("populateChunk")
-	chunk:populate()
-	UpdateCaves()
-	chunk:processRequests()
-	_JPROFILER.pop("populateChunk")
-end
-
-function spawnPlayer()
-	_JPROFILER.push("spawnPlayer")
-	ChooseSpawnLocation()
-	_JPROFILER.pop("spawnPlayer")
-end
-
-function updateChunkModel(chunk)
-	_JPROFILER.push("updateChunkModel")
-	chunk:updateModel()
-	_JPROFILER.pop("updateChunkModel")
 end
 
 function addChunkToRenderQueue(chunk)
@@ -204,18 +190,20 @@ end
 function forceModelUpdatesForChunks(chunk)
 	_JPROFILER.push("forceModelUpdatesForChunks")
 	updateCounterForRemeshModel = updateCounterForRemeshModel + 1
-	if updateCounterForRemeshModel > 1500 then
+	if updateCounterForRemeshModel > 5000 then
 		updateSlicesForChunk(chunk)
 		updateCounterForRemeshModel = 0
 	end
 	_JPROFILER.pop("forceModelUpdatesForChunks")
 end
-
 function updateSlicesForChunk(chunk)
 	_JPROFILER.push("updateSlicesForChunk")
-	for i = 1, WorldHeight / SliceHeight do
-		if chunk.slices[i] and not chunk.slices[i].isUpdating then
-			chunk.slices[i]:updateModel()
+	local sliceIndex = 1
+	while sliceIndex <= WorldHeight / SliceHeight do
+		local slice = chunk.slices[sliceIndex]
+		if slice and not slice.modelneedtobeupdated then
+			slice:updateModel()
+			sliceIndex = sliceIndex + 1
 		end
 	end
 	_JPROFILER.pop("updateSlicesForChunk")
@@ -237,11 +225,16 @@ function processRenderChunks()
 end
 
 function isInTable(tbl, value)
+	_JPROFILER.push("isInTable")
+
 	for _, v in ipairs(tbl) do
 		if v == value then
+			_JPROFILER.pop("isInTable")
+
 			return true
 		end
 	end
+	_JPROFILER.pop("isInTable")
 	return false
 end
 
