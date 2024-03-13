@@ -227,29 +227,24 @@ local function NewLocalLightAdditionCreation(x, y, z)
 	LightingQueueAdd(t)
 end
 
+local operationFunctions = {
+	["NewSunlightAddition"] = NewSunlightAddition,
+	["NewSunlightAdditionCreation"] = NewSunlightAdditionCreation,
+	["NewSunlightForceAddition"] = NewSunlightForceAddition,
+	["NewSunlightDownAddition"] = NewSunlightDownAddition,
+	["NewSunlightSubtraction"] = NewSunlightSubtraction,
+	["NewSunlightDownSubtraction"] = NewSunlightDownSubtraction,
+	["NewLocalLightSubtraction"] = NewLocalLightSubtraction,
+	["NewLocalLightForceAddition"] = NewLocalLightForceAddition,
+	["NewLocalLightAddition"] = NewLocalLightAddition,
+	["NewLocalLightAdditionCreation"] = NewLocalLightAdditionCreation,
+}
+
 function LightOperation(x, y, z, operation, value)
-	if operation == "NewSunlightAddition" then
-		NewSunlightAddition(x, y, z, value)
-	elseif operation == "NewSunlightAdditionCreation" then
-		NewSunlightAdditionCreation(x, y, z)
-	elseif operation == "NewSunlightForceAddition" then
-		NewSunlightForceAddition(x, y, z, value)
-	elseif operation == "NewSunlightDownAddition" then
-		NewSunlightDownAddition(x, y, z, value)
-	elseif operation == "NewSunlightSubtraction" then
-		NewSunlightSubtraction(x, y, z, value)
-	elseif operation == "NewSunlightDownSubtraction" then
-		NewSunlightDownSubtraction(x, y, z)
-	elseif operation == "NewLocalLightSubtraction" then
-		NewLocalLightSubtraction(x, y, z, value)
-	elseif operation == "NewLocalLightForceAddition" then
-		NewLocalLightForceAddition(x, y, z, value)
-	elseif operation == "NewLocalLightAddition" then
-		NewLocalLightAddition(x, y, z, value)
-	elseif operation == "NewLocalLightAdditionCreation" then
-		NewLocalLightAdditionCreation(x, y, z)
+	local operationFunction = operationFunctions[operation]
+	if operationFunction then
+		operationFunction(x, y, z, value)
 	else
 		LuaCraftErrorLogging("using wrong operation for LightOperation")
-		return
 	end
 end
