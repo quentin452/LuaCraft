@@ -47,35 +47,26 @@ function NewChunk(x, z)
 
 	chunk.sunlight = function(self)
 		--_JPROFILER.push("sunlight")
+
 		for i = 1, ChunkSize do
 			for j = 1, ChunkSize do
+				local gx, gz = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
+
 				if self.heightMap[i] and self.heightMap[i][j] then
-					local gx, gz = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
 					local this = self.heightMap[i][j]
-					local above = self.heightMap[i][j] + 1
-					local below = self.heightMap[i][j] - 1
-					local left = (i == 1) and below or self.heightMap[i - 1][j]
-					local right = (i == ChunkSize) and below or self.heightMap[i + 1][j]
-					local top = (j == 1) and below or self.heightMap[i][j - 1]
-					local bottom = (j == ChunkSize) and below or self.heightMap[i][j + 1]
-					local operations = {}
-					if above > this then
-						table.insert(operations, { gx = gx, gy = above, gz = gz })
+
+					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
+						LightOperation(gx - 1, this, gz, "NewSunlightDownAddition", LightSources[15])
 					end
-					if left > this then
-						table.insert(operations, { gx = gx - 1, gy = left, gz = gz })
+
+					if j == 1 or this > self.heightMap[i][j - 1] then
+						LightOperation(gx, this, gz - 1, "NewSunlightDownAddition", LightSources[15])
 					end
-					if right > this then
-						table.insert(operations, { gx = gx + 1, gy = right, gz = gz })
+					if i == ChunkSize or this > self.heightMap[i + 1][j] then
+						LightOperation(gx + 1, this, gz, "NewSunlightDownAddition", LightSources[15])
 					end
-					if top > this then
-						table.insert(operations, { gx = gx, gy = top, gz = gz - 1 })
-					end
-					if bottom > this then
-						table.insert(operations, { gx = gx, gy = bottom, gz = gz + 1 })
-					end
-					for _, op in ipairs(operations) do
-						LightOperation(op.gx, op.gy, op.gz, "NewSunlightDownAddition", LightSources[15])
+					if j == ChunkSize or this > self.heightMap[i][j + 1] then
+						LightOperation(gx, this, gz + 1, "NewSunlightDownAddition", LightSources[15])
 					end
 				end
 			end
