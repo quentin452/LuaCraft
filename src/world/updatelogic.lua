@@ -125,12 +125,6 @@ end
 
 function forceChunkModelsRemoval(chunk)
 	_JPROFILER.push("forceChunkModelsRemoval")
-	destroyAllChunkModels(chunk)
-	_JPROFILER.pop("forceChunkModelsRemoval")
-end
-
-function destroyAllChunkModels(chunk)
-	_JPROFILER.push("destroyAllChunkModels")
 	if chunk.slices then
 		for i = 1, #chunk.slices do
 			local chunkSlice = chunk.slices[i]
@@ -142,7 +136,7 @@ function destroyAllChunkModels(chunk)
 		end
 		chunk.slices = {}
 	end
-	_JPROFILER.pop("destroyAllChunkModels")
+	_JPROFILER.pop("forceChunkModelsRemoval")
 end
 
 function processChunkUpdates(chunk)
@@ -181,9 +175,7 @@ end
 
 function addChunkToRenderQueue(chunk)
 	_JPROFILER.push("addChunkToRenderQueue")
-	if not isInTable(renderChunks, chunk) then
-		table.insert(renderChunks, chunk)
-	end
+	table.insert(renderChunks, chunk)
 	_JPROFILER.pop("addChunkToRenderQueue")
 end
 
@@ -222,20 +214,6 @@ function processRenderChunks()
 		end
 	end
 	_JPROFILER.pop("processRenderChunks")
-end
-
-function isInTable(tbl, value)
-	_JPROFILER.push("isInTable")
-
-	for _, v in ipairs(tbl) do
-		if v == value then
-			_JPROFILER.pop("isInTable")
-
-			return true
-		end
-	end
-	_JPROFILER.pop("isInTable")
-	return false
 end
 
 function updateThingList(dt)
