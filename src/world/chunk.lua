@@ -109,37 +109,43 @@ function NewChunk(x, z)
 
 	-- get voxel id of the voxel in this chunk's coordinate space
 	chunk.getVoxel = function(self, x, y, z)
-		if self.voxels and self.voxels[x] and self.voxels[x][z] then
-			if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
-				local startIndex = (y - 1) * TileDataSize + 1
-				local endIndex = startIndex + 2
-				local byte1, byte2, byte3 = string.byte(self.voxels[x][z], startIndex, endIndex)
-				return byte1, byte2, byte3
+		if self.voxels then
+			local column = self.voxels[x]
+			if column then
+				local voxelData = column[z]
+				if voxelData then
+					if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+						local startIndex = (y - 1) * TileDataSize + 1
+						local byte1, byte2, byte3 = string.byte(voxelData, startIndex, startIndex + 2)
+						return byte1, byte2, byte3
+					end
+				end
 			end
 		end
 		return 0, 0, 0
 	end
 
-	chunk.getVoxelFirstData = function(self, x, y, z)
-		x = math.floor(x)
-		y = math.floor(y)
-		z = math.floor(z)
-		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			return string.byte(self.voxels[x][z]:sub((y - 1) * TileDataSize + 2, (y - 1) * TileDataSize + 2))
+	chunk.getVoxelData = function(self, x, y, z, dataIndex)
+		x, y, z = math.floor(x), math.floor(y), math.floor(z)
+		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+			local column = self.voxels[x]
+			if column then
+				local voxelData = column[z]
+				if voxelData then
+					local startIndex = (y - 1) * TileDataSize + dataIndex
+					return string.byte(voxelData, startIndex, startIndex)
+				end
+			end
 		end
-
 		return 0
 	end
 
-	chunk.getVoxelSecondData = function(self, x, y, z)
-		x = math.floor(x)
-		y = math.floor(y)
-		z = math.floor(z)
-		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			return string.byte(self.voxels[x][z]:sub((y - 1) * TileDataSize + 3, (y - 1) * TileDataSize + 3))
-		end
+	chunk.getVoxelFirstData = function(self, x, y, z)
+		return self:getVoxelData(x, y, z, 2)
+	end
 
-		return 0
+	chunk.getVoxelSecondData = function(self, x, y, z)
+		return self:getVoxelData(x, y, z, 3)
 	end
 
 	chunk.setVoxelRaw = function(self, x, y, z, blockvalue, light)
