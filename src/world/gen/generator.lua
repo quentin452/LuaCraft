@@ -1,18 +1,15 @@
-local light0 = string.char(LightSources[0])
-local light15 = string.char(LightSources[15])
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 
 	local dirt = 4
 	local grass = true
-	local temp = {}
 
 	for i = 1, ChunkSize do
 		chunk.voxels[i] = {}
 		local xx = (x - 1) * ChunkSize + i
 
 		for k = 1, ChunkSize do
-			temp = {}
+			local temp = {}
 			local zz = (z - 1) * ChunkSize + k
 			chunk.heightMap[i][k] = 0
 
@@ -22,10 +19,10 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				local genFuncResult = generationFunction(chunk, xx, j, zz)
 
 				for a = 1, TileDataSize - 1 do
-					temp[yy + a] = light0
+					temp[yy + a] = string.char(LightSources[0])
 				end
 				if sunlight then
-					temp[yy + 1] = light15
+					temp[yy + 1] = string.char(LightSources[15])
 				end
 
 				if j < chunk.floor then

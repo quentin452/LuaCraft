@@ -8,13 +8,15 @@ ThingList = {}
 local destroyChunkModels = 0
 local updateCounterForRemeshModel = 0
 
+RenderDistance = getRenderDistanceValue()
+
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
 	if gamestate == gamestatePlayingGame then
-		renderdistancevalue()
 		PlayerInitIfNeeded()
 		UpdateAndGenerateChunks(RenderDistance)
 		UpdateLogic(dt)
+		renderdistancevalue()
 	end
 	_JPROFILER.pop("UpdateGameDT")
 end
@@ -78,24 +80,22 @@ function UpdateChunksWithinRenderDistanceDistanceLoop(playerChunkX, playerChunkZ
 
 	_JPROFILER.pop("UpdateChunksWithinRenderDistanceDistanceLoop")
 end
+
 function UpdateChunksWithinRenderDistanceChunkLoop(playerChunkX, playerChunkZ, i, j, distance, maxChunkDistance)
-    _JPROFILER.push("UpdateChunksWithinRenderDistanceChunkLoop")
+	_JPROFILER.push("UpdateChunksWithinRenderDistanceChunkLoop")
 
-    local chunkX = playerChunkX + i
-    local chunkZ = playerChunkZ + j
-    local chunk = GetOrCreateChunk(chunkX, chunkZ)
+	local chunkX = playerChunkX + i
+	local chunkZ = playerChunkZ + j
+	local chunk = GetOrCreateChunk(chunkX, chunkZ)
 
-    local distanceSquared = i^2 + j^2
+	if distance < maxChunkDistance then
+		processChunkUpdates(chunk)
+	else
+		removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
+	end
 
-    if distanceSquared < maxChunkDistance^2 then
-        processChunkUpdates(chunk)
-    else
-        removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
-    end
-
-    _JPROFILER.pop("UpdateChunksWithinRenderDistanceChunkLoop")
+	_JPROFILER.pop("UpdateChunksWithinRenderDistanceChunkLoop")
 end
-
 function GetOrCreateChunk(chunkX, chunkZ)
 	_JPROFILER.push("GetOrCreateChunk")
 	local chunk = ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
@@ -122,7 +122,9 @@ function removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, RenderDis
 
 		local distanceSquared = dx ^ 2 + dz ^ 2
 
-		if distanceSquared > maxChunkDistanceSquared then
+		local diagonalDistanceSquared = (dx ^ 2 + dz ^ 2) / 2
+
+		if distanceSquared > maxChunkDistanceSquared and diagonalDistanceSquared > maxChunkDistanceSquared then
 			forceChunkModelsRemoval(otherChunk)
 		end
 	end
