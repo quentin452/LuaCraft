@@ -127,26 +127,29 @@ local function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	_JPROFILER.pop("getVoxelFromChunk_blockrendering")
 	return nil
 end
-local addFaceFunctions = {
-	getTop = addFaceToModel,
-	getBottom = addFaceToModel,
-	getPositiveX = addFaceToModelPositiveX,
-	getNegativeX = addFaceToModelNegativeX,
-	getPositiveZ = addFaceToModelPositiveZ,
-	getNegativeZ = addFaceToModelNegativeZ,
-}
 local function addFace(gettype, direction, y_offset, light_offset, thisLight, model, thisTransparency, scale, x, y, z)
 	_JPROFILER.push("addFace_blockrendering")
 	if CanDrawFace(direction, thisTransparency) then
 		local textureIndex = math.min(2 + y_offset, #TileTextures(direction))
-		local getTopBottom = (gettype == "getTop" or gettype == "getBottom")
-		local texture = getTopBottom and TileTextures(direction)[textureIndex] or TileTextures(direction)[1]
-		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - light_offset, 0))
-		local addFaceFunction = addFaceFunctions[gettype]
-		if addFaceFunction then
-			addFaceFunction(model, x, getTopBottom and y + y_offset * scale or y, z, otx, oty, scale)
+		local texture
+		if gettype == "getTop" or gettype == "getBottom" then
+			texture = TileTextures(direction)[textureIndex]
 		else
-			LuaCraftErrorLogging("this gettype: " .. gettype .. " is not correct")
+			texture = TileTextures(direction)[1]
+		end
+		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - light_offset, 0))
+		if gettype == "getTop" or gettype == "getBottom" then
+			addFaceToModel(model, x, y + y_offset * scale, z, otx, oty, scale)
+		elseif gettype == "getPositiveX" then
+			addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
+		elseif gettype == "getNegativeX" then
+			addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
+		elseif gettype == "getPositiveZ" then
+			addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
+		elseif gettype == "getNegativeZ" then
+			addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
+		else
+			LuaCraftErrorLogging("this gettype: " .. gettype .. "is not correct")
 		end
 	end
 	_JPROFILER.pop("addFace_blockrendering")
