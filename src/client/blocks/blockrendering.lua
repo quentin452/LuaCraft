@@ -9,11 +9,8 @@ local getPositiveX
 local getNegativeX
 local getPositiveZ
 local getNegativeZ
-local verticesTopBottom = {}
-local verticesPositiveX = {}
-local verticesNegativeX = {}
-local verticesPositiveZ = {}
-local verticesNegativeZ = {}
+local vertices = {}
+
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
 	local tget = TileTransparency(get)
@@ -27,14 +24,6 @@ local function CanDrawFace(get, thisTransparency)
 		_JPROFILER.pop("CanDrawFace")
 		return tget ~= thisTransparency
 	end
-end
-
-local function createBlockVertices(vertices, model)
-	_JPROFILER.push("createBlockVertices")
-	for _, vertex in ipairs(vertices) do
-		model[#model + 1] = vertex
-	end
-	_JPROFILER.pop("createBlockVertices")
 end
 
 function calculationotxoty(otx, oty)
@@ -57,66 +46,6 @@ function getTextureCoordinatesAndLight(texture, lightOffset)
 	return otx, oty
 end
 
-local function addFaceToModel(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModel")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	verticesTopBottom[1] = { x, y, z, tx, ty }
-	verticesTopBottom[2] = { x + scale, y, z, tx2, ty }
-	verticesTopBottom[3] = { x, y, z + scale, tx, ty2 }
-	verticesTopBottom[4] = { x + scale, y, z, tx2, ty }
-	verticesTopBottom[5] = { x + scale, y, z + scale, tx2, ty2 }
-	verticesTopBottom[6] = { x, y, z + scale, tx, ty2 }
-	createBlockVertices(verticesTopBottom, model)
-	_JPROFILER.pop("addFaceToModel")
-end
-local function addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModelPositiveX")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	verticesPositiveX[1] = { x, y + scale, z, tx2, ty }
-	verticesPositiveX[2] = { x, y, z, tx2, ty2 }
-	verticesPositiveX[3] = { x, y, z + scale, tx, ty2 }
-	verticesPositiveX[4] = { x, y + scale, z + scale, tx, ty }
-	verticesPositiveX[5] = { x, y + scale, z, tx2, ty }
-	verticesPositiveX[6] = { x, y, z + scale, tx, ty2 }
-	createBlockVertices(verticesPositiveX, model)
-	_JPROFILER.pop("addFaceToModelPositiveX")
-end
-local function addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModelNegativeX")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	verticesNegativeX[1] = { x + scale, y, z, tx, ty2 }
-	verticesNegativeX[2] = { x + scale, y + scale, z, tx, ty }
-	verticesNegativeX[3] = { x + scale, y, z + scale, tx2, ty2 }
-	verticesNegativeX[4] = { x + scale, y + scale, z, tx, ty }
-	verticesNegativeX[5] = { x + scale, y + scale, z + scale, tx2, ty }
-	verticesNegativeX[6] = { x + scale, y, z + scale, tx2, ty2 }
-	createBlockVertices(verticesNegativeX, model)
-	_JPROFILER.pop("addFaceToModelNegativeX")
-end
-local function addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModelPositiveZ")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	verticesPositiveZ[1] = { x, y, z, tx, ty2 }
-	verticesPositiveZ[2] = { x, y + scale, z, tx, ty }
-	verticesPositiveZ[3] = { x + scale, y, z, tx2, ty2 }
-	verticesPositiveZ[4] = { x, y + scale, z, tx, ty }
-	verticesPositiveZ[5] = { x + scale, y + scale, z, tx2, ty }
-	verticesPositiveZ[6] = { x + scale, y, z, tx2, ty2 }
-	createBlockVertices(verticesPositiveZ, model)
-	_JPROFILER.pop("addFaceToModelPositiveZ")
-end
-local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
-	_JPROFILER.push("addFaceToModelNegativeZ")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	verticesNegativeZ[1] = { x, y + scale, z + scale, tx2, ty }
-	verticesNegativeZ[2] = { x, y, z + scale, tx2, ty2 }
-	verticesNegativeZ[3] = { x + scale, y, z + scale, tx, ty2 }
-	verticesNegativeZ[4] = { x + scale, y + scale, z + scale, tx, ty }
-	verticesNegativeZ[5] = { x, y + scale, z + scale, tx2, ty }
-	verticesNegativeZ[6] = { x + scale, y, z + scale, tx, ty2 }
-	createBlockVertices(verticesNegativeZ, model)
-	_JPROFILER.pop("addFaceToModelNegativeZ")
-end
 local function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	_JPROFILER.push("getVoxelFromChunk_blockrendering")
 	local chunkGet = chunkGetter(x, y, z)
@@ -127,6 +56,74 @@ local function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	_JPROFILER.pop("getVoxelFromChunk_blockrendering")
 	return nil
 end
+
+local function createBlockVertices(vertices, model)
+	_JPROFILER.push("createBlockVertices")
+	for _, vertex in ipairs(vertices) do
+		model[#model + 1] = vertex
+	end
+	_JPROFILER.pop("createBlockVertices")
+end
+
+local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
+	_JPROFILER.push("addFaceToModel")
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+	local x_plus_scale = x + scale
+	local y_plus_scale = y + scale
+	local z_plus_scale = z + scale
+	if gettype == "getTop" or gettype == "getBottom" then
+		vertices = {
+			{ x, y, z, tx, ty },
+			{ x_plus_scale, y, z, tx2, ty },
+			{ x, y, z_plus_scale, tx, ty2 },
+			{ x_plus_scale, y, z, tx2, ty },
+			{ x_plus_scale, y, z_plus_scale, tx2, ty2 },
+			{ x, y, z_plus_scale, tx, ty2 },
+		}
+	elseif gettype == "getPositiveX" then
+		vertices = {
+			{ x, y_plus_scale, z, tx2, ty },
+			{ x, y, z, tx2, ty2 },
+			{ x, y, z_plus_scale, tx, ty2 },
+			{ x, y_plus_scale, z_plus_scale, tx, ty },
+			{ x, y_plus_scale, z, tx2, ty },
+			{ x, y, z_plus_scale, tx, ty2 },
+		}
+	elseif gettype == "getNegativeX" then
+		vertices = {
+			{ x_plus_scale, y, z, tx, ty2 },
+			{ x_plus_scale, y_plus_scale, z, tx, ty },
+			{ x_plus_scale, y, z_plus_scale, tx2, ty2 },
+			{ x_plus_scale, y_plus_scale, z, tx, ty },
+			{ x_plus_scale, y_plus_scale, z_plus_scale, tx2, ty },
+			{ x_plus_scale, y, z_plus_scale, tx2, ty2 },
+		}
+	elseif gettype == "getPositiveZ" then
+		vertices = {
+			{ x, y, z, tx, ty2 },
+			{ x, y_plus_scale, z, tx, ty },
+			{ x_plus_scale, y, z, tx2, ty2 },
+			{ x, y_plus_scale, z, tx, ty },
+			{ x_plus_scale, y_plus_scale, z, tx2, ty },
+			{ x_plus_scale, y, z, tx2, ty2 },
+		}
+	elseif gettype == "getNegativeZ" then
+		vertices = {
+			{ x, y_plus_scale, z_plus_scale, tx2, ty },
+			{ x, y, z_plus_scale, tx2, ty2 },
+			{ x_plus_scale, y, z_plus_scale, tx, ty2 },
+			{ x_plus_scale, y_plus_scale, z_plus_scale, tx, ty },
+			{ x, y_plus_scale, z_plus_scale, tx2, ty },
+			{ x_plus_scale, y, z_plus_scale, tx, ty2 },
+		}
+	else
+		LuaCraftErrorLogging("Invalid gettype: " .. gettype)
+	end
+
+	createBlockVertices(vertices, model)
+	_JPROFILER.pop("addFaceToModel")
+end
+
 local function addFace(gettype, direction, y_offset, light_offset, thisLight, model, thisTransparency, scale, x, y, z)
 	_JPROFILER.push("addFace_blockrendering")
 	if CanDrawFace(direction, thisTransparency) then
@@ -138,19 +135,7 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 			texture = TileTextures(direction)[1]
 		end
 		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - light_offset, 0))
-		if gettype == "getTop" or gettype == "getBottom" then
-			addFaceToModel(model, x, y + y_offset * scale, z, otx, oty, scale)
-		elseif gettype == "getPositiveX" then
-			addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
-		elseif gettype == "getNegativeX" then
-			addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
-		elseif gettype == "getPositiveZ" then
-			addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
-		elseif gettype == "getNegativeZ" then
-			addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
-		else
-			LuaCraftErrorLogging("this gettype: " .. gettype .. "is not correct")
-		end
+		addFaceToModel(model, x, y + y_offset * scale, z, otx, oty, scale, gettype)
 	end
 	_JPROFILER.pop("addFace_blockrendering")
 end
