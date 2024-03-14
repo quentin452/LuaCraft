@@ -274,9 +274,6 @@ function initPlayerInventory()
 	for i = 1, 36 do
 		PlayerInventory.items[i] = defaultTileIDs[i] or Tiles.AIR_Block.id
 	end
-	if enablePROFIProfiler then
-		ProFi:checkMemory(5, "5eme profil")
-	end
 	_JPROFILER.pop("initPlayerInventory")
 end
 
