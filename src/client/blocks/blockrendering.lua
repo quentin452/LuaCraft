@@ -3,7 +3,12 @@ local AIR_TRANSPARENCY = 0
 local LEAVES_TRANSPARENCY = 1
 local adjustmentFactorValuecalculationotxoty = 256 / finalAtlasSize
 local adjustmentFactorValuegetTextureCoordinatesAndLight = finalAtlasSize / 256
-
+local getTop
+local getBottom
+local getPositiveX
+local getNegativeX
+local getPositiveZ
+local getNegativeZ
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
 	local tget = TileTransparency(get)
@@ -130,94 +135,95 @@ local function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	_JPROFILER.pop("getVoxelFromChunk_blockrendering")
 	return nil
 end
+local function addFace(gettype, direction, y_offset, light_offset, thisLight, model, thisTransparency, scale, x, y, z)
+	_JPROFILER.push("addFace_blockrendering")
+	if CanDrawFace(direction, thisTransparency) then
+		local textureIndex = math.min(2 + y_offset, #TileTextures(direction))
+		local texture
+		if gettype == "getTop" or gettype == "getBottom" then
+			texture = TileTextures(direction)[textureIndex]
+		else
+			texture = TileTextures(direction)[1]
+		end
+		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - light_offset, 0))
+		if gettype == "getTop" or gettype == "getBottom" then
+			addFaceToModel(model, x, y + y_offset * scale, z, otx, oty, scale)
+		elseif gettype == "getPositiveX" then
+			addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
+		elseif gettype == "getNegativeX" then
+			addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
+		elseif gettype == "getPositiveZ" then
+			addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
+		elseif gettype == "getNegativeZ" then
+			addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
+		else
+			LuaCraftErrorLogging("this direction:" .. direction .. "is not correct")
+		end
+	end
+	_JPROFILER.pop("addFace_blockrendering")
+end
 
-local function DrawFaces(getTop,getBottom,getPositiveX,getNegativeX,getPositiveZ,getNegativeZ,model,thisTransparency,thisLight,scale,x,y,z)
+local function DrawFaces(model, thisTransparency, thisLight, scale, x, y, z)
 	_JPROFILER.push("DrawFaces_blockrendering")
-	if CanDrawFace(getTop, thisTransparency) then
-		local textureIndex = math.min(2, #TileTextures(getTop))
-		local texture = TileTextures(getTop)[textureIndex]
-		local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
-		addFaceToModel(model, x, y, z, otx, oty, scale)
-	end
-	if CanDrawFace(getBottom, thisTransparency) then
-		local textureIndex = math.min(3, #TileTextures(getBottom))
-		local texture = TileTextures(getBottom)[textureIndex]
-		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 3, 0))
-		addFaceToModel(model, x, y + scale, z, otx, oty, scale)
-	end
-	if CanDrawFace(getPositiveX, thisTransparency) then
-		local texture = TileTextures(getPositiveX)[1]
-		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 2, 0))
-		addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
-	end
-	if CanDrawFace(getNegativeX, thisTransparency) then
-		local texture = TileTextures(getNegativeX)[1]
-		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 2, 0))
-		addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
-	end
-	if CanDrawFace(getPositiveZ, thisTransparency) then
-		local texture = TileTextures(getPositiveZ)[1]
-		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 1, 0))
-		addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
-	end
-	if CanDrawFace(getNegativeZ, thisTransparency) then
-		local texture = TileTextures(getNegativeZ)[1]
-		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - 1, 0))
-		addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
-	end
+	addFace("getTop", getTop, 0, 0, thisLight, model, thisTransparency, scale, x, y, z)
+	addFace("getBottom", getBottom, 1, 3, thisLight, model, thisTransparency, scale, x, y, z)
+	addFace("getPositiveX", getPositiveX, 0, 2, thisLight, model, thisTransparency, scale, x, y, z)
+	addFace("getNegativeX", getNegativeX, 0, 2, thisLight, model, thisTransparency, scale, x, y, z)
+	addFace("getPositiveZ", getPositiveZ, 0, 1, thisLight, model, thisTransparency, scale, x, y, z)
+	addFace("getNegativeZ", getNegativeZ, 0, 1, thisLight, model, thisTransparency, scale, x, y, z)
 	_JPROFILER.pop("DrawFaces_blockrendering")
 end
 
 local function checkBlockValidity(self, i, j, k)
 	_JPROFILER.push("checkBlockValidity_blockrendering")
-    local this = self.parent:getVoxel(i, j, k)
-    local value = TilesById[this]
-    if value then
-        local blockstringname = value.blockstringname
-        if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.None then
+	local this = self.parent:getVoxel(i, j, k)
+	local value = TilesById[this]
+	if value then
+		local blockstringname = value.blockstringname
+		if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.None then
 			_JPROFILER.pop("checkBlockValidity_blockrendering")
-            return false
-        end
-    end
+			return false
+		end
+	end
 	_JPROFILER.pop("checkBlockValidity_blockrendering")
-    return true
+	return true
 end
 
 local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 	_JPROFILER.push("updateAdjacentBlocks_blockrendering")
-    local getTop = self.parent:getVoxel(i, j - 1, k)
-    local getBottom = self.parent:getVoxel(i, j + 1, k)
-    local getPositiveX = self.parent:getVoxel(i - 1, j, k)
-    local getNegativeX = self.parent:getVoxel(i + 1, j, k)
-    local getPositiveZ = self.parent:getVoxel(i, j, k - 1)
-    local getNegativeZ = self.parent:getVoxel(i, j, k + 1)
+	getTop = self.parent:getVoxel(i, j - 1, k)
+	getBottom = self.parent:getVoxel(i, j + 1, k)
+	getPositiveX = self.parent:getVoxel(i - 1, j, k)
+	getNegativeX = self.parent:getVoxel(i + 1, j, k)
+	getPositiveZ = self.parent:getVoxel(i, j, k - 1)
+	getNegativeZ = self.parent:getVoxel(i, j, k + 1)
 
-    if i == 1 then
-        getPositiveX = getVoxelFromChunk(GetChunk, x - 1, y, z, ChunkSize, j, k)
-    end
+	if i == 1 then
+		getPositiveX = getVoxelFromChunk(GetChunk, x - 1, y, z, ChunkSize, j, k)
+	end
 
-    if i == ChunkSize then
-        getNegativeX = getVoxelFromChunk(GetChunk, x + 1, y, z, 1, j, k)
-    end
+	if i == ChunkSize then
+		getNegativeX = getVoxelFromChunk(GetChunk, x + 1, y, z, 1, j, k)
+	end
 
-    if k == 1 then
-        getPositiveZ = getVoxelFromChunk(GetChunk, x, y, z - 1, i, j, ChunkSize)
-    end
+	if k == 1 then
+		getPositiveZ = getVoxelFromChunk(GetChunk, x, y, z - 1, i, j, ChunkSize)
+	end
 
-    if k == ChunkSize then
-        getNegativeZ = getVoxelFromChunk(GetChunk, x, y, z + 1, i, j, 1)
-    end
+	if k == ChunkSize then
+		getNegativeZ = getVoxelFromChunk(GetChunk, x, y, z + 1, i, j, 1)
+	end
 	_JPROFILER.pop("updateAdjacentBlocks_blockrendering")
-    return getTop, getBottom, getPositiveX, getNegativeX, getPositiveZ, getNegativeZ
+	return getBottom, getPositiveX, getNegativeX, getPositiveZ, getNegativeZ
 end
 
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
-    _JPROFILER.push("BlockRendering")
-    if not checkBlockValidity(self, i, j, k) then
-        _JPROFILER.pop("BlockRendering")
-        return
-    end
-    local getTop, getBottom, getPositiveX, getNegativeX, getPositiveZ, getNegativeZ = updateAdjacentBlocks(self, i, j, k, x, y, z)
-	DrawFaces(getTop,getBottom,getPositiveX,getNegativeX,getPositiveZ,getNegativeZ,model,thisTransparency,thisLight,scale,x,y,z)
-    _JPROFILER.pop("BlockRendering")
+	_JPROFILER.push("BlockRendering")
+	if not checkBlockValidity(self, i, j, k) then
+		_JPROFILER.pop("BlockRendering")
+		return
+	end
+	updateAdjacentBlocks(self, i, j, k, x, y, z)
+	DrawFaces(model, thisTransparency, thisLight, scale, x, y, z)
+	_JPROFILER.pop("BlockRendering")
 end
