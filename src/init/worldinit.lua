@@ -11,16 +11,21 @@ function initScene()
 	_JPROFILER.pop("initScene")
 end
 
+local RandomSeed
+
 function initGlobalRandomNumbers()
 	_JPROFILER.push("initGlobalRandomNumbers")
-
+	RandomSeed = os.time()
+	math.randomseed(RandomSeed)
 	Salt = {}
 	for i = 1, 128 do
 		Salt[i] = math.random()
 	end
+
 	if enablePROFIProfiler then
 		ProFi:checkMemory(2, "Second profil")
 	end
+	LuaCraftPrintLoggingNormal("Random Seed:", RandomSeed)
 	_JPROFILER.pop("initGlobalRandomNumbers")
 end
 
