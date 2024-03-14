@@ -1,7 +1,6 @@
+local treeBlocks = {}
 function ExampleMod_GenerateTree(chunk, x, y, z)
 	_JPROFILER.push("GenerateTree")
-
-	local treeBlocks = {}
 
 	local treeHeight = 4 + math.floor(math.random() * 2 + 0.5)
 	for tr = 1, treeHeight do
@@ -50,6 +49,6 @@ function ExampleMod_GenerateTree(chunk, x, y, z)
 	for _, block in ipairs(treeBlocks) do
 		NewChunkRequest(block[1], block[2], block[3], block[4])
 	end
-
+	treeBlocks = {}
 	_JPROFILER.pop("GenerateTree")
 end
