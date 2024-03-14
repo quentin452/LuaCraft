@@ -109,21 +109,9 @@ end
 function Noise2D(x, z, freq, si)
 	return love.math.noise(x / freq + Salt[si] * 100000, z / freq + Salt[si + 2] * 100000)
 end
-local memoizedResults = {}
-
 function OctaveNoise(x, y, octaves, seed1, seed2)
-	_JPROFILER.push("OctaveNoise")
-
-	-- Generate a unique key based on the function inputs
-	local key = string.format("%d_%d_%d_%d_%d", x, y, octaves, seed1, seed2)
-
-	-- Check if the result is already memoized
-	if memoizedResults[key] then
-		return memoizedResults[key]
-	end
-
-	-- If not memoized, calculate the noise value
 	local ret = 0
+
 	local freq = 1
 	local amp = 1
 	for i = 1, octaves do
@@ -131,11 +119,6 @@ function OctaveNoise(x, y, octaves, seed1, seed2)
 		freq = freq * 0.5
 		amp = amp * 2
 	end
-
-	-- Memoize the result for future use
-	memoizedResults[key] = ret
-
-	_JPROFILER.pop("OctaveNoise")
 
 	return ret
 end
