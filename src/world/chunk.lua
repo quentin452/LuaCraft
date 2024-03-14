@@ -207,7 +207,7 @@ function NewChunk(x, z)
 			local blockAbove = self:getVoxel(x, y + 1, z)
 
 			local function isBlockInTileModelTable(block)
-				local value = TilesById[block]
+				local value = GetValueFromTilesById(block)
 				if value then
 					local blockstringname = value.blockstringname
 					if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.TileMode then
@@ -232,7 +232,7 @@ function NewChunk(x, z)
 			local destroyLight = false
 
 			if TileLightable(blockvalue) then
-				local value = TilesById[blockvalue]
+				local value = GetValueFromTilesById(blockvalue)
 				local blockstringname = value.blockstringname
 				if
 					TileTransparency(blockvalue) == TilesTransparency.NONE
@@ -274,7 +274,7 @@ function NewChunk(x, z)
 					end
 				end
 			else
-				local semiLightable = TileSemiLightable(blockvalue)
+				local semiLightable = TileLightable(blockvalue, true)
 
 				LightOperation(gx, gy - 1, gz, "NewSunlightDownSubtraction")
 
@@ -283,7 +283,7 @@ function NewChunk(x, z)
 				end
 
 				if not semiLightable or manuallyPlaced then
-					destroyLight = not TileSemiLightable(blockvalue)
+					destroyLight = not TileLightable(blockvalue, true)
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
@@ -324,7 +324,7 @@ function NewChunk(x, z)
 					end
 				end
 
-				if TileSemiLightable(blockvalue) and not placingLocalSource then
+				if TileLightable(blockvalue, true) and not placingLocalSource then
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do

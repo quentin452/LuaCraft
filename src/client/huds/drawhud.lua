@@ -354,7 +354,7 @@ local Table_HudTextureCache = {}
 
 function DrawHudTile(tile, hudX, hudY)
 	_JPROFILER.push("DrawHudTile")
-	local tileData = TilesById[tile]
+	local tileData = GetValueFromTilesById(tile)
 	if tile == 0 or not tileData then
 		return
 	end

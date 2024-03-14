@@ -120,7 +120,6 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 	else
 		LuaCraftErrorLogging("Invalid gettype: " .. gettype)
 	end
-
 	createBlockVertices(blockVertices, model)
 	_JPROFILER.pop("addFaceToModel")
 end
@@ -151,7 +150,7 @@ end
 local function checkBlockValidity(self, i, j, k)
 	_JPROFILER.push("checkBlockValidity_blockrendering")
 	local this = self.parent:getVoxel(i, j, k)
-	local value = TilesById[this]
+	local value = GetValueFromTilesById(this)
 	if value then
 		local blockstringname = value.blockstringname
 		if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.None then

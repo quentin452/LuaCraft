@@ -13,6 +13,35 @@ function initWorldGenerationVariables()
 	TileDataSize = 3
 end
 
+function iterateOverAllTiles()
+	for _, value in pairs(Tiles) do
+		local blockTopTexture = value.blockTopTexture or "N/A"
+		local blockSideTexture = value.blockSideTexture or "N/A"
+		local blockBottomMasterTexture = value.blockBottomMasterTexture or "N/A"
+
+		LuaCraftPrintLoggingNormal(
+			"Tile Name: "
+				.. value.blockstringname
+				.. " Index: "
+				.. value.id
+				.. " Transparency: "
+				.. value.transparency
+				.. " Light Source: "
+				.. value.LightSources
+				.. " Can Collide?: "
+				.. value.Cancollide
+				.. " Type: "
+				.. value.BlockOrLiquidOrTile
+				.. " BottomMaster Texture: "
+				.. blockBottomMasterTexture
+				.. " Side Texture: "
+				.. blockSideTexture
+				.. " Top Texture: "
+				.. blockTopTexture
+				.. "\n-----------------------------------------------------------------------------------------------------------------------"
+		)
+	end
+end
 function InitializeGame()
 	_JPROFILER.push("SettingsHandlingInit")
 	SettingsHandlingInit()
@@ -54,4 +83,7 @@ function InitializeGame()
 	_JPROFILER.push("initWorldGenerationVariables")
 	initWorldGenerationVariables()
 	_JPROFILER.pop("initWorldGenerationVariables")
+	_JPROFILER.push("iterateOverAllTiles")
+	iterateOverAllTiles()
+	_JPROFILER.pop("iterateOverAllTiles")
 end
