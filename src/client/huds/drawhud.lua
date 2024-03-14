@@ -17,14 +17,8 @@ end
 function DrawF3()
 	_JPROFILER.push("DrawF3")
 	lovegraphics.setColor(1, 1, 1)
-	lovegraphics.print(
-		"x: "
-			.. math.floor(ThePlayer.x + 0.5)
-			.. "\ny: "
-			.. math.floor(ThePlayer.y + 0.5)
-			.. "\nz: "
-			.. math.floor(ThePlayer.z + 0.5)
-	)
+	local playerPosition = getPlayerPosition()
+	love.graphics.print("x: " .. playerPosition.x .. "\ny: " .. playerPosition.y .. "\nz: " .. playerPosition.z)
 	lovegraphics.print("Memory Usage: " .. math.floor(collectgarbage("count")) .. " kB", 0, 50)
 	lovegraphics.print("FPS: " .. lovetimer.getFPS(), 0, 70)
 	local playerDirection = GetPlayerDirection(ThePlayer.rotation, ThePlayer.pitch)

@@ -41,7 +41,8 @@ end
 function UpdateAndGenerateChunks(RenderDistance)
 	_JPROFILER.push("UpdateAndGenerateChunks")
 	renderChunks = {}
-	local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
+	local playerPosition = getPlayerPosition()
+	local playerX, playerY, playerZ = playerPosition.x, playerPosition.y, playerPosition.z
 	local playerChunkX = math.ceil(playerX / ChunkSize)
 	local playerChunkZ = math.ceil(playerZ / ChunkSize)
 	UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)

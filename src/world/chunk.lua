@@ -176,11 +176,9 @@ function NewChunk(x, z)
 			local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
 			local range1 = 1
 			local range2 = 0.1
-
 			local playerXFloor = math.floor(playerX)
 			local playerYFloor = math.floor(playerY)
 			local playerZFloor = math.floor(playerZ)
-
 			if
 				(
 					love.keyboard.isDown("space")
@@ -203,6 +201,7 @@ function NewChunk(x, z)
 			then
 				return
 			end
+
 			--prevent placing a block on an another block(like flowers)
 			local blockBelow = self:getVoxel(x, y - 1, z)
 			local blockAbove = self:getVoxel(x, y + 1, z)

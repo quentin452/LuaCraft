@@ -196,41 +196,44 @@ function PlayerInit()
 	ThePlayer = CreateThing(NewPlayer(0, 0, 0))
 	initPlayerInventory()
 end
+function FindSolidBlock(x, y, z)
+	while y > 0 and GetVoxel(x, y, z) == 0 do
+		y = y - 1
+	end
+	return y
+end
+
+local function GenerateRandomPosition()
+	return math.random() * 120
+end
+
 function ChooseSpawnLocation()
 	local maxTries = 1000
 	local currentTry = 0
-
-	-- Generate a random position for the player
-	local playerX = math.random() * 120
-	local playerZ = math.random() * 120
-
-	-- Find the highest non-air voxel
-	local playerY = WorldHeight
 	local foundSolidBlock = false
+	local playerX
+	local playerY
+	local playerZ
+	while not foundSolidBlock and currentTry < maxTries do
+		playerX = GenerateRandomPosition()
+		playerZ = GenerateRandomPosition()
+		playerY = WorldHeight
 
-	while not foundSolidBlock do
-		while playerY > 0 and GetVoxel(playerX, playerY, playerZ) == 0 do
-			playerY = playerY - 1
-		end
+		playerY = FindSolidBlock(playerX, playerY, playerZ)
 
 		if playerY > 0 then
 			foundSolidBlock = true
 		else
-			-- If no solid block was found, generate a new random position and try again
-			playerX = math.random() * 120
-			playerZ = math.random() * 120
-			playerY = WorldHeight
-
 			currentTry = currentTry + 1
-
-			if currentTry >= maxTries then
-				LuaCraftErrorLogging(
-					"Warning: Unable to find a suitable spawn position after " .. maxTries .. " tries."
-				)
-			elseif currentTry % 100 == 0 then
+			if currentTry % 100 == 0 then
 				LuaCraftPrintLoggingNormal("Still trying to find a suitable spawn position... Try #" .. currentTry)
 			end
 		end
+	end
+
+	if not foundSolidBlock then
+		LuaCraftErrorLogging("Warning: Unable to find a suitable spawn position after " .. maxTries .. " tries.")
+		return
 	end
 
 	-- Change the player's position to the calculated position
@@ -238,7 +241,6 @@ function ChooseSpawnLocation()
 	ThePlayer.y = playerY + 1.1
 	ThePlayer.z = playerZ
 	ThePlayer.IsPlayerHasSpawned = true
-	currentTry = 0
 end
 
 function initPlayerInventory()
@@ -270,4 +272,12 @@ function initPlayerInventory()
 	end
 
 	_JPROFILER.pop("initPlayerInventory")
+end
+
+function getPlayerPosition()
+	return {
+		x = math.floor(ThePlayer.x + 0.5),
+		y = math.floor(ThePlayer.y + 0.5),
+		z = math.floor(ThePlayer.z + 0.5),
+	}
 end
