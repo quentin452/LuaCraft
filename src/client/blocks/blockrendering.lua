@@ -157,7 +157,7 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 		elseif gettype == "getNegativeZ" then
 			addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 		else
-			LuaCraftErrorLogging("this direction:" .. direction .. "is not correct")
+			LuaCraftErrorLogging("this gettype:" .. gettype .. "is not correct")
 		end
 	end
 	_JPROFILER.pop("addFace_blockrendering")
