@@ -37,6 +37,9 @@ require("src/world/chunk")
 require("src/world/updatelogic")
 require("src/world/gen/generator")
 require("src/world/gen/caves")
+require("src/world/utilities/chunkmethods")
+require("src/world/utilities/voxelsmethods")
+
 --init
 require("src/init/!init")
 --client
