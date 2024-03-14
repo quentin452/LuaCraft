@@ -1,3 +1,4 @@
+local transparencyCache = {}
 TileMode = {
 	BlockMode = "3DBlock",
 	TileMode = "2DTile",
@@ -80,12 +81,19 @@ function TileCollisions(n)
 	end
 	return false
 end
+
 function TileTransparency(n)
-	local value = TilesById[n]
-	if value then
-		local blockstringname = value.blockstringname
-		return Tiles[blockstringname].transparency
-	end
+    if transparencyCache[n] ~= nil then
+        return transparencyCache[n]
+    end
+
+    local value = TilesById[n]
+    if value then
+        local blockstringname = value.blockstringname
+        local transparency = Tiles[blockstringname].transparency
+        transparencyCache[n] = transparency
+        return transparency
+    end
 end
 
 function TileLightSource(n)
