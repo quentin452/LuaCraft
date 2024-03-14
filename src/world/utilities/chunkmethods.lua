@@ -29,14 +29,10 @@ function GetChunk(x, y, z)
 end
 
 function GetChunkRaw(x, z)
-	_JPROFILER.push("GetChunkRaw")
-
 	local hashx, hashy = ChunkHash(x), ChunkHash(z)
 	local getChunk = nil
 	if ChunkHashTable[hashx] ~= nil then
 		getChunk = ChunkHashTable[hashx][hashy]
 	end
-	_JPROFILER.pop("GetChunkRaw")
-
 	return getChunk
 end
