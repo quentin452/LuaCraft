@@ -11,18 +11,31 @@ local getPositiveZ
 local getNegativeZ
 local vertices = {}
 
+local function isAirTransparency(transparency)
+	return transparency == AIR_TRANSPARENCY
+end
+
+local function isLeavesTransparency(transparency)
+	return transparency == LEAVES_TRANSPARENCY
+end
+
+local function isDifferentTransparency(tileTransparency, currentTransparency)
+	return tileTransparency ~= currentTransparency
+end
+
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
-	local tget = TileTransparency(get)
-	if tget == AIR_TRANSPARENCY then
+	local tileTransparency = TileTransparency(get)
+	if isAirTransparency(tileTransparency) then
 		_JPROFILER.pop("CanDrawFace")
 		return false
-	elseif tget == LEAVES_TRANSPARENCY then
+	elseif isLeavesTransparency(tileTransparency) then
 		_JPROFILER.pop("CanDrawFace")
 		return true
 	else
+		local result = isDifferentTransparency(tileTransparency, thisTransparency)
 		_JPROFILER.pop("CanDrawFace")
-		return tget ~= thisTransparency
+		return result
 	end
 end
 
@@ -59,8 +72,10 @@ end
 
 local function createBlockVertices(vertices, model)
 	_JPROFILER.push("createBlockVertices")
-	for _, vertex in ipairs(vertices) do
-		model[#model + 1] = vertex
+	local totalVertices = #vertices
+	local modelSize = #model
+	for i = 1, totalVertices do
+		model[modelSize + i] = vertices[i]
 	end
 	_JPROFILER.pop("createBlockVertices")
 end
