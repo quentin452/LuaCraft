@@ -9,39 +9,38 @@ local getPositiveX
 local getNegativeX
 local getPositiveZ
 local getNegativeZ
-local vertices = {}
+local blockVertices = {}
 
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
 	local tileTransparency = TileTransparency(get)
+	local result = true
 	if tileTransparency == AIR_TRANSPARENCY then
-		_JPROFILER.pop("CanDrawFace")
-		return false
-	end
-	if tileTransparency == LEAVES_TRANSPARENCY then
-		_JPROFILER.pop("CanDrawFace")
-		return true
+		result = false
+	elseif tileTransparency == LEAVES_TRANSPARENCY then
+		result = true
+	else
+		result = tileTransparency ~= thisTransparency
 	end
 	_JPROFILER.pop("CanDrawFace")
-	return tileTransparency ~= thisTransparency
+	return result
 end
 
 function calculationotxoty(otx, oty)
 	_JPROFILER.push("calculationotxoty")
-	local adjustmentFactor = adjustmentFactorValuecalculationotxoty
 	local tx = otx * TileWidth / LightValues
 	local ty = oty * TileHeight
-	local tx2 = (otx + adjustmentFactor) * TileWidth / LightValues
-	local ty2 = (oty + adjustmentFactor) * TileHeight
+	local tx2 = (otx + adjustmentFactorValuecalculationotxoty) * TileWidth / LightValues
+	local ty2 = (oty + adjustmentFactorValuecalculationotxoty) * TileHeight
 	_JPROFILER.pop("calculationotxoty")
 	return tx, ty, tx2, ty2
 end
+
 function getTextureCoordinatesAndLight(texture, lightOffset)
 	_JPROFILER.push("getTextureCoordinatesAndLight")
 	local textureindex = texture
-	local adjustmentFactor = adjustmentFactorValuegetTextureCoordinatesAndLight
-	local otx = ((textureindex / adjustmentFactor) % LightValues + 16 * lightOffset)
-	local oty = math.floor(textureindex / (adjustmentFactor * LightValues))
+	local otx = ((textureindex / adjustmentFactorValuegetTextureCoordinatesAndLight) % LightValues + 16 * lightOffset)
+	local oty = math.floor(textureindex / (adjustmentFactorValuegetTextureCoordinatesAndLight * LightValues))
 	_JPROFILER.pop("getTextureCoordinatesAndLight")
 	return otx, oty
 end
@@ -74,7 +73,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 	local y_plus_scale = y + scale
 	local z_plus_scale = z + scale
 	if gettype == "getTop" or gettype == "getBottom" then
-		vertices = {
+		blockVertices = {
 			{ x, y, z, tx, ty },
 			{ x_plus_scale, y, z, tx2, ty },
 			{ x, y, z_plus_scale, tx, ty2 },
@@ -83,7 +82,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 			{ x, y, z_plus_scale, tx, ty2 },
 		}
 	elseif gettype == "getPositiveX" then
-		vertices = {
+		blockVertices = {
 			{ x, y_plus_scale, z, tx2, ty },
 			{ x, y, z, tx2, ty2 },
 			{ x, y, z_plus_scale, tx, ty2 },
@@ -92,7 +91,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 			{ x, y, z_plus_scale, tx, ty2 },
 		}
 	elseif gettype == "getNegativeX" then
-		vertices = {
+		blockVertices = {
 			{ x_plus_scale, y, z, tx, ty2 },
 			{ x_plus_scale, y_plus_scale, z, tx, ty },
 			{ x_plus_scale, y, z_plus_scale, tx2, ty2 },
@@ -101,7 +100,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 			{ x_plus_scale, y, z_plus_scale, tx2, ty2 },
 		}
 	elseif gettype == "getPositiveZ" then
-		vertices = {
+		blockVertices = {
 			{ x, y, z, tx, ty2 },
 			{ x, y_plus_scale, z, tx, ty },
 			{ x_plus_scale, y, z, tx2, ty2 },
@@ -110,7 +109,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 			{ x_plus_scale, y, z, tx2, ty2 },
 		}
 	elseif gettype == "getNegativeZ" then
-		vertices = {
+		blockVertices = {
 			{ x, y_plus_scale, z_plus_scale, tx2, ty },
 			{ x, y, z_plus_scale, tx2, ty2 },
 			{ x_plus_scale, y, z_plus_scale, tx, ty2 },
@@ -122,7 +121,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 		LuaCraftErrorLogging("Invalid gettype: " .. gettype)
 	end
 
-	createBlockVertices(vertices, model)
+	createBlockVertices(blockVertices, model)
 	_JPROFILER.pop("addFaceToModel")
 end
 
