@@ -152,7 +152,6 @@ function processChunkUpdates(chunk)
 		chunk:populate()
 		UpdateCaves()
 		chunk:processRequests()
-		LightingUpdate()
 		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = true
 	elseif chunk.updatemodel == false then
