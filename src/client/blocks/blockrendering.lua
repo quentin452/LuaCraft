@@ -11,32 +11,19 @@ local getPositiveZ
 local getNegativeZ
 local vertices = {}
 
-local function isAirTransparency(transparency)
-	return transparency == AIR_TRANSPARENCY
-end
-
-local function isLeavesTransparency(transparency)
-	return transparency == LEAVES_TRANSPARENCY
-end
-
-local function isDifferentTransparency(tileTransparency, currentTransparency)
-	return tileTransparency ~= currentTransparency
-end
-
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
 	local tileTransparency = TileTransparency(get)
-	if isAirTransparency(tileTransparency) then
+	if tileTransparency == AIR_TRANSPARENCY then
 		_JPROFILER.pop("CanDrawFace")
 		return false
-	elseif isLeavesTransparency(tileTransparency) then
+	end
+	if tileTransparency == LEAVES_TRANSPARENCY then
 		_JPROFILER.pop("CanDrawFace")
 		return true
-	else
-		local result = isDifferentTransparency(tileTransparency, thisTransparency)
-		_JPROFILER.pop("CanDrawFace")
-		return result
 	end
+	_JPROFILER.pop("CanDrawFace")
+	return tileTransparency ~= thisTransparency
 end
 
 function calculationotxoty(otx, oty)
@@ -143,12 +130,8 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 	_JPROFILER.push("addFace_blockrendering")
 	if CanDrawFace(direction, thisTransparency) then
 		local textureIndex = math.min(2 + y_offset, #TileTextures(direction))
-		local texture
-		if gettype == "getTop" or gettype == "getBottom" then
-			texture = TileTextures(direction)[textureIndex]
-		else
-			texture = TileTextures(direction)[1]
-		end
+		local texture = (gettype == "getTop" or gettype == "getBottom") and TileTextures(direction)[textureIndex]
+			or TileTextures(direction)[1]
 		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - light_offset, 0))
 		addFaceToModel(model, x, y + y_offset * scale, z, otx, oty, scale, gettype)
 	end
