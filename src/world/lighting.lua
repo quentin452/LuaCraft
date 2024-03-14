@@ -67,7 +67,7 @@ local function NewLocalLightAdditionCreation(x, y, z)
 	t.query = LightningQueries(t)
 	LightingQueueAdd(t)
 end
-function NewSunlightAddition(x, y, z, value)
+local function NewSunlightAddition(x, y, z, value)
 	local t = { x = x, y = y, z = z, value = value, querytype = "NewSunlightAddition" }
 	t.query = LightningQueries(t)
 	LightingQueueAdd(t)
