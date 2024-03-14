@@ -157,7 +157,7 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 		elseif gettype == "getNegativeZ" then
 			addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 		else
-			LuaCraftErrorLogging("this gettype:" .. gettype .. "is not correct")
+			LuaCraftErrorLogging("this gettype: " .. gettype .. "is not correct")
 		end
 	end
 	_JPROFILER.pop("addFace_blockrendering")
@@ -197,20 +197,14 @@ local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 	getNegativeX = self.parent:getVoxel(i + 1, j, k)
 	getPositiveZ = self.parent:getVoxel(i, j, k - 1)
 	getNegativeZ = self.parent:getVoxel(i, j, k + 1)
-
 	if i == 1 then
 		getPositiveX = getVoxelFromChunk(GetChunk, x - 1, y, z, ChunkSize, j, k)
-	end
-
-	if i == ChunkSize then
+	elseif i == ChunkSize then
 		getNegativeX = getVoxelFromChunk(GetChunk, x + 1, y, z, 1, j, k)
 	end
-
 	if k == 1 then
 		getPositiveZ = getVoxelFromChunk(GetChunk, x, y, z - 1, i, j, ChunkSize)
-	end
-
-	if k == ChunkSize then
+	elseif k == ChunkSize then
 		getNegativeZ = getVoxelFromChunk(GetChunk, x, y, z + 1, i, j, 1)
 	end
 	_JPROFILER.pop("updateAdjacentBlocks_blockrendering")
