@@ -1,6 +1,7 @@
 local playerReach = 5
 
 function NewPlayer(x, y, z)
+	_JPROFILER.push("NewPlayer")
 	local t = NewThing(x, y, z)
 	t.friction = 0.85
 	t.moveSpeed = 0.01
@@ -18,6 +19,7 @@ function NewPlayer(x, y, z)
 	t.IsPlayerHasSpawned = false
 
 	t.update = function(self, dt)
+		_JPROFILER.push("NewPlayer_update")
 		if PhysicsStep then
 			self:physics()
 		end
@@ -52,11 +54,12 @@ function NewPlayer(x, y, z)
 
 		-- Update rotation and pitch
 		self.rotation, self.pitch = Scene.camera.angle.x, Scene.camera.angle.y
-
+		_JPROFILER.pop("NewPlayer_update")
 		return true
 	end
 
 	t.physics = function(self)
+		_JPROFILER.push("NewPlayer_physics")
 		local Camera = Scene.camera
 
 		-- apply gravity and friction
@@ -187,19 +190,24 @@ function NewPlayer(x, y, z)
 		else
 			self.zSpeed = 0
 		end
+		_JPROFILER.pop("NewPlayer_physics")
 	end
-
+	_JPROFILER.pop("NewPlayer")
 	return t
 end
 
 function PlayerInit()
+	_JPROFILER.push("PlayerInit")
 	ThePlayer = CreateThing(NewPlayer(0, 0, 0))
 	initPlayerInventory()
+	_JPROFILER.pop("PlayerInit")
 end
 function FindSolidBlock(x, y, z)
+	_JPROFILER.push("FindSolidBlock")
 	while y > 0 and GetVoxel(x, y, z) == 0 do
 		y = y - 1
 	end
+	_JPROFILER.pop("FindSolidBlock")
 	return y
 end
 
@@ -208,6 +216,7 @@ local function GenerateRandomPosition()
 end
 
 function ChooseSpawnLocation()
+	_JPROFILER.push("ChooseSpawnLocation")
 	local maxTries = 1000
 	local currentTry = 0
 	local foundSolidBlock = false
@@ -233,6 +242,7 @@ function ChooseSpawnLocation()
 
 	if not foundSolidBlock then
 		LuaCraftErrorLogging("Warning: Unable to find a suitable spawn position after " .. maxTries .. " tries.")
+		_JPROFILER.pop("ChooseSpawnLocation")
 		return
 	end
 
@@ -241,16 +251,15 @@ function ChooseSpawnLocation()
 	ThePlayer.y = playerY + 1.1
 	ThePlayer.z = playerZ
 	ThePlayer.IsPlayerHasSpawned = true
+	_JPROFILER.pop("ChooseSpawnLocation")
 end
 
 function initPlayerInventory()
 	_JPROFILER.push("initPlayerInventory")
-
 	PlayerInventory = {
 		items = {},
 		hotbarSelect = 1,
 	}
-
 	local defaultTileIDs = {
 		Tiles.STONE_Block.id,
 		Tiles.COBBLE_Block.id,
@@ -262,19 +271,18 @@ function initPlayerInventory()
 		Tiles.SAND_Block.id,
 		Tiles.GLOWSTONE_Block.id,
 	}
-
 	for i = 1, 36 do
 		PlayerInventory.items[i] = defaultTileIDs[i] or Tiles.AIR_Block.id
 	end
-
 	if enablePROFIProfiler then
 		ProFi:checkMemory(5, "5eme profil")
 	end
-
 	_JPROFILER.pop("initPlayerInventory")
 end
 
 function getPlayerPosition()
+	_JPROFILER.push("getPlayerPosition")
+	_JPROFILER.pop("getPlayerPosition")
 	return {
 		x = math.floor(ThePlayer.x + 0.5),
 		y = math.floor(ThePlayer.y + 0.5),
