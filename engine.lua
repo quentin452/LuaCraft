@@ -283,31 +283,24 @@ end
 
 function CopyTable(orig)
 	_JPROFILER.push("CopyTable")
-
 	local orig_type = type(orig)
 	local copy
 	if orig_type == "table" then
 		copy = {}
-		for orig_key, orig_value in next, orig, nil do
-			copy[CopyTable(orig_key)] = CopyTable(orig_value)
+		for orig_key, orig_value in pairs(orig) do
+			copy[orig_key] = CopyTable(orig_value)
 		end
 		setmetatable(copy, CopyTable(getmetatable(orig)))
 	else
 		copy = orig
 	end
 	_JPROFILER.pop("CopyTable")
-
 	return copy
 end
 function GetSign(n)
-	if n > 0 then
-		return 1
-	end
-	if n < 0 then
-		return -1
-	end
-	return 0
+	return n > 0 and 1 or n < 0 and -1 or 0
 end
+
 function CrossProduct(v1, v2)
 	_JPROFILER.push("CrossProduct")
 
