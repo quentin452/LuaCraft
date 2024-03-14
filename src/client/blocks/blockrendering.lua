@@ -9,6 +9,11 @@ local getPositiveX
 local getNegativeX
 local getPositiveZ
 local getNegativeZ
+local verticesTopBottom = {}
+local verticesPositiveX = {}
+local verticesNegativeX = {}
+local verticesPositiveZ = {}
+local verticesNegativeZ = {}
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
 	local tget = TileTransparency(get)
@@ -51,78 +56,65 @@ function getTextureCoordinatesAndLight(texture, lightOffset)
 	_JPROFILER.pop("getTextureCoordinatesAndLight")
 	return otx, oty
 end
+
 local function addFaceToModel(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModel")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	local vertices = {
-		{ x, y, z, tx, ty },
-		{ x + scale, y, z, tx2, ty },
-		{ x, y, z + scale, tx, ty2 },
-		{ x + scale, y, z, tx2, ty },
-		{ x + scale, y, z + scale, tx2, ty2 },
-		{ x, y, z + scale, tx, ty2 },
-	}
-	createBlockVertices(vertices, model)
+	verticesTopBottom[1] = { x, y, z, tx, ty }
+	verticesTopBottom[2] = { x + scale, y, z, tx2, ty }
+	verticesTopBottom[3] = { x, y, z + scale, tx, ty2 }
+	verticesTopBottom[4] = { x + scale, y, z, tx2, ty }
+	verticesTopBottom[5] = { x + scale, y, z + scale, tx2, ty2 }
+	verticesTopBottom[6] = { x, y, z + scale, tx, ty2 }
+	createBlockVertices(verticesTopBottom, model)
 	_JPROFILER.pop("addFaceToModel")
 end
-
 local function addFaceToModelPositiveX(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelPositiveX")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	local vertices = {
-		{ x, y + scale, z, tx2, ty },
-		{ x, y, z, tx2, ty2 },
-		{ x, y, z + scale, tx, ty2 },
-		{ x, y + scale, z + scale, tx, ty },
-		{ x, y + scale, z, tx2, ty },
-		{ x, y, z + scale, tx, ty2 },
-	}
-	createBlockVertices(vertices, model)
+	verticesPositiveX[1] = { x, y + scale, z, tx2, ty }
+	verticesPositiveX[2] = { x, y, z, tx2, ty2 }
+	verticesPositiveX[3] = { x, y, z + scale, tx, ty2 }
+	verticesPositiveX[4] = { x, y + scale, z + scale, tx, ty }
+	verticesPositiveX[5] = { x, y + scale, z, tx2, ty }
+	verticesPositiveX[6] = { x, y, z + scale, tx, ty2 }
+	createBlockVertices(verticesPositiveX, model)
 	_JPROFILER.pop("addFaceToModelPositiveX")
 end
-
 local function addFaceToModelNegativeX(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelNegativeX")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	local vertices = {
-		{ x + scale, y, z, tx, ty2 },
-		{ x + scale, y + scale, z, tx, ty },
-		{ x + scale, y, z + scale, tx2, ty2 },
-		{ x + scale, y + scale, z, tx, ty },
-		{ x + scale, y + scale, z + scale, tx2, ty },
-		{ x + scale, y, z + scale, tx2, ty2 },
-	}
-	createBlockVertices(vertices, model)
+	verticesNegativeX[1] = { x + scale, y, z, tx, ty2 }
+	verticesNegativeX[2] = { x + scale, y + scale, z, tx, ty }
+	verticesNegativeX[3] = { x + scale, y, z + scale, tx2, ty2 }
+	verticesNegativeX[4] = { x + scale, y + scale, z, tx, ty }
+	verticesNegativeX[5] = { x + scale, y + scale, z + scale, tx2, ty }
+	verticesNegativeX[6] = { x + scale, y, z + scale, tx2, ty2 }
+	createBlockVertices(verticesNegativeX, model)
 	_JPROFILER.pop("addFaceToModelNegativeX")
 end
-
 local function addFaceToModelPositiveZ(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelPositiveZ")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	local vertices = {
-		{ x, y, z, tx, ty2 },
-		{ x, y + scale, z, tx, ty },
-		{ x + scale, y, z, tx2, ty2 },
-		{ x, y + scale, z, tx, ty },
-		{ x + scale, y + scale, z, tx2, ty },
-		{ x + scale, y, z, tx2, ty2 },
-	}
-	createBlockVertices(vertices, model)
+	verticesPositiveZ[1] = { x, y, z, tx, ty2 }
+	verticesPositiveZ[2] = { x, y + scale, z, tx, ty }
+	verticesPositiveZ[3] = { x + scale, y, z, tx2, ty2 }
+	verticesPositiveZ[4] = { x, y + scale, z, tx, ty }
+	verticesPositiveZ[5] = { x + scale, y + scale, z, tx2, ty }
+	verticesPositiveZ[6] = { x + scale, y, z, tx2, ty2 }
+	createBlockVertices(verticesPositiveZ, model)
 	_JPROFILER.pop("addFaceToModelPositiveZ")
 end
-
 local function addFaceToModelNegativeZ(model, x, y, z, otx, oty, scale)
 	_JPROFILER.push("addFaceToModelNegativeZ")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	local vertices = {
-		{ x, y + scale, z + scale, tx2, ty },
-		{ x, y, z + scale, tx2, ty2 },
-		{ x + scale, y, z + scale, tx, ty2 },
-		{ x + scale, y + scale, z + scale, tx, ty },
-		{ x, y + scale, z + scale, tx2, ty },
-		{ x + scale, y, z + scale, tx, ty2 },
-	}
-	createBlockVertices(vertices, model)
+	verticesNegativeZ[1] = { x, y + scale, z + scale, tx2, ty }
+	verticesNegativeZ[2] = { x, y, z + scale, tx2, ty2 }
+	verticesNegativeZ[3] = { x + scale, y, z + scale, tx, ty2 }
+	verticesNegativeZ[4] = { x + scale, y + scale, z + scale, tx, ty }
+	verticesNegativeZ[5] = { x, y + scale, z + scale, tx2, ty }
+	verticesNegativeZ[6] = { x + scale, y, z + scale, tx, ty2 }
+	createBlockVertices(verticesNegativeZ, model)
 	_JPROFILER.pop("addFaceToModelNegativeZ")
 end
 local function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
