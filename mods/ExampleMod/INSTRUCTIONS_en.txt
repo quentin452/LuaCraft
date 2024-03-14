@@ -5,14 +5,6 @@
 -- Follow this syntax to ensure naming consistency and avoid conflicts with other mods or the core game.
 -- If your mod is named "ExampleMod," use the following conventions:
 
--- Prefix all your mod-specific variables with the mod name and an underscore.
-local ExampleMod_size
-
--- Prefix all your mod-specific functions with the mod name and an underscore.
-function ExampleMod_generatesomething()
-   ExampleMod_size = 16
-end
-
 --Prefix all your scripts with ExampleMod_
 
 -- This naming convention helps maintain clarity, prevent naming clashes, and ensures a smooth integration
