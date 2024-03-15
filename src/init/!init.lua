@@ -1,18 +1,8 @@
 require("src/init/assetsinit")
 require("src/init/canvasinit")
-require("src/init/guisandhudinit")
-require("src/init/shadersinit")
 require("src/init/windowsettingsinit")
 require("src/init/worldinit")
 require("src/init/modelloader")
-
-function initWorldGenerationVariables()
-	ChunkSize = 16
-	SliceHeight = 8
-	WorldHeight = 128
-	TileWidth, TileHeight = 1 / 16, 1 / 16
-	TileDataSize = 3
-end
 
 function iterateOverAllTiles()
 	for _, value in pairs(Tiles) do
@@ -70,20 +60,9 @@ function InitializeGame()
 	_JPROFILER.push("InitializeWindowSettings")
 	InitializeWindowSettings()
 	_JPROFILER.pop("InitializeWindowSettings")
-	LogicAccumulator = 0
-	PhysicsStep = true
-	_JPROFILER.push("InitializeGuisAndHud")
-	InitializeGuisAndHud()
-	_JPROFILER.pop("InitializeGuisAndHud")
-	_JPROFILER.push("InitializeShaders")
-	InitializeShaders()
-	_JPROFILER.pop("InitializeShaders")
 	_JPROFILER.push("InitalizeLightningCanevas")
 	InitializeGameTileCanvas()
 	_JPROFILER.pop("InitalizeLightningCanevas")
-	_JPROFILER.push("initWorldGenerationVariables")
-	initWorldGenerationVariables()
-	_JPROFILER.pop("initWorldGenerationVariables")
 	_JPROFILER.push("iterateOverAllTiles")
 	iterateOverAllTiles()
 	_JPROFILER.pop("iterateOverAllTiles")

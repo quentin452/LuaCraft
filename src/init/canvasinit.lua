@@ -1,9 +1,7 @@
 local mult = 1
-TileCanvas = {}
 --TODO DON4T USE CANVAS FOR GAME TILE
 function InitializeGameTileCanvas()
 	-- create lighting value textures on LightingTexture canvas
-	LightValues = 16
 	local lightingWidth = finalAtlasSize * LightValues
 	LightingTexture = lovegraphics.newCanvas(lightingWidth, finalAtlasSize)
 	lovegraphics.setCanvas(LightingTexture)

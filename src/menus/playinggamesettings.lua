@@ -1,16 +1,3 @@
-_PlayingGameSettings = {}
-_PlayingGameSettings.x = 50
-_PlayingGameSettings.y = 50
-_PlayingGameSettings.title = "Settings"
-_PlayingGameSettings.choice = {}
-_PlayingGameSettings.choice[1] = "Enable Vsync?"
-_PlayingGameSettings.choice[2] = "Enable Logging(no warn or errors)?"
-_PlayingGameSettings.choice[3] = "Enable warns logging?"
-_PlayingGameSettings.choice[4] = "Enable errors logging?"
-_PlayingGameSettings.choice[5] = "Render Distance"
-_PlayingGameSettings.choice[6] = "Exiting to game"
-_PlayingGameSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
-
 function drawPlayingMenuSettings()
 	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / playingGameSettings:getWidth()

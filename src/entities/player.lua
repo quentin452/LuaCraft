@@ -256,10 +256,6 @@ end
 
 function initPlayerInventory()
 	_JPROFILER.push("initPlayerInventory")
-	PlayerInventory = {
-		items = {},
-		hotbarSelect = 1,
-	}
 	local defaultTileIDs = {
 		Tiles.STONE_Block.id,
 		Tiles.COBBLE_Block.id,

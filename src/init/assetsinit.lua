@@ -1,5 +1,3 @@
-finalAtlasSize = 256 -- TODO ADD Support for atlas 4096 size and more
-textureAtlasCoordinates = {}
 local function getKeysInOrder(tbl)
 	_JPROFILER.push("getKeysInOrder")
 	local keys = {}
@@ -85,19 +83,6 @@ local function createTILEINGameAssets()
 		end
 	end
 end
-local function InitializeImages()
-	local texturepath = "resources/assets/textures/"
-	-- Load images
-	BlockTest = lovegraphics.newImage(texturepath .. "debug/defaulttexture.png")
-	DefaultTexture = BlockTest -- Reuse the same image reference
-	GuiSprites = lovegraphics.newImage(texturepath .. "guis/gui.png")
-	mainMenuBackground = lovegraphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
-	mainMenuSettingsBackground = lovegraphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
-	playingGamePauseMenu = lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
-	playingGameSettings = lovegraphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
-	worldCreationBackground = lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
-	ChunkBorders = lovegraphics.newImage(texturepath .. "debug/chunkborders.png")
-end
 function InitializeAssets()
 	_JPROFILER.push("InitializeTilesNumberAndName")
 	InitializeTilesNumberAndName()
@@ -105,9 +90,6 @@ function InitializeAssets()
 	_JPROFILER.push("InitalizeTextureStatic")
 	InitalizeTextureStatic()
 	_JPROFILER.pop("InitalizeTextureStatic")
-	_JPROFILER.push("InitializeImages")
-	InitializeImages()
-	_JPROFILER.pop("InitializeImages")
 	_JPROFILER.push("createTILEINGameAssets")
 	createTILEINGameAssets()
 	_JPROFILER.pop("createTILEINGameAssets")

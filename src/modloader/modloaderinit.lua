@@ -1,5 +1,4 @@
 --TODO : FIX CRASH WHILE PROFILING
-ModLoaderTable = {}
 function addFunctionToTag(tag, func)
 	--_JPROFILER.push("addFunctionToTag")
 	if not ModLoaderTable[tag] then

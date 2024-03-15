@@ -1,11 +1,4 @@
-texturepathLuaCraft = "resources/assets/textures/"
-blockandtilesfolderLuaCraft = "blocksandtiles"
-blocktexturepathLuaCraft = blockandtilesfolderLuaCraft .. "/blocks/"
-liquidtexturepathLuaCraft = blockandtilesfolderLuaCraft .. "/liquid/"
-tilestexturepathLuaCraft = blockandtilesfolderLuaCraft .. "/tiles/"
 function InitalizeTextureStatic()
-	TilesTextureFORAtlasList = {}
-
 	for _, tileData in pairs(Tiles) do
 		if type(tileData) == "table" and tileData.id ~= 0 then
 			TilesTextureFORAtlasList[tileData.id] = {}

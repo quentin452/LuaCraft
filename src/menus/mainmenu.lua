@@ -1,13 +1,3 @@
-_Mainmenu = {}
-_Mainmenu.x = 50
-_Mainmenu.y = 50
-_Mainmenu.title = "LuaCraft"
-_Mainmenu.choice = {}
-_Mainmenu.choice[1] = "%2World Creation Menu%0"
-_Mainmenu.choice[2] = "Settings"
-_Mainmenu.choice[3] = "Exit"
-_Mainmenu.selection = 1
-
 function drawMainMenu()
 	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / mainMenuBackground:getWidth()

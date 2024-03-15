@@ -1,16 +1,3 @@
-_MainMenuSettings = {}
-_MainMenuSettings.x = 50
-_MainMenuSettings.y = 50
-_MainMenuSettings.title = "Settings"
-_MainMenuSettings.choice = {}
-_MainMenuSettings.choice[1] = "Enable Vsync?"
-_MainMenuSettings.choice[2] = "Enable Logging(no warn or errors)?"
-_MainMenuSettings.choice[3] = "Enable warns logging?"
-_MainMenuSettings.choice[4] = "Enable errors logging?"
-_MainMenuSettings.choice[5] = "Render Distance"
-_MainMenuSettings.choice[6] = "Exiting to main menu"
-_MainMenuSettings.selection = 0 -- initialize to 0 to prevent unwanted object selection
-
 function drawMainMenuSettings()
 	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / mainMenuSettingsBackground:getWidth()

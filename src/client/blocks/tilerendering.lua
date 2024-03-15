@@ -1,6 +1,3 @@
--- Cache for storing tile models
-TileModelCaching = {}
-
 -- Renders a tile in the world
 function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 	_JPROFILER.push("TileRendering")

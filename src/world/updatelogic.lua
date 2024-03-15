@@ -1,22 +1,15 @@
 --TODO FIX : trees sometimes has problems to be generated across chunk borders
 --TODO FIX : major lags while using high render distance and caused by chunk.slices[i]:updateModel() and many other
-
-ChunkSet = {}
-ChunkHashTable = {}
-CaveList = {}
-ThingList = {}
 local destroyChunkModels = 0
 local updateCounterForRemeshModel = 0
-
-RenderDistance = getRenderDistanceValue()
 
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
 	if gamestate == gamestatePlayingGame then
+		renderdistancevalue()
 		PlayerInitIfNeeded()
 		UpdateAndGenerateChunks(RenderDistance)
 		UpdateLogic(dt)
-		renderdistancevalue()
 	end
 	_JPROFILER.pop("UpdateGameDT")
 end

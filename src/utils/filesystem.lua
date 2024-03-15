@@ -1,4 +1,4 @@
-Settings = {}
+local FileSystemSettings = {}
 local logFilePath = userDirectory .. "\\.LuaCraft\\luacraftconfig.log"
 
 function writeToLog(string, message)
@@ -64,8 +64,6 @@ function saveLogsToOldLogsFolder()
 		LuaCraftErrorLogging("Failed to read current log file. Error: " .. error_message)
 	end
 end
-
-Settings = {}
 
 function checkAndUpdateDefaults(Settings)
 	_JPROFILER.push("checkAndUpdateDefaults")
@@ -145,7 +143,6 @@ function loadAndSaveLuaCraftFileSystem()
 	local file_content, error_message = customReadFile(configFilePath)
 
 	if file_content then
-		local Settings = {}
 		local orderedKeys = {
 			"vsync",
 			"LuaCraftPrintLoggingNormal",
@@ -159,13 +156,13 @@ function loadAndSaveLuaCraftFileSystem()
 			local value = file_content:match(key .. "=(%w+)")
 			if value then
 				local numValue = tonumber(value)
-				Settings[key] = numValue or (value == "true")
+				FileSystemSettings[key] = numValue or (value == "true")
 			end
 		end
 
 		LuaCraftPrintLoggingNormal("Settings loaded successfully.")
 
-		checkAndUpdateDefaults(Settings)
+		checkAndUpdateDefaults(FileSystemSettings)
 
 		-- Open the file in Writter mod
 		local file, error_message = io.open(configFilePath, "w")
@@ -173,7 +170,7 @@ function loadAndSaveLuaCraftFileSystem()
 		if file then
 			-- Write parameters with verifications
 			for _, key in ipairs(orderedKeys) do
-				file:write(key .. "=" .. tostring(Settings[key]) .. "\n")
+				file:write(key .. "=" .. tostring(FileSystemSettings[key]) .. "\n")
 			end
 
 			file:close()
@@ -201,8 +198,6 @@ function getLuaCraftPrintLoggingErrorValue()
 	local file_content, error_message = customReadFile(luacraftconfig)
 	return file_content and file_content:match("LuaCraftErrorLogging=(%d)")
 end
-
-EnableLuaCraftPrintLoggingNormalLogging = getLuaCraftPrintLoggingNormalValue()
 
 function LuaCraftPrintLoggingNormal(...)
 	if EnableLuaCraftPrintLoggingNormalLogging then

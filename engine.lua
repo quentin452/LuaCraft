@@ -1,9 +1,5 @@
 -- Super Simple 3D Engine v1
 -- groverburger 2019
-
-cpml = require("libs/cpml")
-
-engine = {}
 engine.objFormat = {
 	{ "VertexPosition", "float", 4 },
 	{ "VertexTexCoord", "float", 2 },

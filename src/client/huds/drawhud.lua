@@ -81,8 +81,6 @@ function GetPlayerDirection(rotation, pitch)
 end
 
 local function CreateChunkBordersVertices()
-	ChunkVerts = {}
-
 	-- Define the coordinates for each face
 	local faces = {
 		{ -- Bottom face

@@ -1,13 +1,3 @@
-_GamePlayingPauseMenu = {}
-_GamePlayingPauseMenu.x = 50
-_GamePlayingPauseMenu.y = 50
-_GamePlayingPauseMenu.title = "Pause"
-_GamePlayingPauseMenu.choice = {}
-_GamePlayingPauseMenu.choice[1] = "UnPause"
-_GamePlayingPauseMenu.choice[2] = "Settings"
-_GamePlayingPauseMenu.choice[3] = "Exit to main menu"
-_GamePlayingPauseMenu.selection = 1
-
 function drawGamePlayingPauseMenu()
 	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / playingGamePauseMenu:getWidth()

@@ -1,12 +1,3 @@
-_WorldCreationMenu = {}
-_WorldCreationMenu.x = 50
-_WorldCreationMenu.y = 50
-_WorldCreationMenu.title = "World Creation Menu"
-_WorldCreationMenu.choice = {}
-_WorldCreationMenu.choice[1] = "Create World?"
-_WorldCreationMenu.choice[2] = "Exiting to main menu"
-_WorldCreationMenu.selection = 0 -- initialize to 0 to prevent unwanted object selection
-
 function drawWorldCreationMenu()
 	local w, h = lovegraphics.getDimensions()
 	local scaleX = w / worldCreationBackground:getWidth()

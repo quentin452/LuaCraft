@@ -465,8 +465,6 @@ function NewChunk(x, z)
 end
 
 local transparency3 = 3
-ChunkSliceModels = {}
-
 function NewChunkSlice(x, y, z, parent)
 	_JPROFILER.push("NewChunkSlice")
 

@@ -1,7 +1,3 @@
-require("src/utils/filesystem")
-
-globalVSync = lovewindow.getVSync()
-
 function reloadConfig()
 	local file_content, error_message = customReadFile(luacraftconfig)
 	if file_content then
@@ -194,20 +190,6 @@ function printErrorsSettings()
 		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("printErrorsSettings")
-end
-
-function createDefaultConfig(filePath)
-	local defaultContent =
-		"vsync=true\nLuaCraftPrintLoggingNormal=false\nLuaCraftWarnLogging=false\nLuaCraftErrorLogging=false\nrenderdistance=5"
-
-	local file, error_message = io.open(filePath, "w")
-	if file then
-		file:write(defaultContent)
-		file:close()
-		print("Created default luacraftconfig.txt")
-	else
-		LuaCraftErrorLogging("Failed to create default luacraftconfig.txt. Error: " .. error_message)
-	end
 end
 
 function SettingsHandlingInit()

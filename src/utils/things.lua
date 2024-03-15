@@ -62,6 +62,7 @@ function NewThing(x, y, z)
 end
 
 -- a parent class for a 2d sprite billboard 3d object
+--TODO
 function NewBillboard(x, y, z)
 	local t = NewThing(x, y, z)
 	t.name = "billboardthing"

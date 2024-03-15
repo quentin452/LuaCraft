@@ -1,6 +1,3 @@
-font25 = lovegraphics.newFont(25)
-font15 = lovegraphics.newFont(15)
-
 local colorMap = {
 	["0"] = { 255, 255, 255 }, -- white
 	["1"] = { 255, 0, 0 }, -- red
@@ -54,11 +51,14 @@ local fontTable = {
 	PlayingGame = font15,
 }
 
+local previousGamestate = nil
+
 function setFont()
 	_JPROFILER.push("setFont")
 	local selectedFont = fontTable[gamestate]
-	if selectedFont then
+	if selectedFont and gamestate ~= previousGamestate then
 		lovegraphics.setFont(selectedFont)
+		previousGamestate = gamestate
 	end
 	_JPROFILER.pop("setFont")
 end
