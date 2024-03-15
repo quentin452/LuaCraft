@@ -86,7 +86,7 @@ function NewBillboard(x, y, z)
 
 	t.update = function(self, dt)
 		self.direction = -1 * Scene.camera.angle.x + math.pi / 2
-		self.model:setTransform({ self.x, self.y, self.z }, { self.direction, cpml.vec3.unit_y })
+		self.model:setTransform({ self.x, self.y, self.z }, { self.direction, Cpml.vec3.unit_y })
 		return true
 	end
 
