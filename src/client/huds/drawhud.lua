@@ -14,6 +14,18 @@ function DrawCanevas()
 	_JPROFILER.pop("DrawCanevas")
 end
 
+local DrawF3Tab = {
+	["Tiles"] = Tiles,
+	["ChunkSet"] = ChunkSet,
+	["ChunkHashTable"] = ChunkHashTable,
+	["CaveList"] = CaveList,
+	["ThingList"] = ThingList,
+	["TilesTextureFORAtlasList"] = TilesTextureFORAtlasList,
+	["renderChunks"] = renderChunks,
+	["textureAtlasCoordinates"] = textureAtlasCoordinates,
+	["ChunkSliceModels"] = ChunkSliceModels,
+	["TileModelCaching"] = TileModelCaching,
+}
 function DrawF3()
 	_JPROFILER.push("DrawF3")
 	lovegraphics.setColor(1, 1, 1)
@@ -28,21 +40,8 @@ function DrawF3()
 		lovegraphics.print("Direction: Unknown", 0, 130)
 	end
 
-	local tables = {
-		["Tiles"] = Tiles,
-		["ChunkSet"] = ChunkSet,
-		["ChunkHashTable"] = ChunkHashTable,
-		["CaveList"] = CaveList,
-		["ThingList"] = ThingList,
-		["TilesTextureFORAtlasList"] = TilesTextureFORAtlasList,
-		["renderChunks"] = renderChunks,
-		["textureAtlasCoordinates"] = textureAtlasCoordinates,
-		["ChunkSliceModels"] = ChunkSliceModels,
-		["TileModelCaching"] = TileModelCaching,
-	}
-
 	local yOffset = 150
-	for tableName, tableData in pairs(tables) do
+	for tableName, tableData in pairs(DrawF3Tab) do
 		local count = 0
 		for _ in pairs(tableData) do
 			count = count + 1
