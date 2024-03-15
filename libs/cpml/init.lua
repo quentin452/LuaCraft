@@ -32,13 +32,13 @@
                 :@@@@@@@++;;;+#@@@@@@+`
                       .;'+++++;.
 --]]
-local modules = (...) and (...):gsub('%.init$', '') .. ".modules." or ""
+local modules = (...) and (...):gsub("%.init$", "") .. ".modules." or ""
 
-local cpml = {
-	_LICENSE = "CPML is distributed under the terms of the MIT license. See LICENSE.md.",
-	_URL = "https://github.com/excessive/cpml",
+local Cpml = {
+	_LICENSE = "Cpml is distributed under the terms of the MIT license. See LICENSE.md.",
+	_URL = "https://github.com/excessive/Cpml",
 	_VERSION = "1.2.9",
-	_DESCRIPTION = "Cirno's Perfect Math Library: Just about everything you need for 3D games. Hopefully."
+	_DESCRIPTION = "Cirno's Perfect Math Library: Just about everything you need for 3D games. Hopefully.",
 }
 
 local files = {
@@ -59,7 +59,7 @@ local files = {
 }
 
 for _, file in ipairs(files) do
-	cpml[file] = require(modules .. file)
+	Cpml[file] = require(modules .. file)
 end
 
-return cpml
+return Cpml
