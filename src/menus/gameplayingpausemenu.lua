@@ -1,12 +1,12 @@
 function drawGamePlayingPauseMenu()
-	local w, h = lovegraphics.getDimensions()
-	local scaleX = w / playingGamePauseMenu:getWidth()
-	local scaleY = h / playingGamePauseMenu:getHeight()
+	local w, h = Lovegraphics.getDimensions()
+	local scaleX = w / PlayingGamePauseMenu:getWidth()
+	local scaleY = h / PlayingGamePauseMenu:getHeight()
 
-	lovegraphics.draw(playingGamePauseMenu, 0, 0, 0, scaleX, scaleY)
+	Lovegraphics.draw(PlayingGamePauseMenu, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _GamePlayingPauseMenu.y
-	local lineHeight = font25:getHeight("X")
+	local lineHeight = Font25:getHeight("X")
 
 	-- Title Screen
 	drawColorString(_GamePlayingPauseMenu.title, _GamePlayingPauseMenu.x, posY)
@@ -43,9 +43,9 @@ function keysinitGamePlayingPauseMenu(k)
 			end
 		elseif k == "return" then
 			if _GamePlayingPauseMenu.selection == 1 then
-				gamestate = gamestatePlayingGame
+				Gamestate = GamestatePlayingGame
 			elseif _GamePlayingPauseMenu.selection == 2 then
-				gamestate = gamestatePlayingGameSettings
+				Gamestate = GamestatePlayingGameSettings
 			elseif _GamePlayingPauseMenu.selection == 3 then
 				--TODO here add chunk saving system before going to MainMenu and during gameplay
 				for chunk in pairs(ChunkSet) do
@@ -59,7 +59,7 @@ function keysinitGamePlayingPauseMenu(k)
 				ChunkHashTable = {}
 				CaveList = {}
 				ThePlayer.IsPlayerHasSpawned = false
-				gamestate = gamestateMainMenu
+				Gamestate = GamestateMainMenu
 			end
 		end
 	end

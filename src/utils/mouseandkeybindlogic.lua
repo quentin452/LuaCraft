@@ -17,7 +17,7 @@ function MouseLogicOnPlay(x, y, b)
 	local pos = ThePlayer and ThePlayer.cursorpos
 	local value = 0
 
-	if b == 2 and fixinputforDrawCommandInput == false then
+	if b == 2 and FixinputforDrawCommandInput == false then
 		pos = ThePlayer and ThePlayer.cursorposPrev
 		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or Tiles.AIR_Block.id
 	end
@@ -29,7 +29,7 @@ function MouseLogicOnPlay(x, y, b)
 		LightingUpdate()
 	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
 		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
-		hudTimeLeft = 3
+		HudTimeLeft = 3
 	end
 	_JPROFILER.pop("MouseLogicOnPlay")
 	_JPROFILER.pop("frame")
@@ -41,57 +41,57 @@ function KeyPressed(k)
 	end
 	-- simplified hotbar number press code, thanks nico-abram!
 	local numberPress = tonumber(k)
-	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and fixinputforDrawCommandInput == false then
+	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and FixinputforDrawCommandInput == false then
 		PlayerInventory.hotbarSelect = numberPress
 	end
-	if gamestate == gamestateMainMenu then
+	if Gamestate == GamestateMainMenu then
 		_JPROFILER.push("keysinitMainMenu")
 		keysinitMainMenu(k)
 		_JPROFILER.pop("keysinitMainMenu")
 	end
-	if gamestate == gamestateMainMenuSettings then
+	if Gamestate == GamestateMainMenuSettings then
 		_JPROFILER.push("keysinitMainMenuSettings")
 		keysinitMainMenuSettings(k)
 		_JPROFILER.pop("keysinitMainMenuSettings")
 	end
-	if gamestate == gamestateWorldCreationMenu then
+	if Gamestate == GamestateWorldCreationMenu then
 		_JPROFILER.push("keysInitWorldCreationMenu")
 		keysInitWorldCreationMenu(k)
 		_JPROFILER.pop("keysInitWorldCreationMenu")
 	end
-	if gamestate == gamestatePlayingGame then
+	if Gamestate == GamestatePlayingGame then
 		if k == "escape" then
-			if enableCommandHUD then
-				fixinputforDrawCommandInput = false
-				enableCommandHUD = false
+			if EnableCommandHUD then
+				FixinputforDrawCommandInput = false
+				EnableCommandHUD = false
 			else
-				gamestate = gamestateGamePausing
+				Gamestate = GamestateGamePausing
 			end
 		elseif k == "f3" then
-			enableF3 = not enableF3
+			EnableF3 = not EnableF3
 		elseif k == "f8" then
-			enableF8 = not enableF8
+			EnableF8 = not EnableF8
 		elseif k == "f1" then
-			--enableTESTBLOCK = not enableTESTBLOCK
+			--EnableTESTBLOCK = not EnableTESTBLOCK
 		elseif k == "w" then
-			if enableCommandHUD == false then
+			if EnableCommandHUD == false then
 				CurrentCommand = ""
-				enableCommandHUD = true
+				EnableCommandHUD = true
 			end
-		elseif k == "backspace" and enableCommandHUD then
+		elseif k == "backspace" and EnableCommandHUD then
 			CurrentCommand = string.sub(CurrentCommand, 1, -2)
-		elseif k == "return" and enableCommandHUD then
+		elseif k == "return" and EnableCommandHUD then
 			ExecuteCommand(CurrentCommand)
 			CurrentCommand = ""
 		end
 	end
 
-	if gamestate == gamestateGamePausing then
+	if Gamestate == GamestateGamePausing then
 		_JPROFILER.push("keysinitGamePlayingPauseMenu")
 		keysinitGamePlayingPauseMenu(k)
 		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
 	end
-	if gamestate == gamestatePlayingGameSettings then
+	if Gamestate == GamestatePlayingGameSettings then
 		_JPROFILER.push("keysinitPlayingMenuSettings")
 		keysinitPlayingMenuSettings(k)
 		_JPROFILER.pop("keysinitPlayingMenuSettings")

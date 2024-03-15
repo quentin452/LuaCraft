@@ -1,6 +1,6 @@
 -- Super Simple 3D Engine v1
 -- groverburger 2019
-engine.objFormat = {
+Engine.objFormat = {
 	{ "VertexPosition", "float", 4 },
 	{ "VertexTexCoord", "float", 2 },
 	{ "VertexNormal", "float", 3 },
@@ -11,8 +11,8 @@ engine.objFormat = {
 -- each vert is its own table that contains three coordinate numbers, and may contain 2 extra numbers as uv coordinates
 -- another example, this with uvs: { {0,0,0, 0,0}, {0,1,0, 1,0}, {0,0,1, 0,1} }
 -- polygons are automatically created with three consecutive verts
-function engine.newModel(verts, texture, coords, color, format)
-	_JPROFILER.push("engine.newModel")
+function Engine.newModel(verts, texture, coords, color, format)
+	_JPROFILER.push("Engine.newModel")
 
 	local m = {}
 
@@ -105,13 +105,13 @@ function engine.newModel(verts, texture, coords, color, format)
 		return not self.dead
 	end
 
-	_JPROFILER.pop("engine.newModel")
+	_JPROFILER.pop("Engine.newModel")
 	return m
 end
 
 -- create a new Scene object with given canvas output size
-function engine.newScene(renderWidth, renderHeight)
-	_JPROFILER.push("engine.newScene")
+function Engine.newScene(renderWidth, renderHeight)
+	_JPROFILER.push("Engine.newScene")
 
 	love.graphics.setDepthMode("lequal", true)
 	scene = {}
@@ -164,7 +164,7 @@ return color * texturecolor;}
 		if love.keyboard.isDown("lctrl") then
 			speed = speed * 10
 		end
-		local Camera = engine.camera
+		local Camera = Engine.camera
 		local pos = Camera.pos
 
 		local mul = love.keyboard.isDown("w") and 1 or (love.keyboard.isDown("s") and -1 or 0)
@@ -263,7 +263,7 @@ return color * texturecolor;}
 		Camera.angle.x = Camera.angle.x + math.rad(dx * 0.5)
 		Camera.angle.y = math.max(math.min(Camera.angle.y + math.rad(dy * 0.5), math.pi / 2), -1 * math.pi / 2)
 	end
-	_JPROFILER.pop("engine.newScene")
+	_JPROFILER.pop("Engine.newScene")
 
 	return scene
 end
@@ -372,4 +372,4 @@ function MoveVerts(verts, sx, sy, sz)
 	return verts
 end
 
-return engine
+return Engine

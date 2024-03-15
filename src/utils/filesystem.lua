@@ -1,5 +1,5 @@
 local FileSystemSettings = {}
-local logFilePath = userDirectory .. "\\.LuaCraft\\luacraftconfig.log"
+local logFilePath = UserDirectory .. "\\.LuaCraft\\Luacraftconfig.log"
 
 function writeToLog(string, message)
 	local file, err = io.open(logFilePath, "a") -- "a" stands for append mode
@@ -36,7 +36,7 @@ function createDirectoryIfNotExists(directoryPath)
 end
 
 function saveLogsToOldLogsFolder()
-	local oldLogsFolder = userDirectory .. ".LuaCraft\\old_logs\\"
+	local oldLogsFolder = UserDirectory .. ".LuaCraft\\old_logs\\"
 	local timestamp = os.date("%Y%m%d%H%M%S")
 	local newLogFilePath = oldLogsFolder .. "luacraftlog_" .. timestamp .. ".txt"
 
@@ -128,8 +128,8 @@ function loadAndSaveLuaCraftFileSystem()
 
 	LuaCraftPrintLoggingNormal("Attempting to load LuaCraft settings")
 
-	local luaCraftDirectory = userDirectory .. ".LuaCraft\\"
-	local configFilePath = luaCraftDirectory .. "luacraftconfig.txt"
+	local luaCraftDirectory = UserDirectory .. ".LuaCraft\\"
+	local configFilePath = luaCraftDirectory .. "Luacraftconfig.txt"
 
 	createFileIfNotExists(configFilePath)
 
@@ -174,7 +174,7 @@ function loadAndSaveLuaCraftFileSystem()
 			end
 
 			file:close()
-			LuaCraftPrintLoggingNormal("Settings loaded and saved to luacraftconfig.txt")
+			LuaCraftPrintLoggingNormal("Settings loaded and saved to Luacraftconfig.txt")
 		else
 			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
 		end
@@ -185,17 +185,17 @@ function loadAndSaveLuaCraftFileSystem()
 end
 
 function getLuaCraftPrintLoggingNormalValue()
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 	return file_content and file_content:match("LuaCraftPrintLoggingNormal=(%d)")
 end
 
 function getLuaCraftPrintLoggingWarnValue()
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 	return file_content and file_content:match("LuaCraftWarnLogging=(%d)")
 end
 
 function getLuaCraftPrintLoggingErrorValue()
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 	return file_content and file_content:match("LuaCraftErrorLogging=(%d)")
 end
 
@@ -227,7 +227,7 @@ function LuaCraftErrorLogging(...)
 	end
 end
 
-local logFilePath = userDirectory .. "\\.LuaCraft\\luacraftconfig.log"
+local logFilePath = UserDirectory .. "\\.LuaCraft\\Luacraftconfig.log"
 
 function writeToLog(string, message)
 	local file, err = io.open(logFilePath, "a") -- "a" stands for append mode

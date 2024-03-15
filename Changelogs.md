@@ -44,7 +44,7 @@ NEW FEATURES/IMPROVEMENTS:
     for github : add github workflows : thx to Omay238
     [micro optimizations on love.graphics usage](https://github.com/quentin452/LuaCraft/commit/437ee090d742949b3bd223ab3f2a9b14b48518f2)
     [optimize usefull.lua functions](https://github.com/quentin452/LuaCraft/commit/75fce067037c53a4dc7dc37903e0a0b85fc0a1c0)
-    Improve GameState handling
+    Improve Gamestate handling
     Improve Tiles/Blocks handling
     Improve Generation
     Improve Chunk procedural gen/render distance
@@ -60,7 +60,7 @@ NEW FEATURES/IMPROVEMENTS:
     Add some huds
     Draw in 2D in HOTBAR Flowers/Sapplings tiles
     Improve Tile Rendering for flowers/sapplings by example
-    Optimize luacraftconfig.txt file reading performance
+    Optimize Luacraftconfig.txt file reading performance
     Add /tp command
     and some other....
 

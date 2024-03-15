@@ -1,10 +1,10 @@
 function reloadConfig()
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
 		local vsyncValue = file_content:match("vsync=(%w+)")
 		if vsyncValue then
-			globalVSync = vsyncValue:lower() == "true"
-			lovewindow.setVSync(globalVSync and 1 or 0)
+			GlobalVSync = vsyncValue:lower() == "true"
+			Lovewindow.setVSync(GlobalVSync and 1 or 0)
 		end
 
 		--	local renderdistanceValue = file_content:match("renderdistance=(%d+)")
@@ -19,7 +19,7 @@ function reloadConfig()
 		local errorValue = file_content:match("LuaCraftErrorLogging=(%w+)")
 		EnableLuaCraftLoggingError = errorValue:lower() == "true"
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 end
 
@@ -30,12 +30,12 @@ function toggleFullScreen()
 	local fullscreenSetting = GlobalFullscreen and "true" or "false"
 
 	-- Update the configuration file
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		file_content = file_content:gsub("fullscreen=%w+", "fullscreen=" .. fullscreenSetting)
 
-		local file, error_message = io.open(luacraftconfig, "w")
+		local file, error_message = io.open(Luacraftconfig, "w")
 
 		if file then
 			file:write(file_content)
@@ -44,7 +44,7 @@ function toggleFullScreen()
 			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
 		end
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 
 	-- Set the window to fullscreen
@@ -57,14 +57,14 @@ end
 
 function toggleVSync()
 	_JPROFILER.push("toggleVSync")
-	globalVSync = not globalVSync
-	lovewindow.setVSync(globalVSync and 1 or 0)
+	GlobalVSync = not GlobalVSync
+	Lovewindow.setVSync(GlobalVSync and 1 or 0)
 
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
-		file_content = file_content:gsub("vsync=%w+", "vsync=" .. (globalVSync and "true" or "false"))
-		local file, error_message = io.open(luacraftconfig, "w")
+		file_content = file_content:gsub("vsync=%w+", "vsync=" .. (GlobalVSync and "true" or "false"))
+		local file, error_message = io.open(Luacraftconfig, "w")
 		if file then
 			file:write(file_content)
 			file:close()
@@ -72,25 +72,25 @@ function toggleVSync()
 			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
 		end
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("toggleVSync")
 end
 
 function getRenderDistanceValue()
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		local current_renderdistance = tonumber(file_content:match("renderdistance=(%d+)")) or 6
 		return current_renderdistance * 16 --ChunkSize
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 		return
 	end
 end
 
 function renderdistanceSetting()
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		local current_renderdistance = tonumber(file_content:match("renderdistance=(%d+)")) or 0
@@ -102,7 +102,7 @@ function renderdistanceSetting()
 
 		file_content = file_content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
 
-		local file, error_message = io.open(luacraftconfig, "w")
+		local file, error_message = io.open(Luacraftconfig, "w")
 		if file then
 			file:write(file_content)
 			file:close()
@@ -110,7 +110,7 @@ function renderdistanceSetting()
 			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
 		end
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	return globalRenderDistance
 end
@@ -118,16 +118,16 @@ end
 function printNormalLoggingSettings()
 	_JPROFILER.push("printNormalLoggingSettings")
 	EnableLuaCraftPrintLoggingNormalLogging = not EnableLuaCraftPrintLoggingNormalLogging
-	-- Load current contents of luacraftconfig.txt file
-	local file_content, error_message = customReadFile(luacraftconfig)
+	-- Load current contents of Luacraftconfig.txt file
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		-- Update print value in content
 		local printValue = EnableLuaCraftPrintLoggingNormalLogging and "true" or "false"
 		file_content = file_content:gsub("LuaCraftPrintLoggingNormal=%w+", "LuaCraftPrintLoggingNormal=" .. printValue)
 
-		-- Rewrite luacraftconfig.txt file with updated content
-		local file, error_message = io.open(luacraftconfig, "w")
+		-- Rewrite Luacraftconfig.txt file with updated content
+		local file, error_message = io.open(Luacraftconfig, "w")
 		if file then
 			file:write(file_content)
 			file:close()
@@ -135,24 +135,24 @@ function printNormalLoggingSettings()
 			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
 		end
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("printNormalLoggingSettings")
 end
 function printWarnsSettings()
 	_JPROFILER.push("printWarnsSettings")
 	EnableLuaCraftLoggingWarn = not EnableLuaCraftLoggingWarn
-	-- Load current contents of luacraftconfig.txt file
+	-- Load current contents of Luacraftconfig.txt file
 
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		-- Update print value in content
 		local printValue = EnableLuaCraftLoggingWarn and "true" or "false"
 		file_content = file_content:gsub("LuaCraftWarnLogging=%w+", "LuaCraftWarnLogging=" .. printValue)
 
-		-- Rewrite luacraftconfig.txt file with updated content
-		local file, error_message = io.open(luacraftconfig, "w")
+		-- Rewrite Luacraftconfig.txt file with updated content
+		local file, error_message = io.open(Luacraftconfig, "w")
 		if file then
 			file:write(file_content)
 			file:close()
@@ -160,7 +160,7 @@ function printWarnsSettings()
 			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
 		end
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("printWarnsSettings")
 end
@@ -169,17 +169,17 @@ function printErrorsSettings()
 
 	EnableLuaCraftLoggingError = not EnableLuaCraftLoggingError
 
-	-- Load current contents of luacraftconfig.txt file
+	-- Load current contents of Luacraftconfig.txt file
 
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		-- Update print value in content
 		local printValue = EnableLuaCraftLoggingError and "true" or "false"
 		file_content = file_content:gsub("LuaCraftErrorLogging=%w+", "LuaCraftErrorLogging=" .. printValue)
 
-		-- Rewrite luacraftconfig.txt file with updated content
-		local file, error_message = io.open(luacraftconfig, "w")
+		-- Rewrite Luacraftconfig.txt file with updated content
+		local file, error_message = io.open(Luacraftconfig, "w")
 		if file then
 			file:write(file_content)
 			file:close()
@@ -187,7 +187,7 @@ function printErrorsSettings()
 			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
 		end
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("printErrorsSettings")
 end
@@ -196,17 +196,17 @@ function SettingsHandlingInit()
 	_JPROFILER.push("SettingsHandlingInit")
 
 	reloadConfig()
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
 		local vsyncValue = file_content:match("vsync=(%d)")
 		if vsyncValue then
-			lovewindow.setVSync(tonumber(vsyncValue))
+			Lovewindow.setVSync(tonumber(vsyncValue))
 		end
 
 		local renderdistanceValue = file_content:match("renderdistance=(%d)")
 		globalRenderDistance = tonumber(renderdistanceValue)
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 
 	_JPROFILER.pop("SettingsHandlingInit")

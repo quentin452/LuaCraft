@@ -1,12 +1,12 @@
 function drawMainMenuSettings()
-	local w, h = lovegraphics.getDimensions()
-	local scaleX = w / mainMenuSettingsBackground:getWidth()
-	local scaleY = h / mainMenuSettingsBackground:getHeight()
+	local w, h = Lovegraphics.getDimensions()
+	local scaleX = w / MainMenuSettingsBackground:getWidth()
+	local scaleY = h / MainMenuSettingsBackground:getHeight()
 
-	lovegraphics.draw(mainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
+	Lovegraphics.draw(MainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _MainMenuSettings.y
-	local lineHeight = font25:getHeight("X")
+	local lineHeight = Font25:getHeight("X")
 
 	-- Title Screen
 	drawColorString(_MainMenuSettings.title, _MainMenuSettings.x, posY)
@@ -14,7 +14,7 @@ function drawMainMenuSettings()
 
 	-- Choices
 	local marque = ""
-	local file_content, error_message = customReadFile(luacraftconfig)
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		local Settings = {}
@@ -59,7 +59,7 @@ function drawMainMenuSettings()
 			posY = posY + lineHeight
 		end
 	else
-		LuaCraftErrorLogging("Failed to read luacraftconfig.txt. Error: " .. error_message)
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 
 	-- Help
@@ -89,9 +89,9 @@ function keysinitMainMenuSettings(k)
 				printErrorsSettings()
 			elseif _MainMenuSettings.selection == 5 then
 				renderdistanceSetting()
-				renderdistancegetresetted = true
+				Renderdistancegetresetted = true
 			elseif _MainMenuSettings.selection == 6 then
-				gamestate = gamestateMainMenu
+				Gamestate = GamestateMainMenu
 				_MainMenuSettings.selection = 0
 			end
 		end

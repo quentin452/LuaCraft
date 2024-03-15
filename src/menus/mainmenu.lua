@@ -1,12 +1,12 @@
 function drawMainMenu()
-	local w, h = lovegraphics.getDimensions()
-	local scaleX = w / mainMenuBackground:getWidth()
-	local scaleY = h / mainMenuBackground:getHeight()
+	local w, h = Lovegraphics.getDimensions()
+	local scaleX = w / MainMenuBackground:getWidth()
+	local scaleY = h / MainMenuBackground:getHeight()
 
-	lovegraphics.draw(mainMenuBackground, 0, 0, 0, scaleX, scaleY)
+	Lovegraphics.draw(MainMenuBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _Mainmenu.y
-	local lineHeight = font25:getHeight("X")
+	local lineHeight = Font25:getHeight("X")
 
 	-- Title Screen
 	drawColorString(_Mainmenu.title, _Mainmenu.x, posY)
@@ -43,9 +43,9 @@ function keysinitMainMenu(k)
 		elseif k == "return" then
 			if _Mainmenu.selection == 1 then
 				_WorldCreationMenu.selection = 0 --prevent https://github.com/quentin452/LuaCraft/issues/9
-				gamestate = gamestateWorldCreationMenu
+				Gamestate = GamestateWorldCreationMenu
 			elseif _Mainmenu.selection == 2 then
-				gamestate = gamestateMainMenuSettings
+				Gamestate = GamestateMainMenuSettings
 			elseif _Mainmenu.selection == 3 then
 				love.event.push("quit")
 			end

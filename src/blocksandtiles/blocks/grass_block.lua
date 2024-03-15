@@ -1,6 +1,6 @@
-local grassBottomTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "grass/grass_bottom.png"
-local grassTopTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "grass/grass_top.png"
-local grassSideTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "grass/grass_side.png"
+local grassBottomTexture = TexturepathLuaCraft .. BlockTexturepathLuaCraft .. "grass/grass_bottom.png"
+local grassTopTexture = TexturepathLuaCraft .. BlockTexturepathLuaCraft .. "grass/grass_top.png"
+local grassSideTexture = TexturepathLuaCraft .. BlockTexturepathLuaCraft .. "grass/grass_side.png"
 local grass_block = {}
 
 function grass_block.initialize()

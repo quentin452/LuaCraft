@@ -1,10 +1,10 @@
 function DrawCanevas()
 	_JPROFILER.push("DrawCanevas")
-	local scale = lovegraphics.getWidth() / InterfaceWidth
-	lovegraphics.draw(
+	local scale = Lovegraphics.getWidth() / InterfaceWidth
+	Lovegraphics.draw(
 		Scene.twoCanvas,
-		lovegraphics.getWidth() / 2,
-		lovegraphics.getHeight() / 2 + 1,
+		Lovegraphics.getWidth() / 2,
+		Lovegraphics.getHeight() / 2 + 1,
 		0,
 		scale,
 		scale,
@@ -22,7 +22,7 @@ local DrawF3Tab = {
 	["ThingList"] = ThingList,
 	["TilesTextureFORAtlasList"] = TilesTextureFORAtlasList,
 	["renderChunks"] = renderChunks,
-	["textureAtlasCoordinates"] = textureAtlasCoordinates,
+	["TextureAtlasCoordinates"] = TextureAtlasCoordinates,
 	["ChunkSliceModels"] = ChunkSliceModels,
 	["TileModelCaching"] = TileModelCaching,
 	["TileTransparencyCache"] = TileTransparencyCache,
@@ -31,16 +31,16 @@ local DrawF3Tab = {
 }
 function DrawF3()
 	_JPROFILER.push("DrawF3")
-	lovegraphics.setColor(1, 1, 1)
+	Lovegraphics.setColor(1, 1, 1)
 	local playerPosition = getPlayerPosition()
-	lovegraphics.print("x: " .. playerPosition.x .. "\ny: " .. playerPosition.y .. "\nz: " .. playerPosition.z)
-	lovegraphics.print("Memory Usage: " .. math.floor(collectgarbage("count")) .. " kB", 0, 50)
-	lovegraphics.print("FPS: " .. lovetimer.getFPS(), 0, 70)
+	Lovegraphics.print("x: " .. playerPosition.x .. "\ny: " .. playerPosition.y .. "\nz: " .. playerPosition.z)
+	Lovegraphics.print("Memory Usage: " .. math.floor(collectgarbage("count")) .. " kB", 0, 50)
+	Lovegraphics.print("FPS: " .. Lovetimer.getFPS(), 0, 70)
 	local playerDirection = GetPlayerDirection(ThePlayer.rotation, ThePlayer.pitch)
 	if playerDirection then
-		lovegraphics.print("Direction: " .. playerDirection, 0, 90)
+		Lovegraphics.print("Direction: " .. playerDirection, 0, 90)
 	else
-		lovegraphics.print("Direction: Unknown", 0, 130)
+		Lovegraphics.print("Direction: Unknown", 0, 130)
 	end
 
 	local yOffset = 150
@@ -49,7 +49,7 @@ function DrawF3()
 		for _ in pairs(tableData) do
 			count = count + 1
 		end
-		lovegraphics.print("Number of " .. tableName .. ": " .. count, 0, yOffset)
+		Lovegraphics.print("Number of " .. tableName .. ": " .. count, 0, yOffset)
 		yOffset = yOffset + 20
 	end
 
@@ -57,8 +57,8 @@ function DrawF3()
 end
 
 -- Fonction pour obtenir la direction du joueur
-local seuilVersLeHaut = mathpi / 4
-local seuilVersLeBas = -mathpi / 4
+local seuilVersLeHaut = Mathpi / 4
+local seuilVersLeBas = -Mathpi / 4
 function GetPlayerDirection(rotation, pitch)
 	_JPROFILER.push("GetPlayerDirection")
 	if pitch then
@@ -73,7 +73,7 @@ function GetPlayerDirection(rotation, pitch)
 
 	if rotation then
 		local directions = { "N", "NE", "E", "SE", "S", "SW", "W", "NW", "N" }
-		local index = math.floor(((rotation + mathpi / 8) % (2 * mathpi)) / (mathpi / 4)) + 1
+		local index = math.floor(((rotation + Mathpi / 8) % (2 * Mathpi)) / (Mathpi / 4)) + 1
 		return directions[index]
 	end
 	_JPROFILER.pop("GetPlayerDirection")
@@ -131,7 +131,7 @@ end
 
 local chunkBordersModels = {}
 function DrawChunkBorders3D()
-	if enableF8 == false and ChunkBorderAlreadyCreated == 1 then
+	if EnableF8 == false and ChunkBorderAlreadyCreated == 1 then
 		for _, model in ipairs(chunkBordersModels) do
 			local modelIndex = nil
 			for i, sceneModel in ipairs(scene.modelList) do
@@ -149,7 +149,7 @@ function DrawChunkBorders3D()
 		chunkBordersModels = {}
 
 		ChunkBorderAlreadyCreated = 0
-	elseif enableF8 and ChunkBorderAlreadyCreated == 0 then
+	elseif EnableF8 and ChunkBorderAlreadyCreated == 0 then
 		for chunk, _ in pairs(ChunkSet) do
 			if type(chunk) == "table" and chunk.x and chunk.y and chunk.z then
 				CreateChunkBordersVertices()
@@ -240,9 +240,9 @@ function DrawHudTile(tile, hudX, hudY)
 		if textures[1] and textures[2] then
 			local topQuadVertices, rightFrontQuadVertices, leftSideQuadVertices = CalculateHudVertices(hudX, hudY)
 			DrawTileQuadPersonalized(textures[1], topQuadVertices)
-			lovegraphics.setColor(SHADING_FACTOR, SHADING_FACTOR, SHADING_FACTOR)
+			Lovegraphics.setColor(SHADING_FACTOR, SHADING_FACTOR, SHADING_FACTOR)
 			DrawTileQuadPersonalized(textures[2], rightFrontQuadVertices)
-			lovegraphics.setColor(SHADING_FACTOR, SHADING_FACTOR, SHADING_FACTOR)
+			Lovegraphics.setColor(SHADING_FACTOR, SHADING_FACTOR, SHADING_FACTOR)
 			DrawTileQuadPersonalized(textures[2], leftSideQuadVertices)
 		end
 	end
@@ -252,7 +252,7 @@ end
 function DrawTileQuadPersonalized(texture, points)
 	_JPROFILER.push("DrawTileQuadPersonalized")
 	if not Table_HudTextureCache[texture] then
-		Table_HudTextureCache[texture] = lovegraphics.newImage(texture)
+		Table_HudTextureCache[texture] = Lovegraphics.newImage(texture)
 	end
 	Perspective.quad(Table_HudTextureCache[texture], unpack(points))
 	_JPROFILER.pop("DrawTileQuadPersonalized")
@@ -262,11 +262,11 @@ function DrawTileQuad2D(tileData, x, y, size)
 	_JPROFILER.push("DrawTileQuad2D")
 	local texture = tileData.blockBottomMasterTexture
 	if not Table_HudTextureCache[texture] then
-		Table_HudTextureCache[texture] = lovegraphics.newImage(texture)
+		Table_HudTextureCache[texture] = Lovegraphics.newImage(texture)
 	end
 	local prevFilter = Table_HudTextureCache[texture]:getFilter()
 	Table_HudTextureCache[texture]:setFilter("nearest", "nearest")
-	lovegraphics.draw(
+	Lovegraphics.draw(
 		Table_HudTextureCache[texture],
 		x + 6,
 		y + 6,
@@ -281,20 +281,20 @@ end
 function DrawCrossHair()
 	_JPROFILER.push("DrawCrossHair")
 	-- draw crosshair
-	lovegraphics.setColor(1, 1, 1)
+	Lovegraphics.setColor(1, 1, 1)
 	CrosshairShader:send("source", Scene.threeCanvas)
 	CrosshairShader:send("xProportion", 32 / GraphicsWidth)
 	CrosshairShader:send("yProportion", 32 / GraphicsHeight)
-	lovegraphics.draw(GuiSprites, GuiCrosshair, InterfaceWidth / 2 - 16, InterfaceHeight / 2 - 16, 0, 2, 2)
+	Lovegraphics.draw(GuiSprites, GuiCrosshair, InterfaceWidth / 2 - 16, InterfaceHeight / 2 - 16, 0, 2, 2)
 	_JPROFILER.pop("DrawCrossHair")
 end
 
 function DrawHotBar()
 	_JPROFILER.push("DrawHotBar")
 	-- draw hotbar
-	lovegraphics.setColor(1, 1, 1)
-	lovegraphics.draw(GuiSprites, GuiHotbarQuad, InterfaceWidth / 2 - 182, InterfaceHeight - 22 * 2, 0, 2, 2)
-	lovegraphics.draw(
+	Lovegraphics.setColor(1, 1, 1)
+	Lovegraphics.draw(GuiSprites, GuiHotbarQuad, InterfaceWidth / 2 - 182, InterfaceHeight - 22 * 2, 0, 2, 2)
+	Lovegraphics.draw(
 		GuiSprites,
 		GuiHotbarSelectQuad,
 		InterfaceWidth / 2 - 182 + 40 * (PlayerInventory.hotbarSelect - 1) - 2,
@@ -322,40 +322,40 @@ end
 
 function DrawCommandInput()
 	_JPROFILER.push("DrawCommandInput")
-	if enableCommandHUD == true then
-		if fixinputforDrawCommandInput == false then
+	if EnableCommandHUD == true then
+		if FixinputforDrawCommandInput == false then
 			CurrentCommand = ""
-			fixinputforDrawCommandInput = true
+			FixinputforDrawCommandInput = true
 		end
 
 		-- Dessiner le fond gris transparent
-		lovegraphics.setColor(0.5, 0.5, 0.5, 0.5) -- Gris semi-transparent
-		lovegraphics.rectangle("fill", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
+		Lovegraphics.setColor(0.5, 0.5, 0.5, 0.5) -- Gris semi-transparent
+		Lovegraphics.rectangle("fill", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
 
 		-- Dessiner la zone de saisie des commandes (rectangle, texte, etc.)
-		lovegraphics.setColor(1, 1, 1)
-		lovegraphics.rectangle("line", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
+		Lovegraphics.setColor(1, 1, 1)
+		Lovegraphics.rectangle("line", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
 
 		-- Dessiner le texte de la commande actuelle
 		local cleanedCommand = cleanString(CurrentCommand)
 
 		-- Limiter le texte à la largeur du rectangle
 		local maxTextWidth = 600 -- La largeur du rectangle
-		while lovegraphics.getFont():getWidth(cleanedCommand) > maxTextWidth do
+		while Lovegraphics.getFont():getWidth(cleanedCommand) > maxTextWidth do
 			cleanedCommand = cleanedCommand:sub(2) -- Supprimer le premier caractère
 		end
 
-		lovegraphics.print(cleanedCommand, InterfaceWidth / 2 - 300, InterfaceHeight - 75)
+		Lovegraphics.print(cleanedCommand, InterfaceWidth / 2 - 300, InterfaceHeight - 75)
 
 		-- Dessiner le curseur
-		local cursorX = InterfaceWidth / 2 - 300 + lovegraphics.getFont():getWidth(cleanedCommand)
-		lovegraphics.line(cursorX, InterfaceHeight - 80, cursorX, InterfaceHeight - 50)
+		local cursorX = InterfaceWidth / 2 - 300 + Lovegraphics.getFont():getWidth(cleanedCommand)
+		Lovegraphics.line(cursorX, InterfaceHeight - 80, cursorX, InterfaceHeight - 50)
 	end
 	_JPROFILER.pop("DrawCommandInput")
 end
 
 function DrawHudMain()
-	if enableF3 == true then
+	if EnableF3 == true then
 		DrawF3()
 	end
 
@@ -363,7 +363,7 @@ function DrawHudMain()
 	DrawTestBlock()
 	DrawCrossHair()
 
-	lovegraphics.setShader()
+	Lovegraphics.setShader()
 
 	DrawHotBar()
 

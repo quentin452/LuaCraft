@@ -1,12 +1,12 @@
 function drawWorldCreationMenu()
-	local w, h = lovegraphics.getDimensions()
-	local scaleX = w / worldCreationBackground:getWidth()
-	local scaleY = h / worldCreationBackground:getHeight()
+	local w, h = Lovegraphics.getDimensions()
+	local scaleX = w / WorldCreationBackground:getWidth()
+	local scaleY = h / WorldCreationBackground:getHeight()
 
-	lovegraphics.draw(worldCreationBackground, 0, 0, 0, scaleX, scaleY)
+	Lovegraphics.draw(WorldCreationBackground, 0, 0, 0, scaleX, scaleY)
 
 	local posY = _WorldCreationMenu.y
-	local lineHeight = font15:getHeight("X")
+	local lineHeight = Font15:getHeight("X")
 
 	-- Title Screen
 	drawColorString(_WorldCreationMenu.title, _WorldCreationMenu.x, posY)
@@ -45,10 +45,10 @@ function keysInitWorldCreationMenu(k)
 			end
 		elseif k == "return" then
 			if _WorldCreationMenu.selection == 1 then
-				gamestate = gamestatePlayingGame
+				Gamestate = GamestatePlayingGame
 				GenerateWorld()
 			elseif _WorldCreationMenu.selection == 2 then
-				gamestate = gamestateMainMenu
+				Gamestate = GamestateMainMenu
 				_WorldCreationMenu.selection = 0
 			end
 		end

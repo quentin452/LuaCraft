@@ -1,4 +1,4 @@
-local yellowflowerTexture = texturepathLuaCraft .. tilestexturepathLuaCraft .. "yellow_flower.png"
+local yellowflowerTexture = TexturepathLuaCraft .. TilesTexturepathLuaCraft .. "yellow_flower.png"
 local stone_block = {}
 
 function stone_block.initialize()

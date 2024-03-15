@@ -13,24 +13,24 @@ end
 --TODO ADD EASY texture size changer (for now only support 16x16)
 local function createTextureAtlas(memoryorpng)
 	assert(
-		finalAtlasSize >= 256 and finalAtlasSize % 256 == 0,
-		"finalAtlasSize must be a multiple of 256 and not less than 256"
+		FinalAtlasSize >= 256 and FinalAtlasSize % 256 == 0,
+		"FinalAtlasSize must be a multiple of 256 and not less than 256"
 	)
 	local totalTimeStart = os.clock()
 
-	local atlasSize = finalAtlasSize
-	local atlas = loveimage.newImageData(atlasSize, atlasSize)
+	local atlasSize = FinalAtlasSize
+	local atlas = Loveimage.newImageData(atlasSize, atlasSize)
 	local x, y = 0, 0
 
 	for _, blockType in ipairs(getKeysInOrder(TilesTextureFORAtlasList)) do
 		local texturePaths = TilesTextureFORAtlasList[blockType] or { TilesTextureFORAtlasList[blockType] }
 
 		for _, texturePath in ipairs(texturePaths) do
-			local fileExist = lovefilesystem.getInfo(texturePath)
+			local fileExist = Lovefilesystem.getInfo(texturePath)
 			if fileExist then
-				local fileData = lovefilesystem.read(texturePath)
-				local fileDataObject = lovefilesystem.newFileData(fileData, texturePath)
-				local imageData = loveimage.newImageData(fileDataObject)
+				local fileData = Lovefilesystem.read(texturePath)
+				local fileDataObject = Lovefilesystem.newFileData(fileData, texturePath)
+				local imageData = Loveimage.newImageData(fileDataObject)
 				local width, height = imageData:getDimensions()
 
 				if x + width > atlasSize then
@@ -39,17 +39,17 @@ local function createTextureAtlas(memoryorpng)
 				end
 				if y + height > atlasSize then
 					atlasSize = atlasSize + 256
-					finalAtlasSize = atlasSize
-					local newAtlas = loveimage.newImageData(atlasSize, atlasSize)
+					FinalAtlasSize = atlasSize
+					local newAtlas = Loveimage.newImageData(atlasSize, atlasSize)
 					newAtlas:paste(atlas, 0, 0)
 					atlas = newAtlas
 					x, y = 0, 0
 				end
 
 				atlas:paste(imageData, x, y)
-				local index = x / 16 + y / 16 * (finalAtlasSize / 16)
+				local index = x / 16 + y / 16 * (FinalAtlasSize / 16)
 				local ids = BlockThatUseCustomTexturesForTopandSide[blockType]
-				textureAtlasCoordinates[blockType] = ids and { index, index - 2, index - 1 } or { index }
+				TextureAtlasCoordinates[blockType] = ids and { index, index - 2, index - 1 } or { index }
 				x = x + width
 			else
 				LuaCraftPrintLoggingNormal("Failed to read file:", texturePath)
@@ -62,22 +62,22 @@ local function createTextureAtlas(memoryorpng)
 
 	if memoryorpng == "PNG" then
 		local atlasDirectory = "Atlas"
-		lovefilesystem.createDirectory(atlasDirectory)
+		Lovefilesystem.createDirectory(atlasDirectory)
 		local atlasImagePath = atlasDirectory .. "/Atlas" .. ".png"
 		local pngData = atlas:encode("png")
-		lovefilesystem.write(atlasImagePath, pngData)
+		Lovefilesystem.write(atlasImagePath, pngData)
 	end
 
-	return atlas, textureAtlasCoordinates
+	return atlas, TextureAtlasCoordinates
 end
 local function createTILEINGameAssets()
 	createTextureAtlas("PNG")
 	local atlasInRAM = createTextureAtlas("RAM")
-	atlasImage = lovegraphics.newImage(atlasInRAM)
+	atlasImage = Lovegraphics.newImage(atlasInRAM)
 	TilesTextureList = {}
-	for blockType, _ in pairs(textureAtlasCoordinates) do
+	for blockType, _ in pairs(TextureAtlasCoordinates) do
 		if not TilesTextureList[blockType] then
-			TilesTextureList[blockType] = { unpack(textureAtlasCoordinates[blockType]) }
+			TilesTextureList[blockType] = { unpack(TextureAtlasCoordinates[blockType]) }
 		else
 			LuaCraftPrintLoggingNormal("This BlockType " .. blockType .. " Has been already registered.")
 		end

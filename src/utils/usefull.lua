@@ -11,7 +11,7 @@ function drawColorString(Pstring, Px, Py)
 	local defaultColor = { 255, 255, 255 }
 	local currentColor = defaultColor
 
-	lovegraphics.setColor(currentColor)
+	Lovegraphics.setColor(currentColor)
 
 	local i = 1
 	local len = #Pstring
@@ -22,43 +22,43 @@ function drawColorString(Pstring, Px, Py)
 		if c == "%" then
 			local colorDigit = string.sub(Pstring, i + 1, i + 1)
 			currentColor = colorMap[tostring(colorDigit)] or defaultColor
-			lovegraphics.setColor(currentColor)
+			Lovegraphics.setColor(currentColor)
 			i = i + 2 -- skip both '%' and the color digit
 		else
-			lovegraphics.print(c, rx, ry)
+			Lovegraphics.print(c, rx, ry)
 			local fontWidth = (
-				gamestate == gamestateMainMenu
-				or gamestate == gamestateMainMenuSettings
-				or gamestate == gamestateGamePausing
-				or gamestate == gamestatePlayingGameSettings
+				Gamestate == GamestateMainMenu
+				or Gamestate == GamestateMainMenuSettings
+				or Gamestate == GamestateGamePausing
+				or Gamestate == GamestatePlayingGameSettings
 			)
-					and font25
-				or (gamestateWorldCreationMenu or gamestate == gamestatePlayingGame) and font15
+					and Font25
+				or (GamestateWorldCreationMenu or Gamestate == GamestatePlayingGame) and Font15
 			rx = rx + fontWidth:getWidth(c)
 			i = i + 1
 		end
 	end
-	lovegraphics.setColor(defaultColor)
+	Lovegraphics.setColor(defaultColor)
 	_JPROFILER.pop("drawColorString")
 end
 
 local fontTable = {
-	MainMenu = font25,
-	MainMenuSettings = font25,
-	GamePausing = font25,
-	PlayingGameSettings = font25,
-	WorldCreationMenu = font15,
-	PlayingGame = font15,
+	MainMenu = Font25,
+	MainMenuSettings = Font25,
+	GamePausing = Font25,
+	PlayingGameSettings = Font25,
+	WorldCreationMenu = Font15,
+	PlayingGame = Font15,
 }
 
 local previousGamestate = nil
 
 function setFont()
 	_JPROFILER.push("setFont")
-	local selectedFont = fontTable[gamestate]
-	if selectedFont and gamestate ~= previousGamestate then
-		lovegraphics.setFont(selectedFont)
-		previousGamestate = gamestate
+	local selectedFont = fontTable[Gamestate]
+	if selectedFont and Gamestate ~= previousGamestate then
+		Lovegraphics.setFont(selectedFont)
+		previousGamestate = Gamestate
 	end
 	_JPROFILER.pop("setFont")
 end

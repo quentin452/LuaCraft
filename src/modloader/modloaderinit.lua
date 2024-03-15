@@ -88,10 +88,10 @@ function addBlock(
 	TilesById[id] = Tiles[blockstringname]
 	if blockTopTexture ~= nil or blockSideTexture ~= nil then
 		if type(blockTopTexture) == "string" then
-			blockTopTexture = lovegraphics.newImage(blockTopTexture)
+			blockTopTexture = Lovegraphics.newImage(blockTopTexture)
 		end
 		if type(blockSideTexture) == "string" then
-			blockSideTexture = lovegraphics.newImage(blockSideTexture)
+			blockSideTexture = Lovegraphics.newImage(blockSideTexture)
 		end
 
 		if BlockThatUseCustomTexturesForTopandSide[id] then
@@ -112,10 +112,10 @@ end
 function LoadMods()
 	--_JPROFILER.push("LoadMods")
 	local modsDirectory = "mods/"
-	local items = lovefilesystem.getDirectoryItems(modsDirectory)
+	local items = Lovefilesystem.getDirectoryItems(modsDirectory)
 	for _, item in ipairs(items) do
 		local fullPath = modsDirectory .. item
-		if lovefilesystem.getInfo(fullPath, "directory") then
+		if Lovefilesystem.getInfo(fullPath, "directory") then
 			local modName = item
 			local startTime = os.clock()
 			local success, mod = pcall(require, "mods." .. modName .. "." .. modName)

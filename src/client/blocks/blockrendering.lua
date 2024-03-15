@@ -3,8 +3,8 @@ local AIR_TRANSPARENCY = 0
 local LEAVES_TRANSPARENCY = 1
 
 -- Constants for adjustment factors
-local ADJUSTMENT_FACTOR_OTX_OTY = 256 / finalAtlasSize
-local ADJUSTMENT_FACTOR_TEXTURE_COORDINATES = finalAtlasSize / 256
+local ADJUSTMENT_FACTOR_OTX_OTY = 256 / FinalAtlasSize
+local ADJUSTMENT_FACTOR_TEXTURE_COORDINATES = FinalAtlasSize / 256
 
 -- Cached voxel states
 local getTop

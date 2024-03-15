@@ -1,6 +1,6 @@
 local exampleModelReference = nil
 function DrawTestBlock()
-	if enableTESTBLOCK == false and modelalreadycreated == 1 then
+	if EnableTESTBLOCK == false and Modelalreadycreated == 1 then
 		if exampleModelReference then
 			-- Trouver l'indice du modèle dans la liste
 			local modelIndex = nil
@@ -17,12 +17,12 @@ function DrawTestBlock()
 			end
 
 			exampleModelReference = nil
-			modelalreadycreated = 0
-			LuaCraftPrintLoggingNormal("modelalreadycreated reset to 0")
+			Modelalreadycreated = 0
+			LuaCraftPrintLoggingNormal("Modelalreadycreated reset to 0")
 		end
-		LuaCraftPrintLoggingNormal("modelalreadycreated")
-	elseif enableTESTBLOCK and modelalreadycreated == 0 then
-		if modelalreadycreated == 1 then
+		LuaCraftPrintLoggingNormal("Modelalreadycreated")
+	elseif EnableTESTBLOCK and Modelalreadycreated == 0 then
+		if Modelalreadycreated == 1 then
 			return
 		end
 		-- Example usage of engine.newModel
@@ -94,7 +94,7 @@ function DrawTestBlock()
 		t:assignModel(myModel)
 
 		exampleModelReference = myModel
-		modelalreadycreated = 1
+		Modelalreadycreated = 1
 		LuaCraftPrintLoggingNormal("DrawTestBlock completed.")
 	end
 end

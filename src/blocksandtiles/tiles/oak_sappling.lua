@@ -1,4 +1,4 @@
-local oak_sapplingsTexture = texturepathLuaCraft .. tilestexturepathLuaCraft .. "oak_sapplings.png"
+local oak_sapplingsTexture = TexturepathLuaCraft .. TilesTexturepathLuaCraft .. "oak_sapplings.png"
 local stone_block = {}
 
 function stone_block.initialize()

@@ -1,4 +1,4 @@
-local bedrockTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "bedrock.png"
+local bedrockTexture = TexturepathLuaCraft .. BlockTexturepathLuaCraft .. "bedrock.png"
 local stone_block = {}
 
 function stone_block.initialize()

@@ -54,13 +54,13 @@ end
 function FixHudHotbarandTileScaling()
 	local scaleCoefficient = 0.7
 
-	InterfaceWidth = lovegraphics.getWidth() * scaleCoefficient
-	InterfaceHeight = lovegraphics.getHeight() * scaleCoefficient
+	InterfaceWidth = Lovegraphics.getWidth() * scaleCoefficient
+	InterfaceHeight = Lovegraphics.getHeight() * scaleCoefficient
 end
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")
-	lovefilesystem.setIdentity("LuaCraft")
+	Lovefilesystem.setIdentity("LuaCraft")
 	InitializeGame()
 	FixHudHotbarandTileScaling()
 	_JPROFILER.pop("Mainload")
@@ -69,7 +69,7 @@ end
 CurrentCommand = ""
 
 function love.textinput(text)
-	if gamestate == gamestatePlayingGame and enableCommandHUD == true then
+	if Gamestate == GamestatePlayingGame and EnableCommandHUD == true then
 		CurrentCommand = CurrentCommand .. text
 	end
 end
@@ -80,12 +80,12 @@ function love.resize(w, h)
 
 	local scaleX = w / GraphicsWidth
 	local scaleY = h / GraphicsHeight
-	lovegraphics.scale(scaleX, scaleY)
-	local newCanvas = lovegraphics.newCanvas(w, h)
+	Lovegraphics.scale(scaleX, scaleY)
+	local newCanvas = Lovegraphics.newCanvas(w, h)
 
-	lovegraphics.setCanvas(newCanvas)
-	lovegraphics.draw(Scene.twoCanvas)
-	lovegraphics.setCanvas()
+	Lovegraphics.setCanvas(newCanvas)
+	Lovegraphics.draw(Scene.twoCanvas)
+	Lovegraphics.setCanvas()
 
 	Scene.twoCanvas = newCanvas
 
@@ -101,9 +101,9 @@ function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
 	UpdateGame(dt)
-	if hudTimeLeft > 0 then
-		hudTimeLeft = hudTimeLeft - dt
-		if hudTimeLeft <= 0 or gamestate ~= gamestatePlayingGame then
+	if HudTimeLeft > 0 then
+		HudTimeLeft = HudTimeLeft - dt
+		if HudTimeLeft <= 0 or Gamestate ~= GamestatePlayingGame then
 			hudMessage = ""
 		end
 	end
@@ -116,8 +116,8 @@ function love.draw()
 	_JPROFILER.push("MainDraw")
 	DrawGame()
 	if hudMessage ~= nil then
-		local width, height = lovegraphics.getDimensions()
-		local font = lovegraphics.getFont()
+		local width, height = Lovegraphics.getDimensions()
+		local font = Lovegraphics.getFont()
 
 		-- Calculate the width and height of the text
 		local textWidth = font:getWidth(hudMessage)
@@ -127,7 +127,7 @@ function love.draw()
 		local x = (width - textWidth) / 2
 		local y = (height - textHeight) / 2 + 280
 
-		lovegraphics.print(hudMessage, x, y)
+		Lovegraphics.print(hudMessage, x, y)
 	end
 	_JPROFILER.pop("MainDraw")
 	_JPROFILER.pop("frame")
@@ -137,7 +137,7 @@ function love.mousemoved(x, y, dx, dy)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainmousemoved")
 	-- forward mouselook to Scene object for first person camera control
-	if gamestate == gamestatePlayingGame then
+	if Gamestate == GamestatePlayingGame then
 		Scene:mouseLook(x, y, dx, dy)
 	end
 	_JPROFILER.pop("Mainmousemoved")
@@ -145,7 +145,7 @@ function love.mousemoved(x, y, dx, dy)
 end
 
 function love.wheelmoved(x, y)
-	if fixinputforDrawCommandInput == false then
+	if FixinputforDrawCommandInput == false then
 		PlayerInventory.hotbarSelect = math.floor(((PlayerInventory.hotbarSelect - y - 1) % 9 + 1) + 0.5)
 	end
 end

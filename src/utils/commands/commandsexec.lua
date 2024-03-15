@@ -1,5 +1,5 @@
 function ExecuteCommand(command)
-	if enableCommandHUD == true then
+	if EnableCommandHUD == true then
 		if command:sub(1, 3) == "/tp" then
 			local x, y, z = command:match("/tp%s+([%d%.~-]+)%s+([%d%.~-]+)%s+([%d%.~-]+)")
 
@@ -30,7 +30,6 @@ function ExecuteCommand(command)
 				ThePlayer.y = y
 				ThePlayer.z = z
 				LuaCraftPrintLoggingNormal("Player teleported to: " .. x .. ", " .. y .. ", " .. z)
-
 			else
 				LuaCraftPrintLoggingNormal("Invalid coordinates.")
 			end

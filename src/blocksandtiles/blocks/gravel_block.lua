@@ -1,4 +1,4 @@
-local gravelTexture = texturepathLuaCraft .. blocktexturepathLuaCraft .. "gravel.png"
+local gravelTexture = TexturepathLuaCraft .. BlockTexturepathLuaCraft .. "gravel.png"
 local stone_block = {}
 
 function stone_block.initialize()

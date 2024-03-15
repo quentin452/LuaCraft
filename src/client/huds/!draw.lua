@@ -2,15 +2,15 @@ require("src/client/huds/drawhud")
 require("src/client/huds/tests/drawhudtest")
 function DrawGame()
 	setFont()
-	if gamestate == gamestateGamePausing then
+	if Gamestate == GamestateGamePausing then
 		_JPROFILER.push("drawGamePlayingPauseMenu")
 		drawGamePlayingPauseMenu()
 		_JPROFILER.pop("drawGamePlayingPauseMenu")
-	elseif gamestate == gamestateWorldCreationMenu then
+	elseif Gamestate == GamestateWorldCreationMenu then
 		_JPROFILER.push("drawWorldCreationMenu")
 		drawWorldCreationMenu()
 		_JPROFILER.pop("drawWorldCreationMenu")
-	elseif gamestate == gamestatePlayingGame then
+	elseif Gamestate == GamestatePlayingGame then
 		_JPROFILER.push("DrawGameScene")
 		-- draw 3d scene
 		Scene:render(true)
@@ -21,15 +21,15 @@ function DrawGame()
 		love.graphics.setColor(1, 1, 1)
 		DrawCanevas()
 		_JPROFILER.pop("DrawGameScene")
-	elseif gamestate == gamestateMainMenuSettings then
+	elseif Gamestate == GamestateMainMenuSettings then
 		_JPROFILER.push("drawMainMenuSettings")
 		drawMainMenuSettings()
 		_JPROFILER.pop("drawMainMenuSettings")
-	elseif gamestate == gamestateMainMenu then
+	elseif Gamestate == GamestateMainMenu then
 		_JPROFILER.push("drawMainMenu")
 		drawMainMenu()
 		_JPROFILER.pop("drawMainMenu")
-	elseif gamestate == gamestatePlayingGameSettings then
+	elseif Gamestate == GamestatePlayingGameSettings then
 		_JPROFILER.push("drawPlayingMenuSettings")
 		drawPlayingMenuSettings()
 		_JPROFILER.pop("drawPlayingMenuSettings")

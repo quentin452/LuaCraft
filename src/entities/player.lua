@@ -93,7 +93,7 @@ function NewPlayer(x, y, z)
 		local moving = false
 
 		-- take player input
-		if fixinputforDrawCommandInput == false then
+		if FixinputforDrawCommandInput == false then
 			local directionKeys = {
 				z = { 0, -1 },
 				q = { -1, 0 },

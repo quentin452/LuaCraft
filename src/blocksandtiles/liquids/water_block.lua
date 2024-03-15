@@ -1,4 +1,4 @@
-local waterTexture = texturepathLuaCraft .. liquidtexturepathLuaCraft .. "water.png"
+local waterTexture = TexturepathLuaCraft .. LiquidTexturepathLuaCraft .. "water.png"
 local stone_block = {}
 
 function stone_block.initialize()

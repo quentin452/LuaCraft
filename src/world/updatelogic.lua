@@ -5,7 +5,7 @@ local updateCounterForRemeshModel = 0
 
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
-	if gamestate == gamestatePlayingGame then
+	if Gamestate == GamestatePlayingGame then
 		renderdistancevalue()
 		PlayerInitIfNeeded()
 		UpdateAndGenerateChunks(RenderDistance)
@@ -16,9 +16,9 @@ end
 
 function renderdistancevalue()
 	_JPROFILER.push("renderdistancevalue")
-	if renderdistancegetresetted == true then
+	if Renderdistancegetresetted == true then
 		RenderDistance = getRenderDistanceValue()
-		renderdistancegetresetted = false
+		Renderdistancegetresetted = false
 	end
 	_JPROFILER.pop("renderdistancevalue")
 end
