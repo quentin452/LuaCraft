@@ -176,7 +176,7 @@ require("src/utils/commands/commandsexec")
 --entities
 require("src/entities/player")
 --world
-Perspective = require("src/world/perspective")
+Perspective = require("src/client/huds/perspective")
 require("src/world/lighting")
 require("src/world/chunk")
 require("src/world/updatelogic")
