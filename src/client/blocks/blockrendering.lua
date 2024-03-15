@@ -1,16 +1,23 @@
---TODO create a cache to avoid recreating the same model several times for the same block
+-- Constants
 local AIR_TRANSPARENCY = 0
 local LEAVES_TRANSPARENCY = 1
-local adjustmentFactorValuecalculationotxoty = 256 / finalAtlasSize
-local adjustmentFactorValuegetTextureCoordinatesAndLight = finalAtlasSize / 256
+
+-- Constants for adjustment factors
+local ADJUSTMENT_FACTOR_OTX_OTY = 256 / finalAtlasSize
+local ADJUSTMENT_FACTOR_TEXTURE_COORDINATES = finalAtlasSize / 256
+
+-- Cached voxel states
 local getTop
 local getBottom
 local getPositiveX
 local getNegativeX
 local getPositiveZ
 local getNegativeZ
+
+-- Shared block vertices
 local blockVertices = {}
 
+-- Checks if a face can be drawn based on transparency
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
 	local tileTransparency = TileTransparency(get)
@@ -26,25 +33,28 @@ local function CanDrawFace(get, thisTransparency)
 	return result
 end
 
+-- Calculates texture coordinates for given offsets
 function calculationotxoty(otx, oty)
 	_JPROFILER.push("calculationotxoty")
 	local tx = otx * TileWidth / LightValues
 	local ty = oty * TileHeight
-	local tx2 = (otx + adjustmentFactorValuecalculationotxoty) * TileWidth / LightValues
-	local ty2 = (oty + adjustmentFactorValuecalculationotxoty) * TileHeight
+	local tx2 = (otx + ADJUSTMENT_FACTOR_OTX_OTY) * TileWidth / LightValues
+	local ty2 = (oty + ADJUSTMENT_FACTOR_OTX_OTY) * TileHeight
 	_JPROFILER.pop("calculationotxoty")
 	return tx, ty, tx2, ty2
 end
 
+-- Retrieves texture coordinates and light information
 function getTextureCoordinatesAndLight(texture, lightOffset)
 	_JPROFILER.push("getTextureCoordinatesAndLight")
-	local textureindex = texture
-	local otx = ((textureindex / adjustmentFactorValuegetTextureCoordinatesAndLight) % LightValues + 16 * lightOffset)
-	local oty = math.floor(textureindex / (adjustmentFactorValuegetTextureCoordinatesAndLight * LightValues))
+	local textureIndex = texture
+	local otx = ((textureIndex / ADJUSTMENT_FACTOR_TEXTURE_COORDINATES) % LightValues + 16 * lightOffset)
+	local oty = math.floor(textureIndex / (ADJUSTMENT_FACTOR_TEXTURE_COORDINATES * LightValues))
 	_JPROFILER.pop("getTextureCoordinatesAndLight")
 	return otx, oty
 end
 
+-- Retrieves voxel from a chunk, accounting for edge cases
 local function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	_JPROFILER.push("getVoxelFromChunk_blockrendering")
 	local chunkGet = chunkGetter(x, y, z)
@@ -56,6 +66,7 @@ local function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	return nil
 end
 
+-- Creates block vertices and adds them to the model
 local function createBlockVertices(vertices, model)
 	_JPROFILER.push("createBlockVertices")
 	local totalVertices = #vertices
@@ -66,6 +77,7 @@ local function createBlockVertices(vertices, model)
 	_JPROFILER.pop("createBlockVertices")
 end
 
+-- Adds a face to the model based on direction and transparency
 local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 	_JPROFILER.push("addFaceToModel")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
@@ -124,6 +136,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
 	_JPROFILER.pop("addFaceToModel")
 end
 
+-- Adds a face to the model based on direction and transparency
 local function addFace(gettype, direction, y_offset, light_offset, thisLight, model, thisTransparency, scale, x, y, z)
 	_JPROFILER.push("addFace_blockrendering")
 	if CanDrawFace(direction, thisTransparency) then
@@ -136,6 +149,7 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 	_JPROFILER.pop("addFace_blockrendering")
 end
 
+-- Draws faces of a block model
 local function DrawFaces(model, thisTransparency, thisLight, scale, x, y, z)
 	_JPROFILER.push("DrawFaces_blockrendering")
 	addFace("getTop", getTop, 0, 0, thisLight, model, thisTransparency, scale, x, y, z)
@@ -147,6 +161,7 @@ local function DrawFaces(model, thisTransparency, thisLight, scale, x, y, z)
 	_JPROFILER.pop("DrawFaces_blockrendering")
 end
 
+-- Checks if the block at the specified coordinates is valid
 local function checkBlockValidity(self, i, j, k)
 	_JPROFILER.push("checkBlockValidity_blockrendering")
 	local this = self.parent:getVoxel(i, j, k)
@@ -162,6 +177,7 @@ local function checkBlockValidity(self, i, j, k)
 	return true
 end
 
+-- Updates adjacent blocks for rendering
 local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 	_JPROFILER.push("updateAdjacentBlocks_blockrendering")
 	getTop = self.parent:getVoxel(i, j - 1, k)
@@ -184,6 +200,7 @@ local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 	return getBottom, getPositiveX, getNegativeX, getPositiveZ, getNegativeZ
 end
 
+-- Renders the block at the specified coordinates
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
 	_JPROFILER.push("BlockRendering")
 	if not checkBlockValidity(self, i, j, k) then

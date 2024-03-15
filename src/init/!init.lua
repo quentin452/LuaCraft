@@ -4,6 +4,7 @@ require("src/init/guisandhudinit")
 require("src/init/shadersinit")
 require("src/init/windowsettingsinit")
 require("src/init/worldinit")
+require("src/init/modelloader")
 
 function initWorldGenerationVariables()
 	ChunkSize = 16
