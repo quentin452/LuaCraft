@@ -55,12 +55,11 @@ function DrawF3()
 end
 
 -- Fonction pour obtenir la direction du joueur
+local seuilVersLeHaut = mathpi / 4
+local seuilVersLeBas = -mathpi / 4
 function GetPlayerDirection(rotation, pitch)
 	_JPROFILER.push("GetPlayerDirection")
 	if pitch then
-		local seuilVersLeHaut = mathpi / 4
-		local seuilVersLeBas = -mathpi / 4
-
 		if pitch > seuilVersLeHaut then
 			_JPROFILER.pop("GetPlayerDirection")
 			return "Bas"
@@ -79,157 +78,57 @@ function GetPlayerDirection(rotation, pitch)
 	return nil
 end
 
-local exampleModelReference = nil
-function DrawTestBlock()
-	if enableTESTBLOCK == false and modelalreadycreated == 1 then
-		if exampleModelReference then
-			-- Trouver l'indice du modèle dans la liste
-			local modelIndex = nil
-			for i, model in ipairs(scene.modelList) do
-				if model == exampleModelReference then
-					modelIndex = i
-					break
-				end
-			end
+local function CreateChunkBordersVertices()
+	ChunkVerts = {}
 
-			-- Retirer le modèle de la liste
-			if modelIndex then
-				table.remove(scene.modelList, modelIndex)
-			end
+	-- Define the coordinates for each face
+	local faces = {
+		{ -- Bottom face
+			{ 0, 0, 0 },
+			{ ChunkSize, 0, 0 },
+			{ ChunkSize, 0, ChunkSize },
+			{ 0, 0, ChunkSize },
+		},
+		{ -- Top face
+			{ 0, WorldHeight, 0 },
+			{ ChunkSize, WorldHeight, 0 },
+			{ ChunkSize, WorldHeight, ChunkSize },
+			{ 0, WorldHeight, ChunkSize },
+		},
+		{ -- Front face
+			{ 0, 0, 0 },
+			{ ChunkSize, 0, 0 },
+			{ ChunkSize, WorldHeight, 0 },
+			{ 0, WorldHeight, 0 },
+		},
+		{ -- Back face
+			{ 0, 0, ChunkSize },
+			{ ChunkSize, 0, ChunkSize },
+			{ ChunkSize, WorldHeight, ChunkSize },
+			{ 0, WorldHeight, ChunkSize },
+		},
+		{ -- Left face
+			{ 0, 0, 0 },
+			{ 0, 0, ChunkSize },
+			{ 0, WorldHeight, ChunkSize },
+			{ 0, WorldHeight, 0 },
+		},
+		{ -- Right face
+			{ ChunkSize, 0, 0 },
+			{ ChunkSize, 0, ChunkSize },
+			{ ChunkSize, WorldHeight, ChunkSize },
+			{ ChunkSize, WorldHeight, 0 },
+		},
+	}
 
-			exampleModelReference = nil
-			modelalreadycreated = 0
-			LuaCraftPrintLoggingNormal("modelalreadycreated reset to 0")
+	-- Generate vertices for each face
+	for _, face in ipairs(faces) do
+		for _, vertex in ipairs(face) do
+			ChunkVerts[#ChunkVerts + 1] = vertex
 		end
-		LuaCraftPrintLoggingNormal("modelalreadycreated")
-	elseif enableTESTBLOCK and modelalreadycreated == 0 then
-		if modelalreadycreated == 1 then
-			return
-		end
-		-- Example usage of engine.newModel
-		local verts = {
-			-- Face avant
-			{ 0, 0, 0 },
-			{ 1, 0, 0 },
-			{ 1, 1, 0 },
-			{ 1, 1, 0 },
-			{ 0, 1, 0 },
-			{ 0, 0, 0 },
-
-			-- Face arrière
-			{ 0, 0, 1 },
-			{ 1, 0, 1 },
-			{ 1, 1, 1 },
-			{ 1, 1, 1 },
-			{ 0, 1, 1 },
-			{ 0, 0, 1 },
-
-			-- Face gauche
-			{ 0, 0, 0 },
-			{ 0, 1, 0 },
-			{ 0, 1, 1 },
-			{ 0, 1, 1 },
-			{ 0, 0, 1 },
-			{ 0, 0, 0 },
-
-			-- Face droite
-			{ 1, 0, 0 },
-			{ 1, 1, 0 },
-			{ 1, 1, 1 },
-			{ 1, 1, 1 },
-			{ 1, 0, 1 },
-			{ 1, 0, 0 },
-
-			-- Face supérieure
-			{ 0, 1, 0 },
-			{ 1, 1, 0 },
-			{ 1, 1, 1 },
-			{ 1, 1, 1 },
-			{ 0, 1, 1 },
-			{ 0, 1, 0 },
-
-			-- Face inférieure
-			{ 0, 0, 0 },
-			{ 1, 0, 0 },
-			{ 1, 0, 1 },
-			{ 1, 0, 1 },
-			{ 0, 0, 1 },
-			{ 0, 0, 0 },
-		}
-		local x = 0
-		local y = 120
-		local z = 0
-		local coords = { x, y, z }
-		local color = { 1, 1, 1 }
-		local format = {
-			{ "VertexPosition", "float", 3 },
-			{ "VertexTexCoord", "float", 2 },
-		}
-
-		local t = NewThing(x, y, z)
-		t.name = "BlockTest"
-
-		myModel = engine.newModel(verts, BlockTest, coords, color, format)
-		myModel.culling = false
-
-		t:assignModel(myModel)
-
-		exampleModelReference = myModel
-		modelalreadycreated = 1
-		LuaCraftPrintLoggingNormal("DrawTestBlock completed.")
 	end
 end
-local function CreateChunkBordersVertices()
-	ChunkVerts = {
-		-- Bottom face
-		{ 0, 0, 0 },
-		{ ChunkSize, 0, 0 },
-		{ ChunkSize, 0, ChunkSize },
-		{ ChunkSize, 0, ChunkSize },
-		{ 0, 0, ChunkSize },
-		{ 0, 0, 0 },
 
-		-- Top face
-		{ 0, WorldHeight, 0 },
-		{ ChunkSize, WorldHeight, 0 },
-		{ ChunkSize, WorldHeight, ChunkSize },
-		{ ChunkSize, WorldHeight, ChunkSize },
-		{ 0, WorldHeight, ChunkSize },
-		{ 0, WorldHeight, 0 },
-
-		-- Front face
-		{ 0, 0, 0 },
-		{ ChunkSize, 0, 0 },
-		{ ChunkSize, WorldHeight, 0 },
-		{ ChunkSize, WorldHeight, 0 },
-		{ 0, WorldHeight, 0 },
-		{ 0, 0, 0 },
-
-		-- Back face
-		{ 0, 0, ChunkSize },
-		{ ChunkSize, 0, ChunkSize },
-		{ ChunkSize, WorldHeight, ChunkSize },
-		{ ChunkSize, WorldHeight, ChunkSize },
-		{ 0, WorldHeight, ChunkSize },
-		{ 0, 0, ChunkSize },
-
-		-- Left face
-		{ 0, 0, 0 },
-		{ 0, 0, ChunkSize },
-		{ 0, WorldHeight, ChunkSize },
-		{ 0, WorldHeight, ChunkSize },
-		{ 0, WorldHeight, 0 },
-		{ 0, 0, 0 },
-
-		-- Right face
-		{ ChunkSize, 0, 0 },
-		{ ChunkSize, 0, ChunkSize },
-		{ ChunkSize, WorldHeight, ChunkSize },
-		{ ChunkSize, WorldHeight, ChunkSize },
-		{ ChunkSize, WorldHeight, 0 },
-		{ ChunkSize, 0, 0 },
-	}
-end
 local chunkBordersModels = {}
 function DrawChunkBorders3D()
 	if enableF8 == false and ChunkBorderAlreadyCreated == 1 then
@@ -455,9 +354,21 @@ function DrawCommandInput()
 	_JPROFILER.pop("DrawCommandInput")
 end
 
-function FixHudHotbarandTileScaling()
-	local scaleCoefficient = 0.7
+function DrawHudMain()
+	if enableF3 == true then
+		DrawF3()
+	end
 
-	InterfaceWidth = lovegraphics.getWidth() * scaleCoefficient
-	InterfaceHeight = lovegraphics.getHeight() * scaleCoefficient
+	DrawChunkBorders3D()
+	DrawTestBlock()
+	DrawCrossHair()
+
+	lovegraphics.setShader()
+
+	DrawHotBar()
+
+	for i = 1, 9 do
+		DrawHudTile(PlayerInventory.items[i], InterfaceWidth / 2 - 182 + 40 * (i - 1), InterfaceHeight - 22 * 2)
+	end
+	DrawCommandInput()
 end

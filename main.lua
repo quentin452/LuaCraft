@@ -131,6 +131,12 @@ function love.run()
 		--		if love.timer then love.timer.sleep(0.001) end
 	end
 end
+function FixHudHotbarandTileScaling()
+	local scaleCoefficient = 0.7
+
+	InterfaceWidth = lovegraphics.getWidth() * scaleCoefficient
+	InterfaceHeight = lovegraphics.getHeight() * scaleCoefficient
+end
 function love.load()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainload")

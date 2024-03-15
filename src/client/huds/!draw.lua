@@ -1,4 +1,5 @@
 require("src/client/huds/drawhud")
+require("src/client/huds/tests/drawhudtest")
 function DrawGame()
 	setFont()
 	if gamestate == gamestateGamePausing then
@@ -18,22 +19,7 @@ function DrawGame()
 
 		-- draw HUD
 		Scene:renderFunction(function()
-			if enableF3 == true then
-				DrawF3()
-			end
-
-			DrawChunkBorders3D()
-			DrawTestBlock()
-			DrawCrossHair()
-
-			lovegraphics.setShader()
-
-			DrawHotBar()
-
-			for i = 1, 9 do
-				DrawHudTile(PlayerInventory.items[i], InterfaceWidth / 2 - 182 + 40 * (i - 1), InterfaceHeight - 22 * 2)
-			end
-			DrawCommandInput()
+			DrawHudMain()
 		end, false)
 
 		lovegraphics.setColor(1, 1, 1)
