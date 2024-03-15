@@ -72,7 +72,7 @@ function KeyPressed(k)
 		elseif k == "f8" then
 			enableF8 = not enableF8
 		elseif k == "f1" then
-			enableTESTBLOCK = not enableTESTBLOCK
+			--enableTESTBLOCK = not enableTESTBLOCK
 		elseif k == "w" then
 			if enableCommandHUD == false then
 				CurrentCommand = ""
