@@ -1,7 +1,7 @@
 -- Caches for tile transparency, light sources, and collision properties
-local transparencyCache = {}
-local lightSourceCache = {}
-local collisionCache = {}
+TileTransparencyCache = {}
+TileLightSourceCache = {}
+TileCollisionCache = {}
 
 -- Enumeration for tile modes
 TileMode = {
@@ -61,13 +61,13 @@ end
 
 -- Retrieves collision property of a tile by ID
 function TileCollisions(n)
-	if collisionCache[n] ~= nil then
-		return collisionCache[n]
+	if TileCollisionCache[n] ~= nil then
+		return TileCollisionCache[n]
 	end
 	local value = GetValueFromTilesById(n)
 	if value then
 		local collision = value.Cancollide == CollideMode.YesCanCollide
-		collisionCache[n] = collision
+		TileCollisionCache[n] = collision
 		return collision
 	end
 	return false
@@ -75,28 +75,28 @@ end
 
 -- Retrieves transparency level of a tile by ID
 function TileTransparency(n)
-	if transparencyCache[n] ~= nil then
-		return transparencyCache[n]
+	if TileTransparencyCache[n] ~= nil then
+		return TileTransparencyCache[n]
 	end
 	local value = GetValueFromTilesById(n)
 	if value then
 		local blockstringname = value.blockstringname
 		local transparency = Tiles[blockstringname].transparency
-		transparencyCache[n] = transparency
+		TileTransparencyCache[n] = transparency
 		return transparency
 	end
 end
 
 -- Retrieves light source value of a tile by ID
 function TileLightSource(n)
-	if lightSourceCache[n] ~= nil then
-		return lightSourceCache[n]
+	if TileLightSourceCache[n] ~= nil then
+		return TileLightSourceCache[n]
 	end
 	local value = GetValueFromTilesById(n)
 	if value then
 		local blockstringname = value.blockstringname
 		local lightSource = Tiles[blockstringname].LightSources
-		lightSourceCache[n] = lightSource
+		TileLightSourceCache[n] = lightSource
 		return lightSource
 	end
 end
