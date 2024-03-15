@@ -1,20 +1,29 @@
+-- Cache for storing tile models
 TileModelCaching = {}
 
+-- Renders a tile in the world
 function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 	_JPROFILER.push("TileRendering")
+
+	-- Retrieve the tile ID at the given position
 	local this = self.parent:getVoxel(i, j, k)
 
+	-- Check if the tile has a 2D model
 	if TileModel(this) == 1 then
+		-- Check if the tile model data is cached
 		local tileModelData = TileModelCaching[this]
 		if not tileModelData then
+			-- Create and cache the tile model data if not already cached
 			tileModelData = createTileModel(this, thisLight, scale)
 			TileModelCaching[this] = tileModelData
 		end
 
+		-- Add the tile model vertices to the model list
 		for _, v in ipairs(tileModelData) do
 			model[#model + 1] = { x + v[1], y + v[2], z + v[3], v[4], v[5] }
 		end
 
+		-- Add rotated tile model vertices to the model list
 		for _, v in ipairs(tileModelData) do
 			local originX = v[1] - 0.5
 			local originZ = v[3] - 0.5
@@ -32,12 +41,16 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 	_JPROFILER.pop("TileRendering")
 end
 
+-- Creates a 2D tile model based on its ID, light level, and scale
 function createTileModel(tileID, thisLight, scale)
 	_JPROFILER.push("createTileModel")
+
+	-- Retrieve texture and light coordinates for the tile
 	local texture = TileTextures(tileID)[1]
 	local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
 
+	-- Define vertices for the 2D tile model
 	local diagLong = 0.7071 * scale * 0.5 + 0.5
 	local diagShort = -0.7071 * scale * 0.5 + 0.5
 
@@ -49,6 +62,7 @@ function createTileModel(tileID, thisLight, scale)
 		{ diagLong, scale, diagLong, tx, ty },
 		{ diagShort, scale, diagShort, tx2, ty },
 	}
+
 	_JPROFILER.pop("createTileModel")
 	return vertices
 end
