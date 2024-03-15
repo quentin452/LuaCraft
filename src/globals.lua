@@ -156,7 +156,7 @@ GuiHotbarSelectQuad = love.graphics.newQuad(0, 22, 24, 22 + 24, GuiSprites:getDi
 GuiCrosshair = love.graphics.newQuad(256 - 16, 0, 256, 16, GuiSprites:getDimensions())
 LogicAccumulator = 0
 PhysicsStep = true
-Cpml = require("libs/Cpml")
+cpml = require("libs/cpml")
 --menus
 require("src/menus/mainmenu")
 require("src/menus/mainmenusettings")

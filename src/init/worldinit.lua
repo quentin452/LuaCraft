@@ -3,7 +3,7 @@ function initScene()
 
 	Scene = Engine.newScene(GraphicsWidth, GraphicsHeight)
 	Scene.camera.perspective = TransposeMatrix(
-		Cpml.mat4.from_perspective(90, love.graphics.getWidth() / love.graphics.getHeight(), 0.001, 10000)
+		cpml.mat4.from_perspective(90, love.graphics.getWidth() / love.graphics.getHeight(), 0.001, 10000)
 	)
 	_JPROFILER.pop("initScene")
 end

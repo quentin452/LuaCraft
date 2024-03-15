@@ -47,7 +47,7 @@ function Engine.newModel(verts, texture, coords, color, format)
 	m.texture = texture
 	m.format = format
 	m.verts = verts
-	m.transform = TransposeMatrix(Cpml.mat4.identity())
+	m.transform = TransposeMatrix(cpml.mat4.identity())
 	m.color = color
 	m.visible = true
 	m.dead = false
@@ -65,8 +65,8 @@ function Engine.newModel(verts, texture, coords, color, format)
 	-- Translate and rotate the Model
 	m.setTransform = function(self, newCoords, rotations)
 		rotations = rotations or {}
-		self.transform = TransposeMatrix(Cpml.mat4.identity())
-		self.transform:translate(self.transform, Cpml.vec3(unpack(newCoords)))
+		self.transform = TransposeMatrix(cpml.mat4.identity())
+		self.transform:translate(self.transform, cpml.vec3(unpack(newCoords)))
 		for i = 1, #rotations, 2 do
 			self.transform:rotate(self.transform, rotations[i], rotations[i + 1])
 		end
@@ -142,10 +142,10 @@ return color * texturecolor;}
 	scene.modelList = {}
 
 	scene.camera = {
-		pos = Cpml.vec3(0, 0, 0),
-		angle = Cpml.vec3(0, 0, 0),
-		perspective = TransposeMatrix(Cpml.mat4.from_perspective(60, renderWidth / renderHeight, 0.1, 10000)),
-		transform = Cpml.mat4(),
+		pos = cpml.vec3(0, 0, 0),
+		angle = cpml.vec3(0, 0, 0),
+		perspective = TransposeMatrix(cpml.mat4.from_perspective(60, renderWidth / renderHeight, 0.1, 10000)),
+		transform = cpml.mat4(),
 	}
 
 	-- should be called in love.update every frame
@@ -191,12 +191,12 @@ return color * texturecolor;}
 		love.graphics.setShader(self.threeShader)
 
 		local Camera = self.camera
-		Camera.transform = Cpml.mat4()
+		Camera.transform = cpml.mat4()
 		local t, a, p = Camera.transform, Camera.angle, CopyTable(Camera.pos)
-		t:rotate(t, a.y, Cpml.vec3.unit_x)
-		t:rotate(t, a.x, Cpml.vec3.unit_y)
-		t:rotate(t, a.z, Cpml.vec3.unit_z)
-		t:translate(t, Cpml.vec3(-p.x, -p.y, -p.z))
+		t:rotate(t, a.y, cpml.vec3.unit_x)
+		t:rotate(t, a.x, cpml.vec3.unit_y)
+		t:rotate(t, a.z, cpml.vec3.unit_z)
+		t:translate(t, cpml.vec3(-p.x, -p.y, -p.z))
 		self.threeShader:send("view", Camera.perspective * TransposeMatrix(t))
 
 		for i = 1, #self.modelList do
@@ -270,11 +270,11 @@ end
 
 -- useful functions
 function TransposeMatrix(mat)
-	return Cpml.mat4.transpose(Cpml.mat4(), mat)
+	return cpml.mat4.transpose(cpml.mat4(), mat)
 end
 
 function InvertMatrix(mat)
-	return Cpml.mat4.invert(Cpml.mat4(), mat)
+	return cpml.mat4.invert(cpml.mat4(), mat)
 end
 
 function CopyTable(orig)
