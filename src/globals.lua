@@ -173,8 +173,6 @@ require("src/utils/usefull")
 require("src/utils/filesystem")
 require("src/utils/settingshandling")
 require("src/utils/commands/commandsexec")
-enablePROFIProfiler = false
-ProFi = require("src/utils/ProFi")
 --entities
 require("src/entities/player")
 --world

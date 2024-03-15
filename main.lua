@@ -114,10 +114,6 @@ end
 function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
-	if enablePROFIProfiler then
-		ProFi:start()
-	end
-
 	DrawGame()
 	if hudMessage ~= nil then
 		local width, height = lovegraphics.getDimensions()
@@ -132,9 +128,6 @@ function love.draw()
 		local y = (height - textHeight) / 2 + 280
 
 		lovegraphics.print(hudMessage, x, y)
-	end
-	if enablePROFIProfiler then
-		ProFi:stop()
 	end
 	_JPROFILER.pop("MainDraw")
 	_JPROFILER.pop("frame")
@@ -169,8 +162,5 @@ function love.keypressed(k)
 end
 
 function love.quit()
-	if enablePROFIProfiler then
-		ProFi:writeReport("report.txt")
-	end
 	_JPROFILER.write("_JPROFILER.mpack")
 end
