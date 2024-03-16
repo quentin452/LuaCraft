@@ -1,11 +1,8 @@
---TODO : FIX CRASH WHILE PROFILING
 function addFunctionToTag(tag, func)
-	--_JPROFILER.push("addFunctionToTag")
 	if not ModLoaderTable[tag] then
 		ModLoaderTable[tag] = {}
 	end
 	table.insert(ModLoaderTable[tag], func)
-	--_JPROFILER.pop("addFunctionToTag")
 end
 local nextId = 1
 TilesById = { [0] = {
@@ -22,7 +19,6 @@ function addBlock(
 	blockSideTexture,
 	blockTopTexture
 )
-	--_JPROFILER.push("addBlock")
 	if Tiles[blockstringname] then
 		LuaCraftErrorLogging("Error: Duplicate blockstringname detected: " .. tostring(blockstringname))
 		return
@@ -104,58 +100,59 @@ function addBlock(
 		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTexture, side = blockSideTexture }
 	end
 	nextId = nextId + 1
-	--_JPROFILER.pop("addBlock")
-
 	return id
 end
 
 function LoadMods()
-	--_JPROFILER.push("LoadMods")
-	local fullPath
 	local modsDirectory = "mods/"
-	local items = Lovefilesystem.getDirectoryItems(modsDirectory)
-	for _, item in ipairs(items) do
-		fullPath = modsDirectory .. item
-		if Lovefilesystem.getInfo(fullPath, "directory") then
-			local modName = item
-			local startTime = os.clock()
-			local success, mod = pcall(require, "mods." .. modName .. "." .. modName)
-			if success then
-				if mod.initialize then
-					mod.initialize()
+	local directories = { modsDirectory }
+	while #directories > 0 do
+		local currentDirectory = table.remove(directories)
+		local items = Lovefilesystem.getDirectoryItems(currentDirectory)
+		for _, item in ipairs(items) do
+			local fullPath = currentDirectory .. item
+			local info = Lovefilesystem.getInfo(fullPath, "directory")
+			if info then
+				local modName = item
+				local startTime = os.clock()
+				local success, mod = pcall(require, "mods." .. modName .. "." .. modName)
+				if success then
+					if mod.initialize then
+						mod.initialize()
+					end
+					local endTime = os.clock()
+					local loadTime = endTime - startTime
+					LuaCraftPrintLoggingNormal("Load time for", modName, ":", loadTime, "seconds")
+				else
+					LuaCraftErrorLogging("Failed to load mod:", modName)
 				end
-				local endTime = os.clock()
-				local loadTime = endTime - startTime
-				LuaCraftPrintLoggingNormal("Load time for", modName, ":", loadTime, "seconds")
-			else
-				LuaCraftErrorLogging("Failed to load mod:", modName)
+				table.insert(directories, fullPath)
 			end
 		end
 	end
-	fullPath = nil
-	--_JPROFILER.pop("LoadMods")
 end
 
-function LoadBlocksAndTiles(directory)
-	--_JPROFILER.push("LoadBlocksAndTiles")
-	local fullPath
-	local items = love.filesystem.getDirectoryItems(directory)
-	for _, item in ipairs(items) do
-		fullPath = directory .. "/" .. item
-		if love.filesystem.getInfo(fullPath).type == "directory" then
-			LoadBlocksAndTiles(fullPath)
-		elseif item:match("%.lua$") and item ~= "tiledata.lua" then
-			local blockName = item:sub(1, -5)
-			local success, block = pcall(require, directory:gsub("/", ".") .. "." .. blockName)
-			if success then
-				if block and type(block) == "table" and block.initialize then
-					block.initialize()
+function LoadBlocksAndTiles(rootDirectory)
+	local directories = { rootDirectory }
+	while #directories > 0 do
+		local currentDirectory = table.remove(directories)
+		local items = love.filesystem.getDirectoryItems(currentDirectory)
+		for _, item in ipairs(items) do
+			local fullPath = currentDirectory .. "/" .. item
+			local info = love.filesystem.getInfo(fullPath)
+			if info.type == "directory" then
+				table.insert(directories, fullPath)
+			elseif item:match("%.lua$") and item ~= "tiledata.lua" then
+				local blockName = item:sub(1, -5)
+				local success, block = pcall(require, currentDirectory:gsub("/", ".") .. "." .. blockName)
+				if success then
+					if block and type(block) == "table" and block.initialize then
+						block.initialize()
+					end
+				else
+					LuaCraftErrorLogging("Failed to load block:", blockName)
 				end
-			else
-				LuaCraftErrorLogging("Failed to load block:", blockName)
 			end
 		end
 	end
-	fullPath = nil
-	--_JPROFILER.pop("LoadBlocksAndTiles")
 end
