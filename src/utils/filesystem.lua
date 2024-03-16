@@ -198,7 +198,22 @@ function getLuaCraftPrintLoggingErrorValue()
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	return file_content and file_content:match("LuaCraftErrorLogging=(%d)")
 end
-
+function getForwardMovementKey()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+	return file_content and file_content:match("forwardmovementkey=(%d)")
+end
+function getBackwardMovementKey()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+	return file_content and file_content:match("backwardmovementkey=(%d)")
+end
+function getLeftMovementKey()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+	return file_content and file_content:match("leftmovementkey=(%d)")
+end
+function getRightMomentKey()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+	return file_content and file_content:match("rightmovementkey=(%d)")
+end
 function LuaCraftPrintLoggingNormal(...)
 	if EnableLuaCraftPrintLoggingNormalLogging then
 		local message = table.concat({ ... }, " ")
@@ -238,3 +253,8 @@ function writeToLog(string, message)
 	else
 	end
 end
+
+ReloadForwardKey = getForwardMovementKey()
+ReloadBackwardKey = getBackwardMovementKey()
+ReloadLeftKey = getLeftMovementKey()
+ReloadRightKey = getRightMomentKey()

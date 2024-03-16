@@ -1,27 +1,37 @@
 function reloadConfig()
-	local file_content, error_message = customReadFile(Luacraftconfig)
-	if file_content then
-		local vsyncValue = file_content:match("vsync=(%w+)")
-		if vsyncValue then
-			GlobalVSync = vsyncValue:lower() == "true"
-			Lovewindow.setVSync(GlobalVSync and 1 or 0)
-		end
+    local file_content, error_message = customReadFile(Luacraftconfig)
+    if file_content then
+        local vsyncValue = file_content:match("vsync=(%w+)")
+        if vsyncValue then
+            GlobalVSync = vsyncValue:lower() == "true"
+            Lovewindow.setVSync(GlobalVSync and 1 or 0)
+        end
 
-		--	local renderdistanceValue = file_content:match("renderdistance=(%d+)")
-		--	globalRenderDistance = tonumber(renderdistanceValue) or 6
+        local printNormalValue = file_content:match("LuaCraftPrintLoggingNormal=(%w+)")
+        EnableLuaCraftPrintLoggingNormalLogging = printNormalValue:lower() == "true"
 
-		local printNormalValue = file_content:match("LuaCraftPrintLoggingNormal=(%w+)")
-		EnableLuaCraftPrintLoggingNormalLogging = printNormalValue:lower() == "true"
+        local warnValue = file_content:match("LuaCraftWarnLogging=(%w+)")
+        EnableLuaCraftLoggingWarn = warnValue:lower() == "true"
 
-		local warnValue = file_content:match("LuaCraftWarnLogging=(%w+)")
-		EnableLuaCraftLoggingWarn = warnValue:lower() == "true"
+        local errorValue = file_content:match("LuaCraftErrorLogging=(%w+)")
+        EnableLuaCraftLoggingError = errorValue:lower() == "true"
 
-		local errorValue = file_content:match("LuaCraftErrorLogging=(%w+)")
-		EnableLuaCraftLoggingError = errorValue:lower() == "true"
-	else
-		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
-	end
+        local forwardmovementkey = file_content:match("forwardmovementkey=([%a%d]+)")
+        ReloadForwardKey = forwardmovementkey:lower() == "z"
+
+        local backwardmovementkey = file_content:match("backwardmovementkey=([%a%d]+)")
+        ReloadBackwardKey = backwardmovementkey:lower() == "s"
+
+        local leftmovementkey = file_content:match("leftmovementkey=([%a%d]+)")
+        ReloadLeftKey = leftmovementkey:lower() == "q"
+
+        local rightmovementkey = file_content:match("rightmovementkey=([%a%d]+)")
+        ReloadRightKey = rightmovementkey:lower() == "d"
+    else
+        LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+    end
 end
+
 
 function toggleFullScreen()
 	_JPROFILER.push("toggleFullScreen")

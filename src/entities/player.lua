@@ -9,7 +9,18 @@ local previousLeftKey = nil
 local previousRightKey = nil
 local lastUpdateTime = 0
 local updateDelay = 1
+function loadMovementKeyValues()
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
+	if file_content then
+		forwardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
+		backwardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
+		leftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
+		rightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
+	else
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+	end
+end
 function updateMovementKeyValues()
 	_JPROFILER.push("updateMovementKeyValues")
 
