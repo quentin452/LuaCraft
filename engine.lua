@@ -23,7 +23,7 @@ function Engine.newModel(verts, texture, coords, color, format)
 		{ "VertexPosition", "float", 3 },
 		{ "VertexTexCoord", "float", 2 },
 	}
-	texture = texture or love.graphics.newCanvas(1, 1)
+	texture = texture or Lovegraphics.newCanvas(1, 1)
 	verts = verts or {}
 
 	-- Translate verts by given coords and add random UV coordinates if not given
@@ -40,7 +40,7 @@ function Engine.newModel(verts, texture, coords, color, format)
 	end
 
 	-- Define the Model object's properties
-	m.mesh = #verts > 0 and love.graphics.newMesh(format, verts, "triangles") or nil
+	m.mesh = #verts > 0 and Lovegraphics.newMesh(format, verts, "triangles") or nil
 	if m.mesh then
 		m.mesh:setTexture(texture)
 	end
@@ -56,7 +56,7 @@ function Engine.newModel(verts, texture, coords, color, format)
 
 	m.setVerts = function(self, newVerts)
 		if #newVerts > 0 then
-			self.mesh = love.graphics.newMesh(self.format, newVerts, "triangles")
+			self.mesh = Lovegraphics.newMesh(self.format, newVerts, "triangles")
 			self.mesh:setTexture(self.texture)
 		end
 		self.verts = newVerts
@@ -113,11 +113,11 @@ end
 function Engine.newScene(renderWidth, renderHeight)
 	_JPROFILER.push("Engine.newScene")
 
-	love.graphics.setDepthMode("lequal", true)
+	Lovegraphics.setDepthMode("lequal", true)
 	scene = {}
 
 	-- define the shaders used in rendering the scene
-	scene.threeShader = love.graphics.newShader([[
+	scene.threeShader = Lovegraphics.newShader([[
 #ifndef PIXEL
 uniform mat4 view;
 uniform mat4 model_matrix;
@@ -136,9 +136,9 @@ return color * texturecolor;}
 	scene.renderHeight = renderHeight
 
 	-- create a canvas that will store the rendered 3d scene
-	scene.threeCanvas = love.graphics.newCanvas(renderWidth, renderHeight)
+	scene.threeCanvas = Lovegraphics.newCanvas(renderWidth, renderHeight)
 	-- create a canvas that will store a 2d layer that can be drawn on top of the 3d scene
-	scene.twoCanvas = love.graphics.newCanvas(renderWidth, renderHeight)
+	scene.twoCanvas = Lovegraphics.newCanvas(renderWidth, renderHeight)
 	scene.modelList = {}
 
 	scene.camera = {
@@ -182,13 +182,13 @@ return color * texturecolor;}
 	-- renders the models in the scene to the threeCanvas
 	-- will draw threeCanvas if drawArg is not given or is true (use if you want to scale the game canvas to window)
 	scene.render = function(self, drawArg)
-		local windowWidth, windowHeight = love.graphics.getDimensions()
+		local windowWidth, windowHeight = Lovegraphics.getDimensions()
 		local scaleX, scaleY = windowWidth / self.renderWidth, windowHeight / self.renderHeight
 
-		love.graphics.setColor(1, 1, 1)
-		love.graphics.setCanvas({ self.threeCanvas, depth = true })
-		love.graphics.clear(0, 0, 0, 0)
-		love.graphics.setShader(self.threeShader)
+		Lovegraphics.setColor(1, 1, 1)
+		Lovegraphics.setCanvas({ self.threeCanvas, depth = true })
+		Lovegraphics.clear(0, 0, 0, 0)
+		Lovegraphics.setShader(self.threeShader)
 
 		local Camera = self.camera
 		Camera.transform = Cpml.mat4()
@@ -203,22 +203,22 @@ return color * texturecolor;}
 			local model = self.modelList[i]
 			if model and model.visible and #model.verts > 0 then
 				self.threeShader:send("model_matrix", model.transform)
-				love.graphics.setWireframe(model.wireframe)
+				Lovegraphics.setWireframe(model.wireframe)
 				if model.culling then
-					love.graphics.setMeshCullMode("back")
+					Lovegraphics.setMeshCullMode("back")
 				end
-				love.graphics.draw(model.mesh, -self.renderWidth / 2, -self.renderHeight / 2)
-				love.graphics.setMeshCullMode("none")
-				love.graphics.setWireframe(false)
+				Lovegraphics.draw(model.mesh, -self.renderWidth / 2, -self.renderHeight / 2)
+				Lovegraphics.setMeshCullMode("none")
+				Lovegraphics.setWireframe(false)
 			end
 		end
 
-		love.graphics.setShader()
-		love.graphics.setCanvas()
+		Lovegraphics.setShader()
+		Lovegraphics.setCanvas()
 
-		love.graphics.setColor(1, 1, 1)
+		Lovegraphics.setColor(1, 1, 1)
 		if drawArg == nil or drawArg then
-			love.graphics.draw(
+			Lovegraphics.draw(
 				self.threeCanvas,
 				windowWidth / 2,
 				windowHeight / 2,
@@ -235,14 +235,14 @@ return color * texturecolor;}
 	-- this is useful for drawing 2d HUDS and information on the screen in front of the 3d scene
 	-- will draw threeCanvas if drawArg is not given or is true (use if you want to scale the game canvas to window)
 	scene.renderFunction = function(self, func, drawArg)
-		love.graphics.setColor(1, 1, 1)
-		love.graphics.setCanvas(Scene.twoCanvas)
-		love.graphics.clear(0, 0, 0, 0)
+		Lovegraphics.setColor(1, 1, 1)
+		Lovegraphics.setCanvas(Scene.twoCanvas)
+		Lovegraphics.clear(0, 0, 0, 0)
 		func()
-		love.graphics.setCanvas()
+		Lovegraphics.setCanvas()
 
 		if drawArg == nil or drawArg == true then
-			love.graphics.draw(
+			Lovegraphics.draw(
 				Scene.twoCanvas,
 				self.renderWidth / 2,
 				self.renderHeight / 2,

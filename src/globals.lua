@@ -4,6 +4,9 @@ Lovegraphics = Lovez.graphics
 Lovewindow = Lovez.window
 Loveimage = Lovez.image
 Lovetimer = Lovez.timer
+Loveevent = Lovez.event
+Lovehandlers = Lovez.handlers
+Loveargs = love.arg
 --init shaders
 -- Shader to change color of crosshair to contrast with what is being looked at
 CrosshairShader = Lovegraphics.newShader(
@@ -70,6 +73,7 @@ CaveList = {}
 ThingList = {}
 Engine = {}
 ChunkVerts = {}
+SliceUpdates = {}
 TilesTextureFORAtlasList = {}
 PlayerInventory = {
 	items = {},
@@ -135,11 +139,12 @@ PlayingGameSettings = Lovegraphics.newImage("resources/assets/backgrounds/playin
 WorldCreationBackground = Lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 ChunkBorders = Lovegraphics.newImage(TexturepathLuaCraft .. "debug/chunkborders.png")
 LightValues = 16
-GuiHotbarQuad = love.graphics.newQuad(0, 0, 182, 22, GuiSprites:getDimensions())
-GuiHotbarSelectQuad = love.graphics.newQuad(0, 22, 24, 22 + 24, GuiSprites:getDimensions())
-GuiCrosshair = love.graphics.newQuad(256 - 16, 0, 256, 16, GuiSprites:getDimensions())
+GuiHotbarQuad = Lovegraphics.newQuad(0, 0, 182, 22, GuiSprites:getDimensions())
+GuiHotbarSelectQuad = Lovegraphics.newQuad(0, 22, 24, 22 + 24, GuiSprites:getDimensions())
+GuiCrosshair = Lovegraphics.newQuad(256 - 16, 0, 256, 16, GuiSprites:getDimensions())
 LogicAccumulator = 0
 PhysicsStep = true
+CurrentCommand = ""
 Cpml = require("libs/cpml")
 --menus
 require("src/menus/mainmenu")

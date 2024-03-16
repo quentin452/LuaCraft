@@ -343,57 +343,35 @@ function NewChunk(x, z)
 		_JPROFILER.pop("setVoxel")
 	end
 
+	local function setVoxelDataInternal(self, x, y, z, blockvalue, dataIndex)
+		x = math.floor(x)
+		y = math.floor(y)
+		z = math.floor(z)
+		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
+			local dataIndexOffset = (dataIndex == "First" and 2 or 3)
+			self.voxels[x][z] =
+				ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + dataIndexOffset, string.char(blockvalue))
+			self.changes[#self.changes + 1] = { x, y, z }
+		end
+	end
+
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)
-		x = math.floor(x)
-		y = math.floor(y)
-		z = math.floor(z)
-		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 2, string.char(blockvalue))
-
-			self.changes[#self.changes + 1] = { x, y, z }
-		end
+		setVoxelDataInternal(self, x, y, z, blockvalue, "First")
 	end
 
-	-- sunlight data
 	chunk.setVoxelFirstData = function(self, x, y, z, blockvalue)
-		--_JPROFILER.push("setVoxelFirstData")
-
-		x = math.floor(x)
-		y = math.floor(y)
-		z = math.floor(z)
-		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 2, string.char(blockvalue))
-
-			self.changes[#self.changes + 1] = { x, y, z }
-		end
-		--_JPROFILER.pop("setVoxelFirstData")
+		setVoxelDataInternal(self, x, y, z, blockvalue, "First")
 	end
 
-	-- local light data
 	chunk.setVoxelSecondData = function(self, x, y, z, blockvalue)
-		--_JPROFILER.push("setVoxelSecondData")
-
-		x = math.floor(x)
-		y = math.floor(y)
-		z = math.floor(z)
-		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 3, string.char(blockvalue))
-
-			self.changes[#self.changes + 1] = { x, y, z }
-		end
-		--_JPROFILER.pop("setVoxelSecondData")
+		setVoxelDataInternal(self, x, y, z, blockvalue, "Second")
 	end
 
 	local function initSliceUpdates()
-		--_JPROFILER.push("initSliceUpdates")
-
-		sliceUpdates = {}
 		for i = 1, WorldHeight / SliceHeight do
-			sliceUpdates[i] = { false, false, false, false, false }
+			SliceUpdates[i] = { false, false, false, false, false }
 		end
-		--_JPROFILER.pop("initSliceUpdates")
-
-		return sliceUpdates
+		return SliceUpdates
 	end
 
 	local function findUpdatedSlices(self, sliceUpdates)
