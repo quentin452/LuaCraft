@@ -34,108 +34,56 @@ function LightingUpdate()
 	LightingQueue = {}
 end
 
-local function NewSunlightForceAddition(x, y, z, value)
-	local t = { x = x, y = y, z = z, value = value, querytype = "NewSunlightForceAddition" }
-	t.query = LightningQueries(t)
-	LightingQueueAdd(t)
-end
-local function NewSunlightAdditionCreation(x, y, z)
-	local t = { x = x, y = y, z = z, querytype = "NewSunlightAdditionCreation" }
-	t.query = LightningQueries(t)
-	LightingQueueAdd(t)
-end
-
-local function NewSunlightDownAddition(x, y, z, value)
-	local t = { x = x, y = y, z = z, value = value, querytype = "NewSunlightDownAddition" }
-	t.query = LightningQueries(t)
-	LightingQueueAdd(t)
-end
-
-local function NewLocalLightForceAddition(x, y, z, value)
-	local t = { x = x, y = y, z = z, value = value, querytype = "NewLocalLightForceAddition" }
-	t.query = LightningQueries(t)
-	LightingQueueAdd(t)
-end
-
-local function NewLocalLightSubtraction(x, y, z, value)
-	local t = { x = x, y = y, z = z, value = value, querytype = "NewLocalLightSubtraction" }
-	t.query = LightningQueries(t)
-	LightingRemovalQueueAdd(t)
-end
-local function NewLocalLightAdditionCreation(x, y, z)
-	local t = { x = x, y = y, z = z, querytype = "NewLocalLightAdditionCreation" }
-	t.query = LightningQueries(t)
-	LightingQueueAdd(t)
-end
-local function NewSunlightAddition(x, y, z, value)
-	local t = { x = x, y = y, z = z, value = value, querytype = "NewSunlightAddition" }
-	t.query = LightningQueries(t)
-	LightingQueueAdd(t)
-end
-
-local function NewLocalLightAddition(x, y, z, value)
-	local t = { x = x, y = y, z = z, value = value, querytype = "NewLocalLightAddition" }
-	t.query = LightningQueries(t)
-	LightingQueueAdd(t)
-end
-local function NewSunlightSubtraction(x, y, z, value)
-	local t = { x = x, y = y, z = z, value = value, querytype = "NewSunlightSubtraction" }
-	t.query = LightningQueries(t)
-	LightingRemovalQueueAdd(t)
-end
-local function NewSunlightDownSubtraction(x, y, z)
-	local t = { x = x, y = y, z = z, querytype = "NewSunlightDownSubtraction" }
-	t.query = LightningQueries(t)
-	LightingRemovalQueueAdd(t)
-end
-
-function LightningQueries(self)
+function LightningQueries(self, lightoperation)
 	local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 	if cget == nil then
 		return function() end
 	end
 
-	if self.querytype == "NewSunlightForceAddition" then
+	if lightoperation == "NewSunlightForceAddition" then
 		return function()
 			local val = cget:getVoxel(cx, cy, cz)
 			if self.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
-					NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+					local x = self.x + dir.x
+					NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewSunlightAddition", self.value - 1)
 				end
 			end
 		end
-	elseif self.querytype == "NewSunlightAdditionCreation" then
+	elseif lightoperation == "NewSunlightAdditionCreation" then
 		return function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
-				NewSunlightForceAddition(self.x, self.y, self.z, dat)
+				NewLightOperation(self.x, self.y, self.z, "NewSunlightForceAddition", dat)
 			end
 		end
-	elseif self.querytype == "NewSunlightDownAddition" then
+	elseif lightoperation == "NewSunlightDownAddition" then
 		return function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if TileLightable(val) and dat <= self.value then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
-				NewSunlightDownAddition(self.x, self.y - 1, self.z, self.value)
+				NewLightOperation(self.x, self.y - 1, self.z, "NewSunlightDownAddition", self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
-					NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+					local x = self.x + dir.x
+					NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewSunlightAddition", self.value - 1)
 				end
 			end
 		end
-	elseif self.querytype == "NewLocalLightForceAddition" then
+	elseif lightoperation == "NewLocalLightForceAddition" then
 		return function()
 			local val, _, _ = cget:getVoxel(cx, cy, cz)
 			if self.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelSecondData(cx, cy, cz, self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
-					NewLocalLightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+					local x = self.x + dir.x
+					NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewLocalLightAddition", self.value - 1)
 				end
 			end
 		end
-	elseif self.querytype == "NewLocalLightSubtraction" then
+	elseif lightoperation == "NewLocalLightSubtraction" then
 		return function()
 			local val, _ = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelSecondData(cx, cy, cz)
@@ -144,33 +92,34 @@ function LightningQueries(self)
 					cget:setVoxelSecondData(cx, cy, cz, 0)
 					for _, dir in ipairs(SIXDIRECTIONS) do
 						local nx, ny, nz = self.x + dir.x, self.y + dir.y, self.z + dir.z
-						NewLocalLightSubtraction(nx, ny, nz, fget)
+						NewLightOperation(nx, ny, nz, "NewLocalLightSubtraction", fget)
 					end
 				else
-					NewLocalLightForceAddition(self.x, self.y, self.z, fget)
+					NewLightOperation(self.x, self.y, self.z, "NewLocalLightForceAddition", fget)
 				end
 				return false
 			end
 		end
-	elseif self.querytype == "NewLocalLightAdditionCreation" then
+	elseif lightoperation == "NewLocalLightAdditionCreation" then
 		return function()
 			local val, _, dat = cget:getVoxel(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
-				NewLocalLightForceAddition(self.x, self.y, self.z, dat)
+				NewLightOperation(self.x, self.y, self.z, "NewLocalLightForceAddition", dat)
 			end
 		end
-	elseif self.querytype == "NewSunlightAddition" then
+	elseif lightoperation == "NewSunlightAddition" then
 		return function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if self.value >= 0 and TileLightable(val, true) and dat < self.value then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
-					NewSunlightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+					local x = self.x + dir.x
+					NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewSunlightAddition", self.value - 1)
 				end
 			end
 		end
-	elseif self.querytype == "NewLocalLightAddition" then
+	elseif lightoperation == "NewLocalLightAddition" then
 		return function()
 			local localcx, localcy, localcz = Localize(self.x, self.y, self.z)
 			local val, _, dat = cget:getVoxel(localcx, localcy, localcz)
@@ -178,12 +127,13 @@ function LightningQueries(self)
 				cget:setVoxelSecondData(localcx, localcy, localcz, self.value)
 				if self.value > 1 then
 					for _, dir in ipairs(SIXDIRECTIONS) do
-						NewLocalLightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
+						local x = self.x + dir.x
+						NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewLocalLightAddition", self.value - 1)
 					end
 				end
 			end
 		end
-	elseif self.querytype == "NewSunlightSubtraction" then
+	elseif lightoperation == "NewSunlightSubtraction" then
 		return function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelFirstData(cx, cy, cz)
@@ -191,21 +141,23 @@ function LightningQueries(self)
 				if fget < self.value then
 					cget:setVoxelFirstData(cx, cy, cz, Tiles.AIR_Block.id)
 					for _, dir in ipairs(SIXDIRECTIONS) do
-						NewSunlightSubtraction(self.x + dir.x, self.y + dir.y, self.z + dir.z, fget)
+						local x = self.x + dir.x
+						NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewSunlightSubtraction", fget)
 					end
 				else
-					NewSunlightForceAddition(self.x, self.y, self.z, fget)
+					NewLightOperation(self.x, self.y, self.z, "NewSunlightForceAddition", fget)
 				end
 				return false
 			end
 		end
-	elseif self.querytype == "NewSunlightDownSubtraction" then
+	elseif lightoperation == "NewSunlightDownSubtraction" then
 		return function()
 			if TileLightable(GetVoxel(self.x, self.y, self.z), true) then
 				SetVoxelFirstData(self.x, self.y, self.z, Tiles.AIR_Block.id)
-				NewSunlightDownSubtraction(self.x, self.y - 1, self.z)
+				NewLightOperation(self.x, self.y - 1, self.z, "NewSunlightDownSubtraction")
 				for _, dir in ipairs(SIXDIRECTIONS) do
-					NewSunlightSubtraction(self.x + dir.x, self.y + dir.y, self.z + dir.z, LightSources[15])
+					local x = self.x + dir.x
+					NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewSunlightSubtraction", LightSources[15])
 				end
 				return true
 			end
@@ -213,23 +165,25 @@ function LightningQueries(self)
 	end
 end
 local operationFunctions = {
-	["NewSunlightAddition"] = NewSunlightAddition,
-	["NewSunlightAdditionCreation"] = NewSunlightAdditionCreation,
-	["NewSunlightForceAddition"] = NewSunlightForceAddition,
-	["NewSunlightDownAddition"] = NewSunlightDownAddition,
-	["NewSunlightSubtraction"] = NewSunlightSubtraction,
-	["NewSunlightDownSubtraction"] = NewSunlightDownSubtraction,
-	["NewLocalLightSubtraction"] = NewLocalLightSubtraction,
-	["NewLocalLightForceAddition"] = NewLocalLightForceAddition,
-	["NewLocalLightAddition"] = NewLocalLightAddition,
-	["NewLocalLightAdditionCreation"] = NewLocalLightAdditionCreation,
+	["NewSunlightForceAddition"] = LightingQueueAdd,
+	["NewSunlightAdditionCreation"] = LightingQueueAdd,
+	["NewSunlightDownAddition"] = LightingQueueAdd,
+	["NewLocalLightForceAddition"] = LightingQueueAdd,
+	["NewLocalLightAdditionCreation"] = LightingQueueAdd,
+	["NewSunlightAddition"] = LightingQueueAdd,
+	["NewLocalLightAddition"] = LightingQueueAdd,
+	["NewLocalLightSubtraction"] = LightingRemovalQueueAdd,
+	["NewSunlightSubtraction"] = LightingRemovalQueueAdd,
+	["NewSunlightDownSubtraction"] = LightingRemovalQueueAdd,
 }
 
-function LightOperation(x, y, z, operation, value)
-	local operationFunction = operationFunctions[operation]
+function NewLightOperation(x, y, z, lightoperation, value)
+	local t = { x = x, y = y, z = z, value = value }
+	t.query = LightningQueries(t, lightoperation)
+	local operationFunction = operationFunctions[lightoperation]
 	if operationFunction then
-		operationFunction(x, y, z, value)
+		operationFunction(t)
 	else
-		LuaCraftErrorLogging("using wrong operation for LightOperation")
+		LuaCraftErrorLogging("This lightoperation: " .. lightoperation .. " is not correct")
 	end
 end

@@ -52,16 +52,16 @@ function NewChunk(x, z)
 				if self.heightMap[i] and self.heightMap[i][j] then
 					local this = self.heightMap[i][j]
 					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
-						LightOperation(gridX - 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
+						NewLightOperation(gridX - 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
 					end
 					if j == 1 or this > self.heightMap[i][j - 1] then
-						LightOperation(gridX, this, gridZ - 1, "NewSunlightDownAddition", LightSources[15])
+						NewLightOperation(gridX, this, gridZ - 1, "NewSunlightDownAddition", LightSources[15])
 					end
 					if i == ChunkSize or this > self.heightMap[i + 1][j] then
-						LightOperation(gridX + 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
+						NewLightOperation(gridX + 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
 					end
 					if j == ChunkSize or this > self.heightMap[i][j + 1] then
-						LightOperation(gridX, this, gridZ + 1, "NewSunlightDownAddition", LightSources[15])
+						NewLightOperation(gridX, this, gridZ + 1, "NewSunlightDownAddition", LightSources[15])
 					end
 				end
 			end
@@ -240,13 +240,13 @@ function NewChunk(x, z)
 						end
 					end
 					if inDirectSunlight and not blockAboveExists then
-						LightOperation(gx, gy, gz, "NewSunlightDownAddition", sunlight)
+						NewLightOperation(gx, gy, gz, "NewSunlightDownAddition", sunlight)
 					end
 				else
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
-								LightOperation(gx + dx, gy + dy, gz + dz, "NewSunlightAdditionCreation")
+								NewLightOperation(gx + dx, gy + dy, gz + dz, "NewSunlightAdditionCreation")
 							end
 						end
 					end
@@ -255,13 +255,13 @@ function NewChunk(x, z)
 				if manuallyPlaced then
 					local source = TileLightSource(blockvalue)
 					if source > 0 then
-						LightOperation(gx, gy, gz, "NewLocalLightAddition", source)
+						NewLightOperation(gx, gy, gz, "NewLocalLightAddition", source)
 						placingLocalSource = true
 					else
 						for dx = -1, 1 do
 							for dy = -1, 1 do
 								for dz = -1, 1 do
-									LightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
+									NewLightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
 								end
 							end
 						end
@@ -270,10 +270,10 @@ function NewChunk(x, z)
 			else
 				local semiLightable = TileLightable(blockvalue, true)
 
-				LightOperation(gx, gy - 1, gz, "NewSunlightDownSubtraction")
+				NewLightOperation(gx, gy - 1, gz, "NewSunlightDownSubtraction")
 
 				if semiLightable and inDirectSunlight and manuallyPlaced then
-					LightOperation(gx, gy + 1, gz, "NewSunlightAdditionCreation")
+					NewLightOperation(gx, gy + 1, gz, "NewSunlightAdditionCreation")
 				end
 
 				if not semiLightable or manuallyPlaced then
@@ -284,7 +284,7 @@ function NewChunk(x, z)
 								local nx, ny, nz = gx + dx, gy + dy, gz + dz
 								local nget = GetVoxelFirstData(nx, ny, nz)
 								if nget < LightSources[15] then
-									LightOperation(nx, ny, nz, "NewSunlightSubtraction", nget + LightSources[1])
+									NewLightOperation(nx, ny, nz, "NewSunlightSubtraction", nget + LightSources[1])
 								end
 							end
 						end
@@ -294,7 +294,7 @@ function NewChunk(x, z)
 
 			local source = TileLightSource(self:getVoxel(x, y, z))
 			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
-				LightOperation(gx, gy, gz, "NewLocalLightSubtraction", source + LightSources[1])
+				NewLightOperation(gx, gy, gz, "NewLocalLightSubtraction", source + LightSources[1])
 				destroyLight = true
 			end
 
@@ -305,7 +305,7 @@ function NewChunk(x, z)
 							for dz = -1, 1 do
 								local nget = GetVoxelSecondData(gx + dx, gy + dy, gz + dz)
 								if nget < LightSources[15] then
-									LightOperation(
+									NewLightOperation(
 										gx + dx,
 										gy + dy,
 										gz + dz,
@@ -322,7 +322,7 @@ function NewChunk(x, z)
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
-								LightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
+								NewLightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
 							end
 						end
 					end
