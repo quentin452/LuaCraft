@@ -3,15 +3,8 @@ local forwardKey = nil
 local backwardKey = nil
 local leftKey = nil
 local rightKey = nil
-local previousForwardKey = nil
-local previousBackwardKey = nil
-local previousLeftKey = nil
-local previousRightKey = nil
-local lastUpdateTime = 0
-local updateDelay = 1
-function loadMovementKeyValues()
+function ReLoadMovementKeyValues()
 	local file_content, error_message = customReadFile(Luacraftconfig)
-
 	if file_content then
 		forwardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
 		backwardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
@@ -21,48 +14,6 @@ function loadMovementKeyValues()
 		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 end
-function updateMovementKeyValues()
-	_JPROFILER.push("updateMovementKeyValues")
-
-	local currentTime = Lovetimer.getTime()
-	if currentTime - lastUpdateTime < updateDelay then
-		_JPROFILER.pop("updateMovementKeyValues")
-		return
-	end
-
-	local file_content, error_message = customReadFile(Luacraftconfig)
-
-	if file_content then
-		local newForwardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
-		local newBackwardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
-		local newLeftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
-		local newRightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
-
-		if newForwardKey ~= previousForwardKey then
-			forwardKey = newForwardKey
-			previousForwardKey = newForwardKey
-		end
-		if newBackwardKey ~= previousBackwardKey then
-			backwardKey = newBackwardKey
-			previousBackwardKey = newBackwardKey
-		end
-		if newLeftKey ~= previousLeftKey then
-			leftKey = newLeftKey
-			previousLeftKey = newLeftKey
-		end
-		if newRightKey ~= previousRightKey then
-			rightKey = newRightKey
-			previousRightKey = newRightKey
-		end
-
-		lastUpdateTime = currentTime
-	else
-		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
-	end
-
-	_JPROFILER.pop("updateMovementKeyValues")
-end
-
 function NewPlayer(x, y, z)
 	_JPROFILER.push("NewPlayer")
 	local t = NewThing(x, y, z)

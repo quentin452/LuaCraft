@@ -117,6 +117,7 @@ function KeyPressed(k)
 					forwardKey = k
 					updateConfigFile(keyToUpdate, forwardKey)
 					if forwardKey ~= previousKey then
+						ResetMovementKeys = true
 						ConfiguringMovementKey = false
 					end
 				end

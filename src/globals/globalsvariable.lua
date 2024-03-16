@@ -56,3 +56,4 @@ HudTimeLeft = 0
 ConfiguringMovementKey = false
 GlobalRenderDistance = 2
 HudMessage = nil
+ResetMovementKeys = true
