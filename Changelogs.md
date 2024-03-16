@@ -228,10 +228,6 @@ REMOVED FEATURES:
 
 This version is compatible with LOVE2D 11.5 and probably newer versions.
 
-LuaCraft V0.4.1
-
-This version is compatible with LOVE2D 11.5 and probably newer versions.
-
 HOTFIX
 
     Fix configs issues by mading this commit : https://github.com/quentin452/LuaCraft/commit/90eb96bbd7650099976d59ff6c189ff0ddb2fd2c , pls remove .LuaCraft folder in "C:\Users\yourusername\.LuaCraft" 
