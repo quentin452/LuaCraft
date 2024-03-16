@@ -80,3 +80,13 @@ _JPROFILER = require("libs/" .. libs[1])
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
 requireGroup(modloader, "src/modloader/")
 Engine = require("engine")
+
+menus = nil
+blocks = nil
+utils = nil
+entities = nil
+world = nil
+init = nil
+client = nil
+libs = nil
+modloader = nil
