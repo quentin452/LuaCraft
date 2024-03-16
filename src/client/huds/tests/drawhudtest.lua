@@ -88,7 +88,7 @@ function DrawTestBlock()
 		local t = NewThing(x, y, z)
 		t.name = "BlockTest"
 
-		myModel = Engine.newModel(verts, BlockTest, coords, color, format)
+		local myModel = Engine.newModel(verts, BlockTest, coords, color, format)
 		myModel.culling = false
 
 		t:assignModel(myModel)
