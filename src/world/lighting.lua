@@ -173,9 +173,9 @@ function LightningQueries(self)
 	elseif self.querytype == "NewLocalLightAddition" then
 		return function()
 			local cx, cy, cz = Localize(self.x, self.y, self.z)
-			local val, dis, dat = chunk:getVoxel(cx, cy, cz)
+			local val, dis, dat = cget:getVoxel(cx, cy, cz)
 			if TileLightable(val, true) and dat < self.value then
-				chunk:setVoxelSecondData(cx, cy, cz, self.value)
+				cget:setVoxelSecondData(cx, cy, cz, self.value)
 				if self.value > 1 then
 					for _, dir in ipairs(SIXDIRECTIONS) do
 						NewLocalLightAddition(self.x + dir.x, self.y + dir.y, self.z + dir.z, self.value - 1)
