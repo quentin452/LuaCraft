@@ -81,52 +81,55 @@ function GetPlayerDirection(rotation, pitch)
 end
 
 local function CreateChunkBordersVertices()
-	-- Define the coordinates for each face
-	local faces = {
-		{ -- Bottom face
-			{ 0, 0, 0 },
-			{ ChunkSize, 0, 0 },
-			{ ChunkSize, 0, ChunkSize },
-			{ 0, 0, ChunkSize },
-		},
-		{ -- Top face
-			{ 0, WorldHeight, 0 },
-			{ ChunkSize, WorldHeight, 0 },
-			{ ChunkSize, WorldHeight, ChunkSize },
-			{ 0, WorldHeight, ChunkSize },
-		},
-		{ -- Front face
-			{ 0, 0, 0 },
-			{ ChunkSize, 0, 0 },
-			{ ChunkSize, WorldHeight, 0 },
-			{ 0, WorldHeight, 0 },
-		},
-		{ -- Back face
-			{ 0, 0, ChunkSize },
-			{ ChunkSize, 0, ChunkSize },
-			{ ChunkSize, WorldHeight, ChunkSize },
-			{ 0, WorldHeight, ChunkSize },
-		},
-		{ -- Left face
-			{ 0, 0, 0 },
-			{ 0, 0, ChunkSize },
-			{ 0, WorldHeight, ChunkSize },
-			{ 0, WorldHeight, 0 },
-		},
-		{ -- Right face
-			{ ChunkSize, 0, 0 },
-			{ ChunkSize, 0, ChunkSize },
-			{ ChunkSize, WorldHeight, ChunkSize },
-			{ ChunkSize, WorldHeight, 0 },
-		},
-	}
+	ChunkVerts = {
+		-- Bottom face
+		{ 0, 0, 0 },
+		{ ChunkSize, 0, 0 },
+		{ ChunkSize, 0, ChunkSize },
+		{ ChunkSize, 0, ChunkSize },
+		{ 0, 0, ChunkSize },
+		{ 0, 0, 0 },
 
-	-- Generate vertices for each face
-	for _, face in ipairs(faces) do
-		for _, vertex in ipairs(face) do
-			ChunkVerts[#ChunkVerts + 1] = vertex
-		end
-	end
+		-- Top face
+		{ 0, WorldHeight, 0 },
+		{ ChunkSize, WorldHeight, 0 },
+		{ ChunkSize, WorldHeight, ChunkSize },
+		{ ChunkSize, WorldHeight, ChunkSize },
+		{ 0, WorldHeight, ChunkSize },
+		{ 0, WorldHeight, 0 },
+
+		-- Front face
+		{ 0, 0, 0 },
+		{ ChunkSize, 0, 0 },
+		{ ChunkSize, WorldHeight, 0 },
+		{ ChunkSize, WorldHeight, 0 },
+		{ 0, WorldHeight, 0 },
+		{ 0, 0, 0 },
+
+		-- Back face
+		{ 0, 0, ChunkSize },
+		{ ChunkSize, 0, ChunkSize },
+		{ ChunkSize, WorldHeight, ChunkSize },
+		{ ChunkSize, WorldHeight, ChunkSize },
+		{ 0, WorldHeight, ChunkSize },
+		{ 0, 0, ChunkSize },
+
+		-- Left face
+		{ 0, 0, 0 },
+		{ 0, 0, ChunkSize },
+		{ 0, WorldHeight, ChunkSize },
+		{ 0, WorldHeight, ChunkSize },
+		{ 0, WorldHeight, 0 },
+		{ 0, 0, 0 },
+
+		-- Right face
+		{ ChunkSize, 0, 0 },
+		{ ChunkSize, 0, ChunkSize },
+		{ ChunkSize, WorldHeight, ChunkSize },
+		{ ChunkSize, WorldHeight, ChunkSize },
+		{ ChunkSize, WorldHeight, 0 },
+		{ ChunkSize, 0, 0 },
+	}
 end
 
 local chunkBordersModels = {}
