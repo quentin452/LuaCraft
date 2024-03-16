@@ -35,15 +35,6 @@ _MainMenuSettings = createMenu(50, 50, "Settings", {
 	"Exiting to main menu",
 })
 
-_PlayingGameSettings = createMenu(50, 50, "Settings", {
-	"Enable Vsync?",
-	"Enable Logging (no warn or errors)?",
-	"Enable warns logging?",
-	"Enable errors logging?",
-	"Render Distance",
-	"Exiting to main menu",
-})
-
 _WorldCreationMenu = createMenu(50, 50, "World Creation Menu", {
 	"Create World?",
 	"Exiting to main menu",

@@ -23,7 +23,6 @@ GuiSprites = Lovegraphics.newImage(TexturepathLuaCraft .. "guis/gui.png")
 MainMenuBackground = Lovegraphics.newImage("resources/assets/backgrounds/MainMenuBackground.png")
 MainMenuSettingsBackground = Lovegraphics.newImage("resources/assets/backgrounds/Mainmenusettingsbackground.png")
 PlayingGamePauseMenu = Lovegraphics.newImage("resources/assets/backgrounds/gameplayingpausemenu.png")
-PlayingGameSettings = Lovegraphics.newImage("resources/assets/backgrounds/playinggamesettings.png")
 WorldCreationBackground = Lovegraphics.newImage("resources/assets/backgrounds/WorldCreationBackground.png")
 ChunkBorders = Lovegraphics.newImage(TexturepathLuaCraft .. "debug/chunkborders.png")
 LightValues = 16

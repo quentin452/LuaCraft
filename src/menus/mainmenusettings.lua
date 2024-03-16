@@ -1,4 +1,4 @@
-function drawMainMenuSettings()
+function DrawMenuSettings()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuSettingsBackground:getWidth()
 	local scaleY = h / MainMenuSettingsBackground:getHeight()
@@ -68,7 +68,7 @@ function drawMainMenuSettings()
 	--drawColorString("   [%3Retour%0] Valider", _MainMenuSettings.x, posY)
 end
 
-function keysinitMainMenuSettings(k)
+function keysinitMenuSettings(k)
 	if type(_MainMenuSettings.choice) == "table" and _MainMenuSettings.selection then
 		if k == "s" then
 			if _MainMenuSettings.selection < #_MainMenuSettings.choice then

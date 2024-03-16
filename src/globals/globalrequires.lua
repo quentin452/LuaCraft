@@ -5,7 +5,6 @@ local menus = {
 	"mainmenu",
 	"mainmenusettings",
 	"gameplayingpausemenu",
-	"playinggamesettings",
 	"worldcreationmenu",
 }
 

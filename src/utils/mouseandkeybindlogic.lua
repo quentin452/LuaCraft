@@ -49,10 +49,10 @@ function KeyPressed(k)
 		keysinitMainMenu(k)
 		_JPROFILER.pop("keysinitMainMenu")
 	end
-	if Gamestate == GamestateMainMenuSettings then
-		_JPROFILER.push("keysinitMainMenuSettings")
-		keysinitMainMenuSettings(k)
-		_JPROFILER.pop("keysinitMainMenuSettings")
+	if Gamestate == GamestateMainMenuSettings or Gamestate == GamestatePlayingGameSettings then
+		_JPROFILER.push("keysinitMenuSettings")
+		keysinitMenuSettings(k)
+		_JPROFILER.pop("keysinitMenuSettings")
 	end
 	if Gamestate == GamestateWorldCreationMenu then
 		_JPROFILER.push("keysInitWorldCreationMenu")
@@ -90,10 +90,5 @@ function KeyPressed(k)
 		_JPROFILER.push("keysinitGamePlayingPauseMenu")
 		keysinitGamePlayingPauseMenu(k)
 		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
-	end
-	if Gamestate == GamestatePlayingGameSettings then
-		_JPROFILER.push("keysinitPlayingMenuSettings")
-		keysinitPlayingMenuSettings(k)
-		_JPROFILER.pop("keysinitPlayingMenuSettings")
 	end
 end

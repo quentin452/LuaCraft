@@ -21,17 +21,13 @@ function DrawGame()
 		love.graphics.setColor(1, 1, 1)
 		DrawCanevas()
 		_JPROFILER.pop("DrawGameScene")
-	elseif Gamestate == GamestateMainMenuSettings then
-		_JPROFILER.push("drawMainMenuSettings")
-		drawMainMenuSettings()
-		_JPROFILER.pop("drawMainMenuSettings")
+	elseif Gamestate == GamestateMainMenuSettings or Gamestate == GamestatePlayingGameSettings then
+		_JPROFILER.push("drawMenuSettings")
+		DrawMenuSettings()
+		_JPROFILER.pop("drawMenuSettings")
 	elseif Gamestate == GamestateMainMenu then
 		_JPROFILER.push("drawMainMenu")
 		drawMainMenu()
 		_JPROFILER.pop("drawMainMenu")
-	elseif Gamestate == GamestatePlayingGameSettings then
-		_JPROFILER.push("drawPlayingMenuSettings")
-		drawPlayingMenuSettings()
-		_JPROFILER.pop("drawPlayingMenuSettings")
 	end
 end
