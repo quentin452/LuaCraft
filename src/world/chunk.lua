@@ -445,7 +445,6 @@ end
 local transparency3 = 3
 function NewChunkSlice(x, y, z, parent)
 	_JPROFILER.push("NewChunkSlice")
-
 	local t = NewThing(x, y, z)
 	t.parent = parent
 	t.name = "chunkslice"
@@ -454,56 +453,34 @@ function NewChunkSlice(x, y, z, parent)
 	t:assignModel(compmodel)
 	t.isUpdating = false
 	t.updateModel = function(self)
-		_JPROFILER.push("ChunkSliceUpdateModel")
 		if not self or not self.parent or not self.model then
 			return
 		end
 		self.isUpdating = true
 		ChunkSliceModels = {}
-
 		for i = 1, ChunkSize do
-			_JPROFILER.push("IterateI")
 			for j = self.y, self.y + SliceHeight - 1 do
-				_JPROFILER.push("IterateJ")
 				for k = 1, ChunkSize do
-					_JPROFILER.push("IterateK")
 					local this, thisSunlight, thisLocalLight = self.parent:getVoxel(i, j, k)
 					local thisLight = math.max(thisSunlight, thisLocalLight)
 					local thisTransparency = TileTransparency(this)
 					local scale = 1
 					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * scale, (self.z - 1) * ChunkSize + k - 1
 					if thisTransparency < transparency3 then
-						_JPROFILER.push("TileRendering")
 						TileRendering(self, i, j, k, x, y, z, thisLight, ChunkSliceModels, scale)
-						_JPROFILER.pop("TileRendering")
-
-						_JPROFILER.push("BlockRendering")
 						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, ChunkSliceModels, scale)
-						_JPROFILER.pop("BlockRendering")
 					end
-
-					_JPROFILER.pop("IterateK")
 				end
-				_JPROFILER.pop("IterateJ")
 			end
-			_JPROFILER.pop("IterateI")
 		end
-
-		_JPROFILER.push("SetVerts")
 		if self.model then
 			self.model:setVerts(ChunkSliceModels)
 		end
-		_JPROFILER.pop("SetVerts")
-
 		self.isUpdating = false
-		_JPROFILER.pop("ChunkSliceUpdateModel")
 	end
-
 	t.destroyModel = function(self)
 		self.model.dead = true
 	end
-	_JPROFILER.pop("NewChunkSlice")
-
 	return t
 end
 
