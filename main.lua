@@ -1,5 +1,7 @@
 --globalvariable
-require("src/globals")
+require("src/globals/!globals")
+--load block and tiles
+LoadBlocksAndTiles("src/blocksandtiles")
 function love.run()
 	if love.load then
 		love.load(Loveargs.parseGameArguments(arg), arg)
