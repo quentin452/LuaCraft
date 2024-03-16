@@ -89,12 +89,8 @@ function getTextureCoordinatesAndLight(texture, lightOffset)
 	return otx, oty
 end
 
-function GetValueFromCache(n, cache, computeFunction)
-	if cache[n] ~= nil then
-		return cache[n]
-	else
-		local value = computeFunction(n)
-		cache[n] = value
-		return value
+function CacheCheck(n, table)
+	if table[n] ~= nil then
+		return table[n]
 	end
 end

@@ -14,36 +14,38 @@ function GetValueFromTilesById(n)
 end
 -- Retrieves collision property of a tile by ID
 function TileCollisions(n)
-	return GetValueFromCache(n, TileCollisionCache, function(n)
-		local value = GetValueFromTilesById(n)
-		if value then
-			return value.Cancollide == CollideMode.YesCanCollide
-		end
-		return false
-	end)
+	CacheCheck(n, TileCollisionCache)
+	local value = GetValueFromTilesById(n)
+	if value then
+		local collision = value.Cancollide == CollideMode.YesCanCollide
+		TileCollisionCache[n] = collision
+		return collision
+	end
+	return false
 end
 
 -- Retrieves transparency level of a tile by ID
 function TileTransparency(n)
-	return GetValueFromCache(n, TileTransparencyCache, function(n)
-		local value = GetValueFromTilesById(n)
-		if value then
-			local blockstringname = value.blockstringname
-			return Tiles[blockstringname].transparency
-		end
-	end)
+	CacheCheck(n, TileTransparencyCache)
+	local value = GetValueFromTilesById(n)
+	if value then
+		local blockstringname = value.blockstringname
+		local transparency = Tiles[blockstringname].transparency
+		TileTransparencyCache[n] = transparency
+		return transparency
+	end
 end
 
 -- Retrieves light source value of a tile by ID
 function TileLightSource(n)
-	return GetValueFromCache(n, TileLightSourceCache, function(n)
-		local value = GetValueFromTilesById(n)
-		if value then
-			local blockstringname = value.blockstringname
-			local lightSource = Tiles[blockstringname].LightSources
-			return lightSource
-		end
-	end)
+	CacheCheck(n, TileLightSourceCache)
+	local value = GetValueFromTilesById(n)
+	if value then
+		local blockstringname = value.blockstringname
+		local lightSource = Tiles[blockstringname].LightSources
+		TileLightSourceCache[n] = lightSource
+		return lightSource
+	end
 end
 
 -- Checks if a tile can emit light
