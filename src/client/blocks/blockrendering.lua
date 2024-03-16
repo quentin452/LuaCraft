@@ -39,12 +39,12 @@ local function createBlockVertices(vertices, model)
 end
 
 -- Adds a face to the model based on direction and transparency
-local function addFaceToModel(model, x, y, z, otx, oty, scale, gettype)
+local function addFaceToModel(model, x, y, z, otx, oty, BlockAndTilesModelScale, gettype)
 	_JPROFILER.push("addFaceToModel")
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-	local x_plus_scale = x + scale
-	local y_plus_scale = y + scale
-	local z_plus_scale = z + scale
+	local x_plus_scale = x + BlockAndTilesModelScale
+	local y_plus_scale = y + BlockAndTilesModelScale
+	local z_plus_scale = z + BlockAndTilesModelScale
 	if gettype == "getTop" or gettype == "getBottom" then
 		blockVertices = {
 			{ x, y, z, tx, ty },
@@ -111,14 +111,14 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 end
 
 -- Draws faces of a block model
-local function DrawFaces(model, thisTransparency, thisLight, scale, x, y, z)
+local function DrawFaces(model, thisTransparency, thisLight, BlockAndTilesModelScale, x, y, z)
 	_JPROFILER.push("DrawFaces_blockrendering")
-	addFace("getTop", getTop, 0, 0, thisLight, model, thisTransparency, scale, x, y, z)
-	addFace("getBottom", getBottom, 1, 3, thisLight, model, thisTransparency, scale, x, y, z)
-	addFace("getPositiveX", getPositiveX, 0, 2, thisLight, model, thisTransparency, scale, x, y, z)
-	addFace("getNegativeX", getNegativeX, 0, 2, thisLight, model, thisTransparency, scale, x, y, z)
-	addFace("getPositiveZ", getPositiveZ, 0, 1, thisLight, model, thisTransparency, scale, x, y, z)
-	addFace("getNegativeZ", getNegativeZ, 0, 1, thisLight, model, thisTransparency, scale, x, y, z)
+	addFace("getTop", getTop, 0, 0, thisLight, model, thisTransparency, BlockAndTilesModelScale, x, y, z)
+	addFace("getBottom", getBottom, 1, 3, thisLight, model, thisTransparency, BlockAndTilesModelScale, x, y, z)
+	addFace("getPositiveX", getPositiveX, 0, 2, thisLight, model, thisTransparency, BlockAndTilesModelScale, x, y, z)
+	addFace("getNegativeX", getNegativeX, 0, 2, thisLight, model, thisTransparency, BlockAndTilesModelScale, x, y, z)
+	addFace("getPositiveZ", getPositiveZ, 0, 1, thisLight, model, thisTransparency, BlockAndTilesModelScale, x, y, z)
+	addFace("getNegativeZ", getNegativeZ, 0, 1, thisLight, model, thisTransparency, BlockAndTilesModelScale, x, y, z)
 	_JPROFILER.pop("DrawFaces_blockrendering")
 end
 
@@ -162,13 +162,13 @@ local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 end
 
 -- Renders the block at the specified coordinates
-function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, scale)
+function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, BlockAndTilesModelScale)
 	_JPROFILER.push("BlockRendering")
 	if not checkBlockValidity(self, i, j, k) then
 		_JPROFILER.pop("BlockRendering")
 		return
 	end
 	updateAdjacentBlocks(self, i, j, k, x, y, z)
-	DrawFaces(model, thisTransparency, thisLight, scale, x, y, z)
+	DrawFaces(model, thisTransparency, thisLight, BlockAndTilesModelScale, x, y, z)
 	_JPROFILER.pop("BlockRendering")
 end

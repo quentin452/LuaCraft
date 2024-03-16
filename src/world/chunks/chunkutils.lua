@@ -157,11 +157,10 @@ function NewChunkSlice(x, y, z, parent)
 					local this, thisSunlight, thisLocalLight = self.parent:getVoxel(i, j, k)
 					local thisLight = math.max(thisSunlight, thisLocalLight)
 					local thisTransparency = TileTransparency(this)
-					local scale = 1
-					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * scale, (self.z - 1) * ChunkSize + k - 1
+					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * BlockAndTilesModelScale, (self.z - 1) * ChunkSize + k - 1
 					if thisTransparency < transparency3 then
-						TileRendering(self, i, j, k, x, y, z, thisLight, ChunkSliceModels, scale)
-						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, ChunkSliceModels, scale)
+						TileRendering(self, i, j, k, x, y, z, thisLight, ChunkSliceModels, BlockAndTilesModelScale)
+						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, ChunkSliceModels, BlockAndTilesModelScale)
 					end
 				end
 			end

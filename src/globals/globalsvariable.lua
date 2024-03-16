@@ -57,3 +57,4 @@ ConfiguringMovementKey = false
 GlobalRenderDistance = 2
 HudMessage = nil
 ResetMovementKeys = true
+BlockAndTilesModelScale = 1

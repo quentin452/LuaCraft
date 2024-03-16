@@ -1,5 +1,5 @@
 -- Renders a tile in the world
-function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
+function TileRendering(self, i, j, k, x, y, z, thisLight, model, BlockAndTilesModelScale)
 	_JPROFILER.push("TileRendering")
 
 	-- Retrieve the tile ID at the given position
@@ -11,7 +11,7 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 		local tileModelData = TileModelCaching[this]
 		if not tileModelData then
 			-- Create and cache the tile model data if not already cached
-			tileModelData = createTileModel(this, thisLight, scale)
+			tileModelData = createTileModel(this, thisLight, BlockAndTilesModelScale)
 			TileModelCaching[this] = tileModelData
 		end
 
@@ -39,7 +39,7 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 end
 local vertices = {}
 -- Creates a 2D tile model based on its ID, light level, and scale
-function createTileModel(tileID, thisLight, scale)
+function createTileModel(tileID, thisLight, BlockAndTilesModelScale)
 	_JPROFILER.push("createTileModel")
 
 	-- Retrieve texture and light coordinates for the tile
@@ -48,16 +48,16 @@ function createTileModel(tileID, thisLight, scale)
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
 
 	-- Define vertices for the 2D tile model
-	local diagLong = 0.7071 * scale * 0.5 + 0.5
-	local diagShort = -0.7071 * scale * 0.5 + 0.5
+	local diagLong = 0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
+	local diagShort = -0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
 
 	vertices = {
 		{ diagShort, 0, diagShort, tx2, ty2 },
 		{ diagLong, 0, diagLong, tx, ty2 },
-		{ diagShort, scale, diagShort, tx2, ty },
+		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
 		{ diagLong, 0, diagLong, tx, ty2 },
-		{ diagLong, scale, diagLong, tx, ty },
-		{ diagShort, scale, diagShort, tx2, ty },
+		{ diagLong, BlockAndTilesModelScale, diagLong, tx, ty },
+		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
 	}
 
 	_JPROFILER.pop("createTileModel")
