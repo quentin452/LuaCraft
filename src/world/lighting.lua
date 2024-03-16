@@ -90,12 +90,13 @@ local function NewSunlightDownSubtraction(x, y, z)
 end
 
 function LightningQueries(self)
+	local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
+	if cget == nil then
+		return function() end
+	end
+
 	if self.querytype == "NewSunlightForceAddition" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val = cget:getVoxel(cx, cy, cz)
 			if self.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
@@ -106,10 +107,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewSunlightAdditionCreation" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
@@ -118,10 +115,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewSunlightDownAddition" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if TileLightable(val) and dat <= self.value then
@@ -134,10 +127,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewLocalLightForceAddition" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val, dis, dat = cget:getVoxel(cx, cy, cz)
 			if self.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelSecondData(cx, cy, cz, self.value)
@@ -148,10 +137,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewLocalLightSubtraction" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val, dat = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelSecondData(cx, cy, cz)
 			if fget > 0 and self.value >= 0 and TileLightable(val, true) then
@@ -169,10 +154,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewLocalLightAdditionCreation" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val, dis, dat = cget:getVoxel(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
 				NewLocalLightForceAddition(self.x, self.y, self.z, dat)
@@ -180,10 +161,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewSunlightAddition" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if self.value >= 0 and TileLightable(val, true) and dat < self.value then
@@ -195,10 +172,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewLocalLightAddition" then
 		return function()
-			local chunk = GetChunk(self.x, self.y, self.z)
-			if chunk == nil then
-				return
-			end
 			local cx, cy, cz = Localize(self.x, self.y, self.z)
 			local val, dis, dat = chunk:getVoxel(cx, cy, cz)
 			if TileLightable(val, true) and dat < self.value then
@@ -212,10 +185,6 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewSunlightSubtraction" then
 		return function()
-			local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-			if cget == nil then
-				return
-			end
 			local val = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelFirstData(cx, cy, cz)
 			if fget > 0 and self.value >= 0 and TileLightable(val, true) then
