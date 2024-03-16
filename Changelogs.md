@@ -179,8 +179,6 @@ NEW FEATURES/IMPROVEMENTS:
     fix #43 (diagonal chunks are removed)
     Reduce chunkslice update model frequency for performances 
     Reduce unecessary ChunkSet iteration in updalogic.lua that causing LARGE LAGS
-    Remove airTexture (unecessary)
-    Remove isInTable in updatelogic.lua (causing lags)
     Make blockrendering.lua maintainable
     Dedupplicate player position getting + optimize spawn point
     Optimize GetSign and CopyTable from engine.lua
@@ -207,9 +205,8 @@ NEW FEATURES/IMPROVEMENTS:
     Use elseif statements in checkAndUpdateDefaults filesystem.lua
     Made FFI a global variable
     Optimize LoadMods and LoadBlocksAndTiles
-    Simplify UpdateChunks code + remove uneccesary chunk.slices = {} + made methods local in updatelogic.lua
+    Simplify UpdateChunks code
     Fix a mistake in chunk.processRequests that use a number parameter but the parameter needed is a boolean for the 5th parameter
-    Remove chunk.updatemodel because its unnecessary in updatelogic.lua
     Avoid Redefined local in chunk.lua + lighting.lua
     Avoid unused local variable in lighting.lua
 
@@ -219,6 +216,10 @@ LIBRARIES REMOVED :
 
 REMOVED FEATURES:
 
-    remove some debug (jprofiler) statements 
+    Remove some debug (jprofiler) statements 
     Remove OctaveNoise Cache
     Remove unecessary profilers in NewChunkSlice
+    Remove chunk.updatemodel because its unnecessary in updatelogic.lua
+    Remove uneccesary chunk.slices = {} + made methods local in updatelogic.lua
+    Remove airTexture (unecessary)
+    Remove isInTable in updatelogic.lua (causing lags)
