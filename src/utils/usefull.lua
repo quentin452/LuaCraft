@@ -88,9 +88,3 @@ function getTextureCoordinatesAndLight(texture, lightOffset)
 	_JPROFILER.pop("getTextureCoordinatesAndLight")
 	return otx, oty
 end
-
-function CacheCheck(n, table)
-	if table[n] ~= nil then
-		return table[n]
-	end
-end

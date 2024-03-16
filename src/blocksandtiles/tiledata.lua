@@ -12,9 +12,12 @@ end
 function GetValueFromTilesById(n)
 	return TilesById[n]
 end
+
 -- Retrieves collision property of a tile by ID
 function TileCollisions(n)
-	CacheCheck(n, TileCollisionCache)
+	if TileCollisionCache[n] ~= nil then
+		return TileCollisionCache[n]
+	end
 	local value = GetValueFromTilesById(n)
 	if value then
 		local collision = value.Cancollide == CollideMode.YesCanCollide
@@ -26,7 +29,9 @@ end
 
 -- Retrieves transparency level of a tile by ID
 function TileTransparency(n)
-	CacheCheck(n, TileTransparencyCache)
+	if TileTransparencyCache[n] ~= nil then
+		return TileTransparencyCache[n]
+	end
 	local value = GetValueFromTilesById(n)
 	if value then
 		local blockstringname = value.blockstringname
@@ -38,7 +43,9 @@ end
 
 -- Retrieves light source value of a tile by ID
 function TileLightSource(n)
-	CacheCheck(n, TileLightSourceCache)
+	if TileLightSourceCache[n] ~= nil then
+		return TileLightSourceCache[n]
+	end
 	local value = GetValueFromTilesById(n)
 	if value then
 		local blockstringname = value.blockstringname
