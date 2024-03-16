@@ -73,6 +73,7 @@ _JPROFILER = require("libs/" .. libs[1])
 --3 : exiting game
 --4 : open a CMD on Jprofiler (SRC)
 --5 : use this command : love . LuaCraft _JPROFILER.mpack and you will see the viewer
+Ffi = require("ffi")
 requireGroup(menussettings, "src/menus/settings/")
 requireGroup(menus, "src/menus/")
 requireGroup(blocks, "src/blocksandtiles/")
