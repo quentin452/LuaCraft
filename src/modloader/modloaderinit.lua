@@ -111,10 +111,11 @@ end
 
 function LoadMods()
 	--_JPROFILER.push("LoadMods")
+	local fullPath
 	local modsDirectory = "mods/"
 	local items = Lovefilesystem.getDirectoryItems(modsDirectory)
 	for _, item in ipairs(items) do
-		local fullPath = modsDirectory .. item
+		fullPath = modsDirectory .. item
 		if Lovefilesystem.getInfo(fullPath, "directory") then
 			local modName = item
 			local startTime = os.clock()
@@ -131,14 +132,16 @@ function LoadMods()
 			end
 		end
 	end
+	fullPath = nil
 	--_JPROFILER.pop("LoadMods")
 end
 
 function LoadBlocksAndTiles(directory)
 	--_JPROFILER.push("LoadBlocksAndTiles")
+	local fullPath
 	local items = love.filesystem.getDirectoryItems(directory)
 	for _, item in ipairs(items) do
-		local fullPath = directory .. "/" .. item
+		fullPath = directory .. "/" .. item
 		if love.filesystem.getInfo(fullPath).type == "directory" then
 			LoadBlocksAndTiles(fullPath)
 		elseif item:match("%.lua$") and item ~= "tiledata.lua" then
@@ -153,5 +156,6 @@ function LoadBlocksAndTiles(directory)
 			end
 		end
 	end
+	fullPath = nil
 	--_JPROFILER.pop("LoadBlocksAndTiles")
 end
