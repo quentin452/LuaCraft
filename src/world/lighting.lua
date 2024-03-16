@@ -127,7 +127,7 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewLocalLightForceAddition" then
 		return function()
-			local val, dis, dat = cget:getVoxel(cx, cy, cz)
+			local val, _, _ = cget:getVoxel(cx, cy, cz)
 			if self.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelSecondData(cx, cy, cz, self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
@@ -137,7 +137,7 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewLocalLightSubtraction" then
 		return function()
-			local val, dat = cget:getVoxel(cx, cy, cz)
+			local val, _ = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelSecondData(cx, cy, cz)
 			if fget > 0 and self.value >= 0 and TileLightable(val, true) then
 				if fget < self.value then
@@ -154,7 +154,7 @@ function LightningQueries(self)
 		end
 	elseif self.querytype == "NewLocalLightAdditionCreation" then
 		return function()
-			local val, dis, dat = cget:getVoxel(cx, cy, cz)
+			local val, _, dat = cget:getVoxel(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
 				NewLocalLightForceAddition(self.x, self.y, self.z, dat)
 			end
@@ -173,7 +173,7 @@ function LightningQueries(self)
 	elseif self.querytype == "NewLocalLightAddition" then
 		return function()
 			local localcx, localcy, localcz = Localize(self.x, self.y, self.z)
-			local val, dis, dat = cget:getVoxel(localcx, localcy, localcz)
+			local val, _, dat = cget:getVoxel(localcx, localcy, localcz)
 			if TileLightable(val, true) and dat < self.value then
 				cget:setVoxelSecondData(localcx, localcy, localcz, self.value)
 				if self.value > 1 then
