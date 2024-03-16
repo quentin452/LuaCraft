@@ -107,6 +107,7 @@ Tiles = {
 }
 
 --init global variables
+Ffi = require("ffi")
 ChunkSize = 16
 SliceHeight = 8
 WorldHeight = 128

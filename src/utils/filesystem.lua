@@ -12,24 +12,22 @@ function writeToLog(string, message)
 	end
 end
 
-local ffi = require("ffi")
-
-ffi.cdef([[
+Ffi.cdef([[
     int CreateDirectoryA(const char* lpPathName, void* lpSecurityAttributes);
     int GetLastError(void);
     int _access(const char* path, int mode);
 ]])
 
 function directoryExists(path)
-	return ffi.C._access(path, 0) == 0
+	return Ffi.C._access(path, 0) == 0
 end
 
 function createDirectoryIfNotExists(directoryPath)
 	if not directoryExists(directoryPath) then
-		local success = ffi.C.CreateDirectoryA(directoryPath, nil)
+		local success = Ffi.C.CreateDirectoryA(directoryPath, nil)
 
 		if success == 0 then
-			local err = ffi.C.GetLastError()
+			local err = Ffi.C.GetLastError()
 			LuaCraftErrorLogging("Failed to create directory. Error code: " .. err)
 		end
 	end
