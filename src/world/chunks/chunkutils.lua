@@ -1,3 +1,5 @@
+local transparency3 = 3
+
 --TODO Prevent Block Placements methods should be upgraded/debuggified
 
 function ReplaceChar(str, pos, r)

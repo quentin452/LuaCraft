@@ -1,4 +1,3 @@
-local transparency3 = 3
 local caveConfigs = {
 	{ minHeight = 8, maxHeight = 64, count = rand(1, 3) },
 	{ minHeight = 48, maxHeight = 80, count = rand(1, 2) },
