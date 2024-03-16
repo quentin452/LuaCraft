@@ -34,12 +34,12 @@ function iterateOverAllTiles()
 	end
 end
 function InitializeGame()
-	_JPROFILER.push("SettingsHandlingInit")
-	SettingsHandlingInit()
-	_JPROFILER.pop("SettingsHandlingInit")
 	_JPROFILER.push("loadAndSaveLuaCraftFileSystem")
 	loadAndSaveLuaCraftFileSystem()
 	_JPROFILER.pop("loadAndSaveLuaCraftFileSystem")
+	_JPROFILER.push("SettingsHandlingInit")
+	SettingsHandlingInit()
+	_JPROFILER.pop("SettingsHandlingInit")
 	_JPROFILER.push("loadMovementKeyValues")
 	loadMovementKeyValues()
 	_JPROFILER.pop("loadMovementKeyValues")
@@ -52,9 +52,9 @@ function InitializeGame()
 	if
 		EnableLuaCraftLoggingError == nil
 		or EnableLuaCraftLoggingWarn == nil
-		or EnableLuaCraftPrintLoggingNormalLogging == nil
+		or EnableLuaCraftPrintLoggingNormal == nil
 	then
-		--TODO FIX EnableLuaCraftLoggingError + EnableLuaCraftLoggingWarn + EnableLuaCraftPrintLoggingNormalLogging are nil at first game launch
+		--TODO FIX EnableLuaCraftLoggingError + EnableLuaCraftLoggingWarn + EnableLuaCraftPrintLoggingNormal are nil at first game launch
 		love.event.quit()
 	end
 	_JPROFILER.push("saveLogsToOldLogsFolder")

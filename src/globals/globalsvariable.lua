@@ -52,3 +52,4 @@ Modelalreadycreated = 0
 ChunkBorderAlreadyCreated = 0
 HudTimeLeft = 0
 ConfiguringMovementKey = false
+GlobalRenderDistance = 2

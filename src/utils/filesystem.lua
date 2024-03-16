@@ -65,37 +65,22 @@ end
 
 function checkAndUpdateDefaults(Settings)
 	_JPROFILER.push("checkAndUpdateDefaults")
-	--Settings
-	if Settings["vsync"] == nil then
-		Settings["vsync"] = true
-	end
-	if Settings["LuaCraftPrintLoggingNormal"] == nil then
-		Settings["LuaCraftPrintLoggingNormal"] = true
-	end
-	if Settings["LuaCraftWarnLogging"] == nil then
-		Settings["LuaCraftWarnLogging"] = true
-	end
-	if Settings["LuaCraftErrorLogging"] == nil then
-		Settings["LuaCraftErrorLogging"] = true
-	end
-	if Settings["renderdistance"] == nil then
-		Settings["renderdistance"] = 2
-	end
-	if Settings["fullscreen"] == nil then
-		Settings["fullscreen"] = false
-	end
-	--Keybinding settings
-	if Settings["forwardmovementkey"] == nil then
-		Settings["forwardmovementkey"] = "z"
-	end
-	if Settings["backwardmovementkey"] == nil then
-		Settings["backwardmovementkey"] = "s"
-	end
-	if Settings["leftmovementkey"] == nil then
-		Settings["leftmovementkey"] = "q"
-	end
-	if Settings["rightmovementkey"] == nil then
-		Settings["rightmovementkey"] = "d"
+	local defaults = {
+		vsync = true,
+		LuaCraftPrintLoggingNormal = true,
+		LuaCraftWarnLogging = true,
+		LuaCraftErrorLogging = true,
+		renderdistance = 2,
+		fullscreen = false,
+		forwardmovementkey = "z",
+		backwardmovementkey = "s",
+		leftmovementkey = "q",
+		rightmovementkey = "d",
+	}
+	for key, value in pairs(defaults) do
+		if Settings[key] == nil then
+			Settings[key] = value
+		end
 	end
 	_JPROFILER.pop("checkAndUpdateDefaults")
 end
@@ -214,8 +199,11 @@ function getRightMomentKey()
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	return file_content and file_content:match("rightmovementkey=(%d)")
 end
+
+EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
+
 function LuaCraftPrintLoggingNormal(...)
-	if EnableLuaCraftPrintLoggingNormalLogging then
+	if EnableLuaCraftPrintLoggingNormal then
 		local message = table.concat({ ... }, " ")
 		writeToLog("[NORMAL]", message)
 		print("[NORMAL]", message)

@@ -1,37 +1,36 @@
-function reloadConfig()
-    local file_content, error_message = customReadFile(Luacraftconfig)
-    if file_content then
-        local vsyncValue = file_content:match("vsync=(%w+)")
-        if vsyncValue then
-            GlobalVSync = vsyncValue:lower() == "true"
-            Lovewindow.setVSync(GlobalVSync and 1 or 0)
-        end
+local function reloadConfig()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+	if file_content then
+		local vsyncValue = file_content:match("vsync=(%w+)")
+		if vsyncValue then
+			GlobalVSync = vsyncValue:lower() == "true"
+			Lovewindow.setVSync(GlobalVSync and 1 or 0)
+		end
 
-        local printNormalValue = file_content:match("LuaCraftPrintLoggingNormal=(%w+)")
-        EnableLuaCraftPrintLoggingNormalLogging = printNormalValue:lower() == "true"
+		local printNormalValue = file_content:match("LuaCraftPrintLoggingNormal=(%w+)")
+		EnableLuaCraftPrintLoggingNormal = printNormalValue:lower() == "true"
 
-        local warnValue = file_content:match("LuaCraftWarnLogging=(%w+)")
-        EnableLuaCraftLoggingWarn = warnValue:lower() == "true"
+		local warnValue = file_content:match("LuaCraftWarnLogging=(%w+)")
+		EnableLuaCraftLoggingWarn = warnValue:lower() == "true"
 
-        local errorValue = file_content:match("LuaCraftErrorLogging=(%w+)")
-        EnableLuaCraftLoggingError = errorValue:lower() == "true"
+		local errorValue = file_content:match("LuaCraftErrorLogging=(%w+)")
+		EnableLuaCraftLoggingError = errorValue:lower() == "true"
 
-        local forwardmovementkey = file_content:match("forwardmovementkey=([%a%d]+)")
-        ReloadForwardKey = forwardmovementkey:lower() == "z"
+		local forwardmovementkey = file_content:match("forwardmovementkey=([%a%d]+)")
+		ReloadForwardKey = forwardmovementkey:lower() == "z"
 
-        local backwardmovementkey = file_content:match("backwardmovementkey=([%a%d]+)")
-        ReloadBackwardKey = backwardmovementkey:lower() == "s"
+		local backwardmovementkey = file_content:match("backwardmovementkey=([%a%d]+)")
+		ReloadBackwardKey = backwardmovementkey:lower() == "s"
 
-        local leftmovementkey = file_content:match("leftmovementkey=([%a%d]+)")
-        ReloadLeftKey = leftmovementkey:lower() == "q"
+		local leftmovementkey = file_content:match("leftmovementkey=([%a%d]+)")
+		ReloadLeftKey = leftmovementkey:lower() == "q"
 
-        local rightmovementkey = file_content:match("rightmovementkey=([%a%d]+)")
-        ReloadRightKey = rightmovementkey:lower() == "d"
-    else
-        LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
-    end
+		local rightmovementkey = file_content:match("rightmovementkey=([%a%d]+)")
+		ReloadRightKey = rightmovementkey:lower() == "d"
+	else
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+	end
 end
-
 
 function toggleFullScreen()
 	_JPROFILER.push("toggleFullScreen")
@@ -147,13 +146,13 @@ function renderdistanceSetting()
 
 	if file_content then
 		local current_renderdistance = tonumber(file_content:match("renderdistance=(%d+)")) or 0
-		globalRenderDistance = current_renderdistance + 2
+		GlobalRenderDistance = current_renderdistance + 2
 
-		if globalRenderDistance > 20 then
-			globalRenderDistance = 2
+		if GlobalRenderDistance > 20 then
+			GlobalRenderDistance = 2
 		end
 
-		file_content = file_content:gsub("renderdistance=(%d+)", "renderdistance=" .. globalRenderDistance)
+		file_content = file_content:gsub("renderdistance=(%d+)", "renderdistance=" .. GlobalRenderDistance)
 
 		local file, error_message = io.open(Luacraftconfig, "w")
 		if file then
@@ -165,18 +164,18 @@ function renderdistanceSetting()
 	else
 		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
-	return globalRenderDistance
+	return GlobalRenderDistance
 end
 
 function printNormalLoggingSettings()
 	_JPROFILER.push("printNormalLoggingSettings")
-	EnableLuaCraftPrintLoggingNormalLogging = not EnableLuaCraftPrintLoggingNormalLogging
+	EnableLuaCraftPrintLoggingNormal = not EnableLuaCraftPrintLoggingNormal
 	-- Load current contents of Luacraftconfig.txt file
 	local file_content, error_message = customReadFile(Luacraftconfig)
 
 	if file_content then
 		-- Update print value in content
-		local printValue = EnableLuaCraftPrintLoggingNormalLogging and "true" or "false"
+		local printValue = EnableLuaCraftPrintLoggingNormal and "true" or "false"
 		file_content = file_content:gsub("LuaCraftPrintLoggingNormal=%w+", "LuaCraftPrintLoggingNormal=" .. printValue)
 
 		-- Rewrite Luacraftconfig.txt file with updated content
@@ -257,7 +256,7 @@ function SettingsHandlingInit()
 		end
 
 		local renderdistanceValue = file_content:match("renderdistance=(%d)")
-		globalRenderDistance = tonumber(renderdistanceValue)
+		GlobalRenderDistance = tonumber(renderdistanceValue)
 	else
 		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
