@@ -109,7 +109,7 @@ local function updateThingList(dt)
 	end
 
 	local logicThreshold = 1 / 60
-	local fps = love.timer.getFPS()
+	local fps = Lovetimer.getFPS()
 
 	if LogicAccumulator >= logicThreshold and fps ~= 0 then
 		local logicUpdates = math.floor(LogicAccumulator / logicThreshold)
@@ -134,14 +134,11 @@ local function processChunkUpdates(chunk)
 		chunk:processRequests()
 		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = true
-	elseif chunk.updatemodel == false then
-		_JPROFILER.push("updateChunkModel")
-		chunk:updateModel()
-		_JPROFILER.pop("updateChunkModel")
+	elseif chunk.updateLighting == false then
 		_JPROFILER.push("LightingUpdate_processChunkUpdates")
 		LightingUpdate()
 		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
-		chunk.updatemodel = true
+		chunk.updateLighting = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then
 		_JPROFILER.push("spawnPlayer")
 		ChooseSpawnLocation()
@@ -176,6 +173,7 @@ local function removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, Ren
 	end
 	_JPROFILER.pop("removeChunksOutsideRenderDistance")
 end
+
 local function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)
 	_JPROFILER.push("UpdateChunksWithinRenderDistance")
 	local maxChunkDistance = RenderDistance / ChunkSize
@@ -203,7 +201,7 @@ local function UpdateAndGenerateChunks(RenderDistance)
 	_JPROFILER.push("UpdateAndGenerateChunks")
 	RenderChunks = {}
 	local playerPosition = getPlayerPosition()
-	local playerX, playerY, playerZ = playerPosition.x, playerPosition.y, playerPosition.z
+	local playerX, playerZ = playerPosition.x, playerPosition.z
 	local playerChunkX = math.ceil(playerX / ChunkSize)
 	local playerChunkZ = math.ceil(playerZ / ChunkSize)
 	UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, RenderDistance)

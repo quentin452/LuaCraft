@@ -19,7 +19,7 @@ function NewChunk(x, z)
 	chunk.changes = {}
 	chunk.updatedSunLight = false
 	chunk.isPopulated = false
-	chunk.updatemodel = false
+	chunk.updateLighting = false
 
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
