@@ -67,15 +67,20 @@ function checkAndUpdateDefaults(Settings)
 	_JPROFILER.push("checkAndUpdateDefaults")
 	if Settings["vsync"] == nil then
 		Settings["vsync"] = true
-	elseif Settings["LuaCraftPrintLoggingNormal"] == nil then
+	end
+	if Settings["LuaCraftPrintLoggingNormal"] == nil then
 		Settings["LuaCraftPrintLoggingNormal"] = true
-	elseif Settings["LuaCraftWarnLogging"] == nil then
+	end
+	if Settings["LuaCraftWarnLogging"] == nil then
 		Settings["LuaCraftWarnLogging"] = true
-	elseif Settings["LuaCraftErrorLogging"] == nil then
+	end
+	if Settings["LuaCraftErrorLogging"] == nil then
 		Settings["LuaCraftErrorLogging"] = true
-	elseif Settings["renderdistance"] == nil then
+	end
+	if Settings["renderdistance"] == nil then
 		Settings["renderdistance"] = 2
-	elseif Settings["fullscreen"] == nil then
+	end
+	if Settings["fullscreen"] == nil then
 		Settings["fullscreen"] = false
 	end
 	_JPROFILER.pop("checkAndUpdateDefaults")
