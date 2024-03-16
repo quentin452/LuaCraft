@@ -46,32 +46,26 @@ function NewChunk(x, z)
 	end
 
 	chunk.sunlight = function(self)
-		--_JPROFILER.push("sunlight")
-
 		for i = 1, ChunkSize do
 			for j = 1, ChunkSize do
-				local gx, gz = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
-
+				local gridX, gridZ = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
 				if self.heightMap[i] and self.heightMap[i][j] then
 					local this = self.heightMap[i][j]
-
 					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
-						LightOperation(gx - 1, this, gz, "NewSunlightDownAddition", LightSources[15])
+						LightOperation(gridX - 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
 					end
-
 					if j == 1 or this > self.heightMap[i][j - 1] then
-						LightOperation(gx, this, gz - 1, "NewSunlightDownAddition", LightSources[15])
+						LightOperation(gridX, this, gridZ - 1, "NewSunlightDownAddition", LightSources[15])
 					end
 					if i == ChunkSize or this > self.heightMap[i + 1][j] then
-						LightOperation(gx + 1, this, gz, "NewSunlightDownAddition", LightSources[15])
+						LightOperation(gridX + 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
 					end
 					if j == ChunkSize or this > self.heightMap[i][j + 1] then
-						LightOperation(gx, this, gz + 1, "NewSunlightDownAddition", LightSources[15])
+						LightOperation(gridX, this, gridZ + 1, "NewSunlightDownAddition", LightSources[15])
 					end
 				end
 			end
 		end
-		--_JPROFILER.pop("sunlight")
 	end
 
 	chunk.processRequests = function(self)
