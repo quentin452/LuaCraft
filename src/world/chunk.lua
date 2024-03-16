@@ -80,7 +80,7 @@ function NewChunk(x, z)
 		for j = 1, #self.requests do
 			local block = self.requests[j]
 			if not TileCollisions(self:getVoxel(block.x, block.y, block.z)) then
-				self:setVoxel(block.x, block.y, block.z, block.value, 15)
+				self:setVoxel(block.x, block.y, block.z, block.value, false)
 			end
 		end
 		--_JPROFILER.pop("processRequests")
