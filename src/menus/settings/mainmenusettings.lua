@@ -91,6 +91,9 @@ function keysinitMenuSettings(k)
 				renderdistanceSetting()
 				Renderdistancegetresetted = true
 			elseif _MainMenuSettings.selection == 6 then
+				Gamestate = GamestateKeybindingSettings
+				_MainMenuSettings.selection = 0
+			elseif _MainMenuSettings.selection == 7 then
 				Gamestate = GamestateMainMenu
 				_MainMenuSettings.selection = 0
 			end

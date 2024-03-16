@@ -1,3 +1,5 @@
+local timeSelected = 0
+local delay = 1
 function MouseLogicOnPlay(x, y, b)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MouseLogicOnPlay")
@@ -54,6 +56,11 @@ function KeyPressed(k)
 		keysinitMenuSettings(k)
 		_JPROFILER.pop("keysinitMenuSettings")
 	end
+	if Gamestate == GamestateKeybindingSettings then
+		_JPROFILER.push("keysinitKeybindingSettings")
+		keysinitKeybindingSettings(k)
+		_JPROFILER.pop("keysinitKeybindingSettings")
+	end
 	if Gamestate == GamestateWorldCreationMenu then
 		_JPROFILER.push("keysInitWorldCreationMenu")
 		keysInitWorldCreationMenu(k)
@@ -90,5 +97,32 @@ function KeyPressed(k)
 		_JPROFILER.push("keysinitGamePlayingPauseMenu")
 		keysinitGamePlayingPauseMenu(k)
 		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
+	end
+	if ConfiguringMovementKey then
+		if k == "escape" then
+			ConfiguringMovementKey = false
+		else
+			if k ~= "return" then
+				local keyToUpdate
+				if _KeybindingMenuSettings.selection == 1 then
+					keyToUpdate = "forwardmovementkey"
+				elseif _KeybindingMenuSettings.selection == 2 then
+					keyToUpdate = "backwardmovementkey"
+				elseif _KeybindingMenuSettings.selection == 3 then
+					keyToUpdate = "leftmovementkey"
+				elseif _KeybindingMenuSettings.selection == 4 then
+					keyToUpdate = "rightmovementkey"
+				end
+				if keyToUpdate then
+					local forwardKey
+					local previousKey = forwardKey
+					forwardKey = k
+					updateConfigFile(keyToUpdate, forwardKey)
+					if forwardKey ~= previousKey then
+						ConfiguringMovementKey = false
+					end
+				end
+			end
+		end
 	end
 end

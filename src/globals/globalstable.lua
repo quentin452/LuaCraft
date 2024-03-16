@@ -32,9 +32,16 @@ _MainMenuSettings = createMenu(50, 50, "Settings", {
 	"Enable warns logging?",
 	"Enable errors logging?",
 	"Render Distance",
+	"Keybinding Settings Menu",
 	"Exiting to main menu",
 })
-
+_KeybindingMenuSettings = createMenu(50, 50, "Keybinding Settings", {
+	"Forward keybind",
+	"Backward keybind",
+	"Left keybind",
+	"Right keybind",
+	"Exiting to settings menu",
+})
 _WorldCreationMenu = createMenu(50, 50, "World Creation Menu", {
 	"Create World?",
 	"Exiting to main menu",

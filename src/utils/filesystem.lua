@@ -65,6 +65,7 @@ end
 
 function checkAndUpdateDefaults(Settings)
 	_JPROFILER.push("checkAndUpdateDefaults")
+	--Settings
 	if Settings["vsync"] == nil then
 		Settings["vsync"] = true
 	end
@@ -82,6 +83,19 @@ function checkAndUpdateDefaults(Settings)
 	end
 	if Settings["fullscreen"] == nil then
 		Settings["fullscreen"] = false
+	end
+	--Keybinding settings
+	if Settings["forwardmovementkey"] == nil then
+		Settings["forwardmovementkey"] = "z"
+	end
+	if Settings["backwardmovementkey"] == nil then
+		Settings["backwardmovementkey"] = "s"
+	end
+	if Settings["leftmovementkey"] == nil then
+		Settings["leftmovementkey"] = "q"
+	end
+	if Settings["rightmovementkey"] == nil then
+		Settings["rightmovementkey"] = "d"
 	end
 	_JPROFILER.pop("checkAndUpdateDefaults")
 end
@@ -123,23 +137,16 @@ end
 
 function loadAndSaveLuaCraftFileSystem()
 	_JPROFILER.push("loadAndSaveLuaCraftFileSystem")
-
 	LuaCraftPrintLoggingNormal("Attempting to load LuaCraft settings")
-
 	local luaCraftDirectory = UserDirectory .. ".LuaCraft\\"
 	local configFilePath = luaCraftDirectory .. "Luacraftconfig.txt"
-
 	createFileIfNotExists(configFilePath)
-
 	LuaCraftPrintLoggingNormal("Directory contents before attempting to load settings:")
 	for _, item in ipairs(love.filesystem.getDirectoryItems(luaCraftDirectory)) do
 		LuaCraftPrintLoggingNormal(item)
 	end
-
 	LuaCraftPrintLoggingNormal("Config file path: " .. configFilePath)
-
 	local file_content, error_message = customReadFile(configFilePath)
-
 	if file_content then
 		local orderedKeys = {
 			"vsync",
@@ -148,29 +155,24 @@ function loadAndSaveLuaCraftFileSystem()
 			"LuaCraftErrorLogging",
 			"renderdistance",
 			"fullscreen",
+			"forwardmovementkey",
+			"backwardmovementkey",
+			"leftmovementkey",
+			"rightmovementkey",
 		}
-
 		for _, key in ipairs(orderedKeys) do
-			local value = file_content:match(key .. "=(%w+)")
+			local value = file_content:match(key .. "=([^%c]+)")
 			if value then
-				local numValue = tonumber(value)
-				FileSystemSettings[key] = numValue or (value == "true")
+				FileSystemSettings[key] = value
 			end
 		end
-
 		LuaCraftPrintLoggingNormal("Settings loaded successfully.")
-
 		checkAndUpdateDefaults(FileSystemSettings)
-
-		-- Open the file in Writter mod
 		local file, error_message = io.open(configFilePath, "w")
-
 		if file then
-			-- Write parameters with verifications
 			for _, key in ipairs(orderedKeys) do
 				file:write(key .. "=" .. tostring(FileSystemSettings[key]) .. "\n")
 			end
-
 			file:close()
 			LuaCraftPrintLoggingNormal("Settings loaded and saved to Luacraftconfig.txt")
 		else

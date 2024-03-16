@@ -1,9 +1,12 @@
 require("src/modloader/modloaderinit")
 Cpml = require("libs/cpml")
 
+local menussettings = {
+	"mainmenusettings",
+	"keybindingmenusettings",
+}
 local menus = {
 	"mainmenu",
-	"mainmenusettings",
 	"gameplayingpausemenu",
 	"worldcreationmenu",
 }
@@ -60,7 +63,7 @@ local function requireGroup(group, path)
 		require(path .. v)
 	end
 end
-
+requireGroup(menussettings, "src/menus/settings/")
 requireGroup(menus, "src/menus/")
 requireGroup(blocks, "src/blocksandtiles/")
 requireGroup(utils, "src/utils/")
@@ -80,6 +83,7 @@ _JPROFILER = require("libs/" .. libs[1])
 requireGroup(modloader, "src/modloader/")
 Engine = require("engine")
 
+menussettings = nil
 menus = nil
 blocks = nil
 utils = nil

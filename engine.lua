@@ -167,11 +167,13 @@ return color * texturecolor;}
 		local Camera = Engine.camera
 		local pos = Camera.pos
 
-		local mul = love.keyboard.isDown("w") and 1 or (love.keyboard.isDown("s") and -1 or 0)
+		local mul = love.keyboard.isDown(getForwardMovementKeyValue()) and 1
+			or (love.keyboard.isDown(getBackwardMovementKeyValue()) and -1 or 0)
 		pos.x = pos.x + math.sin(-Camera.angle.x) * mul * speed
 		pos.z = pos.z + math.cos(-Camera.angle.x) * mul * speed
 
-		local mul = love.keyboard.isDown("d") and -1 or (love.keyboard.isDown("a") and 1 or 0)
+		local mul = love.keyboard.isDown(getLeftMovementKeyValue()) and -1
+			or (love.keyboard.isDown(getRightMovementKeyValue()) and 1 or 0)
 		pos.x = pos.x + math.cos(Camera.angle.x) * mul * speed
 		pos.z = pos.z + math.sin(Camera.angle.x) * mul * speed
 

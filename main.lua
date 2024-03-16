@@ -86,6 +86,7 @@ end
 function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
+	updateMovementKeyValues()
 	UpdateGame(dt)
 	if HudTimeLeft > 0 then
 		HudTimeLeft = HudTimeLeft - dt

@@ -88,7 +88,50 @@ function getRenderDistanceValue()
 		return
 	end
 end
+function getForwardMovementKeyValue()
+	local file_content, error_message = customReadFile(Luacraftconfig)
 
+	if file_content then
+		local forward_movement_key = file_content:match("forwardmovementkey=([%a%d]+)")
+		return forward_movement_key or "z"
+	else
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+		return
+	end
+end
+function getBackwardMovementKeyValue()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+
+	if file_content then
+		local forward_movement_key = file_content:match("backwardmovementkey=([%a%d]+)")
+		return forward_movement_key or "s"
+	else
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+		return
+	end
+end
+function getLeftMovementKeyValue()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+
+	if file_content then
+		local forward_movement_key = file_content:match("leftmovementkey=([%a%d]+)")
+		return forward_movement_key or "q"
+	else
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+		return
+	end
+end
+function getRightMovementKeyValue()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+
+	if file_content then
+		local forward_movement_key = file_content:match("rightmovementkey=([%a%d]+)")
+		return forward_movement_key or "d"
+	else
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+		return
+	end
+end
 function renderdistanceSetting()
 	local file_content, error_message = customReadFile(Luacraftconfig)
 

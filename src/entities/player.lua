@@ -1,4 +1,56 @@
 local playerReach = 5
+local forwardKey = nil
+local backwardKey = nil
+local leftKey = nil
+local rightKey = nil
+local previousForwardKey = nil
+local previousBackwardKey = nil
+local previousLeftKey = nil
+local previousRightKey = nil
+local lastUpdateTime = 0
+local updateDelay = 1
+
+function updateMovementKeyValues()
+	_JPROFILER.push("updateMovementKeyValues")
+
+	local currentTime = Lovetimer.getTime()
+	if currentTime - lastUpdateTime < updateDelay then
+		_JPROFILER.pop("updateMovementKeyValues")
+		return
+	end
+
+	local file_content, error_message = customReadFile(Luacraftconfig)
+
+	if file_content then
+		local newForwardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
+		local newBackwardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
+		local newLeftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
+		local newRightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
+
+		if newForwardKey ~= previousForwardKey then
+			forwardKey = newForwardKey
+			previousForwardKey = newForwardKey
+		end
+		if newBackwardKey ~= previousBackwardKey then
+			backwardKey = newBackwardKey
+			previousBackwardKey = newBackwardKey
+		end
+		if newLeftKey ~= previousLeftKey then
+			leftKey = newLeftKey
+			previousLeftKey = newLeftKey
+		end
+		if newRightKey ~= previousRightKey then
+			rightKey = newRightKey
+			previousRightKey = newRightKey
+		end
+
+		lastUpdateTime = currentTime
+	else
+		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+	end
+
+	_JPROFILER.pop("updateMovementKeyValues")
+end
 
 function NewPlayer(x, y, z)
 	_JPROFILER.push("NewPlayer")
@@ -95,10 +147,10 @@ function NewPlayer(x, y, z)
 		-- take player input
 		if FixinputforDrawCommandInput == false then
 			local directionKeys = {
-				z = { 0, -1 },
-				q = { -1, 0 },
-				s = { 0, 1 },
-				d = { 1, 0 },
+				[forwardKey] = { 0, -1 },
+				[leftKey] = { -1, 0 },
+				[backwardKey] = { 0, 1 },
+				[rightKey] = { 1, 0 },
 			}
 
 			for key, dir in pairs(directionKeys) do
@@ -109,7 +161,7 @@ function NewPlayer(x, y, z)
 				end
 			end
 
-			-- jump if on ground
+			-- saut si au sol
 			if
 				love.keyboard.isDown("space")
 				and self.onGround

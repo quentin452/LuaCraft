@@ -25,6 +25,10 @@ function DrawGame()
 		_JPROFILER.push("drawMenuSettings")
 		DrawMenuSettings()
 		_JPROFILER.pop("drawMenuSettings")
+	elseif Gamestate == GamestateKeybindingSettings then
+		_JPROFILER.push("drawMenuSettings")
+        DrawKeybindingSettings()
+		_JPROFILER.pop("drawMenuSettings")
 	elseif Gamestate == GamestateMainMenu then
 		_JPROFILER.push("drawMainMenu")
 		drawMainMenu()
