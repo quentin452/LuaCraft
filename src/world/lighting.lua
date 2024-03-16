@@ -34,7 +34,7 @@ function LightingUpdate()
 	LightingQueue = {}
 end
 
-function LightningQueries(self, lightoperation)
+local function LightningQueries(self, lightoperation)
 	local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 	if cget == nil then
 		return function() end
