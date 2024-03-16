@@ -169,15 +169,17 @@ function NewChunk(x, z)
 						end
 					end
 				end
-				if manuallyPlaced then
-					local source = TileLightSource(blockvalue)
-					if source > 0 then
-						NewLightOperation(gx, gy, gz, "NewLocalLightAddition", source)
-						placingLocalSource = true
-					else
-						for dx = -1, 1 do
-							for dy = -1, 1 do
-								for dz = -1, 1 do
+				for dx = -1, 1 do
+					for dy = -1, 1 do
+						for dz = -1, 1 do
+							if manuallyPlaced then
+								local source = TileLightSource(blockvalue)
+								if source > 0 then
+									NewLightOperation(gx, gy, gz, "NewLocalLightAddition", source)
+									placingLocalSource = true
+								end
+							else
+								if TileLightable(blockvalue, true) and not placingLocalSource then
 									NewLightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
 								end
 							end
@@ -220,15 +222,6 @@ function NewChunk(x, z)
 									local xd, yd, zd = gx + dx, gy + dy, gz + dz
 									NewLightOperation(xd, yd, zd, "NewLocalLightSubtraction", nget + LightSources[1])
 								end
-							end
-						end
-					end
-				end
-				if TileLightable(blockvalue, true) and not placingLocalSource then
-					for dx = -1, 1 do
-						for dy = -1, 1 do
-							for dz = -1, 1 do
-								NewLightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
 							end
 						end
 					end
