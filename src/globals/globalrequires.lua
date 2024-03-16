@@ -31,7 +31,6 @@ local entities = {
 
 local world = {
 	"lighting",
-	"chunk",
 	"updatelogic",
 	"gen/generator",
 	"gen/caves",
@@ -39,6 +38,10 @@ local world = {
 	"utilities/voxelsmethods",
 }
 
+local worldchunks = {
+	"chunkutils",
+	"chunkmain",
+}
 local init = {
 	"!init",
 }
@@ -77,6 +80,7 @@ requireGroup(blocks, "src/blocksandtiles/")
 requireGroup(utils, "src/utils/")
 requireGroup(entities, "src/entities/")
 Perspective = require("src/client/huds/perspective")
+requireGroup(worldchunks, "src/world/chunks/")
 requireGroup(world, "src/world/")
 requireGroup(init, "src/init/")
 requireGroup(client, "src/client/")
