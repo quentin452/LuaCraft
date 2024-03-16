@@ -56,7 +56,7 @@ function KeyPressed(k)
 		keysinitMenuSettings(k)
 		_JPROFILER.pop("keysinitMenuSettings")
 	end
-	if Gamestate == GamestateKeybindingSettings then
+	if Gamestate == GamestateKeybindingMainSettings or Gamestate == GamestateKeybindingPlayingGameSettings then
 		_JPROFILER.push("keysinitKeybindingSettings")
 		keysinitKeybindingSettings(k)
 		_JPROFILER.pop("keysinitKeybindingSettings")

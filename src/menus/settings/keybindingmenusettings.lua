@@ -92,8 +92,13 @@ function keysinitKeybindingSettings(k)
 			elseif _KeybindingMenuSettings.selection == 4 then
 				ConfiguringMovementKey = true
 			elseif _KeybindingMenuSettings.selection == 5 then
-				Gamestate = GamestateMainMenuSettings
-				_KeybindingMenuSettings.selection = 0
+				if Gamestate == GamestateKeybindingMainSettings then
+					Gamestate = GamestateMainMenuSettings
+					_KeybindingMenuSettings.selection = 0
+				elseif Gamestate == GamestateKeybindingPlayingGameSettings then
+					Gamestate = GamestatePlayingGameSettings
+					_KeybindingMenuSettings.selection = 0
+				end
 			end
 		end
 	end

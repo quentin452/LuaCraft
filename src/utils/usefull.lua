@@ -34,7 +34,8 @@ function drawColorString(Pstring, Px, Py)
 				or Gamestate == GamestateMainMenuSettings
 				or Gamestate == GamestateGamePausing
 				or Gamestate == GamestatePlayingGameSettings
-				or Gamestate == GamestateKeybindingSettings
+				or Gamestate == GamestateKeybindingMainSettings
+				or Gamestate == GamestateKeybindingPlayingGameSettings
 			)
 					and Font25
 				or (GamestateWorldCreationMenu or Gamestate == GamestatePlayingGame) and Font15
