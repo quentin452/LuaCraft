@@ -50,7 +50,6 @@ local client = {
 	"huds/!draw",
 	"blocks/blockrendering",
 	"blocks/tilerendering",
-	"textures/texturestatic",
 }
 
 local libs = {

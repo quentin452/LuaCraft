@@ -83,6 +83,28 @@ local function createTILEINGameAssets()
 		end
 	end
 end
+function InitalizeTextureStatic()
+	for _, tileData in pairs(Tiles) do
+		if type(tileData) == "table" and tileData.id ~= 0 then
+			TilesTextureFORAtlasList[tileData.id] = {}
+
+			if tileData.blockTopTexture then
+				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockTopTexture)
+			end
+
+			if tileData.blockBottomMasterTexture then
+				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockBottomMasterTexture)
+			end
+
+			if tileData.blockSideTexture then
+				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockSideTexture)
+			end
+		elseif type(tileData) ~= "table" then
+			TilesTextureFORAtlasList[tileData.id] = { tileData.blockBottomMasterTexture }
+		end
+	end
+end
+
 function InitializeAssets()
 	_JPROFILER.push("InitializeTilesNumberAndName")
 	InitializeTilesNumberAndName()
