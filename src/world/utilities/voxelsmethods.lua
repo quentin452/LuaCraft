@@ -8,6 +8,18 @@ function GetVoxelGeneric(x, y, z, getFunction)
 	return result
 end
 
+-- Retrieves voxel from a chunk, accounting for edge cases
+function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
+	_JPROFILER.push("getVoxelFromChunk_blockrendering")
+	local chunkGet = chunkGetter(x, y, z)
+	if chunkGet ~= nil then
+		_JPROFILER.pop("getVoxelFromChunk_blockrendering")
+		return chunkGet:getVoxel(i, j, k)
+	end
+	_JPROFILER.pop("getVoxelFromChunk_blockrendering")
+	return nil
+end
+
 function GetVoxel(x, y, z)
 	return GetVoxelGeneric(x, y, z, function(chunk, cx, cy, cz)
 		return chunk:getVoxel(cx, cy, cz)

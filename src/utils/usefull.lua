@@ -1,3 +1,6 @@
+-- Constants for adjustment factors
+local ADJUSTMENT_FACTOR_OTX_OTY = 256 / FinalAtlasSize
+local ADJUSTMENT_FACTOR_TEXTURE_COORDINATES = FinalAtlasSize / 256
 local colorMap = {
 	["0"] = { 255, 255, 255 }, -- white
 	["1"] = { 255, 0, 0 }, -- red
@@ -61,4 +64,25 @@ function setFont()
 		previousGamestate = Gamestate
 	end
 	_JPROFILER.pop("setFont")
+end
+
+-- Calculates texture coordinates for given offsets
+function calculationotxoty(otx, oty)
+	_JPROFILER.push("calculationotxoty")
+	local tx = otx * TileWidth / LightValues
+	local ty = oty * TileHeight
+	local tx2 = (otx + ADJUSTMENT_FACTOR_OTX_OTY) * TileWidth / LightValues
+	local ty2 = (oty + ADJUSTMENT_FACTOR_OTX_OTY) * TileHeight
+	_JPROFILER.pop("calculationotxoty")
+	return tx, ty, tx2, ty2
+end
+
+-- Retrieves texture coordinates and light information
+function getTextureCoordinatesAndLight(texture, lightOffset)
+	_JPROFILER.push("getTextureCoordinatesAndLight")
+	local textureIndex = texture
+	local otx = ((textureIndex / ADJUSTMENT_FACTOR_TEXTURE_COORDINATES) % LightValues + 16 * lightOffset)
+	local oty = math.floor(textureIndex / (ADJUSTMENT_FACTOR_TEXTURE_COORDINATES * LightValues))
+	_JPROFILER.pop("getTextureCoordinatesAndLight")
+	return otx, oty
 end
