@@ -63,20 +63,19 @@ end
 function love.resize(w, h)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainresize")
+	if Gamestate == GamestatePlayingGame then
+		local scaleX = w / GraphicsWidth
+		local scaleY = h / GraphicsHeight
+		Lovegraphics.scale(scaleX, scaleY)
+		local newCanvas = Lovegraphics.newCanvas(w, h)
 
-	local scaleX = w / GraphicsWidth
-	local scaleY = h / GraphicsHeight
-	Lovegraphics.scale(scaleX, scaleY)
-	local newCanvas = Lovegraphics.newCanvas(w, h)
+		Lovegraphics.setCanvas(newCanvas)
+		Lovegraphics.draw(Scene.twoCanvas)
+		Lovegraphics.setCanvas()
 
-	Lovegraphics.setCanvas(newCanvas)
-	Lovegraphics.draw(Scene.twoCanvas)
-	Lovegraphics.setCanvas()
-
-	Scene.twoCanvas = newCanvas
-
+		Scene.twoCanvas = newCanvas
+	end
 	local scaleCoefficient = 0.7
-
 	InterfaceWidth = w * scaleCoefficient
 	InterfaceHeight = h * scaleCoefficient
 	_JPROFILER.pop("Mainresize")
