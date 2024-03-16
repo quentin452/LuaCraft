@@ -1,4 +1,31 @@
 -- Renders a tile in the world
+local vertices = {}
+-- Creates a 2D tile model based on its ID, light level, and scale
+local function createTileModel(tileID, thisLight, BlockAndTilesModelScale)
+	_JPROFILER.push("createTileModel")
+
+	-- Retrieve texture and light coordinates for the tile
+	local texture = TileTextures(tileID)[1]
+	local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
+	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+
+	-- Define vertices for the 2D tile model
+	local diagLong = 0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
+	local diagShort = -0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
+
+	vertices = {
+		{ diagShort, 0, diagShort, tx2, ty2 },
+		{ diagLong, 0, diagLong, tx, ty2 },
+		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
+		{ diagLong, 0, diagLong, tx, ty2 },
+		{ diagLong, BlockAndTilesModelScale, diagLong, tx, ty },
+		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
+	}
+
+	_JPROFILER.pop("createTileModel")
+	return vertices
+end
+
 function TileRendering(self, i, j, k, x, y, z, thisLight, model, BlockAndTilesModelScale)
 	_JPROFILER.push("TileRendering")
 
@@ -36,30 +63,4 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, BlockAndTilesMo
 	end
 
 	_JPROFILER.pop("TileRendering")
-end
-local vertices = {}
--- Creates a 2D tile model based on its ID, light level, and scale
-function createTileModel(tileID, thisLight, BlockAndTilesModelScale)
-	_JPROFILER.push("createTileModel")
-
-	-- Retrieve texture and light coordinates for the tile
-	local texture = TileTextures(tileID)[1]
-	local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
-
-	-- Define vertices for the 2D tile model
-	local diagLong = 0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
-	local diagShort = -0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
-
-	vertices = {
-		{ diagShort, 0, diagShort, tx2, ty2 },
-		{ diagLong, 0, diagLong, tx, ty2 },
-		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
-		{ diagLong, 0, diagLong, tx, ty2 },
-		{ diagLong, BlockAndTilesModelScale, diagLong, tx, ty },
-		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
-	}
-
-	_JPROFILER.pop("createTileModel")
-	return vertices
 end
