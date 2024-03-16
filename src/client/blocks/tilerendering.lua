@@ -37,7 +37,7 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, scale)
 
 	_JPROFILER.pop("TileRendering")
 end
-
+local vertices = {}
 -- Creates a 2D tile model based on its ID, light level, and scale
 function createTileModel(tileID, thisLight, scale)
 	_JPROFILER.push("createTileModel")
@@ -51,7 +51,7 @@ function createTileModel(tileID, thisLight, scale)
 	local diagLong = 0.7071 * scale * 0.5 + 0.5
 	local diagShort = -0.7071 * scale * 0.5 + 0.5
 
-	local vertices = {
+	vertices = {
 		{ diagShort, 0, diagShort, tx2, ty2 },
 		{ diagLong, 0, diagLong, tx, ty2 },
 		{ diagShort, scale, diagShort, tx2, ty },
