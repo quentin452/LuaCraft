@@ -126,6 +126,7 @@ function NewChunk(x, z)
 		end
 	end
 	-- set voxel id of the voxel in this chunk's coordinate space
+	--TODO continue optimizing chunk.setVoxel
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		_JPROFILER.push("setVoxel")
 		manuallyPlaced = manuallyPlaced or false
