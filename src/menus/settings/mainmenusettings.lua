@@ -80,15 +80,15 @@ function keysinitMenuSettings(k)
 			end
 		elseif k == "return" then
 			if _MainMenuSettings.selection == 1 then
-				toggleVSync()
+				LuaCraftSettingsUpdater("toggleVSync")
 			elseif _MainMenuSettings.selection == 2 then
-				printNormalLoggingSettings()
+				LuaCraftSettingsUpdater("NormalLoggingToggler")
 			elseif _MainMenuSettings.selection == 3 then
-				printWarnsSettings()
+				LuaCraftSettingsUpdater("WarnLoggingToggler")
 			elseif _MainMenuSettings.selection == 4 then
-				printErrorsSettings()
+				LuaCraftSettingsUpdater("ErrorLoggingToggler")
 			elseif _MainMenuSettings.selection == 5 then
-				renderdistanceSetting()
+				LuaCraftSettingsUpdater("renderdistanceSetting")
 				Renderdistancegetresetted = true
 			elseif _MainMenuSettings.selection == 6 then
 				if Gamestate == GamestatePlayingGameSettings then

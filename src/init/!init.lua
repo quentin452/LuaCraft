@@ -49,14 +49,6 @@ function InitializeGame()
 	_JPROFILER.push("LoadMods")
 	LoadMods()
 	_JPROFILER.pop("LoadMods")
-	if
-		EnableLuaCraftLoggingError == nil
-		or EnableLuaCraftLoggingWarn == nil
-		or EnableLuaCraftPrintLoggingNormal == nil
-	then
-		--TODO FIX EnableLuaCraftLoggingError + EnableLuaCraftLoggingWarn + EnableLuaCraftPrintLoggingNormal are nil at first game launch
-		love.event.quit()
-	end
 	_JPROFILER.push("saveLogsToOldLogsFolder")
 	saveLogsToOldLogsFolder()
 	_JPROFILER.pop("saveLogsToOldLogsFolder")

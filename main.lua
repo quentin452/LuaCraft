@@ -90,7 +90,7 @@ function love.update(dt)
 	if HudTimeLeft > 0 then
 		HudTimeLeft = HudTimeLeft - dt
 		if HudTimeLeft <= 0 or Gamestate ~= GamestatePlayingGame then
-			hudMessage = ""
+			HudMessage = ""
 		end
 	end
 	_JPROFILER.pop("MainUpdate")
@@ -101,19 +101,19 @@ function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
 	DrawGame()
-	if hudMessage ~= nil then
+	if HudMessage ~= nil then
 		local width, height = Lovegraphics.getDimensions()
 		local font = Lovegraphics.getFont()
 
 		-- Calculate the width and height of the text
-		local textWidth = font:getWidth(hudMessage)
-		local textHeight = font:getHeight(hudMessage)
+		local textWidth = font:getWidth(HudMessage)
+		local textHeight = font:getHeight(HudMessage)
 
 		-- Calculate the position to center the text
 		local x = (width - textWidth) / 2
 		local y = (height - textHeight) / 2 + 280
 
-		Lovegraphics.print(hudMessage, x, y)
+		Lovegraphics.print(HudMessage, x, y)
 	end
 	_JPROFILER.pop("MainDraw")
 	_JPROFILER.pop("frame")

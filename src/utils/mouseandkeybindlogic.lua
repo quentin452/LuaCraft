@@ -1,5 +1,3 @@
-local timeSelected = 0
-local delay = 1
 function MouseLogicOnPlay(x, y, b)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MouseLogicOnPlay")
@@ -30,7 +28,7 @@ function MouseLogicOnPlay(x, y, b)
 		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
 		LightingUpdate()
 	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
-		hudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
+		HudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
 		HudTimeLeft = 3
 	end
 	_JPROFILER.pop("MouseLogicOnPlay")
@@ -39,7 +37,7 @@ end
 
 function KeyPressed(k)
 	if k == "f11" then
-		toggleFullScreen()
+		LuaCraftSettingsUpdater("toggleFullScreen")
 	end
 	-- simplified hotbar number press code, thanks nico-abram!
 	local numberPress = tonumber(k)
