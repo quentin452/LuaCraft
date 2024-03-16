@@ -1,25 +1,14 @@
+Lovez = love
+Lovefilesystem = Lovez.filesystem
+Lovegraphics = Lovez.graphics
+Lovewindow = Lovez.window
+Loveimage = Lovez.image
+Lovetimer = Lovez.timer
 --init shaders
 -- Shader to change color of crosshair to contrast with what is being looked at
-CrosshairShader = love.graphics.newShader([[
-    uniform Image source;
-    uniform number xProportion;
-    uniform number yProportion;
-
-    vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords)
-    {
-        vec2 scaled_coords;
-        scaled_coords.x = (texture_coords.x - 0.9375) * 16;
-        scaled_coords.y = texture_coords.y * 16;
-
-        vec4 sourcecolor = Texel(source, vec2(0.5 + (-0.5 + scaled_coords.x) * xProportion, 0.5 + (0.5 - scaled_coords.y) * yProportion));
-        sourcecolor.rgb = 1.0 - sourcecolor.rgb;
-
-        vec4 crosshair = Texel(texture, texture_coords);
-        sourcecolor.a = crosshair.a;
-
-        return sourcecolor;
-    }
-]])
+CrosshairShader = Lovegraphics.newShader(
+	[[uniform Image source;uniform number xProportion;uniform number yProportion;vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords){vec2 scaled_coords = (texture_coords - vec2(0.9375, 0)) * 16.0;vec4 sourcecolor = texture2D(source, vec2(0.5 + (-0.5 + scaled_coords.x) * xProportion, 0.5 + (0.5 - scaled_coords.y) * yProportion));sourcecolor.rgb = vec3(1.0) - sourcecolor.rgb;sourcecolor.a = texture2D(texture, texture_coords).a;return sourcecolor;}]]
+)
 --init Menus tables
 local function createMenu(x, y, title, choices)
 	return {
@@ -129,12 +118,6 @@ BlockTexturepathLuaCraft = BlockandtilesfolderLuaCraft .. "/blocks/"
 LiquidTexturepathLuaCraft = BlockandtilesfolderLuaCraft .. "/liquid/"
 TilesTexturepathLuaCraft = BlockandtilesfolderLuaCraft .. "/tiles/"
 FinalAtlasSize = 256 -- TODO ADD Support for atlas 4096 size and more
-Lovez = love
-Lovefilesystem = Lovez.filesystem
-Lovegraphics = Lovez.graphics
-Lovewindow = Lovez.window
-Loveimage = Lovez.image
-Lovetimer = Lovez.timer
 Mathpi = math.pi
 UserDirectory = Lovez.filesystem.getUserDirectory()
 Luacraftconfig = UserDirectory .. ".LuaCraft\\Luacraftconfig.txt"
