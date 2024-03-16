@@ -444,7 +444,6 @@ end
 
 local transparency3 = 3
 function NewChunkSlice(x, y, z, parent)
-	_JPROFILER.push("NewChunkSlice")
 	local t = NewThing(x, y, z)
 	t.parent = parent
 	t.name = "chunkslice"
