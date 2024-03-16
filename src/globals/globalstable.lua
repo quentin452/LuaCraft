@@ -66,6 +66,7 @@ Engine = {}
 ChunkVerts = {}
 SliceUpdates = {}
 TilesTextureFORAtlasList = {}
+RenderChunks = {}
 PlayerInventory = {
 	items = {},
 	hotbarSelect = 1,

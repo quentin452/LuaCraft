@@ -47,7 +47,7 @@ local function forceChunkModelsRemoval(chunk)
 end
 local function addChunkToRenderQueue(chunk)
 	_JPROFILER.push("addChunkToRenderQueue")
-	table.insert(renderChunks, chunk)
+	table.insert(RenderChunks, chunk)
 	_JPROFILER.pop("addChunkToRenderQueue")
 end
 local function updateSlicesForChunk(chunk)
@@ -72,10 +72,9 @@ local function forceModelUpdatesForChunks(chunk)
 	_JPROFILER.pop("forceModelUpdatesForChunks")
 end
 
-
 local function processRenderChunks()
 	_JPROFILER.push("processRenderChunks")
-	for _, chunk in ipairs(renderChunks) do
+	for _, chunk in ipairs(RenderChunks) do
 		for _ = 1, WorldHeight / SliceHeight do
 			if not chunk.slices[_] then
 				chunk.slices[_] = NewChunkSlice(chunk.x, chunk.y + (_ - 1) * SliceHeight + 1, chunk.z, chunk)
@@ -202,7 +201,6 @@ local function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, Rend
 end
 local function UpdateAndGenerateChunks(RenderDistance)
 	_JPROFILER.push("UpdateAndGenerateChunks")
-	renderChunks = {}
 	local playerPosition = getPlayerPosition()
 	local playerX, playerY, playerZ = playerPosition.x, playerPosition.y, playerPosition.z
 	local playerChunkX = math.ceil(playerX / ChunkSize)
