@@ -149,8 +149,7 @@ REMOVED FEATURES:
 
 **LuaCraft V0.4**
 
-This version is compatible with LOVE2D 11.5, [11.5experiment1](https://github.com/quentin452/love-experiments/releases/tag/11.5experiment1), and probably newer versions.
-The 11.5experiment1 version is not recommanded anymore , i customized love.run to remove love.timer.sleep that causing fps lags
+This version is compatible with LOVE2D 11.5 and probably newer versions.
 
 NEW FEATURES/IMPROVEMENTS:
 
