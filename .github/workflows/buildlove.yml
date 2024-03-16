@@ -12,13 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Set Build Name
-        id: set_build_name
-        run: echo "BUILD_NAME=LuaCraft.$(date +%Y%m%d%H%M%S).love" >> $GITHUB_ENV
       - name: Compress Directory
-        run: zip -r $BUILD_NAME ./*
+        run: zip -r LuaCraft.love ./*
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: $BUILD_NAME
-          path: ./$BUILD_NAME
+          name: LuaCraft.love
+          path: ./LuaCraft.love
