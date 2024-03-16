@@ -19,5 +19,5 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: LuaCraft_$timestamp.love
-          path: ./LuaCraft_$timestamp.love
+          name: LuaCraft.love
+          path: ./LuaCraft_*.love
