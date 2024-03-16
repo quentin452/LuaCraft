@@ -23,11 +23,6 @@ function drawMainMenu()
 		drawColorString(marque .. "" .. _Mainmenu.choice[n], _Mainmenu.x, posY)
 		posY = posY + lineHeight
 	end
-
-	-- Help
-	--drawColorString("   [%3Fleches%0] Move the Selection", _Mainmenu.x, posY)
-	--posY = posY + lineHeight
-	--drawColorString("   [%3Retour%0] Valider", _Mainmenu.x, posY)
 end
 
 function keysinitMainMenu(k)
@@ -51,8 +46,4 @@ function keysinitMainMenu(k)
 			end
 		end
 	end
-end
-
-function destroyMainMenu()
-	_Mainmenu = nil
 end

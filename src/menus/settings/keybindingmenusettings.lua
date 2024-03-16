@@ -103,7 +103,3 @@ function keysinitKeybindingSettings(k)
 		end
 	end
 end
-
-function destroyKeybindingSettings()
-	_KeybindingMenuSettings = nil
-end

@@ -23,11 +23,6 @@ function drawGamePlayingPauseMenu()
 		drawColorString(marque .. "" .. _GamePlayingPauseMenu.choice[n], _GamePlayingPauseMenu.x, posY)
 		posY = posY + lineHeight
 	end
-
-	-- Help
-	--drawColorString("   [%3Fleches%0] Move the Selection", _GamePlayingPauseMenu.x, posY)
-	--posY = posY + lineHeight
-	--drawColorString("   [%3Retour%0] Valider", _GamePlayingPauseMenu.x, posY)
 end
 
 function keysinitGamePlayingPauseMenu(k)
@@ -64,7 +59,4 @@ function keysinitGamePlayingPauseMenu(k)
 		end
 	end
 	_JPROFILER.pop("keysinitGamePlayingPauseMenu")
-end
-function destroyPlayingPauseMenu()
-	_GamePlayingPauseMenu = nil
 end

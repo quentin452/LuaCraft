@@ -61,11 +61,6 @@ function DrawMenuSettings()
 	else
 		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
-
-	-- Help
-	--drawColorString("   [%3Fleches%0] Move the Selection", _MainMenuSettings.x, posY)
-	--posY = posY + lineHeight
-	--drawColorString("   [%3Retour%0] Valider", _MainMenuSettings.x, posY)
 end
 
 function keysinitMenuSettings(k)
@@ -110,8 +105,4 @@ function keysinitMenuSettings(k)
 			end
 		end
 	end
-end
-
-function destroyMainMenuSettings()
-	_MainMenuSettings = nil
 end

@@ -26,11 +26,6 @@ function drawWorldCreationMenu()
 
 		posY = posY + lineHeight
 	end
-
-	-- Help
-	--drawColorString("   [%3Fleches%0] Move the Selection", _WorldCreationMenu.x, posY)
-	--posY = posY + lineHeight
-	--drawColorString("   [%3Retour%0] Valider", _WorldCreationMenu.x, posY)
 end
 
 function keysInitWorldCreationMenu(k)
@@ -53,8 +48,4 @@ function keysInitWorldCreationMenu(k)
 			end
 		end
 	end
-end
-
-function destroyWorldCreationMenu()
-	_WorldCreationMenu = nil
 end
