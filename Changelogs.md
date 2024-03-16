@@ -154,72 +154,72 @@ The 11.5experiment1 version is not recommanded anymore , i customized love.run t
 
 NEW FEATURES/IMPROVEMENTS:
 
-Eeliminate potential lags caused by lightsource/transparency lookup
-add some debug (jprofiler) statements 
-Add detailled prints to know which block is initialized with which values
-Add ExampleMod_ prefix to scripts of ExampleMod 
-Start mod support for Tiles/Blocks
-Update ExmampleMod Instruction/doc
-Optimize rand method from math.lua
-Fix a synthax error in the script format of iron
-Improve general efficiency of block registration and maintainability
-Optimize atlas texture creation
-Update Texture handling to reduce calculation
-Extremly simplified texture handling (merge atlases) 
-Fix #31 (Sun lightning can pass through Glowstone)
-Fix ROSE_FLOWER_Block not spawning 
-Add some infos in F3 
-Rename some Table
-Fix mistakes in JPROF usage that causing crash while using it 
-Fix bugs in removeChunksOutsideRenderDistance 
-optimize blockrendering and updatelogic
-optimize images (compress)
-refactor Lightning code to reduce dupplications
-Optimize chunk.sunlight + choose from chunk.lua
-Abit optimize chunk.getVoxel + chunk.setVoxel from chunk.lua 
-fix #43 (diagonal chunks are removed)
-Reduce chunkslice update model frequency for performances 
-Reduce unecessary ChunkSet iteration in updalogic.lua that causing LARGE LAGS
-Remove airTexture (unecessary)
-Remove isInTable in updatelogic.lua (causing lags)
-Make blockrendering.lua maintainable
-Dedupplicate player position getting + optimize spawn point
-Optimize GetSign and CopyTable from engine.lua
-Avoid creating at every calls vertices table for block models
-Update randomSeed logic
-Add utilities scripts 
-Reduce code dupplications in set/getvoxels methods 
-Readd transparencyCache
-Made some methods local from blockrendering.lua + lighting.lua + updatelogic.lua
-Fix a memory leak caused by GenerateTree
-Simplify ExampleMod.initialize populate code
-Refactor TileData code + readd some caches in it
-Add Documentations in blockrendering.lua + tiledata.lua + tilerendering.lua
-Greatly optimize DrawF3
-Move DrawTestBlock into an another script + disabling it
-Refactor drawhud.lua
-refactor Global Variables/tables 
-Optimize setFont
-Made all global using HigherCase
-Potential optimisation for createTileModel method?
-Fix a mistake that maked Test Block Model global instead of local
-Avoiding GetChunk repetition in LightningQueries from lighting.lua
-Made CrosshairShader compact to reduce byte usage
-Use elseif statements in checkAndUpdateDefaults filesystem.lua
-Made FFI a global variable
-Optimize LoadMods and LoadBlocksAndTiles
-Simplify UpdateChunks code + remove uneccesary chunk.slices = {} + made methods local in updatelogic.lua
-Fix a mistake in chunk.processRequests that use a number parameter but the parameter needed is a boolean for the 5th parameter
-Remove chunk.updatemodel because its unnecessary in updatelogic.lua
-Avoid Redefined local in chunk.lua + lighting.lua
-Avoid unused local variable in lighting.lua
+    Eeliminate potential lags caused by lightsource/transparency lookup
+    add some debug (jprofiler) statements 
+    Add detailled prints to know which block is initialized with which values
+    Add ExampleMod_ prefix to scripts of ExampleMod 
+    Start mod support for Tiles/Blocks
+    Update ExmampleMod Instruction/doc
+    Optimize rand method from math.lua
+    Fix a synthax error in the script format of iron
+    Improve general efficiency of block registration and maintainability
+    Optimize atlas texture creation
+    Update Texture handling to reduce calculation
+    Extremly simplified texture handling (merge atlases) 
+    Fix #31 (Sun lightning can pass through Glowstone)
+    Fix ROSE_FLOWER_Block not spawning 
+    Add some infos in F3 
+    Rename some Table
+    Fix mistakes in JPROF usage that causing crash while using it 
+    Fix bugs in removeChunksOutsideRenderDistance 
+    optimize blockrendering and updatelogic
+    optimize images (compress)
+    refactor Lightning code to reduce dupplications
+    Optimize chunk.sunlight + choose from chunk.lua
+    Abit optimize chunk.getVoxel + chunk.setVoxel from chunk.lua 
+    fix #43 (diagonal chunks are removed)
+    Reduce chunkslice update model frequency for performances 
+    Reduce unecessary ChunkSet iteration in updalogic.lua that causing LARGE LAGS
+    Remove airTexture (unecessary)
+    Remove isInTable in updatelogic.lua (causing lags)
+    Make blockrendering.lua maintainable
+    Dedupplicate player position getting + optimize spawn point
+    Optimize GetSign and CopyTable from engine.lua
+    Avoid creating at every calls vertices table for block models
+    Update randomSeed logic
+    Add utilities scripts 
+    Reduce code dupplications in set/getvoxels methods 
+    Readd transparencyCache
+    Made some methods local from blockrendering.lua + lighting.lua + updatelogic.lua
+    Fix a memory leak caused by GenerateTree
+    Simplify ExampleMod.initialize populate code
+    Refactor TileData code + readd some caches in it
+    Add Documentations in blockrendering.lua + tiledata.lua + tilerendering.lua
+    Greatly optimize DrawF3
+    Move DrawTestBlock into an another script + disabling it
+    Refactor drawhud.lua
+    refactor Global Variables/tables 
+    Optimize setFont
+    Made all global using HigherCase
+    Potential optimisation for createTileModel method?
+    Fix a mistake that maked Test Block Model global instead of local
+    Avoiding GetChunk repetition in LightningQueries from lighting.lua
+    Made CrosshairShader compact to reduce byte usage
+    Use elseif statements in checkAndUpdateDefaults filesystem.lua
+    Made FFI a global variable
+    Optimize LoadMods and LoadBlocksAndTiles
+    Simplify UpdateChunks code + remove uneccesary chunk.slices = {} + made methods local in updatelogic.lua
+    Fix a mistake in chunk.processRequests that use a number parameter but the parameter needed is a boolean for the 5th parameter
+    Remove chunk.updatemodel because its unnecessary in updatelogic.lua
+    Avoid Redefined local in chunk.lua + lighting.lua
+    Avoid unused local variable in lighting.lua
 
 LIBRARIES REMOVED : 
 
-Remove PROFI and so code debugging in LuaCraft
+    Remove PROFI and so code debugging in LuaCraft
 
 REMOVED FEATURES:
 
-remove some debug (jprofiler) statements 
-Remove OctaveNoise Cache
-Remove unecessary profilers in NewChunkSlice
+    remove some debug (jprofiler) statements 
+    Remove OctaveNoise Cache
+    Remove unecessary profilers in NewChunkSlice
