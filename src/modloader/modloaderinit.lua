@@ -1,8 +1,14 @@
-function addFunctionToTag(tag, func)
+function addFunctionToTag(tag, func, sourcePath)
+	if not sourcePath or sourcePath ~= debug.getinfo(2).source then
+		error("Invalid sourcePath provided for addFunctionToTag." .. tag)
+	end
 	if not ModLoaderTable[tag] then
 		ModLoaderTable[tag] = {}
 	end
-	table.insert(ModLoaderTable[tag], func)
+	table.insert(ModLoaderTable[tag], { func = func, sourcePath = sourcePath })
+end
+function GetSourcePath()
+	return debug.getinfo(2).source
 end
 local nextId = 1
 TilesById = { [0] = {
@@ -20,7 +26,7 @@ function addBlock(
 	blockTopTexture
 )
 	if Tiles[blockstringname] then
-		LuaCraftErrorLogging("Error: Duplicate blockstringname detected: " .. tostring(blockstringname))
+		LuaCraftErrorLogging("Duplicate blockstringname detected: " .. tostring(blockstringname))
 		return
 	end
 

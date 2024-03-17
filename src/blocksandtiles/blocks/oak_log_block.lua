@@ -15,7 +15,7 @@ function stone_block.initialize()
 			oak_logsSideTexture,
 			oak_logsTopTexture
 		)
-	end)
+	end, GetSourcePath())
 end
 
 return stone_block

@@ -15,7 +15,7 @@ function grass_block.initialize()
 			grassSideTexture,
 			grassTopTexture
 		)
-	end)
+	end, GetSourcePath())
 end
 
 return grass_block

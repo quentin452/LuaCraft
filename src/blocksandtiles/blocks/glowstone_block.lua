@@ -13,7 +13,7 @@ function stone_block.initialize()
 			nil,
 			nil
 		)
-	end)
+	end, GetSourcePath())
 end
 
 return stone_block

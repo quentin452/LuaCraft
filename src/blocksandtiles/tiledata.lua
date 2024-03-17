@@ -3,8 +3,8 @@ function InitializeTilesNumberAndName()
 	if next(Tiles, next(Tiles)) ~= nil then
 		LuaCraftErrorLogging("Error: Tiles table must only contain AIR_Block before calling addBlock")
 	end
-	for _, func in ipairs(ModLoaderTable["addBlock"]) do
-		func()
+	for _, taggedFunc in ipairs(ModLoaderTable["addBlock"]) do
+		taggedFunc.func()
 	end
 end
 

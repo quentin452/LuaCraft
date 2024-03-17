@@ -62,15 +62,27 @@ function NewChunk(x, z)
 	end
 
 	-- populate chunk with trees and flowers
+	local MAX_EXECUTION_TIME = 0.5
+	local totalLongExecutionTime = 0
+	local log1 = "Function from"
+	local log2 = "in chunkPopulateTag took too long to execute. Total time taken "
 	chunk.populate = function(self)
+		totalLongExecutionTime = 0
 		for i = 1, ChunkSize do
 			local heightMap_i = self.heightMap[i]
 			if heightMap_i then
 				for j = 1, ChunkSize do
 					local height = heightMap_i[j]
 					if height and TileCollisions(self:getVoxel(i, height, j)) then
-						for _, func in ipairs(ModLoaderTable["chunkPopulateTag"]) do
-							func(self, i, height, j)
+						for _, taggedFunc in ipairs(ModLoaderTable["chunkPopulateTag"]) do
+							local start_time = love.timer.getTime()
+							taggedFunc.func(self, i, height, j)
+							local elapsed_time = love.timer.getTime() - start_time
+							if elapsed_time > MAX_EXECUTION_TIME then
+								totalLongExecutionTime = totalLongExecutionTime + elapsed_time
+								local log3 = totalLongExecutionTime
+								LuaCraftWarnLogging(log1 .. taggedFunc.sourcePath .. log2 .. log3 .. " seconds.")
+							end
 						end
 					end
 				end

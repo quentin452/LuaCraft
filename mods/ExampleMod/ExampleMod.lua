@@ -19,7 +19,7 @@ function ExampleMod.initialize()
 			ExampleMod_GenerateTree(self, i, height, j)
 			self:setVoxelRaw(i, height, j, Tiles.DIRT_Block.id, LightSources[15])
 		end
-	end)
+	end, GetSourcePath())
 end
 
 return ExampleMod
