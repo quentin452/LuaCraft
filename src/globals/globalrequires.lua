@@ -24,7 +24,9 @@ local utils = {
 	"settingshandling",
 	"commands/commandsexec",
 }
-
+local utilsthreads = {
+	"threadtest",
+}
 local entities = {
 	"player",
 }
@@ -77,6 +79,7 @@ Ffi = require("ffi")
 requireGroup(menussettings, "src/menus/settings/")
 requireGroup(menus, "src/menus/")
 requireGroup(blocks, "src/blocksandtiles/")
+requireGroup(utilsthreads, "src/utils/threads/")
 requireGroup(utils, "src/utils/")
 requireGroup(entities, "src/entities/")
 Perspective = require("src/client/huds/perspective")
@@ -91,8 +94,10 @@ menussettings = nil
 menus = nil
 blocks = nil
 utils = nil
+utilsthreads= nil
 entities = nil
 world = nil
+worldchunks= nil
 init = nil
 client = nil
 libs = nil
