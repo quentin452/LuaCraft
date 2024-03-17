@@ -99,3 +99,8 @@ Tiles = {
 		BlockOrLiquidOrTile = TileMode.BlockMode,
 	},
 }
+LuaCraftLoggingLevel = {
+	NORMAL = "NORMAL",
+	WARNING = "WARN",
+	ERROR = "FATAL",
+}

@@ -82,7 +82,7 @@ function NewChunk(x, z)
 								totalLongExecutionTime = totalLongExecutionTime + elapsed_time
 								local log3 = totalLongExecutionTime
 								ThreadLogChannel:push({
-									"WARN",
+									LuaCraftLoggingLevel.WARNING,
 									log1 .. taggedFunc.sourcePath .. log2 .. log3 .. " seconds.",
 								})
 							end

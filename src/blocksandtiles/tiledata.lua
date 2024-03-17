@@ -1,7 +1,10 @@
 -- Initializes the tiles table with default values
 function InitializeTilesNumberAndName()
 	if next(Tiles, next(Tiles)) ~= nil then
-		ThreadLogChannel:push({ "FATAL","Tiles table must only contain AIR_Block before calling addBlock"})
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"Tiles table must only contain AIR_Block before calling addBlock",
+		})
 	end
 	for _, taggedFunc in ipairs(ModLoaderTable["addBlock"]) do
 		taggedFunc.func()

@@ -10,7 +10,7 @@ function iterateOverAllTiles()
 		local blockSideTexture = value.blockSideTexture or "N/A"
 		local blockBottomMasterTexture = value.blockBottomMasterTexture or "N/A"
 
-		ThreadLogChannel:push({ "NORMAL", "Tile Name: "
+		ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "Tile Name: "
 		.. value.blockstringname
 		.. " Index: "
 		.. value.id

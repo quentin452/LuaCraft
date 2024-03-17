@@ -18,7 +18,7 @@ function initGlobalRandomNumbers()
 	for i = 1, 128 do
 		Salt[i] = math.random()
 	end
-	ThreadLogChannel:push({ "NORMAL", "Random Seed:", RandomSeed })
+	ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "Random Seed:", RandomSeed })
 	_JPROFILER.pop("initGlobalRandomNumbers")
 end
 

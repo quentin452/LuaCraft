@@ -11,7 +11,10 @@ function ReLoadMovementKeyValues()
 		leftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
 		rightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
 	else
-		ThreadLogChannel:push({ "FATAL", "Failed to read Luacraftconfig.txt. Error: " .. error_message })
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
+		})
 	end
 end
 function NewPlayer(x, y, z)
@@ -250,7 +253,7 @@ function ChooseSpawnLocation()
 			currentTry = currentTry + 1
 			if currentTry % 100 == 0 then
 				ThreadLogChannel:push({
-					"NORMAL",
+					LuaCraftLoggingLevel.NORMAL,
 					"Still trying to find a suitable spawn position... Try #" .. currentTry,
 				})
 			end
@@ -258,7 +261,10 @@ function ChooseSpawnLocation()
 	end
 
 	if not foundSolidBlock then
-		ThreadLogChannel:push({ "FATAL", "Unable to find a suitable spawn position after " .. maxTries .. " tries." })
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"Unable to find a suitable spawn position after " .. maxTries .. " tries.",
+		})
 		_JPROFILER.pop("ChooseSpawnLocation")
 		return
 	end

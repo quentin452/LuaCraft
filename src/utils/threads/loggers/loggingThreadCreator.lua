@@ -1,6 +1,6 @@
 function createLoggingThread()
 	local ThreadLogChannel = love.thread.newChannel()
 	local thread = love.thread.newThread("src/utils/threads/loggers/loggingThreadCode.lua")
-	thread:start(ThreadLogChannel)
+	thread:start(ThreadLogChannel, LuaCraftLoggingLevel)
 	return ThreadLogChannel
 end

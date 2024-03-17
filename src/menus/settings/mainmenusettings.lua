@@ -64,7 +64,10 @@ function DrawMenuSettings()
 			posY = posY + lineHeight
 		end
 	else
-		ThreadLogChannel:push({ "FATAL", "Failed to read Luacraftconfig.txt. Error: " .. error_message})
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
+		})
 	end
 end
 

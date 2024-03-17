@@ -1,4 +1,4 @@
-ThreadLogChannel = ...
+ThreadLogChannel, LuaCraftLoggingLevel = ...
 local Lovez = love
 local Lovefilesystem = Lovez.filesystem
 local UserDirectory = Lovefilesystem.getUserDirectory()
@@ -57,34 +57,27 @@ local function log(level, enable, ...)
 end
 EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
 local function LuaCraftPrintLoggingNormal(...)
-	log("NORMAL", EnableLuaCraftPrintLoggingNormal, ...)
+	log(LuaCraftLoggingLevel.NORMAL, EnableLuaCraftPrintLoggingNormal, ...)
 end
 EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
 local function LuaCraftWarnLogging(...)
-	log("WARN", EnableLuaCraftLoggingWarn, ...)
+	log(LuaCraftLoggingLevel.WARNING, EnableLuaCraftLoggingWarn, ...)
 end
 EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
 
 local function LuaCraftErrorLogging(...)
-	log("FATAL", EnableLuaCraftLoggingError, ...)
+	log(LuaCraftLoggingLevel.ERROR, EnableLuaCraftLoggingError, ...)
 end
-
---TODO MADE THIS CAN BE ACCESSED ON MAIN THREAD
-LuaCraftLoggingLevel = {
-	NORMAL = "NORMAL",
-	WARNING = "WARN",
-	ERROR = "FATAL",
-}
 
 while true do
 	local message = ThreadLogChannel:demand()
 	if message then
 		local level, logMessage = unpack(message)
-		if level == "WARN" then
+		if level == LuaCraftLoggingLevel.WARNING then
 			LuaCraftWarnLogging(logMessage)
-		elseif level == "NORMAL" then
+		elseif level == LuaCraftLoggingLevel.NORMAL then
 			LuaCraftPrintLoggingNormal(logMessage)
-		elseif level == "FATAL" then
+		elseif level == LuaCraftLoggingLevel.ERROR then
 			LuaCraftErrorLogging(logMessage)
 		else
 			LuaCraftErrorLogging("You used a wrong level for logging:" .. level)
