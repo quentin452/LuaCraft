@@ -18,8 +18,13 @@ function DrawMenuSettings()
 
 	if file_content then
 		local Settings = {}
-		local orderedKeys =
-			{ "vsync", "LuaCraftPrintLoggingNormal", "LuaCraftWarnLogging", "LuaCraftErrorLogging", "renderdistance" }
+		local orderedKeys = {
+			"vsync",
+			"LuaCraftPrintLoggingNormal",
+			"LuaCraftWarnLogging",
+			"LuaCraftErrorLogging",
+			"renderdistance",
+		}
 
 		for _, key in ipairs(orderedKeys) do
 			local value = file_content:match(key .. "=(%w+)")
@@ -59,7 +64,7 @@ function DrawMenuSettings()
 			posY = posY + lineHeight
 		end
 	else
-		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+		ThreadLogChannel:push({ "FATAL", "Failed to read Luacraftconfig.txt. Error: " .. error_message})
 	end
 end
 

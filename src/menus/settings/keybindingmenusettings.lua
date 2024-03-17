@@ -7,10 +7,10 @@ function updateConfigFile(key, value)
 			file:write(fileContent)
 			file:close()
 		else
-			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. err)
+			ThreadLogChannel:push({ "FATAL", "Failed to open file for writing. Error: " .. err })
 		end
 	else
-		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. errorMessage)
+		ThreadLogChannel:push({ "FATAL", "Failed to read Luacraftconfig.txt. Error: " .. errorMessage })
 	end
 end
 function DrawKeybindingSettings()
@@ -69,7 +69,7 @@ function DrawKeybindingSettings()
 			posY = posY + lineHeight
 		end
 	else
-		LuaCraftErrorLogging("Failed to read Luacraftconfig.txt. Error: " .. error_message)
+		ThreadLogChannel:push({ "FATAL", "Failed to read Luacraftconfig.txt. Error: " .. error_message })
 	end
 end
 function keysinitKeybindingSettings(k)

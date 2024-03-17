@@ -10,27 +10,26 @@ function iterateOverAllTiles()
 		local blockSideTexture = value.blockSideTexture or "N/A"
 		local blockBottomMasterTexture = value.blockBottomMasterTexture or "N/A"
 
-		LuaCraftPrintLoggingNormal(
-			"Tile Name: "
-				.. value.blockstringname
-				.. " Index: "
-				.. value.id
-				.. " Transparency: "
-				.. value.transparency
-				.. " Light Source: "
-				.. value.LightSources
-				.. " Can Collide?: "
-				.. value.Cancollide
-				.. " Type: "
-				.. value.BlockOrLiquidOrTile
-				.. " BottomMaster Texture: "
-				.. blockBottomMasterTexture
-				.. " Side Texture: "
-				.. blockSideTexture
-				.. " Top Texture: "
-				.. blockTopTexture
-				.. "\n-----------------------------------------------------------------------------------------------------------------------"
-		)
+		ThreadLogChannel:push({ "NORMAL", "Tile Name: "
+		.. value.blockstringname
+		.. " Index: "
+		.. value.id
+		.. " Transparency: "
+		.. value.transparency
+		.. " Light Source: "
+		.. value.LightSources
+		.. " Can Collide?: "
+		.. value.Cancollide
+		.. " Type: "
+		.. value.BlockOrLiquidOrTile
+		.. " BottomMaster Texture: "
+		.. blockBottomMasterTexture
+		.. " Side Texture: "
+		.. blockSideTexture
+		.. " Top Texture: "
+		.. blockTopTexture
+		.. "\n-----------------------------------------------------------------------------------------------------------------------"
+})
 	end
 end
 function InitializeGame()
@@ -40,6 +39,9 @@ function InitializeGame()
 	_JPROFILER.push("SettingsHandlingInit")
 	SettingsHandlingInit()
 	_JPROFILER.pop("SettingsHandlingInit")
+	_JPROFILER.push("createLoggingThread")
+	ThreadLogChannel = createLoggingThread()
+	_JPROFILER.pop("createLoggingThread")
 	_JPROFILER.push("ReLoadMovementKeyValues")
 	ReLoadMovementKeyValues()
 	_JPROFILER.pop("ReLoadMovementKeyValues")

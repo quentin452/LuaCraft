@@ -81,7 +81,10 @@ function NewChunk(x, z)
 							if elapsed_time > MAX_EXECUTION_TIME then
 								totalLongExecutionTime = totalLongExecutionTime + elapsed_time
 								local log3 = totalLongExecutionTime
-								LuaCraftWarnLogging(log1 .. taggedFunc.sourcePath .. log2 .. log3 .. " seconds.")
+								ThreadLogChannel:push({
+									"WARN",
+									log1 .. taggedFunc.sourcePath .. log2 .. log3 .. " seconds.",
+								})
 							end
 						end
 					end

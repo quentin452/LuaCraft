@@ -184,6 +184,6 @@ function NewLightOperation(x, y, z, lightoperation, value)
 	if operationFunction then
 		operationFunction(t)
 	else
-		LuaCraftErrorLogging("This lightoperation: " .. lightoperation .. " is not correct")
+		ThreadLogChannel:push({ "FATAL", "This lightoperation: " .. lightoperation .. " is not correct" })
 	end
 end

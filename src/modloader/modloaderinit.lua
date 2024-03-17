@@ -26,7 +26,7 @@ function addBlock(
 	blockTopTexture
 )
 	if Tiles[blockstringname] then
-		LuaCraftErrorLogging("Duplicate blockstringname detected: " .. tostring(blockstringname))
+		ThreadLogChannel:push({ "FATAL", "Duplicate blockstringname detected: " .. tostring(blockstringname) })
 		return
 	end
 
@@ -53,23 +53,26 @@ function addBlock(
 	for _, prop in ipairs(properties) do
 		if block[prop] ~= nil then
 			if seen[prop] then
-				LuaCraftErrorLogging(
-					"Error: Property " .. prop .. " is defined more than once in block " .. tostring(blockstringname)
-				)
+				ThreadLogChannel:push({
+					"FATAL",
+					"Property " .. prop .. " is defined more than once in block " .. tostring(blockstringname),
+				})
 			else
 				seen[prop] = true
 			end
 		else
 			if prop == "LightSources" then
-				LuaCraftErrorLogging(
-					"Error: Missing property or not in range property for "
-						.. prop
-						.. " in block "
-						.. tostring(blockstringname)
-						.. ". please ensure that 'LightSources' is within the range of 0 to 15"
-				)
+				ThreadLogChannel:push({
+					"FATAL",
+					"Missing property or not in range property for " .. prop .. " in block " .. tostring(
+						blockstringname
+					) .. ". please ensure that 'LightSources' is within the range of 0 to 15",
+				})
 			else
-				LuaCraftErrorLogging("Error: Missing property " .. prop .. " in block " .. tostring(blockstringname))
+				ThreadLogChannel:push({
+					"FATAL",
+					"Missing property " .. prop .. " in block " .. tostring(blockstringname),
+				})
 			end
 		end
 	end
@@ -97,9 +100,10 @@ function addBlock(
 		end
 
 		if BlockThatUseCustomTexturesForTopandSide[id] then
-			LuaCraftErrorLogging(
-				"Key already exists in BlockThatUseCustomTexturesForTopandSide: " .. block.blockstringname
-			)
+			ThreadLogChannel:push({
+				"FATAL",
+				"Key already exists in BlockThatUseCustomTexturesForTopandSide: " .. block.blockstringname,
+			})
 			return
 		end
 
@@ -128,9 +132,9 @@ function LoadMods()
 					end
 					local endTime = os.clock()
 					local loadTime = endTime - startTime
-					LuaCraftPrintLoggingNormal("Load time for", modName, ":", loadTime, "seconds")
+					ThreadLogChannel:push({ "NORMAL", "Load time for", modName, ":", loadTime, "seconds" })
 				else
-					LuaCraftErrorLogging("Failed to load mod:", modName)
+					ThreadLogChannel:push({ "FATAL", "Failed to load mod:", modName })
 				end
 				table.insert(directories, fullPath)
 			end
@@ -156,7 +160,7 @@ function LoadBlocksAndTiles(rootDirectory)
 						block.initialize()
 					end
 				else
-					LuaCraftErrorLogging("Failed to load block:", blockName)
+					ThreadLogChannel:push({ "FATAL", "Failed to load block:", blockName })
 				end
 			end
 		end

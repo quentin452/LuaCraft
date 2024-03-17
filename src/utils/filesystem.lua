@@ -120,18 +120,18 @@ function saveLogsToOldLogsFolder()
 		if file then
 			file:write(currentLogContent)
 			file:close()
-			LuaCraftPrintLoggingNormal("Logs saved to old_logs folder.")
+			print("Logs saved to old_logs folder.")
 
 			local resetFile, resetError = io.open(LogFilePath, "w")
 			if resetFile then
 				resetFile:close()
 			else
-				LuaCraftErrorLogging("Failed to reset main log file. Error: " .. resetError)
+				error("Failed to reset main log file. Error: " .. resetError)
 			end
 		else
-			LuaCraftErrorLogging("Failed to open file for writing. Error: " .. error_message)
+			error("Failed to open file for writing. Error: " .. error_message)
 		end
 	else
-		LuaCraftErrorLogging("Failed to read current log file. Error: " .. error_message)
+		error("Failed to read current log file. Error: " .. error_message)
 	end
 end

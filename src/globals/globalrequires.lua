@@ -27,6 +27,9 @@ local utils = {
 local utilsthreads = {
 	"threadtest",
 }
+local utilsthreadsloggers = {
+	"loggingThreadCreator",
+}
 local entities = {
 	"player",
 }
@@ -79,6 +82,7 @@ Ffi = require("ffi")
 requireGroup(menussettings, "src/menus/settings/")
 requireGroup(menus, "src/menus/")
 requireGroup(blocks, "src/blocksandtiles/")
+requireGroup(utilsthreadsloggers, "src/utils/threads/loggers/")
 requireGroup(utilsthreads, "src/utils/threads/")
 requireGroup(utils, "src/utils/")
 requireGroup(entities, "src/entities/")
@@ -94,10 +98,11 @@ menussettings = nil
 menus = nil
 blocks = nil
 utils = nil
-utilsthreads= nil
+utilsthreads = nil
+utilsthreadsloggers = nil
 entities = nil
 world = nil
-worldchunks= nil
+worldchunks = nil
 init = nil
 client = nil
 libs = nil
