@@ -120,8 +120,6 @@ function saveLogsToOldLogsFolder()
 		if file then
 			file:write(currentLogContent)
 			file:close()
-			print("Logs saved to old_logs folder.")
-
 			local resetFile, resetError = io.open(LogFilePath, "w")
 			if resetFile then
 				resetFile:close()
