@@ -71,9 +71,9 @@ end
 
 --TODO MADE THIS CAN BE ACCESSED ON MAIN THREAD
 LuaCraftLoggingLevel = {
-    NORMAL = "NORMAL",
-    WARNING = "WARN",
-    ERROR = "FATAL",
+	NORMAL = "NORMAL",
+	WARNING = "WARN",
+	ERROR = "FATAL",
 }
 
 while true do
@@ -86,8 +86,8 @@ while true do
 			LuaCraftPrintLoggingNormal(logMessage)
 		elseif level == "FATAL" then
 			LuaCraftErrorLogging(logMessage)
-        else
-            LuaCraftErrorLogging("You used a wrong level for logging:" .. level)
+		else
+			LuaCraftErrorLogging("You used a wrong level for logging:" .. level)
 		end
 	end
 end
