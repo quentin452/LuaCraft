@@ -9,7 +9,7 @@ TileDataSize = 3
 FinalAtlasSize = 256 -- TODO ADD Support for atlas 4096 size and more
 LightValues = 16
 GlobalRenderDistance = 2
-BlockAndTilesModelScale = 1
+BlockModelScale = 1
 
 -- Resource paths
 TexturepathLuaCraft = "resources/assets/textures/"

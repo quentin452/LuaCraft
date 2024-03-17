@@ -1,7 +1,7 @@
 -- Renders a tile in the world
 local vertices = {}
 -- Creates a 2D tile model based on its ID, light level, and scale
-local function createTileModel(tileID, thisLight, BlockAndTilesModelScale)
+local function createTileModel(tileID, thisLight, BlockModelScale)
 	_JPROFILER.push("createTileModel")
 
 	-- Retrieve texture and light coordinates for the tile
@@ -10,23 +10,23 @@ local function createTileModel(tileID, thisLight, BlockAndTilesModelScale)
 	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
 
 	-- Define vertices for the 2D tile model
-	local diagLong = 0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
-	local diagShort = -0.7071 * BlockAndTilesModelScale * 0.5 + 0.5
+	local diagLong = 0.7071 * BlockModelScale * 0.5 + 0.5
+	local diagShort = -0.7071 * BlockModelScale * 0.5 + 0.5
 
 	vertices = {
 		{ diagShort, 0, diagShort, tx2, ty2 },
 		{ diagLong, 0, diagLong, tx, ty2 },
-		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
+		{ diagShort, BlockModelScale, diagShort, tx2, ty },
 		{ diagLong, 0, diagLong, tx, ty2 },
-		{ diagLong, BlockAndTilesModelScale, diagLong, tx, ty },
-		{ diagShort, BlockAndTilesModelScale, diagShort, tx2, ty },
+		{ diagLong, BlockModelScale, diagLong, tx, ty },
+		{ diagShort, BlockModelScale, diagShort, tx2, ty },
 	}
 
 	_JPROFILER.pop("createTileModel")
 	return vertices
 end
 
-function TileRendering(self, i, j, k, x, y, z, thisLight, model, BlockAndTilesModelScale)
+function TileRendering(self, i, j, k, x, y, z, thisLight, model, BlockModelScale)
 	_JPROFILER.push("TileRendering")
 
 	-- Retrieve the tile ID at the given position
@@ -38,7 +38,7 @@ function TileRendering(self, i, j, k, x, y, z, thisLight, model, BlockAndTilesMo
 		local tileModelData = TileModelCaching[this]
 		if not tileModelData then
 			-- Create and cache the tile model data if not already cached
-			tileModelData = createTileModel(this, thisLight, BlockAndTilesModelScale)
+			tileModelData = createTileModel(this, thisLight, BlockModelScale)
 			TileModelCaching[this] = tileModelData
 		end
 

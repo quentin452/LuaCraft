@@ -1,4 +1,4 @@
-local transparency3 = 3
+local transparency3 = TilesTransparency.OPAQUE
 
 --TODO Prevent Block Placements methods should be upgraded/debuggified
 
@@ -150,23 +150,24 @@ function NewChunkSlice(x, y, z, parent)
 			return
 		end
 		self.isUpdating = true
-		ChunkSliceModels = {}
+		SliceModels = {}
 		for i = 1, ChunkSize do
 			for j = self.y, self.y + SliceHeight - 1 do
 				for k = 1, ChunkSize do
 					local this, thisSunlight, thisLocalLight = self.parent:getVoxel(i, j, k)
-					local thisLight = math.max(thisSunlight, thisLocalLight)
+					local Light = math.max(thisSunlight, thisLocalLight)
 					local thisTransparency = TileTransparency(this)
-					local x, y, z = (self.x - 1) * ChunkSize + i - 1, 1 * j * BlockAndTilesModelScale, (self.z - 1) * ChunkSize + k - 1
+					local x, y, z =
+						(self.x - 1) * ChunkSize + i - 1, 1 * j * BlockModelScale, (self.z - 1) * ChunkSize + k - 1
 					if thisTransparency < transparency3 then
-						TileRendering(self, i, j, k, x, y, z, thisLight, ChunkSliceModels, BlockAndTilesModelScale)
-						BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, ChunkSliceModels, BlockAndTilesModelScale)
+						TileRendering(self, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
+						BlockRendering(self, i, j, k, x, y, z, thisTransparency, Light, SliceModels, BlockModelScale)
 					end
 				end
 			end
 		end
 		if self.model then
-			self.model:setVerts(ChunkSliceModels)
+			self.model:setVerts(SliceModels)
 		end
 		self.isUpdating = false
 	end
