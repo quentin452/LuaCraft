@@ -52,7 +52,7 @@ local function createTextureAtlas(memoryorpng)
 				TextureAtlasCoordinates[blockType] = ids and { index, index - 2, index - 1 } or { index }
 				x = x + width
 			else
-				ThreadLogChannel:push({ "FATAL", "Failed to read file:", texturePath})
+				ThreadLogChannel:push({ "FATAL", "Failed to read file:", texturePath })
 			end
 		end
 	end
@@ -70,7 +70,7 @@ local function createTextureAtlas(memoryorpng)
 	return atlas, TextureAtlasCoordinates
 end
 local function createTILEINGameAssets()
-	createTextureAtlas("PNG")
+	--createTextureAtlas("PNG")
 	local atlasInRAM = createTextureAtlas("RAM")
 	atlasImage = Lovegraphics.newImage(atlasInRAM)
 	TilesTextureList = {}
