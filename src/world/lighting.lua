@@ -42,8 +42,8 @@ local function LightningQueries(self, lightoperation)
 
 	if lightoperation == "NewSunlightForceAddition" then
 		return function()
-			local NewSunlightForceAdditionval = cget:getVoxel(cx, cy, cz)
-			if self.value >= 0 and TileLightable(NewSunlightForceAdditionval, true) then
+			local val = cget:getVoxel(cx, cy, cz)
+			if self.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = self.x + dir.x
@@ -53,17 +53,17 @@ local function LightningQueries(self, lightoperation)
 		end
 	elseif lightoperation == "NewSunlightAdditionCreation" then
 		return function()
-			local valNewSunlightAdditionCreation = cget:getVoxel(cx, cy, cz)
-			local datNewSunlightAdditionCreation = cget:getVoxelFirstData(cx, cy, cz)
-			if TileLightable(valNewSunlightAdditionCreation, true) and datNewSunlightAdditionCreation > 0 then
-				NewLightOperation(self.x, self.y, self.z, "NewSunlightForceAddition", datNewSunlightAdditionCreation)
+			local val = cget:getVoxel(cx, cy, cz)
+			local dat = cget:getVoxelFirstData(cx, cy, cz)
+			if TileLightable(val, true) and dat > 0 then
+				NewLightOperation(self.x, self.y, self.z, "NewSunlightForceAddition", dat)
 			end
 		end
 	elseif lightoperation == "NewSunlightDownAddition" then
 		return function()
-			local valNewSunlightDownAddition = cget:getVoxel(cx, cy, cz)
-			local datNewSunlightDownAddition = cget:getVoxelFirstData(cx, cy, cz)
-			if TileLightable(valNewSunlightDownAddition) and datNewSunlightDownAddition <= self.value then
+			local val = cget:getVoxel(cx, cy, cz)
+			local dat = cget:getVoxelFirstData(cx, cy, cz)
+			if TileLightable(val) and dat <= self.value then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
 				NewLightOperation(self.x, self.y - 1, self.z, "NewSunlightDownAddition", self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
@@ -74,8 +74,8 @@ local function LightningQueries(self, lightoperation)
 		end
 	elseif lightoperation == "NewLocalLightForceAddition" then
 		return function()
-			local valNewLocalLightForceAddition, _, _ = cget:getVoxel(cx, cy, cz)
-			if self.value >= 0 and TileLightable(valNewLocalLightForceAddition, true) then
+			local val, _, _ = cget:getVoxel(cx, cy, cz)
+			if self.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelSecondData(cx, cy, cz, self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = self.x + dir.x
@@ -85,33 +85,33 @@ local function LightningQueries(self, lightoperation)
 		end
 	elseif lightoperation == "NewLocalLightSubtraction" then
 		return function()
-			local valNewLocalLightSub, _ = cget:getVoxel(cx, cy, cz)
-			local fgetNewLocalLightSub = cget:getVoxelSecondData(cx, cy, cz)
-			if fgetNewLocalLightSub > 0 and self.value >= 0 and TileLightable(valNewLocalLightSub, true) then
-				if fgetNewLocalLightSub < self.value then
+			local val, _ = cget:getVoxel(cx, cy, cz)
+			local fget = cget:getVoxelSecondData(cx, cy, cz)
+			if fget > 0 and self.value >= 0 and TileLightable(val, true) then
+				if fget < self.value then
 					cget:setVoxelSecondData(cx, cy, cz, 0)
 					for _, dir in ipairs(SIXDIRECTIONS) do
 						local nx, ny, nz = self.x + dir.x, self.y + dir.y, self.z + dir.z
-						NewLightOperation(nx, ny, nz, "NewLocalLightSubtraction", fgetNewLocalLightSub)
+						NewLightOperation(nx, ny, nz, "NewLocalLightSubtraction", fget)
 					end
 				else
-					NewLightOperation(self.x, self.y, self.z, "NewLocalLightForceAddition", fgetNewLocalLightSub)
+					NewLightOperation(self.x, self.y, self.z, "NewLocalLightForceAddition", fget)
 				end
 				return false
 			end
 		end
 	elseif lightoperation == "NewLocalLightAdditionCreation" then
 		return function()
-			local valNewLocalLightAdditionCrea, _, datNewLocalLightAdditionCrea = cget:getVoxel(cx, cy, cz)
-			if TileLightable(valNewLocalLightAdditionCrea, true) and valNewLocalLightAdditionCrea > 0 then
-				NewLightOperation(self.x, self.y, self.z, "NewLocalLightForceAddition", datNewLocalLightAdditionCrea)
+			local val, _, dat = cget:getVoxel(cx, cy, cz)
+			if TileLightable(val, true) and dat > 0 then
+				NewLightOperation(self.x, self.y, self.z, "NewLocalLightForceAddition", dat)
 			end
 		end
 	elseif lightoperation == "NewSunlightAddition" then
 		return function()
-			local valNewSunlightAdd = cget:getVoxel(cx, cy, cz)
-			local datNewSunlightAdd = cget:getVoxelFirstData(cx, cy, cz)
-			if self.value >= 0 and TileLightable(valNewSunlightAdd, true) and datNewSunlightAdd < self.value then
+			local val = cget:getVoxel(cx, cy, cz)
+			local dat = cget:getVoxelFirstData(cx, cy, cz)
+			if self.value >= 0 and TileLightable(val, true) and dat < self.value then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = self.x + dir.x
@@ -122,8 +122,8 @@ local function LightningQueries(self, lightoperation)
 	elseif lightoperation == "NewLocalLightAddition" then
 		return function()
 			local localcx, localcy, localcz = Localize(self.x, self.y, self.z)
-			local valNewLocalLightAddition, _, datNewLocalLightAddition = cget:getVoxel(localcx, localcy, localcz)
-			if TileLightable(valNewLocalLightAddition, true) and datNewLocalLightAddition < self.value then
+			local val, _, dat = cget:getVoxel(localcx, localcy, localcz)
+			if TileLightable(val, true) and dat < self.value then
 				cget:setVoxelSecondData(localcx, localcy, localcz, self.value)
 				if self.value > 1 then
 					for _, dir in ipairs(SIXDIRECTIONS) do
@@ -135,17 +135,17 @@ local function LightningQueries(self, lightoperation)
 		end
 	elseif lightoperation == "NewSunlightSubtraction" then
 		return function()
-			local valNewSunlightSub = cget:getVoxel(cx, cy, cz)
-			local fgetSunlightSub = cget:getVoxelFirstData(cx, cy, cz)
-			if fgetSunlightSub > 0 and self.value >= 0 and TileLightable(valNewSunlightSub, true) then
-				if fgetSunlightSub < self.value then
+			local val = cget:getVoxel(cx, cy, cz)
+			local fget = cget:getVoxelFirstData(cx, cy, cz)
+			if fget > 0 and self.value >= 0 and TileLightable(val, true) then
+				if fget < self.value then
 					cget:setVoxelFirstData(cx, cy, cz, Tiles.AIR_Block.id)
 					for _, dir in ipairs(SIXDIRECTIONS) do
 						local x = self.x + dir.x
-						NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewSunlightSubtraction", fgetSunlightSub)
+						NewLightOperation(x, self.y + dir.y, self.z + dir.z, "NewSunlightSubtraction", fget)
 					end
 				else
-					NewLightOperation(self.x, self.y, self.z, "NewSunlightForceAddition", fgetSunlightSub)
+					NewLightOperation(self.x, self.y, self.z, "NewSunlightForceAddition", fget)
 				end
 				return false
 			end
