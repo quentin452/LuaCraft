@@ -4,15 +4,6 @@ local Lovefilesystem = Lovez.filesystem
 local UserDirectory = Lovefilesystem.getUserDirectory()
 local Luacraftconfig = UserDirectory .. ".LuaCraft\\Luacraftconfig.txt"
 local LogFilePath = UserDirectory .. "\\.LuaCraft\\Luacraft.log"
-local function openLogFile(mode)
-	return io.open(LogFilePath, mode)
-end
-
-local function closeLogFile(file)
-	if file then
-		file:close()
-	end
-end
 
 local function customReadFile(filePath)
 	local file, error_message = io.open(filePath, "r")
@@ -24,8 +15,9 @@ local function customReadFile(filePath)
 		return nil, error_message
 	end
 end
+
 local function writeToLog(level, ...)
-	local file, err = openLogFile("a") -- "a" stands for append mode
+	local file, err = io.open(LogFilePath, "a") -- "a" stands for append mode
 
 	if file then
 		local message = os.date("[%Y-%m-%d %H:%M:%S] ") .. level .. " "
@@ -35,14 +27,16 @@ local function writeToLog(level, ...)
 		end
 		message = message .. "\n"
 		file:write(message)
-		closeLogFile(file)
+		if file then
+			file:close()
+		end
 	else
 		print("Failed to open log file. Error:", err)
 	end
 end
 
 local function getLuaCraftPrintLoggingValue(pattern)
-	local file_content, error_message = customReadFile(Luacraftconfig)
+	local file_content = customReadFile(Luacraftconfig)
 	return file_content and file_content:match(pattern)
 end
 
