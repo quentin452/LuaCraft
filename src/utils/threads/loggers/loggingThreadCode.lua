@@ -26,7 +26,7 @@ local function writeToLog(level, ...)
 	local file, err = openLogFile("a") -- "a" stands for append mode
 
 	if file then
-		local message = os.date("[%Y-%m-%d %H:%M:%S] ") .. "[" .. level .. "] " .. table.concat({ ... }, " ") .. "\n"
+		local message = os.date("[%Y-%m-%d %H:%M:%S] ") .. level .. " " .. table.concat({ ... }, " ") .. "\n"
 		file:write(message)
 		closeLogFile(file)
 	else
@@ -50,11 +50,10 @@ end
 
 local function log(level, enable, ...)
 	if enable == "true" then
-		local message = table.concat({ ... }, " ")
-		writeToLog("[" .. level .. "]", message)
-		print("[" .. level .. "]", message)
+		writeToLog("[" .. level .. "]", ...)
+		print("[" .. level .. "]", ...)
 		if level == LuaCraftLoggingLevel.ERROR then
-			error(message)
+			error(...)
 		end
 	end
 end
