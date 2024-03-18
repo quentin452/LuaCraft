@@ -162,7 +162,7 @@ function NewChunkSlice(x, y, z, parent)
 					if thisTransparency < transparency3 then
 						TileRendering(chunk, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
 						BlockRendering(chunk, i, j, k, x, y, z, thisTransparency, Light, SliceModels, BlockModelScale)
-					--[[	local data = {
+						--[[local data = {
 							i,
 							j,
 							k,

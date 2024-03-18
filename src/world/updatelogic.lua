@@ -19,6 +19,7 @@ local function PlayerInitIfNeeded()
 	end
 	_JPROFILER.pop("PlayerInitIfNeeded")
 end
+
 local function GetOrCreateChunk(chunkX, chunkZ)
 	_JPROFILER.push("GetOrCreateChunk")
 	local chunk = ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
@@ -27,10 +28,12 @@ local function GetOrCreateChunk(chunkX, chunkZ)
 		ChunkSet[chunk] = true
 		ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 		ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
+		--BlockModellingChannel:push({ chunkX = chunkX, chunkZ = chunkZ })
 	end
 	_JPROFILER.pop("GetOrCreateChunk")
 	return chunk
 end
+
 local function forceChunkModelsRemoval(chunk)
 	_JPROFILER.push("forceChunkModelsRemoval")
 	if chunk.slices then

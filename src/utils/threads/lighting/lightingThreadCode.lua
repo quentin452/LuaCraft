@@ -194,7 +194,7 @@ function NewLightOperation(x, y, z, lightoperation, value)
 end
 
 while true do
-	print("Entrée de la boucle") -- Ajout d'un print pour marquer le début de chaque itération de la boucle
+	print("Entrée de la boucle")
 	local message1 = ThreadLightingChannel:demand()
 	if message1 then
 		local action = message1[1]
@@ -211,7 +211,7 @@ while true do
 			if response then
 				local cget, cx, cy, cz, hashx, hashy = unpack(response)
 				ThreadLightingChannel:push({ cget, cx, cy, cz, hashx, hashy })
-				print("Chunk demandé et envoyé au canal ThreadLightingChannel") -- Print indiquant que le chunk a été demandé et envoyé
+				print("Chunk demandé et envoyé au canal ThreadLightingChannel")
 			else
 				print("Aucune réponse reçue du canal ThreadLightingChannel")
 			end
@@ -221,5 +221,5 @@ while true do
 			print("Canal d'éclairage mis à jour")
 		end
 	end
-	print("Fin de l'itération de la boucle") -- Ajout d'un print pour marquer la fin de chaque itération de la boucle
+	print("Fin de l'itération de la boucle")
 end
