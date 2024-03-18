@@ -86,10 +86,13 @@ function keysinitMenuSettings(k)
 				LuaCraftSettingsUpdater("toggleVSync")
 			elseif _MainMenuSettings.selection == 2 then
 				LuaCraftSettingsUpdater("NormalLoggingToggler")
+				ThreadLogChannel:supply({ "ResetLoggerKeys", false })
 			elseif _MainMenuSettings.selection == 3 then
 				LuaCraftSettingsUpdater("WarnLoggingToggler")
+				ThreadLogChannel:supply({ "ResetLoggerKeys", false })
 			elseif _MainMenuSettings.selection == 4 then
 				LuaCraftSettingsUpdater("ErrorLoggingToggler")
+				ThreadLogChannel:supply({ "ResetLoggerKeys", false })
 			elseif _MainMenuSettings.selection == 5 then
 				LuaCraftSettingsUpdater("renderdistanceSetting")
 				Renderdistancegetresetted = true

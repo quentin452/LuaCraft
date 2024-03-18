@@ -62,6 +62,7 @@ HudTimeLeft = 0
 LogicAccumulator = 0
 Renderdistancegetresetted = true
 ResetMovementKeys = true
+ResetLoggerKeys = true
 PhysicsStep = true
 EnableF3 = false
 EnableF8 = false

@@ -1,4 +1,4 @@
-ThreadLogChannel, LuaCraftLoggingLevel = ...
+ThreadLogChannel, LuaCraftLoggingLevel, ResetLoggerKeys = ...
 local Lovez = love
 local Lovefilesystem = Lovez.filesystem
 local UserDirectory = Lovefilesystem.getUserDirectory()
@@ -49,7 +49,7 @@ local function getLuaCraftPrintLoggingErrorValue()
 end
 
 local function log(level, enable, ...)
-	if enable then
+	if enable == "true" then
 		local message = table.concat({ ... }, " ")
 		writeToLog("[" .. level .. "]", message)
 		print("[" .. level .. "]", message)
@@ -58,15 +58,12 @@ local function log(level, enable, ...)
 		end
 	end
 end
-EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
 local function LuaCraftPrintLoggingNormal(...)
 	log(LuaCraftLoggingLevel.NORMAL, EnableLuaCraftPrintLoggingNormal, ...)
 end
-EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
 local function LuaCraftWarnLogging(...)
 	log(LuaCraftLoggingLevel.WARNING, EnableLuaCraftLoggingWarn, ...)
 end
-EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
 
 local function LuaCraftErrorLogging(...)
 	log(LuaCraftLoggingLevel.ERROR, EnableLuaCraftLoggingError, ...)
@@ -76,7 +73,18 @@ while true do
 	local message = ThreadLogChannel:demand()
 	if message then
 		local level, logMessage = unpack(message)
-		if level == LuaCraftLoggingLevel.WARNING then
+		if ResetLoggerKeys == true then
+			EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
+			EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
+			EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
+			ResetLoggerKeys = false
+		end
+		if level == "ResetLoggerKeys" then
+			ResetLoggerKeys = logMessage
+			EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
+			EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
+			EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
+		elseif level == LuaCraftLoggingLevel.WARNING then
 			LuaCraftWarnLogging(logMessage)
 		elseif level == LuaCraftLoggingLevel.NORMAL then
 			LuaCraftPrintLoggingNormal(logMessage)
