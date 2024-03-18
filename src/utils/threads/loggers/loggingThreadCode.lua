@@ -53,6 +53,9 @@ local function log(level, enable, ...)
 		local message = table.concat({ ... }, " ")
 		writeToLog("[" .. level .. "]", message)
 		print("[" .. level .. "]", message)
+		if level == LuaCraftLoggingLevel.ERROR then
+			error(message)
+		end
 	end
 end
 EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
