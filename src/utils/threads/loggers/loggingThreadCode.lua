@@ -1,4 +1,4 @@
-ThreadLogChannel, LuaCraftLoggingLevel, ResetLoggerKeys = ...
+ThreadLogChannel, LuaCraftLoggingLevel, ResetLoggerKeysn = ...
 local Lovez = love
 local Lovefilesystem = Lovez.filesystem
 local UserDirectory = Lovefilesystem.getUserDirectory()
@@ -7,12 +7,14 @@ local LogFilePath = UserDirectory .. "\\.LuaCraft\\Luacraft.log"
 local function openLogFile(mode)
 	return io.open(LogFilePath, mode)
 end
+
 local function closeLogFile(file)
 	if file then
 		file:close()
 	end
 end
-function customReadFile(filePath)
+
+local function customReadFile(filePath)
 	local file, error_message = io.open(filePath, "r")
 	if file then
 		local content = file:read("*a") -- *a read all things in the configurations
@@ -26,27 +28,27 @@ local function writeToLog(level, ...)
 	local file, err = openLogFile("a") -- "a" stands for append mode
 
 	if file then
-		local message = os.date("[%Y-%m-%d %H:%M:%S] ") .. level .. " " .. table.concat({ ... }, " ") .. "\n"
+		local message = os.date("[%Y-%m-%d %H:%M:%S] ") .. level .. " "
+		local args = { ... }
+		for i = 1, #args do
+			message = message .. tostring(args[i]) .. " "
+		end
+		message = message .. "\n"
 		file:write(message)
 		closeLogFile(file)
 	else
 		print("Failed to open log file. Error:", err)
 	end
 end
-local function getLuaCraftPrintLoggingNormalValue()
+
+local function getLuaCraftPrintLoggingValue(pattern)
 	local file_content, error_message = customReadFile(Luacraftconfig)
-	return file_content and file_content:match("LuaCraftPrintLoggingNormal=(%a+)")
+	return file_content and file_content:match(pattern)
 end
 
-local function getLuaCraftPrintLoggingWarnValue()
-	local file_content, error_message = customReadFile(Luacraftconfig)
-	return file_content and file_content:match("LuaCraftWarnLogging=(%a+)")
-end
-
-local function getLuaCraftPrintLoggingErrorValue()
-	local file_content, error_message = customReadFile(Luacraftconfig)
-	return file_content and file_content:match("LuaCraftErrorLogging=(%a+)")
-end
+EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingValue("LuaCraftPrintLoggingNormal=(%a+)")
+EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingValue("LuaCraftWarnLogging=(%a+)")
+EnableLuaCraftLoggingError = getLuaCraftPrintLoggingValue("LuaCraftErrorLogging=(%a+)")
 
 local function log(level, enable, ...)
 	if enable == "true" then
@@ -67,30 +69,27 @@ end
 local function LuaCraftErrorLogging(...)
 	log(LuaCraftLoggingLevel.ERROR, EnableLuaCraftLoggingError, ...)
 end
-
+local loggingFunctions = {
+	[LuaCraftLoggingLevel.WARNING] = LuaCraftWarnLogging,
+	[LuaCraftLoggingLevel.NORMAL] = LuaCraftPrintLoggingNormal,
+	[LuaCraftLoggingLevel.ERROR] = LuaCraftErrorLogging,
+}
 while true do
 	local message = ThreadLogChannel:demand()
 	if message then
 		local level, logMessage = unpack(message)
-		if ResetLoggerKeys == true then
-			EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
-			EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
-			EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
-			ResetLoggerKeys = false
-		end
 		if level == "ResetLoggerKeys" then
 			ResetLoggerKeys = logMessage
-			EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingNormalValue()
-			EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingWarnValue()
-			EnableLuaCraftLoggingError = getLuaCraftPrintLoggingErrorValue()
-		elseif level == LuaCraftLoggingLevel.WARNING then
-			LuaCraftWarnLogging(logMessage)
-		elseif level == LuaCraftLoggingLevel.NORMAL then
-			LuaCraftPrintLoggingNormal(logMessage)
-		elseif level == LuaCraftLoggingLevel.ERROR then
-			LuaCraftErrorLogging(logMessage)
+			EnableLuaCraftPrintLoggingNormal = getLuaCraftPrintLoggingValue("LuaCraftPrintLoggingNormal=(%a+)")
+			EnableLuaCraftLoggingWarn = getLuaCraftPrintLoggingValue("LuaCraftWarnLogging=(%a+)")
+			EnableLuaCraftLoggingError = getLuaCraftPrintLoggingValue("LuaCraftErrorLogging=(%a+)")
 		else
-			LuaCraftErrorLogging("You used a wrong level for logging:" .. level)
+			local loggingFunction = loggingFunctions[level]
+			if loggingFunction then
+				loggingFunction(logMessage)
+			else
+				LuaCraftErrorLogging("You used a wrong level for logging:" .. level)
+			end
 		end
 	end
 end
