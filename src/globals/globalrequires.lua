@@ -28,6 +28,8 @@ local modules = {
 	"utils/commands/commandsexec",
 	"utils/threads/threadtest",
 	"utils/threads/loggers/loggingThreadCreator",
+	"utils/threads/modeling/blockmodellingThreadCreator",
+	"utils/threads/lighting/lightingThreadCreator",
 	"entities/player",
 	"world/lighting",
 	"world/updatelogic",
@@ -39,8 +41,8 @@ local modules = {
 	"world/chunks/chunkmain",
 	"init/!init",
 	"client/huds/!draw",
-	"client/blocks/blockrendering",
 	"client/blocks/tilerendering",
+	"client/blocks/blockrendering",
 	"modloader/modloaderinit",
 }
 local function requireGroup(group, path)

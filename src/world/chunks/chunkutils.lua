@@ -145,34 +145,50 @@ function NewChunkSlice(x, y, z, parent)
 	compmodel.culling = false
 	t:assignModel(compmodel)
 	t.isUpdating = false
-	t.updateModel = function(self)
-		if not self or not self.parent or not self.model then
+	t.updateModel = function(chunk)
+		if not chunk or not chunk.parent or not chunk.model then
 			return
 		end
-		self.isUpdating = true
+		chunk.isUpdating = true
 		SliceModels = {}
 		for i = 1, ChunkSize do
-			for j = self.y, self.y + SliceHeight - 1 do
+			for j = chunk.y, chunk.y + SliceHeight - 1 do
 				for k = 1, ChunkSize do
-					local this, thisSunlight, thisLocalLight = self.parent:getVoxel(i, j, k)
+					local this, thisSunlight, thisLocalLight = chunk.parent:getVoxel(i, j, k)
 					local Light = math.max(thisSunlight, thisLocalLight)
 					local thisTransparency = TileTransparency(this)
 					local x, y, z =
-						(self.x - 1) * ChunkSize + i - 1, 1 * j * BlockModelScale, (self.z - 1) * ChunkSize + k - 1
+						(chunk.x - 1) * ChunkSize + i - 1, 1 * j * BlockModelScale, (chunk.z - 1) * ChunkSize + k - 1
 					if thisTransparency < transparency3 then
-						TileRendering(self, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
-						BlockRendering(self, i, j, k, x, y, z, thisTransparency, Light, SliceModels, BlockModelScale)
+						TileRendering(chunk, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
+						BlockRendering(chunk, i, j, k, x, y, z, thisTransparency, Light, SliceModels, BlockModelScale)
+					--[[	local data = {
+							i,
+							j,
+							k,
+							x,
+							y,
+							z,
+							thisTransparency,
+							Light,
+							SliceModels,
+							BlockModelScale,
+							chunk.x,
+							chunk.y,
+							chunk.z,
+						}
+						BlockModellingChannel:push(data)]]
 					end
 				end
 			end
 		end
-		if self.model then
-			self.model:setVerts(SliceModels)
+		if chunk.model then
+			chunk.model:setVerts(SliceModels)
 		end
-		self.isUpdating = false
+		chunk.isUpdating = false
 	end
-	t.destroyModel = function(self)
-		self.model.dead = true
+	t.destroyModel = function(chunk)
+		chunk.model.dead = true
 	end
 	return t
 end

@@ -104,3 +104,15 @@ LuaCraftLoggingLevel = {
 	WARNING = "WARN",
 	ERROR = "FATAL",
 }
+LightOpe = {
+	SunDownAdd = "NewSunlightDownAddition",
+	SunForceAdd = "NewSunlightForceAddition",
+	SunCreationAdd = "NewSunlightAdditionCreation",
+	SunAdd = "NewSunlightAddition",
+	SunSubtract = "NewSunlightSubtraction",
+	SunDownSubtract = "NewSunlightDownSubtraction",
+	LocalAdd = "NewLocalLightAddition",
+	LocalSubtract = "NewLocalLightSubtraction",
+	LocalForceAdd = "NewLocalLightForceAddition",
+	LocalCreationAdd = "NewLocalLightAdditionCreation",
+}

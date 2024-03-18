@@ -10,26 +10,28 @@ function iterateOverAllTiles()
 		local blockSideTexture = value.blockSideTexture or "N/A"
 		local blockBottomMasterTexture = value.blockBottomMasterTexture or "N/A"
 
-		ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "Tile Name: "
-		.. value.blockstringname
-		.. " Index: "
-		.. value.id
-		.. " Transparency: "
-		.. value.transparency
-		.. " Light Source: "
-		.. value.LightSources
-		.. " Can Collide?: "
-		.. value.Cancollide
-		.. " Type: "
-		.. value.BlockOrLiquidOrTile
-		.. " BottomMaster Texture: "
-		.. blockBottomMasterTexture
-		.. " Side Texture: "
-		.. blockSideTexture
-		.. " Top Texture: "
-		.. blockTopTexture
-		.. "\n-----------------------------------------------------------------------------------------------------------------------"
-})
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.NORMAL,
+			"Tile Name: "
+				.. value.blockstringname
+				.. " Index: "
+				.. value.id
+				.. " Transparency: "
+				.. value.transparency
+				.. " Light Source: "
+				.. value.LightSources
+				.. " Can Collide?: "
+				.. value.Cancollide
+				.. " Type: "
+				.. value.BlockOrLiquidOrTile
+				.. " BottomMaster Texture: "
+				.. blockBottomMasterTexture
+				.. " Side Texture: "
+				.. blockSideTexture
+				.. " Top Texture: "
+				.. blockTopTexture
+				.. "\n-----------------------------------------------------------------------------------------------------------------------",
+		})
 	end
 end
 function InitializeGame()
@@ -42,6 +44,15 @@ function InitializeGame()
 	_JPROFILER.push("createLoggingThread")
 	ThreadLogChannel = createLoggingThread()
 	_JPROFILER.pop("createLoggingThread")
+	--TODO FIX LIGHTING THREAD
+	--_JPROFILER.push("createLightningThread")
+	--ThreadLightingChannel = createLightningThread()
+	--_JPROFILER.pop("createLightningThread")
+	--TODO FIX BLOCK MODELLING THREAD
+	--_JPROFILER.push("createBlockModellingThread")
+	--BlockModellingChannel = createBlockModellingThread()
+	--_JPROFILER.pop("createBlockModellingThread")
+	--TODO MADE GET BLOCK /CHUNK THREAD FOR TESTINGS
 	_JPROFILER.push("ReLoadMovementKeyValues")
 	ReLoadMovementKeyValues()
 	_JPROFILER.pop("ReLoadMovementKeyValues")

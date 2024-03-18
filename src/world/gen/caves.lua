@@ -81,6 +81,13 @@ function NewCave(x, y, z)
 
 								if cy == chunk.heightMap[cx][cz] then
 									NewLightOperation(gx, gy, gz, "NewSunlightDownAddition", LightSources[15])
+								--[[	ThreadLightingChannel:push({
+										gx,
+										gy,
+										gz,
+										LightOpe.SunDownAdd,
+										LightSources[15],
+									})]]
 								end
 							end
 						end

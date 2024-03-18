@@ -26,11 +26,11 @@ local function createTileModel(tileID, thisLight, BlockModelScale)
 	return vertices
 end
 
-function TileRendering(self, i, j, k, x, y, z, thisLight, model, BlockModelScale)
+function TileRendering(chunk, i, j, k, x, y, z, thisLight, model, BlockModelScale)
 	_JPROFILER.push("TileRendering")
 
 	-- Retrieve the tile ID at the given position
-	local this = self.parent:getVoxel(i, j, k)
+	local this = chunk.parent:getVoxel(i, j, k)
 
 	-- Check if the tile has a 2D model
 	if TileModel(this) == 1 then
