@@ -137,11 +137,7 @@ function LoadMods()
 					local loadTime = endTime - startTime
 					ThreadLogChannel:push({
 						LuaCraftLoggingLevel.NORMAL,
-						"Load time for",
-						modName,
-						":",
-						loadTime,
-						"seconds",
+						"Load time for" .. modName .. ": " .. loadTime .. " seconds",
 					})
 				else
 					ThreadLogChannel:push({ LuaCraftLoggingLevel.ERROR, "Failed to load mod:", modName })
