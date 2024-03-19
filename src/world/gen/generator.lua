@@ -1,3 +1,4 @@
+local temp = {}
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 
@@ -9,7 +10,6 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 		local xx = (x - 1) * ChunkSize + i
 
 		for k = 1, ChunkSize do
-			local temp = {}
 			local zz = (z - 1) * ChunkSize + k
 			chunk.heightMap[i][k] = 0
 
@@ -58,7 +58,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 			chunk.voxels[i][k] = table.concat(temp)
 		end
 	end
-
+	temp = {}
 	_JPROFILER.pop("GenerateTerrain")
 end
 
