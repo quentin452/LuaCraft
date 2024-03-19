@@ -29,6 +29,7 @@ function GamestatePlayingGameSettingsMouseAndKeybindLogic(x, y, b)
 				_MainMenuSettings.selection = 0
 			elseif choiceClicked == 7 then
 				if Gamestate == GamestatePlayingGameSettings then
+					love.mouse.setRelativeMode(true)
 					Gamestate = GamestatePlayingGame
 					_MainMenuSettings.selection = 0
 				elseif Gamestate == GamestateMainMenuSettings then
