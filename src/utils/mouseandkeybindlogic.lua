@@ -43,28 +43,23 @@ function KeyPressed(k)
 	local numberPress = tonumber(k)
 	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and FixinputforDrawCommandInput == false then
 		PlayerInventory.hotbarSelect = numberPress
-	end
-	if Gamestate == GamestateMainMenu then
+	elseif Gamestate == GamestateMainMenu then
 		_JPROFILER.push("keysinitMainMenu")
 		keysinitMainMenu(k)
 		_JPROFILER.pop("keysinitMainMenu")
-	end
-	if Gamestate == GamestateMainMenuSettings or Gamestate == GamestatePlayingGameSettings then
+	elseif Gamestate == GamestateMainMenuSettings or Gamestate == GamestatePlayingGameSettings then
 		_JPROFILER.push("keysinitMenuSettings")
 		keysinitMenuSettings(k)
 		_JPROFILER.pop("keysinitMenuSettings")
-	end
-	if Gamestate == GamestateKeybindingMainSettings or Gamestate == GamestateKeybindingPlayingGameSettings then
+	elseif Gamestate == GamestateKeybindingMainSettings or Gamestate == GamestateKeybindingPlayingGameSettings then
 		_JPROFILER.push("keysinitKeybindingSettings")
 		keysinitKeybindingSettings(k)
 		_JPROFILER.pop("keysinitKeybindingSettings")
-	end
-	if Gamestate == GamestateWorldCreationMenu then
+	elseif Gamestate == GamestateWorldCreationMenu then
 		_JPROFILER.push("keysInitWorldCreationMenu")
 		keysInitWorldCreationMenu(k)
 		_JPROFILER.pop("keysInitWorldCreationMenu")
-	end
-	if Gamestate == GamestatePlayingGame then
+	elseif Gamestate == GamestatePlayingGame then
 		if k == "escape" then
 			if EnableCommandHUD then
 				FixinputforDrawCommandInput = false
@@ -89,9 +84,7 @@ function KeyPressed(k)
 			ExecuteCommand(CurrentCommand)
 			CurrentCommand = ""
 		end
-	end
-
-	if Gamestate == GamestateGamePausing then
+	elseif Gamestate == GamestateGamePausing then
 		_JPROFILER.push("keysinitGamePlayingPauseMenu")
 		keysinitGamePlayingPauseMenu(k)
 		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
