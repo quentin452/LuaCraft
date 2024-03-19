@@ -108,6 +108,7 @@ function keysinitMenuSettings(k)
 			elseif _MainMenuSettings.selection == 7 then
 				if Gamestate == GamestatePlayingGameSettings then
 					Gamestate = GamestatePlayingGame
+					love.mouse.setRelativeMode(true)
 					_MainMenuSettings.selection = 0
 				elseif Gamestate == GamestateMainMenuSettings then
 					Gamestate = GamestateMainMenu
