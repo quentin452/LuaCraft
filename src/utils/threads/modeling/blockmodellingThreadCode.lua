@@ -1,4 +1,4 @@
-BlockModellingChannel, ChunkSize, ChunkHashTable, WorldHeight, TilesTextureList = ...
+BlockModellingChannel, ChunkSize, ChunkHashTable, WorldHeight, TilesTextureList, ChunkHashTableChannel = ...
 
 -- Cached voxel states
 local getTop
@@ -11,6 +11,33 @@ local getNegativeZ
 local blockVertices = {}
 local function TileTextures(n)
 	return TilesTextureList[n]
+end
+local function ChunkHash(x)
+	return x < 0 and 2 * math.abs(x) or 1 + 2 * x
+end
+local function GetChunk(x, y, z)
+	local x = math.floor(x)
+	local y = math.floor(y)
+	local z = math.floor(z)
+	local hashx, hashy = ChunkHash(math.floor(x / ChunkSize) + 1), ChunkHash(math.floor(z / ChunkSize) + 1)
+	local getChunk = nil
+	if ChunkHashTable[hashx] ~= nil then
+		getChunk = ChunkHashTable[hashx][hashy]
+	end
+	if y < 1 or y > WorldHeight then
+		getChunk = nil
+	end
+
+	local mx, mz = x % ChunkSize + 1, z % ChunkSize + 1
+
+	-- Ajout de messages de débogage pour comprendre ce qui se passe
+	if getChunk then
+		print("Chunk trouvé pour les coordonnées:", x, y, z)
+	else
+		print("Chunk non trouvé pour les coordonnées:", x, y, z)
+	end
+
+	return getChunk, mx, y, mz, hashx, hashy
 end
 -- Checks if a face can be drawn based on transparency
 local function CanDrawFace(get, thisTransparency)
@@ -115,9 +142,6 @@ end
 
 -- Checks if the block at the specified coordinates is valid
 local function checkBlockValidity(chunk, i, j, k)
-	--	if not chunk then
-	--		return false
-	--	end
 	local this = chunk.parent:getVoxel(i, j, k)
 	local value = GetValueFromTilesById(this)
 	if value then
@@ -152,52 +176,24 @@ end
 
 -- Renders the block at the specified coordinates
 local function BlockRendering(chunk, i, j, k, x, y, z, thisTransparency, thisLight, model, BlockModelScale)
-	if chunk == nil then
-		-- Ajoutez un message de débogage pour indiquer que le chunk est nul
-		print("Chunk est nil. Impossible de rendre le bloc.")
-		return
-	end
-
 	if not checkBlockValidity(chunk, i, j, k) then
 		return
 	end
 	updateAdjacentBlocks(chunk, i, j, k, x, y, z)
 	DrawFaces(model, thisTransparency, thisLight, BlockModelScale, x, y, z)
 end
-local function ChunkHash(x)
-	return x < 0 and 2 * math.abs(x) or 1 + 2 * x
-end
-local function GetChunk(x, y, z)
-	local x = math.floor(x)
-	local y = math.floor(y)
-	local z = math.floor(z)
-	print("x:", x, "y:", y, "z:", z)
-	local hashx, hashy = ChunkHash(math.floor(x / ChunkSize) + 1), ChunkHash(math.floor(z / ChunkSize) + 1)
-	local getChunk = nil
-	if ChunkHashTable[hashx] ~= nil then
-		getChunk = ChunkHashTable[hashx][hashy]
-	end
-	if not getChunk or y < 1 or y > WorldHeight then
-		return nil
-	end
-	local mx, mz = x % ChunkSize + 1, z % ChunkSize + 1
-	return getChunk, mx, y, mz, hashx, hashy
-end
-local chunkTable = {}
 
 while true do
 	local data = BlockModellingChannel:demand()
-	if data and data.chunkX and data.chunkZ then
-		chunkTable.chunkX = data.chunkX
-		chunkTable.chunkZ = data.chunkZ
-
-		print("Demande de chunk à X:", chunkTable.chunkX, "Z:", chunkTable.chunkZ)
+	if data then
+		local chunkX, chunkZ = unpack(data)
 		local chunk, i, j, k, x, y, z, thisTransparency, Light, SliceModels, BlockModelScale =
-			GetChunk(chunkTable.chunkX, 0, chunkTable.chunkZ) -- chunkY est temporairement fixé à 0
+			GetChunk(chunkX, 0, chunkZ)
 		if chunk then
 			BlockRendering(chunk, i, j, k, x, y, z, thisTransparency, Light, SliceModels, BlockModelScale)
+		else
 		end
 	else
-		print("data, chunkX ou chunkZ est nil")
+		print("Données, chunkX ou chunkZ sont nulles")
 	end
 end

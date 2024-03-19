@@ -44,14 +44,14 @@ function InitializeGame()
 	_JPROFILER.push("createLoggingThread")
 	ThreadLogChannel = createLoggingThread()
 	_JPROFILER.pop("createLoggingThread")
-	--TODO MADE THIS USEFULL : FOR NOW ChunkHashTableChannel made nothing
-	--_JPROFILER.push("createChunkHashTableThread")
-	--ChunkHashTableChannel = createChunkHashTableThread()
-	--_JPROFILER.pop("createChunkHashTableThread")
 	--TODO FIX BLOCK MODELLING THREAD
-	--_JPROFILER.push("createBlockModellingThread")
-	--BlockModellingChannel = createBlockModellingThread()
-	--_JPROFILER.pop("createBlockModellingThread")
+--	_JPROFILER.push("createBlockModellingThread")
+--	BlockModellingChannel = createBlockModellingThread()
+--	_JPROFILER.pop("createBlockModellingThread")
+	--TODO MADE THIS USEFULL : FOR NOW ChunkHashTableChannel made nothing
+--	_JPROFILER.push("createChunkHashTableThread")
+--	ChunkHashTableChannel = createChunkHashTableThread()
+--	_JPROFILER.pop("createChunkHashTableThread")
 	--TODO MADE GET BLOCK /CHUNK THREAD FOR TESTINGS
 	_JPROFILER.push("ReLoadMovementKeyValues")
 	ReLoadMovementKeyValues()
