@@ -1,60 +1,49 @@
 local temp = {}
+local dirt = 4
+local grass = true
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
-
-	local dirt = 4
-	local grass = true
-
 	for i = 1, ChunkSize do
 		chunk.voxels[i] = {}
 		local xx = (x - 1) * ChunkSize + i
-
 		for k = 1, ChunkSize do
 			local zz = (z - 1) * ChunkSize + k
 			chunk.heightMap[i][k] = 0
-
 			local sunlight = true
 			for j = WorldHeight, 1, -1 do
 				local yy = (j - 1) * TileDataSize + 1
 				local genFuncResult = generationFunction(chunk, xx, j, zz)
-
 				for a = 1, TileDataSize - 1 do
 					temp[yy + a] = string.char(LightSources[0])
 				end
 				if sunlight then
 					temp[yy + 1] = string.char(LightSources[15])
 				end
-
 				if j < chunk.floor then
 					temp[yy] = string.char(Tiles.STONE_Block.id)
 					sunlight = false
 				else
 					temp[yy] = string.char(Tiles.AIR_Block.id)
-
 					if genFuncResult then
-						if not grass then
-							if dirt > 0 then
-								dirt = dirt - 1
-								temp[yy] = string.char(Tiles.DIRT_Block.id)
-							else
-								temp[yy] = string.char(Tiles.STONE_Block.id)
-							end
+						if not grass and dirt > 0 then
+							dirt = dirt - 1
+							temp[yy] = string.char(Tiles.DIRT_Block.id)
+						elseif not grass then
+							temp[yy] = string.char(Tiles.STONE_Block.id)
 						else
 							grass = false
 							temp[yy] = string.char(Tiles.GRASS_Block.id)
 						end
-
 						if sunlight then
 							chunk.heightMap[i][k] = j
+							sunlight = false
 						end
-						sunlight = false
 					else
 						grass = true
 						dirt = 4
 					end
 				end
 			end
-
 			chunk.voxels[i][k] = table.concat(temp)
 		end
 	end
