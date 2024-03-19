@@ -25,21 +25,18 @@ end
 
 function NewCave(x, y, z)
 	_JPROFILER.push("NewCave")
-
-	local t = {}
-	t.x = x
-	t.y = y
-	t.z = z
-	t.lifeTimer = rand(64, 256)
-
-	t.theta = math.random() * math.pi * 2
-	t.deltaTheta = 0
-	t.phi = math.random() * math.pi * 2
-	t.deltaPhi = 0
-
-	t.radius = rand(2, 3, 0.1)
-	t.carveIndex = 0
-
+	local t = {
+		x = x,
+		y = y,
+		z = z,
+		lifeTimer = rand(64, 256),
+		theta = math.random() * math.pi * 2,
+		deltaTheta = 0,
+		phi = math.random() * math.pi * 2,
+		deltaPhi = 0,
+		radius = rand(2, 3, 0.1),
+		carveIndex = 0,
+	}
 	t.query = function(self)
 		local sinThetaCosPhi = math.sin(self.theta) * math.cos(self.phi)
 		local sinPhi = math.sin(self.phi)
