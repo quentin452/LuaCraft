@@ -22,7 +22,6 @@ end
 local function updateChunkHashTable(chunkX, chunkZ)
 	ChunkHashTableChannel:push({ chunkX, chunkZ })
 end
-
 local function GetOrCreateChunk(chunkX, chunkZ)
 	_JPROFILER.push("GetOrCreateChunk")
 	local chunk = ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
@@ -33,6 +32,7 @@ local function GetOrCreateChunk(chunkX, chunkZ)
 		ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
 		--TODO MADE THIS USEFULL : FOR NOW ChunkHashTableChannel made nothing
 		--updateChunkHashTable(chunkX, chunkZ)
+		--ThreadLightingChannel:push({ "UpdateChunkHashTable", chunkX, chunkZ })
 	end
 	_JPROFILER.pop("GetOrCreateChunk")
 	return chunk
@@ -144,7 +144,7 @@ local function processChunkUpdates(chunk)
 	elseif chunk.updateLighting == false then
 		_JPROFILER.push("LightingUpdate_processChunkUpdates")
 		LightingUpdate()
-		--ThreadLightingChannel:push({ "updateLighting" })
+	--	ThreadLightingChannel:push({ "updateLighting" })
 		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
 		chunk.updateLighting = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then

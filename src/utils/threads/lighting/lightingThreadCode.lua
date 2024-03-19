@@ -1,5 +1,7 @@
-ThreadLightingChannel, LightOpe, LightingChannel, ThreadLogChannel, LuaCraftLoggingLevel, Tiles, TilesTransparency, ChunkSize, ChunkHashTable, WorldHeight =
-	...
+ThreadLightingChannel, LightOpe, LightingChannel, ThreadLogChannel, LuaCraftLoggingLevel, Tiles, TilesTransparency, ChunkSize, ChunkHashTable, TilesById =
+	
+...
+local WorldHeight = 128
 local SIXDIRECTIONS = {
 	{ x = 0, y = -1, z = 0 }, -- Down
 	{ x = 0, y = 1, z = 0 }, -- Up
@@ -9,9 +11,23 @@ local SIXDIRECTIONS = {
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
 
+local function GetValueFromTilesById(n)
+	return TilesById[n]
+end
+local function TileTransparency(n)
+	--	if TileTransparencyCache[n] ~= nil then
+	--		return TileTransparencyCache[n]
+	--	end
+	local value = GetValueFromTilesById(n)
+	if value then
+		local blockstringname = value.blockstringname
+		local transparency = Tiles[blockstringname].transparency
+		--		TileTransparencyCache[n] = transparency
+		return transparency
+	end
+end
 local function TileLightable(n, includePartial)
-	ThreadLightingChannel:push({ "GetTileTransparency", n })
-	local t = ThreadLightingChannel:demand()
+	local t = TileTransparency(n)
 	return (t == TilesTransparency.FULL or t == TilesTransparency.NONE)
 		or (includePartial and t == TilesTransparency.PARTIAL)
 end
@@ -41,11 +57,30 @@ local function LightingUpdate()
 	LightingRemovalQueue = {}
 	LightingQueue = {}
 end
+local function ChunkHash(x)
+	return x < 0 and 2 * math.abs(x) or 1 + 2 * x
+end
+local function GetChunk(x, y, z)
+	local x = math.floor(x)
+	local y = math.floor(y)
+	local z = math.floor(z)
+	local hashx, hashy = ChunkHash(math.floor(x / ChunkSize) + 1), ChunkHash(math.floor(z / ChunkSize) + 1)
+	local getChunk = nil
+	if ChunkHashTable[hashx] ~= nil then
+		getChunk = ChunkHashTable[hashx][hashy]
+		print("ChunkHashTable contains data at hashx:", hashx, "hashy:", hashy)
+	else
+		print("ChunkHashTable is empty at hashx:", hashx, "hashy:", hashy)
+	end
+	if y < 1 or y > WorldHeight then
+		getChunk = nil
+	end
+	local mx, mz = x % ChunkSize + 1, z % ChunkSize + 1
+	return getChunk, mx, y, mz, hashx, hashy
+end
 
 local function LightningQueries(self, lightoperation)
-	--local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
-	ThreadLightingChannel:push({ "GetChunk", self.x, self.y, self.z })
-	local cget, cx, cy, cz = unpack(ThreadLightingChannel:demand())
+	local cget, cx, cy, cz = GetChunk(self.x, self.y, self.z)
 	if cget == nil then
 		return function() end
 	end
@@ -71,10 +106,8 @@ local function LightningQueries(self, lightoperation)
 		end
 	elseif lightoperation == LightOpe.SunDownAdd then
 		return function()
-			ThreadLightingChannel:push({ "GetVoxel", cx, cy, cz })
-			local val = ThreadLightingChannel:demand()
-			ThreadLightingChannel:push({ "GetVoxelFirstData", cx, cy, cz })
-			local dat = ThreadLightingChannel:demand()
+			local val = cget:getVoxel(cx, cy, cz)
+			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if TileLightable(val) and dat <= self.value then
 				cget:setVoxelFirstData(cx, cy, cz, self.value)
 				NewLightOperation(self.x, self.y - 1, self.z, LightOpe.SunDownAdd, self.value)
@@ -189,26 +222,6 @@ local operationFunctions = {
 	[LightOpe.SunDownSubtract] = LightingRemovalQueueAdd,
 }
 
-local function ChunkHash(x)
-	return x < 0 and 2 * math.abs(x) or 1 + 2 * x
-end
-
-local function GetChunk(x, y, z)
-	local x = math.floor(x)
-	local y = math.floor(y)
-	local z = math.floor(z)
-	local hashx, hashy = ChunkHash(math.floor(x / ChunkSize) + 1), ChunkHash(math.floor(z / ChunkSize) + 1)
-	local getChunk = nil
-	if ChunkHashTable[hashx] ~= nil then
-		getChunk = ChunkHashTable[hashx][hashy]
-	end
-	if y < 1 or y > WorldHeight then
-		getChunk = nil
-	end
-
-	local mx, mz = x % ChunkSize + 1, z % ChunkSize + 1
-	return getChunk, mx, y, mz, hashx, hashy
-end
 local function NewLightOperation(x, y, z, lightoperation, value)
 	local t = { x = x, y = y, z = z, value = value }
 	t.query = LightningQueries(t, lightoperation)
@@ -222,62 +235,23 @@ local function NewLightOperation(x, y, z, lightoperation, value)
 		})
 	end
 end
-local function GetVoxelGeneric(x, y, z, getFunction)
-	local chunk, cx, cy, cz = GetChunk(x, y, z)
-	local result = 0
-	if chunk ~= nil then
-		result = getFunction(chunk, cx, cy, cz)
-	end
-	return result
-end
-local function GetVoxel(x, y, z)
-	return GetVoxelGeneric(x, y, z, function(chunk, cx, cy, cz)
-		return chunk:getVoxel(cx, cy, cz)
-	end)
-end
-
-local function GetVoxelFirstData(x, y, z)
-	return GetVoxelGeneric(x, y, z, function(chunk, cx, cy, cz)
-		return chunk:getVoxelFirstData(cx, cy, cz)
-	end)
-end
-
+--todo fix something whent wrong here , he do not update Lightning in the game....
 while true do
 	local message1 = ThreadLightingChannel:demand()
 	if message1 then
 		local action = message1[1]
-		if action == "GetChunkHashTable" then
-			ThreadLightingChannel:push(ChunkHashTable)
-			print("ChunkHashTable demandé et envoyé au canal ThreadLightingChannel")
-		elseif action == "UpdateChunkHashTable" then
-			ChunkHashTable = message1[2]
+		if action == "UpdateChunkHashTable" then
+			local chunkX, chunkZ = unpack(message1, 2) -- Récupération des valeurs chunkX et chunkZ
+			print("chunkX:", chunkX, "chunkZ:", chunkZ) -- Afficher les valeurs pour déboguer
+			ChunkHashTable[chunkX] = ChunkHashTable[chunkX] or {}
+			ChunkHashTable[chunkX][chunkZ] = true
 		elseif action == "LightOperation" then
 			local x, y, z, lightoperation, value = unpack(message1, 2)
 			NewLightOperation(x, y, z, lightoperation, value)
 			print("Message LightOperation traité avec succès")
-		elseif action == "GetChunk" then
-			local x, y, z = message1[2], message1[3], message1[4]
-			local cget, cx, cy, cz, hashx, hashy = GetChunk(x, y, z)
-			ThreadLightingChannel:push({ cget, cx, cy, cz, hashx, hashy })
-			print("Chunk demandé et envoyé au canal ThreadLightingChannel")
 		elseif action == "updateLighting" then
 			LightingUpdate()
 			print("Canal d'éclairage mis à jour")
-		elseif action == "GetVoxel" then
-			local x, y, z = message1[2], message1[3], message1[4]
-			local val = GetVoxel(x, y, z)
-			ThreadLightingChannel:push(val)
-			print("Voxel demandé et envoyé au canal ThreadLightingChannel")
-		elseif action == "GetVoxelFirstData" then
-			local x, y, z = message1[2], message1[3], message1[4]
-			local val = GetVoxelFirstData(x, y, z)
-			ThreadLightingChannel:push(val)
-			print("VoxelFirstData demandé et envoyé au canal ThreadLightingChannel")
-		elseif action == "GetTileTransparency" then
-			local n = message1[2]
-			local transparency = TileTransparency(n)
-			ThreadLightingChannel:push(transparency)
-			print("Transparence de la tuile demandée et envoyée au canal ThreadLightingChannel")
 		else
 			print("Action non reconnue")
 		end

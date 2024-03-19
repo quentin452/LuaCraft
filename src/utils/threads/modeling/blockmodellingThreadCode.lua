@@ -1,4 +1,4 @@
-BlockModellingChannel, ChunkSize, ChunkHashTable, WorldHeight, TilesTextureList, ChunkHashTableChannel, TilesById, TileTransparencyCache, Tiles, TilesTransparency, BlockGetTop, BlockGetBottom, BlockGetPositiveX, BlockGetNegativeX, BlockGetPositiveZ, BlockGetNegativeZ, FinalAtlasSize, LightValues, TileWidth, TileHeight =
+BlockModellingChannel, ChunkSize, ChunkHashTable, WorldHeight, TilesTextureList, TilesById, TileTransparencyCache, Tiles, TilesTransparency, BlockGetTop, BlockGetBottom, BlockGetPositiveX, BlockGetNegativeX, BlockGetPositiveZ, BlockGetNegativeZ, FinalAtlasSize, LightValues, TileWidth, TileHeight =
 	...
 local ADJUSTMENT_FACTOR_OTX_OTY = 256 / FinalAtlasSize
 local ADJUSTMENT_FACTOR_TEXTURE_COORDINATES = FinalAtlasSize / 256

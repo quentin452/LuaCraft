@@ -11,7 +11,7 @@ function createLightningThread()
 		TilesTransparency,
 		ChunkSize,
 		ChunkHashTable,
-		WorldHeight
+		TilesById
 	)
 	return ThreadLightingChannel
 end

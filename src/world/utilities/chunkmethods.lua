@@ -12,10 +12,6 @@ end
 
 -- get chunk from reading chunk hash table at given position
 function GetChunk(x, y, z)
-	-- Récupérer la table de hachage ChunkHashTable du canal de communication
---	ThreadLightingChannel:push({ "GetChunkHashTable" })
---	local ChunkHashTable = ThreadLightingChannel:demand()
-
 	local x = math.floor(x)
 	local y = math.floor(y)
 	local z = math.floor(z)

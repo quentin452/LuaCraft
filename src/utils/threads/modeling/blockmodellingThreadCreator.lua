@@ -7,7 +7,6 @@ function createBlockModellingThread()
 		ChunkHashTable,
 		WorldHeight,
 		TilesTextureList,
-		ChunkHashTableChannel,
 		TilesById,
 		TileTransparencyCache,
 		Tiles,

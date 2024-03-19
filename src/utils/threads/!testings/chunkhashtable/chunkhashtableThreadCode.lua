@@ -1,4 +1,4 @@
-ChunkHashTableChannel, BlockModellingChannel, ChunkHashTable = ...
+ChunkHashTableChannel, BlockModellingChannel, ChunkHashTable, ThreadLightingChannel = ...
 --TODO MADE THIS USEFULL : FOR NOW ChunkHashTableChannel made nothing
 while true do
 	local message = ChunkHashTableChannel:demand()
@@ -7,6 +7,6 @@ while true do
 		print("ChunkHashTableChannel a reçu chunkX: ", chunkX, " chunkZ: ", chunkZ) -- Ajouté pour le débogage
 		ChunkHashTable[chunkX] = ChunkHashTable[chunkX] or {}
 		ChunkHashTable[chunkX][chunkZ] = true
-		BlockModellingChannel:push({ chunkX, chunkZ })
+		--ThreadLightingChannel:push({ "UpdateChunkHashTable", chunkX, chunkZ })
 	end
 end
