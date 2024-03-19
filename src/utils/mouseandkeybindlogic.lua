@@ -18,6 +18,8 @@ function MouseLogicOnPlay(x, y, b)
 	elseif IsPlayingGame() then
 		GamestatePlayingGameMouseAndKeybindLogic(x, y, b)
 	end
+	_JPROFILER.pop("frame")
+	_JPROFILER.pop("MouseLogicOnPlay")
 end
 
 function KeyPressed(k)
