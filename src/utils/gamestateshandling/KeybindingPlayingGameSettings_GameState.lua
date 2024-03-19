@@ -27,7 +27,7 @@ end
 
 --!draw.lua
 function GamestateKeybindingPlayingGameSettingsDrawGame()
-	if Gamestate == Gamestate == GamestateKeybindingPlayingGameSettings then
+	if Gamestate == GamestateKeybindingPlayingGameSettings then
 		_JPROFILER.push("drawMenuSettings")
 		DrawKeybindingSettings()
 		_JPROFILER.pop("drawMenuSettings")
