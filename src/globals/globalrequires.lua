@@ -15,7 +15,7 @@ Engine = require("engine")
 local modules = {
 	"menus/mainmenu",
 	"menus/gameplayingpausemenu",
-	"menus/worldcreationmenu",
+	"menus/worldcreation/worldcreationmenu",
 	"menus/settings/mainmenusettings",
 	"menus/settings/keybindingmenusettings",
 	"blocksandtiles/tiledata",

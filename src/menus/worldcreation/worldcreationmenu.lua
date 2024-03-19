@@ -41,6 +41,7 @@ function keysInitWorldCreationMenu(k)
 		elseif k == "return" then
 			if _WorldCreationMenu.selection == 1 then
 				Gamestate = GamestatePlayingGame
+				love.mouse.setRelativeMode(true)
 				GenerateWorld()
 			elseif _WorldCreationMenu.selection == 2 then
 				Gamestate = GamestateMainMenu

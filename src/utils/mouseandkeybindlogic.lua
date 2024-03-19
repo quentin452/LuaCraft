@@ -2,38 +2,230 @@ function MouseLogicOnPlay(x, y, b)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MouseLogicOnPlay")
 
-	-- Forward mousepress events to all things in ThingList
-	if ThingList == nil then
-		return
-	end
-	for i = 1, #ThingList do
-		local thing = ThingList[i]
-		if thing and thing.mousepressed then
-			thing:mousepressed(b)
+	if Gamestate == GamestateMainMenu then
+		if b == 1 then
+			local choiceClicked = math.floor((y - _Mainmenu.y) / Font25:getHeight("X"))
+			if choiceClicked >= 1 and choiceClicked <= #_Mainmenu.choice then
+				_Mainmenu.selection = choiceClicked
+				if choiceClicked == 1 then
+					_WorldCreationMenu.selection = 0
+					Gamestate = GamestateWorldCreationMenu
+				elseif choiceClicked == 2 then
+					Gamestate = GamestateMainMenuSettings
+				elseif choiceClicked == 3 then
+					love.event.push("quit")
+				end
+			end
 		end
-	end
+	elseif Gamestate == GamestateKeybindingMainSettings then
+		if b == 1 then
+			local choiceClicked = math.floor((y - _KeybindingMenuSettings.y) / Font25:getHeight("X"))
+			if choiceClicked >= 1 and choiceClicked <= #_KeybindingMenuSettings.choice then
+				_KeybindingMenuSettings.selection = choiceClicked
+				if choiceClicked == 1 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 2 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 3 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 4 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 5 then
+					if Gamestate == GamestateKeybindingMainSettings then
+						Gamestate = GamestateMainMenuSettings
+						_KeybindingMenuSettings.selection = 0
+					elseif Gamestate == GamestateKeybindingPlayingGameSettings then
+						Gamestate = GamestatePlayingGameSettings
+						_KeybindingMenuSettings.selection = 0
+					end
+				end
+			end
+		end
+	elseif Gamestate == GamestateKeybindingPlayingGameSettings then
+		if b == 1 then
+			local choiceClicked = math.floor((y - _KeybindingMenuSettings.y) / Font25:getHeight("X"))
+			if choiceClicked >= 1 and choiceClicked <= #_KeybindingMenuSettings.choice then
+				_KeybindingMenuSettings.selection = choiceClicked
+				if choiceClicked == 1 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 2 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 3 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 4 then
+					ConfiguringMovementKey = true
+				elseif choiceClicked == 5 then
+					if Gamestate == GamestateKeybindingMainSettings then
+						Gamestate = GamestateMainMenuSettings
+						_KeybindingMenuSettings.selection = 0
+					elseif Gamestate == GamestateKeybindingPlayingGameSettings then
+						Gamestate = GamestatePlayingGameSettings
+						_KeybindingMenuSettings.selection = 0
+					end
+				end
+			end
+		end
+	elseif Gamestate == GamestatePlayingGameSettings then
+		if b == 1 then
+			local choiceClicked = math.floor((y - _MainMenuSettings.y) / Font25:getHeight("X"))
+			if choiceClicked >= 1 and choiceClicked <= #_MainMenuSettings.choice then
+				_MainMenuSettings.selection = choiceClicked
+				if choiceClicked == 1 then
+					LuaCraftSettingsUpdater("toggleVSync")
+				elseif choiceClicked == 2 then
+					LuaCraftSettingsUpdater("NormalLoggingToggler")
+					ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+				elseif choiceClicked == 3 then
+					LuaCraftSettingsUpdater("WarnLoggingToggler")
+					ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+				elseif choiceClicked == 4 then
+					LuaCraftSettingsUpdater("ErrorLoggingToggler")
+					ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+				elseif choiceClicked == 5 then
+					LuaCraftSettingsUpdater("renderdistanceSetting")
+					Renderdistancegetresetted = true
+				elseif choiceClicked == 6 then
+					if Gamestate == GamestatePlayingGameSettings then
+						Gamestate = GamestateKeybindingPlayingGameSettings
+						_MainMenuSettings.selection = 0
+					elseif Gamestate == GamestateMainMenuSettings then
+						Gamestate = GamestateKeybindingMainSettings
+						_MainMenuSettings.selection = 0
+					end
+					_MainMenuSettings.selection = 0
+				elseif choiceClicked == 7 then
+					if Gamestate == GamestatePlayingGameSettings then
+						Gamestate = GamestatePlayingGame
+						_MainMenuSettings.selection = 0
+					elseif Gamestate == GamestateMainMenuSettings then
+						Gamestate = GamestateMainMenu
+						_MainMenuSettings.selection = 0
+					end
+				end
+			end
+		end
+	elseif Gamestate == GamestateMainMenuSettings then
+		if b == 1 then
+			local choiceClicked = math.floor((y - _MainMenuSettings.y) / Font25:getHeight("X"))
+			if choiceClicked >= 1 and choiceClicked <= #_MainMenuSettings.choice then
+				_MainMenuSettings.selection = choiceClicked
+				if choiceClicked == 1 then
+					LuaCraftSettingsUpdater("toggleVSync")
+				elseif choiceClicked == 2 then
+					LuaCraftSettingsUpdater("NormalLoggingToggler")
+					ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+				elseif choiceClicked == 3 then
+					LuaCraftSettingsUpdater("WarnLoggingToggler")
+					ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+				elseif choiceClicked == 4 then
+					LuaCraftSettingsUpdater("ErrorLoggingToggler")
+					ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+				elseif choiceClicked == 5 then
+					LuaCraftSettingsUpdater("renderdistanceSetting")
+					Renderdistancegetresetted = true
+				elseif choiceClicked == 6 then
+					if Gamestate == GamestatePlayingGameSettings then
+						Gamestate = GamestateKeybindingPlayingGameSettings
+						_MainMenuSettings.selection = 0
+					elseif Gamestate == GamestateMainMenuSettings then
+						Gamestate = GamestateKeybindingMainSettings
+						_MainMenuSettings.selection = 0
+					end
+					_MainMenuSettings.selection = 0
+				elseif choiceClicked == 7 then
+					if Gamestate == GamestatePlayingGameSettings then
+						Gamestate = GamestatePlayingGame
+						_MainMenuSettings.selection = 0
+					elseif Gamestate == GamestateMainMenuSettings then
+						Gamestate = GamestateMainMenu
+						_MainMenuSettings.selection = 0
+					end
+				end
+			end
+		end
+	elseif Gamestate == GamestateWorldCreationMenu then
+		if b == 1 then
+			local choiceClicked = math.floor((y - _WorldCreationMenu.y) / Font15:getHeight("X"))
+			if choiceClicked >= 1 and choiceClicked <= #_WorldCreationMenu.choice then
+				_WorldCreationMenu.selection = choiceClicked
+				if choiceClicked == 1 then
+					Gamestate = GamestatePlayingGame
+					love.mouse.setRelativeMode(true)
+					GenerateWorld()
+				elseif choiceClicked == 2 then
+					Gamestate = GamestateMainMenu
+					_WorldCreationMenu.selection = 0
+				end
+			end
+		end
+	elseif Gamestate == GamestateGamePausing then
+		if b == 1 then
+			local choiceClicked = math.floor((y - _GamePlayingPauseMenu.y) / Font25:getHeight("X"))
+			if choiceClicked >= 1 and choiceClicked <= #_GamePlayingPauseMenu.choice then
+				_GamePlayingPauseMenu.selection = choiceClicked
+				if choiceClicked == 1 then
+					love.mouse.setRelativeMode(true)
+					Gamestate = GamestatePlayingGame
+				elseif choiceClicked == 2 then
+					Gamestate = GamestatePlayingGameSettings
+				elseif choiceClicked == 3 then
+					--TODO here add chunk saving system before going to MainMenu and during gameplay
+					for chunk in pairs(ChunkSet) do
+						for _, chunkSlice in ipairs(chunk.slices) do
+							chunkSlice.alreadyrendered = false
+							chunkSlice.model = nil
+						end
+					end
 
-	-- Handle clicking to place / destroy blocks
-	local pos = ThePlayer and ThePlayer.cursorpos
-	local value = 0
+					ChunkSet = {}
+					ChunkHashTable = {}
+					CaveList = {}
+					ThePlayer.IsPlayerHasSpawned = false
+					Gamestate = GamestateMainMenu
+				end
+			end
+		end
+	elseif Gamestate == GamestatePlayingGame then
+		-- Forward mousepress events to all things in ThingList
+		if ThingList == nil then
+			return
+		end
+		for i = 1, #ThingList do
+			local thing = ThingList[i]
+			if thing and thing.mousepressed then
+				thing:mousepressed(b)
+			end
+		end
 
-	if b == 2 and FixinputforDrawCommandInput == false then
-		pos = ThePlayer and ThePlayer.cursorposPrev
-		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or Tiles.AIR_Block.id
-	end
+		-- Handle clicking to place / destroy blocks
+		local pos = ThePlayer and ThePlayer.cursorpos
+		local value = 0
 
-	local chunk = pos and pos.chunk
+		if b == 2 and FixinputforDrawCommandInput == false then
+			pos = ThePlayer and ThePlayer.cursorposPrev
+			value = PlayerInventory.items[PlayerInventory.hotbarSelect] or Tiles.AIR_Block.id
+		end
 
-	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
-		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
-		LightingUpdate()
+		local chunk = pos and pos.chunk
+
+		if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
+			chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
+			LightingUpdate()
 		--ThreadLightingChannel:push({ "updateLighting" })
-	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
-		HudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
-		HudTimeLeft = 3
+		elseif
+			pos
+			and pos.x
+			and pos.z
+			and pos.y >= WorldHeight
+			and ThePlayer.cursorpos
+			and ThePlayer.cursorHit == true
+		then
+			HudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
+			HudTimeLeft = 3
+		end
+		_JPROFILER.pop("MouseLogicOnPlay")
+		_JPROFILER.pop("frame")
 	end
-	_JPROFILER.pop("MouseLogicOnPlay")
-	_JPROFILER.pop("frame")
 end
 
 function KeyPressed(k)
@@ -66,6 +258,9 @@ function KeyPressed(k)
 				FixinputforDrawCommandInput = false
 				EnableCommandHUD = false
 			else
+				love.mouse.setRelativeMode(false)
+				love.mouse.setGrabbed(true)
+				love.mouse.setVisible(true)
 				Gamestate = GamestateGamePausing
 			end
 		elseif k == "f3" then

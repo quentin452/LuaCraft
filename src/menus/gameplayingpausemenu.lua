@@ -38,6 +38,7 @@ function keysinitGamePlayingPauseMenu(k)
 			end
 		elseif k == "return" then
 			if _GamePlayingPauseMenu.selection == 1 then
+				love.mouse.setRelativeMode(true)
 				Gamestate = GamestatePlayingGame
 			elseif _GamePlayingPauseMenu.selection == 2 then
 				Gamestate = GamestatePlayingGameSettings
