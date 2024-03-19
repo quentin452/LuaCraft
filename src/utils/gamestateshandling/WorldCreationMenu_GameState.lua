@@ -15,3 +15,12 @@ function GamestateWorldCreationMenuMouseAndKeybindLogic(x, y, b)
 		end
 	end
 end
+
+--!draw.lua
+function GamestateWorldCreationMenuDrawGame()
+	if Gamestate == GamestateWorldCreationMenu then
+		_JPROFILER.push("drawWorldCreationMenu")
+		drawWorldCreationMenu()
+		_JPROFILER.pop("drawWorldCreationMenu")
+	end
+end

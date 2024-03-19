@@ -40,3 +40,12 @@ function GamestatePlayingGameSettingsMouseAndKeybindLogic(x, y, b)
 		end
 	end
 end
+
+--!draw.lua
+function GamestatePlayingGameSettingsDrawGame()
+	if Gamestate == GamestatePlayingGameSettings then
+		_JPROFILER.push("drawMenuSettings_GamestatePlayingGameSettingsDrawGame")
+		DrawMenuSettings()
+		_JPROFILER.pop("drawMenuSettings_GamestatePlayingGameSettingsDrawGame")
+	end
+end
