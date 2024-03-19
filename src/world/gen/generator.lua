@@ -1,6 +1,7 @@
 local temp = {}
 local dirt = 4
 local grass = true
+local OneHundredThoused = 100000
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 	for i = 1, ChunkSize do
@@ -90,13 +91,13 @@ end
 
 function Noise(x, y, z, freq, yfreq, si)
 	return love.math.noise(
-		x / freq + Salt[si] * 100000,
-		y / yfreq + Salt[si + 1] * 100000,
-		z / freq + Salt[si + 2] * 100000
+		x / freq + Salt[si] * OneHundredThoused,
+		y / yfreq + Salt[si + 1] * OneHundredThoused,
+		z / freq + Salt[si + 2] * OneHundredThoused
 	)
 end
 function Noise2D(x, z, freq, si)
-	return love.math.noise(x / freq + Salt[si] * 100000, z / freq + Salt[si + 2] * 100000)
+	return love.math.noise(x / freq + Salt[si] * OneHundredThoused, z / freq + Salt[si + 2] * OneHundredThoused)
 end
 function OctaveNoise(x, y, octaves, seed1, seed2)
 	local ret = 0
@@ -104,7 +105,7 @@ function OctaveNoise(x, y, octaves, seed1, seed2)
 	local freq = 1
 	local amp = 1
 	for i = 1, octaves do
-		ret = ret + love.math.noise(x * freq + Salt[seed1] * 100000, y * freq + Salt[seed2] * 100000) * amp - amp / 2
+		ret = ret + love.math.noise(x * freq + Salt[seed1] * OneHundredThoused, y * freq + Salt[seed2] * OneHundredThoused) * amp - amp / 2
 		freq = freq * 0.5
 		amp = amp * 2
 	end
