@@ -1,9 +1,9 @@
 function MouseLogicOnPlay(x, y, b)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MouseLogicOnPlay")
-
+	if Gamestate == GamestateMainMenu then
 	GamestateMainMenuMouseAndKeybindLogic(x, y, b)
-	if Gamestate == GamestateKeybindingMainSettings then
+	elseif Gamestate == GamestateKeybindingMainSettings then
 		if b == 1 then
 			local choiceClicked = math.floor((y - _KeybindingMenuSettings.y) / Font25:getHeight("X"))
 			if choiceClicked >= 1 and choiceClicked <= #_KeybindingMenuSettings.choice then
