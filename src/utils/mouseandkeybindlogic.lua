@@ -16,7 +16,7 @@ function MouseLogicOnPlay(x, y, b)
 	elseif Gamestate == GamestateGamePausing then
 		GamestateGamePausingMouseAndKeybindLogic(x, y, b)
 	elseif Gamestate == GamestatePlayingGame then
-		GamestatePlayingGameSettingsMouseAndKeybindLogic(x, y, b)
+		GamestatePlayingGameMouseAndKeybindLogic(x, y, b)
 	end
 end
 

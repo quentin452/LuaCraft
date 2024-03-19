@@ -54,7 +54,7 @@ function GamestatePlayingGameUpdateGame(dt)
 end
 
 --mouseandkeybindlogic.lua
-function GamestatePlayingGameSettingsMouseAndKeybindLogic(x, y, b)
+function GamestatePlayingGameMouseAndKeybindLogic(x, y, b)
 	-- Forward mousepress events to all things in ThingList
 	if ThingList == nil then
 		return
