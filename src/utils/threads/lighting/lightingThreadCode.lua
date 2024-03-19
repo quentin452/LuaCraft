@@ -35,24 +35,14 @@ end
 local LightingQueue = {}
 local LightingRemovalQueue = {}
 
--- Function to add an item to the lighting queue
-local function LightingQueueAdd(lthing)
-	LightingQueue[#LightingQueue + 1] = lthing
-	return lthing
-end
-
--- Function to add an item to the lighting removal queue
-local function LightingRemovalQueueAdd(lthing)
-	LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
-	return lthing
-end
-
 local function LightingUpdate()
 	for _, lthing in ipairs(LightingRemovalQueue) do
-		lthing:query()
+		local query = lthing.query
+		query()
 	end
 	for _, lthing in ipairs(LightingQueue) do
-		lthing:query()
+		local query = lthing.query
+		query()
 	end
 	LightingRemovalQueue = {}
 	LightingQueue = {}
@@ -194,29 +184,19 @@ local function LightningQueries(lthing, lightoperation)
 	end
 	return lthing
 end
-local operationFunctions = {
-	[LightOpe.SunForceAdd.id] = LightingQueueAdd,
-	[LightOpe.SunCreationAdd.id] = LightingQueueAdd,
-	[LightOpe.SunDownAdd.id] = LightingQueueAdd,
-	[LightOpe.LocalForceAdd.id] = LightingQueueAdd,
-	[LightOpe.LocalCreationAdd.id] = LightingQueueAdd,
-	[LightOpe.SunAdd.id] = LightingQueueAdd,
-	[LightOpe.LocalAdd.id] = LightingQueueAdd,
-	[LightOpe.LocalSubtract.id] = LightingRemovalQueueAdd,
-	[LightOpe.SunSubtract.id] = LightingRemovalQueueAdd,
-	[LightOpe.SunDownSubtract.id] = LightingRemovalQueueAdd,
-}
+
 
 local function NewLightOperation(x, y, z, lightoperation, value)
 	local t = { x = x, y = y, z = z, value = value }
-	t.query = LightningQueries(t, lightoperation)
-	local operationFunction = operationFunctions[lightoperation]
-	if operationFunction then
-		operationFunction(t)
+	local updatedT = LightningQueries(t, lightoperation)
+	local operation = LightOpe[lightoperation]
+	if operation then
+		local operationFunction = operation.lightope
+		operationFunction(updatedT)
 	else
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
-			"This lightoperation: " .. lightoperation .. " is not correct",
+			"Invalid lightoperation: " .. lightoperation,
 		})
 	end
 end
