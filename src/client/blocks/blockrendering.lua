@@ -1,13 +1,7 @@
--- Cached voxel states
-local getTop
-local getBottom
-local getPositiveX
-local getNegativeX
-local getPositiveZ
-local getNegativeZ
+local ADJUSTMENT_FACTOR_OTX_OTY = 256 / FinalAtlasSize
+local ADJUSTMENT_FACTOR_TEXTURE_COORDINATES = FinalAtlasSize / 256
 -- Shared block vertices
 local blockVertices = {}
-
 -- Checks if a face can be drawn based on transparency
 local function CanDrawFace(get, thisTransparency)
 	_JPROFILER.push("CanDrawFace")
@@ -110,15 +104,14 @@ end
 -- Draws faces of a block model
 local function DrawFaces(model, thisTransparency, thisLight, BlockModelScale, x, y, z)
 	_JPROFILER.push("DrawFaces_blockrendering")
-	addFace("getTop", getTop, 0, 0, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
-	addFace("getBottom", getBottom, 1, 3, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
-	addFace("getPositiveX", getPositiveX, 0, 2, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
-	addFace("getNegativeX", getNegativeX, 0, 2, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
-	addFace("getPositiveZ", getPositiveZ, 0, 1, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
-	addFace("getNegativeZ", getNegativeZ, 0, 1, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
+	addFace("getTop", BlockGetTop, 0, 0, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
+	addFace("getBottom", BlockGetBottom, 1, 3, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
+	addFace("getPositiveX", BlockGetPositiveX, 0, 2, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
+	addFace("getNegativeX", BlockGetNegativeX, 0, 2, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
+	addFace("getPositiveZ", BlockGetPositiveZ, 0, 1, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
+	addFace("getNegativeZ", BlockGetNegativeZ, 0, 1, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
 	_JPROFILER.pop("DrawFaces_blockrendering")
 end
-
 -- Checks if the block at the specified coordinates is valid
 local function checkBlockValidity(self, i, j, k)
 	_JPROFILER.push("checkBlockValidity_blockrendering")
@@ -138,27 +131,26 @@ end
 -- Updates adjacent blocks for rendering
 local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 	_JPROFILER.push("updateAdjacentBlocks_blockrendering")
-	getTop = self.parent:getVoxel(i, j - 1, k)
-	getBottom = self.parent:getVoxel(i, j + 1, k)
-	getPositiveX = self.parent:getVoxel(i - 1, j, k)
-	getNegativeX = self.parent:getVoxel(i + 1, j, k)
-	getPositiveZ = self.parent:getVoxel(i, j, k - 1)
-	getNegativeZ = self.parent:getVoxel(i, j, k + 1)
+	BlockGetTop = self.parent:getVoxel(i, j - 1, k)
+	BlockGetBottom = self.parent:getVoxel(i, j + 1, k)
+	BlockGetPositiveX = self.parent:getVoxel(i - 1, j, k)
+	BlockGetNegativeX = self.parent:getVoxel(i + 1, j, k)
+	BlockGetPositiveZ = self.parent:getVoxel(i, j, k - 1)
+	BlockGetNegativeZ = self.parent:getVoxel(i, j, k + 1)
 	if i == 1 then
-		getPositiveX = getVoxelFromChunk(GetChunk, x - 1, y, z, ChunkSize, j, k)
+		BlockGetPositiveX = getVoxelFromChunk(GetChunk, x - 1, y, z, ChunkSize, j, k)
 	elseif i == ChunkSize then
-		getNegativeX = getVoxelFromChunk(GetChunk, x + 1, y, z, 1, j, k)
+		BlockGetNegativeX = getVoxelFromChunk(GetChunk, x + 1, y, z, 1, j, k)
 	end
 	if k == 1 then
-		getPositiveZ = getVoxelFromChunk(GetChunk, x, y, z - 1, i, j, ChunkSize)
+		BlockGetPositiveZ = getVoxelFromChunk(GetChunk, x, y, z - 1, i, j, ChunkSize)
 	elseif k == ChunkSize then
-		getNegativeZ = getVoxelFromChunk(GetChunk, x, y, z + 1, i, j, 1)
+		BlockGetNegativeZ = getVoxelFromChunk(GetChunk, x, y, z + 1, i, j, 1)
 	end
 	_JPROFILER.pop("updateAdjacentBlocks_blockrendering")
-	return getBottom, getPositiveX, getNegativeX, getPositiveZ, getNegativeZ
+	return BlockGetTop, BlockGetBottom, BlockGetPositiveX, BlockGetNegativeX, BlockGetPositiveZ, BlockGetNegativeZ
 end
 
--- Renders the block at the specified coordinates
 function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, model, BlockModelScale)
 	_JPROFILER.push("BlockRendering")
 	if not checkBlockValidity(self, i, j, k) then
@@ -166,6 +158,36 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		return
 	end
 	updateAdjacentBlocks(self, i, j, k, x, y, z)
+
+	-- Préparez les données des faces à envoyer
+	--	local faceData = {
+	--		x = x,
+	--		y = y,
+	--		z = z,
+	--		thisTransparency = thisTransparency,
+	--	thisLight = thisLight,
+	--	model = model,
+	---		BlockModelScale = BlockModelScale,
+	--	}
+
+	-- Envoyez les données via le canal
+	--	BlockModellingChannel:push(faceData)
+	--[[BlockModellingChannel:push({
+		x = x,
+		y = y,
+		z = z,
+		thisTransparency = thisTransparency,
+		thisLight = thisLight,
+		model = model,
+		BlockModelScale = BlockModelScale,
+		BlockGetTop = BlockGetTop,
+		BlockGetBottom = BlockGetBottom,
+		BlockGetPositiveX = BlockGetPositiveX,
+		BlockGetNegativeX = BlockGetNegativeX,
+		BlockGetPositiveZ = BlockGetPositiveZ,
+		BlockGetNegativeZ = BlockGetNegativeZ,
+	})]]
 	DrawFaces(model, thisTransparency, thisLight, BlockModelScale, x, y, z)
+
 	_JPROFILER.pop("BlockRendering")
 end
