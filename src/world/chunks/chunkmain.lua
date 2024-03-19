@@ -2,6 +2,10 @@ local caveConfigs = {
 	{ minHeight = 8, maxHeight = 64, count = rand(1, 3) },
 	{ minHeight = 48, maxHeight = 80, count = rand(1, 2) },
 }
+local MAX_EXECUTION_TIME = 0.5
+local totalLongExecutionTime = 0
+local populatelog1 = "Function from"
+local populatelog2 = "in chunkPopulateTag took too long to execute. Total time taken "
 function NewChunk(x, z)
 	_JPROFILER.push("NewChunk")
 	local chunk = NewThing(x, 0, z)
@@ -64,12 +68,7 @@ function NewChunk(x, z)
 			end
 		end
 	end
-
 	-- populate chunk with trees and flowers
-	local MAX_EXECUTION_TIME = 0.5
-	local totalLongExecutionTime = 0
-	local log1 = "Function from"
-	local log2 = "in chunkPopulateTag took too long to execute. Total time taken "
 	chunk.populate = function(self)
 		totalLongExecutionTime = 0
 		for i = 1, ChunkSize do
@@ -87,7 +86,7 @@ function NewChunk(x, z)
 								local log3 = totalLongExecutionTime
 								ThreadLogChannel:push({
 									LuaCraftLoggingLevel.WARNING,
-									log1 .. taggedFunc.sourcePath .. log2 .. log3 .. " seconds.",
+									populatelog1 .. taggedFunc.sourcePath .. populatelog2 .. log3 .. " seconds.",
 								})
 							end
 						end
@@ -203,7 +202,7 @@ function NewChunk(x, z)
 				end
 			else
 				local semiLightable = TileLightable(blockvalue, true)
-				NewLightOperation(gx, gy - 1, gz,  LightOpe.SunDownSubtract)
+				NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract)
 				--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract })
 				if semiLightable and inDirectSunlight and manuallyPlaced then
 					NewLightOperation(gx, gy + 1, gz, LightOpe.SunCreationAdd)
@@ -217,7 +216,7 @@ function NewChunk(x, z)
 								local nx, ny, nz = gx + dx, gy + dy, gz + dz
 								local nget = GetVoxelFirstData(nx, ny, nz)
 								if nget < LightSources[15] then
-									NewLightOperation(nx, ny, nz,  LightOpe.SunSubtract, nget + LightSources[1])
+									NewLightOperation(nx, ny, nz, LightOpe.SunSubtract, nget + LightSources[1])
 									--ThreadLightingChannel:push({ "LightOperation",nx, ny, nz, LightOpe.SunSubtract,nget + LightSources[1] })
 								end
 							end
@@ -227,7 +226,7 @@ function NewChunk(x, z)
 			end
 			local source = TileLightSource(self:getVoxel(x, y, z))
 			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
-				NewLightOperation(gx, gy, gz, LightOpe.LocalSubtract , source + LightSources[1])
+				NewLightOperation(gx, gy, gz, LightOpe.LocalSubtract, source + LightSources[1])
 				--ThreadLightingChannel:push({"LightOperation",gx, gy, gz, LightOpe.LocalSubtract ,source + LightSources[1]})
 				destroyLight = true
 			end
@@ -239,7 +238,7 @@ function NewChunk(x, z)
 								local nget = GetVoxelSecondData(gx + dx, gy + dy, gz + dz)
 								if nget < LightSources[15] then
 									local xd, yd, zd = gx + dx, gy + dy, gz + dz
-									NewLightOperation(xd, yd, zd,  LightOpe.LocalSubtract, nget + LightSources[1])
+									NewLightOperation(xd, yd, zd, LightOpe.LocalSubtract, nget + LightSources[1])
 									--ThreadLightingChannel:push({"LightOperation",xd, yd, zd, LightOpe.LocalSubtract ,nget + LightSources[1]})
 								end
 							end
@@ -250,7 +249,7 @@ function NewChunk(x, z)
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
-								NewLightOperation(gx + dx, gy + dy, gz + dz,  LightOpe.LocalCreationAdd)
+								NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd)
 								--ThreadLightingChannel:push({"LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd})
 							end
 						end
