@@ -26,6 +26,7 @@ local modules = {
 	"utils/filesystem",
 	"utils/settingshandling",
 	"utils/commands/commandsexec",
+	"utils/gamestateshandling/!isplayingGameState",
 	"utils/gamestateshandling/GamePausing_GameState",
 	"utils/gamestateshandling/KeyBindingMainSettings_GameState",
 	"utils/gamestateshandling/KeybindingPlayingGameSettings_GameState",

@@ -15,7 +15,7 @@ function MouseLogicOnPlay(x, y, b)
 		GamestateWorldCreationMenuMouseAndKeybindLogic(x, y, b)
 	elseif Gamestate == GamestateGamePausing then
 		GamestateGamePausingMouseAndKeybindLogic(x, y, b)
-	elseif Gamestate == GamestatePlayingGame then
+	elseif IsPlayingGame() then
 		GamestatePlayingGameMouseAndKeybindLogic(x, y, b)
 	end
 end
@@ -44,7 +44,7 @@ function KeyPressed(k)
 		_JPROFILER.push("keysInitWorldCreationMenu")
 		keysInitWorldCreationMenu(k)
 		_JPROFILER.pop("keysInitWorldCreationMenu")
-	elseif Gamestate == GamestatePlayingGame then
+	elseif IsPlayingGame() then
 		if k == "escape" then
 			if EnableCommandHUD then
 				FixinputforDrawCommandInput = false

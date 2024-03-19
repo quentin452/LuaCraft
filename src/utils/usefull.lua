@@ -60,7 +60,7 @@ function getSelectedFont()
 		or Gamestate == GamestateKeybindingPlayingGameSettings
 	then
 		return Font25
-	elseif Gamestate == GamestateWorldCreationMenu or Gamestate == GamestatePlayingGame then
+	elseif Gamestate == GamestateWorldCreationMenu or IsPlayingGame() then
 		return Font15
 	end
 end
