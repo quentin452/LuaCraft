@@ -8,18 +8,6 @@ local SIXDIRECTIONS = {
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
 
--- Function to add an item to the lighting queue
-local function LightingQueueAdd(lthing)
-	LightingQueue[#LightingQueue + 1] = lthing
-	return lthing
-end
-
--- Function to add an item to the lighting removal queue
-local function LightingRemovalQueueAdd(lthing)
-	LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
-	return lthing
-end
-
 function LightingUpdate()
 	for _, lthing in ipairs(LightingRemovalQueue) do
 		local query = lthing.query
@@ -42,42 +30,42 @@ local function LightningQueries(lthing, lightoperation)
 	end
 
 	lthing.query = function()
-		if lightoperation == LightOpe.SunForceAdd then
+		if lightoperation == LightOpe.SunForceAdd.id then
 			local val = cget:getVoxel(cx, cy, cz)
 			if lthing.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelFirstData(cx, cy, cz, lthing.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = lthing.x + dir.x
-					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunAdd, lthing.value - 1)
+					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunAdd.id, lthing.value - 1)
 				end
 			end
-		elseif lightoperation == LightOpe.SunCreationAdd then
+		elseif lightoperation == LightOpe.SunCreationAdd.id then
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
-				NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.SunForceAdd, dat)
+				NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.SunForceAdd.id, dat)
 			end
-		elseif lightoperation == LightOpe.SunDownAdd then
+		elseif lightoperation == LightOpe.SunDownAdd.id then
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if TileLightable(val) and dat <= lthing.value then
 				cget:setVoxelFirstData(cx, cy, cz, lthing.value)
-				NewLightOperation(lthing.x, lthing.y - 1, lthing.z, LightOpe.SunDownAdd, lthing.value)
+				NewLightOperation(lthing.x, lthing.y - 1, lthing.z, LightOpe.SunDownAdd.id, lthing.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = lthing.x + dir.x
-					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunAdd, lthing.value - 1)
+					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunAdd.id, lthing.value - 1)
 				end
 			end
-		elseif lightoperation == LightOpe.LocalForceAdd then
+		elseif lightoperation == LightOpe.LocalForceAdd.id then
 			local val, _, _ = cget:getVoxel(cx, cy, cz)
 			if lthing.value >= 0 and TileLightable(val, true) then
 				cget:setVoxelSecondData(cx, cy, cz, lthing.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = lthing.x + dir.x
-					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.LocalAdd, lthing.value - 1)
+					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.LocalAdd.id, lthing.value - 1)
 				end
 			end
-		elseif lightoperation == LightOpe.LocalSubtract then
+		elseif lightoperation == LightOpe.LocalSubtract.id then
 			local val, _ = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelSecondData(cx, cy, cz)
 			if fget > 0 and lthing.value >= 0 and TileLightable(val, true) then
@@ -85,29 +73,29 @@ local function LightningQueries(lthing, lightoperation)
 					cget:setVoxelSecondData(cx, cy, cz, 0)
 					for _, dir in ipairs(SIXDIRECTIONS) do
 						local nx, ny, nz = lthing.x + dir.x, lthing.y + dir.y, lthing.z + dir.z
-						NewLightOperation(nx, ny, nz, LightOpe.LocalSubtract, fget)
+						NewLightOperation(nx, ny, nz, LightOpe.LocalSubtract.id, fget)
 					end
 				else
-					NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.LocalForceAdd, fget)
+					NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.LocalForceAdd.id, fget)
 				end
 				return false
 			end
-		elseif lightoperation == LightOpe.LocalCreationAdd then
+		elseif lightoperation == LightOpe.LocalCreationAdd.id then
 			local val, _, dat = cget:getVoxel(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
-				NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.LocalForceAdd, dat)
+				NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.LocalForceAdd.id, dat)
 			end
-		elseif lightoperation == LightOpe.SunAdd then
+		elseif lightoperation == LightOpe.SunAdd.id then
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
 			if lthing.value >= 0 and TileLightable(val, true) and dat < lthing.value then
 				cget:setVoxelFirstData(cx, cy, cz, lthing.value)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = lthing.x + dir.x
-					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunAdd, lthing.value - 1)
+					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunAdd.id, lthing.value - 1)
 				end
 			end
-		elseif lightoperation == LightOpe.LocalAdd then
+		elseif lightoperation == LightOpe.LocalAdd.id then
 			local localcx, localcy, localcz = Localize(lthing.x, lthing.y, lthing.z)
 			local val, _, dat = cget:getVoxel(localcx, localcy, localcz)
 			if TileLightable(val, true) and dat < lthing.value then
@@ -115,11 +103,11 @@ local function LightningQueries(lthing, lightoperation)
 				if lthing.value > 1 then
 					for _, dir in ipairs(SIXDIRECTIONS) do
 						local x = lthing.x + dir.x
-						NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.LocalAdd, lthing.value - 1)
+						NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.LocalAdd.id, lthing.value - 1)
 					end
 				end
 			end
-		elseif lightoperation == LightOpe.SunSubtract then
+		elseif lightoperation == LightOpe.SunSubtract.id then
 			local val = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelFirstData(cx, cy, cz)
 			if fget > 0 and lthing.value >= 0 and TileLightable(val, true) then
@@ -127,20 +115,20 @@ local function LightningQueries(lthing, lightoperation)
 					cget:setVoxelFirstData(cx, cy, cz, Tiles.AIR_Block.id)
 					for _, dir in ipairs(SIXDIRECTIONS) do
 						local x = lthing.x + dir.x
-						NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunSubtract, fget)
+						NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunSubtract.id, fget)
 					end
 				else
-					NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.SunForceAdd, fget)
+					NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.SunForceAdd.id, fget)
 				end
 				return false
 			end
-		elseif lightoperation == LightOpe.SunDownSubtract then
+		elseif lightoperation == LightOpe.SunDownSubtract.id then
 			if TileLightable(GetVoxel(lthing.x, lthing.y, lthing.z), true) then
 				SetVoxelFirstData(lthing.x, lthing.y, lthing.z, Tiles.AIR_Block.id)
-				NewLightOperation(lthing.x, lthing.y - 1, lthing.z, LightOpe.SunDownSubtract)
+				NewLightOperation(lthing.x, lthing.y - 1, lthing.z, LightOpe.SunDownSubtract.id)
 				for _, dir in ipairs(SIXDIRECTIONS) do
 					local x = lthing.x + dir.x
-					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunSubtract, LightSources[15])
+					NewLightOperation(x, lthing.y + dir.y, lthing.z + dir.z, LightOpe.SunSubtract.id, LightSources[15])
 				end
 				return true
 			end
@@ -148,29 +136,18 @@ local function LightningQueries(lthing, lightoperation)
 	end
 	return lthing
 end
-local operationFunctions = {
-	[LightOpe.SunForceAdd] = LightingQueueAdd,
-	[LightOpe.SunCreationAdd] = LightingQueueAdd,
-	[LightOpe.SunDownAdd] = LightingQueueAdd,
-	[LightOpe.LocalForceAdd] = LightingQueueAdd,
-	[LightOpe.LocalCreationAdd] = LightingQueueAdd,
-	[LightOpe.SunAdd] = LightingQueueAdd,
-	[LightOpe.LocalAdd] = LightingQueueAdd,
-	[LightOpe.LocalSubtract] = LightingRemovalQueueAdd,
-	[LightOpe.SunSubtract] = LightingRemovalQueueAdd,
-	[LightOpe.SunDownSubtract] = LightingRemovalQueueAdd,
-}
 
 function NewLightOperation(x, y, z, lightoperation, value)
 	local t = { x = x, y = y, z = z, value = value }
 	local updatedT = LightningQueries(t, lightoperation)
-	local operationFunction = operationFunctions[lightoperation]
-	if operationFunction then
+	local operation = LightOpe[lightoperation]
+	if operation then
+		local operationFunction = operation.lightope
 		operationFunction(updatedT)
 	else
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
-			"This lightoperation: " .. lightoperation .. " is not correct",
+			"Invalid lightoperation: " .. lightoperation,
 		})
 	end
 end

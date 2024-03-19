@@ -106,15 +106,27 @@ LuaCraftLoggingLevel = {
 	WARNING = "WARN",
 	ERROR = "FATAL",
 }
+
+-- Function to add an item to the lighting queue
+local function LightingQueueAdd(lthing)
+	LightingQueue[#LightingQueue + 1] = lthing
+	return lthing
+end
+
+-- Function to add an item to the lighting removal queue
+local function LightingRemovalQueueAdd(lthing)
+	LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
+	return lthing
+end
 LightOpe = {
-	SunDownAdd = "NewSunlightDownAddition",
-	SunForceAdd = "NewSunlightForceAddition",
-	SunCreationAdd = "NewSunlightAdditionCreation",
-	SunAdd = "NewSunlightAddition",
-	SunSubtract = "NewSunlightSubtraction",
-	SunDownSubtract = "NewSunlightDownSubtraction",
-	LocalAdd = "NewLocalLightAddition",
-	LocalSubtract = "NewLocalLightSubtraction",
-	LocalForceAdd = "NewLocalLightForceAddition",
-	LocalCreationAdd = "NewLocalLightAdditionCreation",
+	SunDownAdd = { id = "SunDownAdd", lightope = LightingQueueAdd },
+	SunForceAdd = { id = "SunForceAdd", lightope = LightingQueueAdd },
+	SunCreationAdd = { id = "SunCreationAdd", lightope = LightingQueueAdd },
+	SunAdd = { id = "SunAdd", lightope = LightingQueueAdd },
+	SunSubtract = { id = "SunSubtract", lightope = LightingRemovalQueueAdd },
+	SunDownSubtract = { id = "SunDownSubtract", lightope = LightingRemovalQueueAdd },
+	LocalAdd = { id = "LocalAdd", lightope = LightingQueueAdd },
+	LocalSubtract = { id = "LocalSubtract", lightope = LightingRemovalQueueAdd },
+	LocalForceAdd = { id = "LocalForceAdd", lightope = LightingQueueAdd },
+	LocalCreationAdd = { id = "LocalCreationAdd", lightope = LightingQueueAdd },
 }
