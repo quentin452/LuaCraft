@@ -41,7 +41,7 @@ local function LightningQueries(lthing, lightoperation)
 		return lthing
 	end
 
-	if lightoperation == "NewSunlightForceAddition" then
+	if lightoperation == LightOpe.SunForceAdd then
 		lthing.query = function()
 			local val = cget:getVoxel(cx, cy, cz)
 			if lthing.value >= 0 and TileLightable(val, true) then
@@ -52,7 +52,7 @@ local function LightningQueries(lthing, lightoperation)
 				end
 			end
 		end
-	elseif lightoperation == "NewSunlightAdditionCreation" then
+	elseif lightoperation == LightOpe.SunCreationAdd then
 		lthing.query = function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
@@ -60,7 +60,7 @@ local function LightningQueries(lthing, lightoperation)
 				NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.SunForceAdd, dat)
 			end
 		end
-	elseif lightoperation == "NewSunlightDownAddition" then
+	elseif lightoperation == LightOpe.SunDownAdd then
 		lthing.query = function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
@@ -73,7 +73,7 @@ local function LightningQueries(lthing, lightoperation)
 				end
 			end
 		end
-	elseif lightoperation == "NewLocalLightForceAddition" then
+	elseif lightoperation == LightOpe.LocalForceAdd then
 		lthing.query = function()
 			local val, _, _ = cget:getVoxel(cx, cy, cz)
 			if lthing.value >= 0 and TileLightable(val, true) then
@@ -84,7 +84,7 @@ local function LightningQueries(lthing, lightoperation)
 				end
 			end
 		end
-	elseif lightoperation == "NewLocalLightSubtraction" then
+	elseif lightoperation == LightOpe.LocalSubtract then
 		lthing.query = function()
 			local val, _ = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelSecondData(cx, cy, cz)
@@ -101,14 +101,14 @@ local function LightningQueries(lthing, lightoperation)
 				return false
 			end
 		end
-	elseif lightoperation == "NewLocalLightAdditionCreation" then
+	elseif lightoperation == LightOpe.LocalCreationAdd then
 		lthing.query = function()
 			local val, _, dat = cget:getVoxel(cx, cy, cz)
 			if TileLightable(val, true) and dat > 0 then
 				NewLightOperation(lthing.x, lthing.y, lthing.z, LightOpe.LocalForceAdd, dat)
 			end
 		end
-	elseif lightoperation == "NewSunlightAddition" then
+	elseif lightoperation == LightOpe.SunAdd then
 		lthing.query = function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local dat = cget:getVoxelFirstData(cx, cy, cz)
@@ -120,7 +120,7 @@ local function LightningQueries(lthing, lightoperation)
 				end
 			end
 		end
-	elseif lightoperation == "NewLocalLightAddition" then
+	elseif lightoperation == LightOpe.LocalAdd then
 		lthing.query = function()
 			local localcx, localcy, localcz = Localize(lthing.x, lthing.y, lthing.z)
 			local val, _, dat = cget:getVoxel(localcx, localcy, localcz)
@@ -134,7 +134,7 @@ local function LightningQueries(lthing, lightoperation)
 				end
 			end
 		end
-	elseif lightoperation == "NewSunlightSubtraction" then
+	elseif lightoperation == LightOpe.SunSubtract then
 		lthing.query = function()
 			local val = cget:getVoxel(cx, cy, cz)
 			local fget = cget:getVoxelFirstData(cx, cy, cz)
@@ -151,7 +151,7 @@ local function LightningQueries(lthing, lightoperation)
 				return false
 			end
 		end
-	elseif lightoperation == "NewSunlightDownSubtraction" then
+	elseif lightoperation == LightOpe.SunDownSubtract then
 		lthing.query = function()
 			if TileLightable(GetVoxel(lthing.x, lthing.y, lthing.z), true) then
 				SetVoxelFirstData(lthing.x, lthing.y, lthing.z, Tiles.AIR_Block.id)
@@ -167,16 +167,16 @@ local function LightningQueries(lthing, lightoperation)
 	return lthing
 end
 local operationFunctions = {
-	["NewSunlightForceAddition"] = LightingQueueAdd,
-	["NewSunlightAdditionCreation"] = LightingQueueAdd,
-	["NewSunlightDownAddition"] = LightingQueueAdd,
-	["NewLocalLightForceAddition"] = LightingQueueAdd,
-	["NewLocalLightAdditionCreation"] = LightingQueueAdd,
-	["NewSunlightAddition"] = LightingQueueAdd,
-	["NewLocalLightAddition"] = LightingQueueAdd,
-	["NewLocalLightSubtraction"] = LightingRemovalQueueAdd,
-	["NewSunlightSubtraction"] = LightingRemovalQueueAdd,
-	["NewSunlightDownSubtraction"] = LightingRemovalQueueAdd,
+	[LightOpe.SunForceAdd] = LightingQueueAdd,
+	[LightOpe.SunCreationAdd] = LightingQueueAdd,
+	[LightOpe.SunDownAdd] = LightingQueueAdd,
+	[LightOpe.LocalForceAdd] = LightingQueueAdd,
+	[LightOpe.LocalCreationAdd] = LightingQueueAdd,
+	[LightOpe.SunAdd] = LightingQueueAdd,
+	[LightOpe.LocalAdd] = LightingQueueAdd,
+	[LightOpe.LocalSubtract] = LightingRemovalQueueAdd,
+	[LightOpe.SunSubtract] = LightingRemovalQueueAdd,
+	[LightOpe.SunDownSubtract] = LightingRemovalQueueAdd,
 }
 
 function NewLightOperation(x, y, z, lightoperation, value)
