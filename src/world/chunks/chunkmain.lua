@@ -38,19 +38,19 @@ function NewChunk(x, z)
 					local this = self.heightMap[i][j]
 					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
 						NewLightOperation(gridX - 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
-						--ThreadLightingChannel:push({gridX - 1, this, gridZ, LightOpe.SunDownAdd, LightSources[15]})
+						--ThreadLightingChannel:push({"LightOperation",gridX - 1, this, gridZ, LightOpe.SunDownAdd, LightSources[15]})
 					end
 					if j == 1 or this > self.heightMap[i][j - 1] then
 						NewLightOperation(gridX, this, gridZ - 1, "NewSunlightDownAddition", LightSources[15])
-						--ThreadLightingChannel:push({gridX, this, gridZ - 1, LightOpe.SunDownAdd, LightSources[15]})
+						--ThreadLightingChannel:push({"LightOperation",gridX, this, gridZ - 1, LightOpe.SunDownAdd, LightSources[15]})
 					end
 					if i == ChunkSize or this > self.heightMap[i + 1][j] then
 						NewLightOperation(gridX + 1, this, gridZ, "NewSunlightDownAddition", LightSources[15])
-						--ThreadLightingChannel:push({gridX + 1, this, gridZ, LightOpe.SunDownAdd, LightSources[15]})
+						--ThreadLightingChannel:push({"LightOperation",gridX + 1, this, gridZ, LightOpe.SunDownAdd, LightSources[15]})
 					end
 					if j == ChunkSize or this > self.heightMap[i][j + 1] then
 						NewLightOperation(gridX, this, gridZ + 1, "NewSunlightDownAddition", LightSources[15])
-						--ThreadLightingChannel:push({gridX, this, gridZ + 1, LightOpe.SunDownAdd, LightSources[15]})
+						--ThreadLightingChannel:push({"LightOperation",gridX, this, gridZ + 1, LightOpe.SunDownAdd, LightSources[15]})
 					end
 				end
 			end
@@ -173,13 +173,13 @@ function NewChunk(x, z)
 				end
 				if inDirectSunlight and not blockAboveExists then
 					NewLightOperation(gx, gy, gz, "NewSunlightDownAddition", sunlight)
-					--ThreadLightingChannel:push({gx, gy, gz, LightOpe.SunDownAdd,sunlight})
+					--ThreadLightingChannel:push({"LightOperation",gx, gy, gz, LightOpe.SunDownAdd,sunlight})
 				else
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
 								NewLightOperation(gx + dx, gy + dy, gz + dz, "NewSunlightAdditionCreation")
-								--ThreadLightingChannel:push({gx + dx, gy + dy, gz + dz, LightOpe.Sun})
+								--ThreadLightingChannel:push({"LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.Sun})
 							end
 						end
 					end
@@ -188,14 +188,14 @@ function NewChunk(x, z)
 					local source = TileLightSource(blockvalue)
 					if source > 0 then
 						NewLightOperation(gx, gy, gz, "NewLocalLightAddition", source)
-						--ThreadLightingChannel:push({ gx, gy, gz, LightOpe.LocalAdd, source })
+						--ThreadLightingChannel:push({ "LightOperation",gx, gy, gz, LightOpe.LocalAdd, source })
 						placingLocalSource = true
 					else
 						for dx = -1, 1 do
 							for dy = -1, 1 do
 								for dz = -1, 1 do
 									NewLightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
-									--ThreadLightingChannel:push({ gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd })
+									--ThreadLightingChannel:push({ "LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd })
 								end
 							end
 						end
@@ -204,10 +204,10 @@ function NewChunk(x, z)
 			else
 				local semiLightable = TileLightable(blockvalue, true)
 				NewLightOperation(gx, gy - 1, gz, "NewSunlightDownSubtraction")
-				--ThreadLightingChannel:push({ gx, gy - 1, gz, LightOpe.SunDownSubtract })
+				--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract })
 				if semiLightable and inDirectSunlight and manuallyPlaced then
 					NewLightOperation(gx, gy + 1, gz, "NewSunlightAdditionCreation")
-					--ThreadLightingChannel:push({ gx, gy + 1, gz, LightOpe.SunCreationAdd })
+					--ThreadLightingChannel:push({ "LightOperation",gx, gy + 1, gz, LightOpe.SunCreationAdd })
 				end
 				if not semiLightable or manuallyPlaced then
 					destroyLight = not TileLightable(blockvalue, true)
@@ -218,7 +218,7 @@ function NewChunk(x, z)
 								local nget = GetVoxelFirstData(nx, ny, nz)
 								if nget < LightSources[15] then
 									NewLightOperation(nx, ny, nz, "NewSunlightSubtraction", nget + LightSources[1])
-									--ThreadLightingChannel:push({ nx, ny, nz, LightOpe.SunSubtract,nget + LightSources[1] })
+									--ThreadLightingChannel:push({ "LightOperation",nx, ny, nz, LightOpe.SunSubtract,nget + LightSources[1] })
 								end
 							end
 						end
@@ -228,7 +228,7 @@ function NewChunk(x, z)
 			local source = TileLightSource(self:getVoxel(x, y, z))
 			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
 				NewLightOperation(gx, gy, gz, "NewLocalLightSubtraction", source + LightSources[1])
-				--ThreadLightingChannel:push({gx, gy, gz, LightOpe.LocalSubtract ,source + LightSources[1]})
+				--ThreadLightingChannel:push({"LightOperation",gx, gy, gz, LightOpe.LocalSubtract ,source + LightSources[1]})
 				destroyLight = true
 			end
 			if manuallyPlaced then
@@ -240,7 +240,7 @@ function NewChunk(x, z)
 								if nget < LightSources[15] then
 									local xd, yd, zd = gx + dx, gy + dy, gz + dz
 									NewLightOperation(xd, yd, zd, "NewLocalLightSubtraction", nget + LightSources[1])
-									--ThreadLightingChannel:push({xd, yd, zd, LightOpe.LocalSubtract ,nget + LightSources[1]})
+									--ThreadLightingChannel:push({"LightOperation",xd, yd, zd, LightOpe.LocalSubtract ,nget + LightSources[1]})
 								end
 							end
 						end
@@ -251,7 +251,7 @@ function NewChunk(x, z)
 						for dy = -1, 1 do
 							for dz = -1, 1 do
 								NewLightOperation(gx + dx, gy + dy, gz + dz, "NewLocalLightAdditionCreation")
-								--ThreadLightingChannel:push({gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd})
+								--ThreadLightingChannel:push({"LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd})
 							end
 						end
 					end

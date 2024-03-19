@@ -29,11 +29,12 @@ local function GetOrCreateChunk(chunkX, chunkZ)
 		ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 		ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk
 		--BlockModellingChannel:push({ chunkX = chunkX, chunkZ = chunkZ })
+		--TODO FIX THIS IS DOESN4T WORK
+		--ThreadLightingChannel:push({ "UpdateChunkHashTable", ChunkHashTable })
 	end
 	_JPROFILER.pop("GetOrCreateChunk")
 	return chunk
 end
-
 local function forceChunkModelsRemoval(chunk)
 	_JPROFILER.push("forceChunkModelsRemoval")
 	if chunk.slices then
@@ -140,6 +141,7 @@ local function processChunkUpdates(chunk)
 	elseif chunk.updateLighting == false then
 		_JPROFILER.push("LightingUpdate_processChunkUpdates")
 		LightingUpdate()
+		--ThreadLightingChannel:push({ "updateLighting" })
 		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
 		chunk.updateLighting = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then

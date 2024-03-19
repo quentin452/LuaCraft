@@ -10,7 +10,6 @@ function InitializeTilesNumberAndName()
 		taggedFunc.func()
 	end
 end
-
 -- Retrieves tile data from Tiles table by ID
 function GetValueFromTilesById(n)
 	return TilesById[n]

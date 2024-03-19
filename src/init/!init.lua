@@ -44,10 +44,6 @@ function InitializeGame()
 	_JPROFILER.push("createLoggingThread")
 	ThreadLogChannel = createLoggingThread()
 	_JPROFILER.pop("createLoggingThread")
-	--TODO FIX LIGHTING THREAD
-	--_JPROFILER.push("createLightningThread")
-	--ThreadLightingChannel = createLightningThread()
-	--_JPROFILER.pop("createLightningThread")
 	--TODO FIX BLOCK MODELLING THREAD
 	--_JPROFILER.push("createBlockModellingThread")
 	--BlockModellingChannel = createBlockModellingThread()
