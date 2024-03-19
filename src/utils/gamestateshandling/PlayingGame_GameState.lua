@@ -52,3 +52,39 @@ function GamestatePlayingGameUpdateGame(dt)
 		UpdateLogic(dt)
 	end
 end
+
+--mouseandkeybindlogic.lua
+function GamestatePlayingGameSettingsMouseAndKeybindLogic(x, y, b)
+	-- Forward mousepress events to all things in ThingList
+	if ThingList == nil then
+		return
+	end
+	for i = 1, #ThingList do
+		local thing = ThingList[i]
+		if thing and thing.mousepressed then
+			thing:mousepressed(b)
+		end
+	end
+
+	-- Handle clicking to place / destroy blocks
+	local pos = ThePlayer and ThePlayer.cursorpos
+	local value = 0
+
+	if b == 2 and FixinputforDrawCommandInput == false then
+		pos = ThePlayer and ThePlayer.cursorposPrev
+		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or Tiles.AIR_Block.id
+	end
+
+	local chunk = pos and pos.chunk
+
+	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
+		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
+		LightingUpdate()
+	--ThreadLightingChannel:push({ "updateLighting" })
+	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
+		HudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
+		HudTimeLeft = 3
+	end
+	_JPROFILER.pop("MouseLogicOnPlay")
+	_JPROFILER.pop("frame")
+end
