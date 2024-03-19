@@ -60,22 +60,19 @@ function NewCave(x, y, z)
 	end
 
 	t.carve = function(self)
-		local voxel = GetVoxel(self.x, self.y, self.z)
-
-		if voxel ~= 0 then
+		if GetVoxel(self.x, self.y, self.z) ~= 0 then
 			local halfRandom = math.random() / 2
+			local squaredRadius = self.radius * self.radius
 
 			for i = -self.radius, self.radius do
 				for j = -self.radius, self.radius do
 					for k = -self.radius, self.radius do
-						local distance = math.dist3d(i, j, k, 0, 0, 0)
-						if distance + halfRandom < self.radius then
+						local distanceSquared = i * i + j * j + k * k
+						if distanceSquared + halfRandom < squaredRadius then
 							local gx, gy, gz = self.x + i, self.y + j, self.z + k
 							local chunk, cx, cy, cz = GetChunk(gx, gy, gz)
-
 							if chunk ~= nil then
 								chunk:setVoxelRaw(cx, cy, cz, Tiles.AIR_Block.id, LightSources[0])
-
 								if cy == chunk.heightMap[cx][cz] then
 									NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[15])
 									--[[	ThreadLightingChannel:push({"LightOperation",
@@ -93,9 +90,7 @@ function NewCave(x, y, z)
 			end
 		end
 	end
-
 	CaveList[#CaveList + 1] = t
 	_JPROFILER.pop("NewCave")
-
 	return t
 end
