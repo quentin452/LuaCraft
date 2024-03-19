@@ -58,26 +58,13 @@ function love.load()
 end
 
 function love.textinput(text)
-	if Gamestate == GamestatePlayingGame and EnableCommandHUD == true then
-		CurrentCommand = CurrentCommand .. text
-	end
+	GamestatePlayingGameTextInput(text)
 end
 
 function love.resize(w, h)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainresize")
-	if Gamestate == GamestatePlayingGame then
-		local scaleX = w / GraphicsWidth
-		local scaleY = h / GraphicsHeight
-		Lovegraphics.scale(scaleX, scaleY)
-		local newCanvas = Lovegraphics.newCanvas(w, h)
-
-		Lovegraphics.setCanvas(newCanvas)
-		Lovegraphics.draw(Scene.twoCanvas)
-		Lovegraphics.setCanvas()
-
-		Scene.twoCanvas = newCanvas
-	end
+	GamestatePlayingGameResize(w, h)
 	local scaleCoefficient = 0.7
 	InterfaceWidth = w * scaleCoefficient
 	InterfaceHeight = h * scaleCoefficient
@@ -128,10 +115,7 @@ end
 function love.mousemoved(x, y, dx, dy)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainmousemoved")
-	-- forward mouselook to Scene object for first person camera control
-	if Gamestate == GamestatePlayingGame then
-		Scene:mouseLook(x, y, dx, dy)
-	end
+	GamestatePlayingGameMouseMoved(x, y, dx, dy)
 	_JPROFILER.pop("Mainmousemoved")
 	_JPROFILER.pop("frame")
 end

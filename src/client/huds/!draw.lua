@@ -10,17 +10,6 @@ function DrawGame()
 		_JPROFILER.push("drawWorldCreationMenu")
 		drawWorldCreationMenu()
 		_JPROFILER.pop("drawWorldCreationMenu")
-	elseif Gamestate == GamestatePlayingGame then
-		_JPROFILER.push("DrawGameScene")
-		-- draw 3d scene
-		Scene:render(true)
-		-- draw HUD
-		Scene:renderFunction(function()
-			DrawHudMain()
-		end, false)
-		love.graphics.setColor(1, 1, 1)
-		DrawCanevas()
-		_JPROFILER.pop("DrawGameScene")
 	elseif Gamestate == GamestateMainMenuSettings or Gamestate == GamestatePlayingGameSettings then
 		_JPROFILER.push("drawMenuSettings")
 		DrawMenuSettings()
@@ -29,9 +18,7 @@ function DrawGame()
 		_JPROFILER.push("drawMenuSettings")
 		DrawKeybindingSettings()
 		_JPROFILER.pop("drawMenuSettings")
-	elseif Gamestate == GamestateMainMenu then
-		_JPROFILER.push("drawMainMenu")
-		drawMainMenu()
-		_JPROFILER.pop("drawMainMenu")
 	end
+	GamestateMainMenuDrawGame()
+	GamestatePlayingGameDrawGame()
 end

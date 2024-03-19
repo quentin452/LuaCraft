@@ -2,22 +2,8 @@ function MouseLogicOnPlay(x, y, b)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MouseLogicOnPlay")
 
-	if Gamestate == GamestateMainMenu then
-		if b == 1 then
-			local choiceClicked = math.floor((y - _Mainmenu.y) / Font25:getHeight("X"))
-			if choiceClicked >= 1 and choiceClicked <= #_Mainmenu.choice then
-				_Mainmenu.selection = choiceClicked
-				if choiceClicked == 1 then
-					_WorldCreationMenu.selection = 0
-					Gamestate = GamestateWorldCreationMenu
-				elseif choiceClicked == 2 then
-					Gamestate = GamestateMainMenuSettings
-				elseif choiceClicked == 3 then
-					love.event.push("quit")
-				end
-			end
-		end
-	elseif Gamestate == GamestateKeybindingMainSettings then
+	GamestateMainMenuMouseAndKeybindLogic(x, y, b)
+	if Gamestate == GamestateKeybindingMainSettings then
 		if b == 1 then
 			local choiceClicked = math.floor((y - _KeybindingMenuSettings.y) / Font25:getHeight("X"))
 			if choiceClicked >= 1 and choiceClicked <= #_KeybindingMenuSettings.choice then

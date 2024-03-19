@@ -8,6 +8,7 @@ local colorMap = {
 	["3"] = { 0, 255, 255 }, -- blue
 }
 
+--TODO MADE FONT15 + FONT25 EASIER (GAMESTATEHANDLING/REWRITE)
 function drawColorString(Pstring, Px, Py)
 	_JPROFILER.push("drawColorString")
 	local rx, ry = Px, Py
@@ -60,7 +61,20 @@ local previousGamestate = nil
 
 function setFont()
 	_JPROFILER.push("setFont")
-	local selectedFont = fontTable[Gamestate]
+	local selectedFont = nil
+	if
+		Gamestate == GamestateMainMenu
+		or Gamestate == GamestateMainMenuSettings
+		or Gamestate == GamestateGamePausing
+		or Gamestate == GamestatePlayingGameSettings
+		or Gamestate == GamestateKeybindingMainSettings
+		or Gamestate == GamestateKeybindingPlayingGameSettings
+	then
+		selectedFont = Font25
+	elseif Gamestate == GamestateWorldCreationMenu or Gamestate == GamestatePlayingGame then
+		selectedFont = Font15
+	end
+
 	if selectedFont and Gamestate ~= previousGamestate then
 		Lovegraphics.setFont(selectedFont)
 		previousGamestate = Gamestate

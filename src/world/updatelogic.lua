@@ -3,7 +3,7 @@
 local destroyChunkModels = 0
 local updateCounterForRemeshModel = 0
 
-local function renderdistancevalue()
+function renderdistancevalue()
 	_JPROFILER.push("renderdistancevalue")
 	if Renderdistancegetresetted == true then
 		RenderDistance = getRenderDistanceValue()
@@ -12,7 +12,7 @@ local function renderdistancevalue()
 	_JPROFILER.pop("renderdistancevalue")
 end
 
-local function PlayerInitIfNeeded()
+function PlayerInitIfNeeded()
 	_JPROFILER.push("PlayerInitIfNeeded")
 	if ThePlayer == nil then
 		PlayerInit()
@@ -205,7 +205,7 @@ local function UpdateChunksWithinRenderDistance(playerChunkX, playerChunkZ, Rend
 	end
 	_JPROFILER.pop("UpdateChunksWithinRenderDistance")
 end
-local function UpdateAndGenerateChunks(RenderDistance)
+function UpdateAndGenerateChunks(RenderDistance)
 	_JPROFILER.push("UpdateAndGenerateChunks")
 	RenderChunks = {}
 	local playerPosition = getPlayerPosition()
@@ -216,7 +216,7 @@ local function UpdateAndGenerateChunks(RenderDistance)
 	_JPROFILER.pop("UpdateAndGenerateChunks")
 end
 
-local function UpdateLogic(dt)
+function UpdateLogic(dt)
 	_JPROFILER.push("UpdateLogic")
 	LogicAccumulator = LogicAccumulator + dt
 	updateThingList(dt)
@@ -225,11 +225,6 @@ end
 
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
-	if Gamestate == GamestatePlayingGame then
-		renderdistancevalue()
-		PlayerInitIfNeeded()
-		UpdateAndGenerateChunks(RenderDistance)
-		UpdateLogic(dt)
-	end
+	GamestatePlayingGameUpdateGame(dt)
 	_JPROFILER.pop("UpdateGameDT")
 end
