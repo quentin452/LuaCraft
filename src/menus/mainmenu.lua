@@ -27,11 +27,11 @@ end
 
 function keysinitMainMenu(k)
 	if type(_Mainmenu.choice) == "table" and _Mainmenu.selection then
-		if k == "s" then
+		if k == BackWardKey then
 			if _Mainmenu.selection < #_Mainmenu.choice then
 				_Mainmenu.selection = _Mainmenu.selection + 1
 			end
-		elseif k == "z" then
+		elseif k == ForWardKey then
 			if _Mainmenu.selection > 1 then
 				_Mainmenu.selection = _Mainmenu.selection - 1
 			end

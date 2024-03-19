@@ -80,11 +80,11 @@ function DrawKeybindingSettings()
 end
 function keysinitKeybindingSettings(k)
 	if type(_KeybindingMenuSettings.choice) == "table" and _KeybindingMenuSettings.selection then
-		if k == "s" and ConfiguringMovementKey == false then
+		if k == BackWardKey and ConfiguringMovementKey == false then
 			if _KeybindingMenuSettings.selection < #_KeybindingMenuSettings.choice then
 				_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection + 1
 			end
-		elseif k == "z" and ConfiguringMovementKey == false then
+		elseif k == ForWardKey and ConfiguringMovementKey == false then
 			if _KeybindingMenuSettings.selection > 1 then
 				_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection - 1
 			end

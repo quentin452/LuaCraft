@@ -73,11 +73,11 @@ end
 
 function keysinitMenuSettings(k)
 	if type(_MainMenuSettings.choice) == "table" and _MainMenuSettings.selection then
-		if k == "s" then
+		if k == BackWardKey then
 			if _MainMenuSettings.selection < #_MainMenuSettings.choice then
 				_MainMenuSettings.selection = _MainMenuSettings.selection + 1
 			end
-		elseif k == "z" then
+		elseif k == ForWardKey then
 			if _MainMenuSettings.selection > 1 then
 				_MainMenuSettings.selection = _MainMenuSettings.selection - 1
 			end

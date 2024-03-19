@@ -77,3 +77,8 @@ BlockGetPositiveX = nil
 BlockGetNegativeX = nil
 BlockGetPositiveZ = nil
 BlockGetNegativeZ = nil
+--Keybinds
+ForWardKey = nil
+BackWardKey = nil
+LeftKey = nil
+RightKey = nil

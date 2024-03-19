@@ -30,11 +30,11 @@ end
 
 function keysInitWorldCreationMenu(k)
 	if type(_WorldCreationMenu.choice) == "table" and _WorldCreationMenu.selection then
-		if k == "s" then
+		if k == BackWardKey then
 			if _WorldCreationMenu.selection < #_WorldCreationMenu.choice then
 				_WorldCreationMenu.selection = _WorldCreationMenu.selection + 1
 			end
-		elseif k == "z" then
+		elseif k == ForWardKey then
 			if _WorldCreationMenu.selection > 1 then
 				_WorldCreationMenu.selection = _WorldCreationMenu.selection - 1
 			end

@@ -1,15 +1,12 @@
 local playerReach = 5
-local forwardKey = nil
-local backwardKey = nil
-local leftKey = nil
-local rightKey = nil
+
 function ReLoadMovementKeyValues()
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
-		forwardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
-		backwardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
-		leftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
-		rightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
+		ForWardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
+		BackWardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
+		LeftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
+		RightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
 	else
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
@@ -112,10 +109,10 @@ function NewPlayer(x, y, z)
 		-- take player input
 		if FixinputforDrawCommandInput == false then
 			local directionKeys = {
-				[forwardKey] = { 0, -1 },
-				[leftKey] = { -1, 0 },
-				[backwardKey] = { 0, 1 },
-				[rightKey] = { 1, 0 },
+				[ForWardKey] = { 0, -1 },
+				[LeftKey] = { -1, 0 },
+				[BackWardKey] = { 0, 1 },
+				[RightKey] = { 1, 0 },
 			}
 
 			for key, dir in pairs(directionKeys) do

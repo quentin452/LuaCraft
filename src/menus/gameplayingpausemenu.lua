@@ -28,11 +28,11 @@ end
 function keysinitGamePlayingPauseMenu(k)
 	_JPROFILER.push("keysinitGamePlayingPauseMenu")
 	if type(_GamePlayingPauseMenu.choice) == "table" and _GamePlayingPauseMenu.selection then
-		if k == "s" then
+		if k == BackWardKey then
 			if _GamePlayingPauseMenu.selection < #_GamePlayingPauseMenu.choice then
 				_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection + 1
 			end
-		elseif k == "z" then
+		elseif k == ForWardKey then
 			if _GamePlayingPauseMenu.selection > 1 then
 				_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection - 1
 			end
