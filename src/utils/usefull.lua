@@ -7,61 +7,50 @@ local colorMap = {
 	["2"] = { 0, 255, 0 }, -- green
 	["3"] = { 0, 255, 255 }, -- blue
 }
-
---TODO MADE FONT15 + FONT25 EASIER (GAMESTATEHANDLING/REWRITE)
 function drawColorString(Pstring, Px, Py)
-	_JPROFILER.push("drawColorString")
-	local rx, ry = Px, Py
-	local defaultColor = { 255, 255, 255 }
-	local currentColor = defaultColor
+    _JPROFILER.push("drawColorString")
+    local rx, ry = Px, Py
+    local defaultColor = { 255, 255, 255 }
+    local currentColor = defaultColor
 
-	Lovegraphics.setColor(currentColor)
+    Lovegraphics.setColor(currentColor)
 
-	local i = 1
-	local len = #Pstring
+    local i = 1
+    local len = #Pstring
 
-	while i <= len do
-		local c = string.sub(Pstring, i, i)
+    while i <= len do
+        local c = string.sub(Pstring, i, i)
 
-		if c == "%" then
-			local colorDigit = string.sub(Pstring, i + 1, i + 1)
-			currentColor = colorMap[tostring(colorDigit)] or defaultColor
-			Lovegraphics.setColor(currentColor)
-			i = i + 2 -- skip both '%' and the color digit
-		else
-			Lovegraphics.print(c, rx, ry)
-			local fontWidth = (
-				Gamestate == GamestateMainMenu
-				or Gamestate == GamestateMainMenuSettings
-				or Gamestate == GamestateGamePausing
-				or Gamestate == GamestatePlayingGameSettings
-				or Gamestate == GamestateKeybindingMainSettings
-				or Gamestate == GamestateKeybindingPlayingGameSettings
-			)
-					and Font25
-				or (GamestateWorldCreationMenu or Gamestate == GamestatePlayingGame) and Font15
-			rx = rx + fontWidth:getWidth(c)
-			i = i + 1
-		end
-	end
-	Lovegraphics.setColor(defaultColor)
-	_JPROFILER.pop("drawColorString")
+        if c == "%" then
+            local colorDigit = string.sub(Pstring, i + 1, i + 1)
+            currentColor = colorMap[tostring(colorDigit)] or defaultColor
+            Lovegraphics.setColor(currentColor)
+            i = i + 2 -- skip both '%' and the color digit
+        else
+            Lovegraphics.print(c, rx, ry)
+            local selectedFont = getSelectedFont()
+            local fontWidth = selectedFont:getWidth(c)
+            rx = rx + fontWidth
+            i = i + 1
+        end
+    end
+    Lovegraphics.setColor(defaultColor)
+    _JPROFILER.pop("drawColorString")
 end
-
-local fontTable = {
-	MainMenu = Font25,
-	MainMenuSettings = Font25,
-	GamePausing = Font25,
-	PlayingGameSettings = Font25,
-	WorldCreationMenu = Font15,
-	PlayingGame = Font15,
-}
 
 local previousGamestate = nil
 
 function setFont()
 	_JPROFILER.push("setFont")
-	local selectedFont = nil
+	local selectedFont = getSelectedFont()
+	if selectedFont and Gamestate ~= previousGamestate then
+		Lovegraphics.setFont(selectedFont)
+		previousGamestate = Gamestate
+	end
+	_JPROFILER.pop("setFont")
+end
+
+function getSelectedFont()
 	if
 		Gamestate == GamestateMainMenu
 		or Gamestate == GamestateMainMenuSettings
@@ -70,16 +59,10 @@ function setFont()
 		or Gamestate == GamestateKeybindingMainSettings
 		or Gamestate == GamestateKeybindingPlayingGameSettings
 	then
-		selectedFont = Font25
+		return Font25
 	elseif Gamestate == GamestateWorldCreationMenu or Gamestate == GamestatePlayingGame then
-		selectedFont = Font15
+		return Font15
 	end
-
-	if selectedFont and Gamestate ~= previousGamestate then
-		Lovegraphics.setFont(selectedFont)
-		previousGamestate = Gamestate
-	end
-	_JPROFILER.pop("setFont")
 end
 
 -- Calculates texture coordinates for given offsets
