@@ -8,9 +8,6 @@ local SIXDIRECTIONS = {
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
 
-local LightingQueue = {}
-local LightingRemovalQueue = {}
-
 -- Function to add an item to the lighting queue
 local function LightingQueueAdd(lthing)
 	LightingQueue[#LightingQueue + 1] = lthing
