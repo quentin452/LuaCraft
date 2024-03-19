@@ -58,6 +58,7 @@ ModLoaderTable = {}
 SliceModels = {}
 ChunkSet = {}
 ChunkHashTable = {}
+ChunkHashTableTesting = {}
 CaveList = {}
 ThingList = {}
 Engine = {}

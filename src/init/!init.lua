@@ -34,6 +34,19 @@ function iterateOverAllTiles()
 		})
 	end
 end
+
+local function updateTable(key, value)
+	-- Envoi du message au thread séparé via le canal
+	ChunkHashTableChannel:push({ key, value })
+	print("Message envoyé au thread séparé:", key, value)
+end
+
+-- Fonction pour générer des valeurs aléatoires pour ChunkHashTableTesting
+local function generateRandomValues()
+	local randomKey = tostring(math.random(100)) -- Génération d'une clé aléatoire
+	local randomValue = math.random(1000) -- Génération d'une valeur aléatoire
+	updateTable(randomKey, randomValue) -- Mise à jour de la table dans le thread séparé
+end
 function InitializeGame()
 	_JPROFILER.push("loadAndSaveLuaCraftFileSystem")
 	loadAndSaveLuaCraftFileSystem()
@@ -44,6 +57,12 @@ function InitializeGame()
 	_JPROFILER.push("createLoggingThread")
 	ThreadLogChannel = createLoggingThread()
 	_JPROFILER.pop("createLoggingThread")
+--	_JPROFILER.push("createChunkHashTableThread")
+--	ChunkHashTableChannel = createChunkHashTableThread()
+--	_JPROFILER.pop("createChunkHashTableThread")
+--	for i = 1, 10 do
+--		generateRandomValues()
+--	end
 	--TODO FIX BLOCK MODELLING THREAD
 	--_JPROFILER.push("createBlockModellingThread")
 	--BlockModellingChannel = createBlockModellingThread()
