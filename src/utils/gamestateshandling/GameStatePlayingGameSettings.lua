@@ -83,6 +83,7 @@ local function PerformMenuAction(action)
 	elseif action == 6 then
 		SetCurrentGameState(GamestateKeybindingPlayingGameSettings2)
 	elseif action == 7 then
+		WorldSuccessfullyLoaded = true
 		SetCurrentGameState(GameStatePlayingGame2)
 		love.mouse.setRelativeMode(true)
 	end
