@@ -25,7 +25,7 @@ function NewChunk(x, z)
 		chunk.heightMap[i] = {}
 	end
 	--TODO Made a config to change the Terrain Generation WorldType in worldcreationmenu.lua
-	GenerateTerrain(chunk, x, z, StandardTerrain)
+	GenerateTerrain(chunk, x, z, GlobalWorldType)
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
 	if choose({ true, false }) then
 		for _, config in ipairs(caveConfigs) do

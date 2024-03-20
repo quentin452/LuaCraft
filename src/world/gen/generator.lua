@@ -105,10 +105,13 @@ function OctaveNoise(x, y, octaves, seed1, seed2)
 	local freq = 1
 	local amp = 1
 	for i = 1, octaves do
-		ret = ret + love.math.noise(x * freq + Salt[seed1] * OneHundredThoused, y * freq + Salt[seed2] * OneHundredThoused) * amp - amp / 2
+		ret = ret
+			+ love.math.noise(x * freq + Salt[seed1] * OneHundredThoused, y * freq + Salt[seed2] * OneHundredThoused) * amp
+			- amp / 2
 		freq = freq * 0.5
 		amp = amp * 2
 	end
 
 	return ret
 end
+GlobalWorldType = StandardTerrain
