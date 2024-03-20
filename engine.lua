@@ -314,40 +314,25 @@ function VectorLength(x2, y2, z2)
 
 	return ((x2 - x1) ^ 2 + (y2 - y1) ^ 2 + (z2 - z1) ^ 2) ^ 0.5
 end
-function ScaleVerts(verts, sx, sy, sz)
-	_JPROFILER.push("ScaleVerts")
-
+function TransformVerts(verts, sx, sy, sz, operation)
+	_JPROFILER.push(operation .. "Verts")
 	if sy == nil then
 		sy = sx
 		sz = sx
 	end
-
 	for i = 1, #verts do
 		local this = verts[i]
-		this[1] = this[1] * sx
-		this[2] = this[2] * sy
-		this[3] = this[3] * sz
+		if operation == "Scale" then
+			this[1] = this[1] * sx
+			this[2] = this[2] * sy
+			this[3] = this[3] * sz
+		elseif operation == "Move" then
+			this[1] = this[1] + sx
+			this[2] = this[2] + sy
+			this[3] = this[3] + sz
+		end
 	end
-	_JPROFILER.pop("ScaleVerts")
-
-	return verts
-end
-function MoveVerts(verts, sx, sy, sz)
-	_JPROFILER.push("MoveVerts")
-
-	if sy == nil then
-		sy = sx
-		sz = sx
-	end
-
-	for i = 1, #verts do
-		local this = verts[i]
-		this[1] = this[1] + sx
-		this[2] = this[2] + sy
-		this[3] = this[3] + sz
-	end
-	_JPROFILER.pop("MoveVerts")
-
+	_JPROFILER.pop(operation .. "Verts")
 	return verts
 end
 
