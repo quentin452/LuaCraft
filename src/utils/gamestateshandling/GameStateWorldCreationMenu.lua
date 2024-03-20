@@ -43,12 +43,24 @@ local function PerformMenuAction(action)
 		SetCurrentGameState(GamestateMainMenu2)
 	end
 end
+
 function GamestateWorldCreationMenu2:mousepressed(x, y, b)
 	if b == 1 then
-		local _, h = Lovegraphics.getDimensions()
+		local w, h = Lovegraphics.getDimensions()
+		local posX = w * 0.4
 		local posY = h * 0.4
-		local choiceClicked = math.floor((y -posY) / Font15:getHeight("X"))
-		if choiceClicked >= 1 and choiceClicked <= #_WorldCreationMenu.choice then
+		local lineHeight = Font15:getHeight("X")
+		local menuWidth = 0
+		for _, choice in ipairs(_WorldCreationMenu.choice) do
+			local choiceWidth = Font15:getWidth(choice)
+			if choiceWidth > menuWidth then
+				menuWidth = choiceWidth
+			end
+		end
+		local choiceClicked = math.floor((y - posY) / lineHeight)
+		local minX = posX
+		local maxX = posX + menuWidth
+		if choiceClicked >= 1 and choiceClicked <= #_WorldCreationMenu.choice and x >= minX and x <= maxX then
 			_WorldCreationMenu.selection = choiceClicked
 			PerformMenuAction(choiceClicked)
 		end

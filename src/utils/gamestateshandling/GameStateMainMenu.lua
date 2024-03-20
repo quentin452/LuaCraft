@@ -40,10 +40,21 @@ local function PerformMenuAction(action)
 end
 function GamestateMainMenu2:mousepressed(x, y, b)
 	if b == 1 then
-		local _, h = Lovegraphics.getDimensions()
+		local w, h = Lovegraphics.getDimensions()
+		local posX = w * 0.4
 		local posY = h * 0.4
-		local choiceClicked = math.floor((y - posY) / Font25:getHeight("X"))
-		if choiceClicked >= 1 and choiceClicked <= #_Mainmenu.choice then
+		local lineHeight = Font25:getHeight("X")
+		local menuWidth = 0
+		for _, choice in ipairs(_Mainmenu.choice) do
+			local choiceWidth = Font25:getWidth(choice)
+			if choiceWidth > menuWidth then
+				menuWidth = choiceWidth
+			end
+		end
+		local choiceClicked = math.floor((y - posY) / lineHeight)
+		local minX = posX
+		local maxX = posX + menuWidth
+		if choiceClicked >= 1 and choiceClicked <= #_Mainmenu.choice and x >= minX and x <= maxX then
 			_Mainmenu.selection = choiceClicked
 			PerformMenuAction(choiceClicked)
 		end

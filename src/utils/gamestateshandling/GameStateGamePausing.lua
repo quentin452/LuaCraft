@@ -58,19 +58,28 @@ local function PerformMenuAction(action)
 		ClearChunksAndGoToMainMenu()
 	end
 end
-
 function GamestateGamePausing2:mousepressed(x, y, b)
 	if b == 1 then
-		local _, h = Lovegraphics.getDimensions()
+		local w, h = Lovegraphics.getDimensions()
+		local posX = w * 0.4
 		local posY = h * 0.4
-		local choiceClicked = math.floor((y -posY) / Font25:getHeight("X"))
-		if choiceClicked >= 1 and choiceClicked <= #_GamePlayingPauseMenu.choice then
+		local lineHeight = Font25:getHeight("X")
+		local menuWidth = 0
+		for _, choice in ipairs(_GamePlayingPauseMenu.choice) do
+			local choiceWidth = Font25:getWidth(choice)
+			if choiceWidth > menuWidth then
+				menuWidth = choiceWidth
+			end
+		end
+		local choiceClicked = math.floor((y - posY) / lineHeight)
+		local minX = posX
+		local maxX = posX + menuWidth
+		if choiceClicked >= 1 and choiceClicked <= #_GamePlayingPauseMenu.choice and x >= minX and x <= maxX then
 			_GamePlayingPauseMenu.selection = choiceClicked
 			PerformMenuAction(choiceClicked)
 		end
 	end
 end
-
 function GamestateGamePausing2:keypressed(k)
 	_JPROFILER.push("keysinitGamePlayingPauseMenu")
 	if type(_GamePlayingPauseMenu.choice) == "table" and _GamePlayingPauseMenu.selection then
