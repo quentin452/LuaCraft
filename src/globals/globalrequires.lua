@@ -13,7 +13,6 @@ Perspective = require("src/client/huds/perspective")
 Engine = require("engine")
 
 local modules = {
-	"menus/settings/keybindingmenusettings",
 	"blocksandtiles/tiledata",
 	"utils/things",
 	"utils/math",
