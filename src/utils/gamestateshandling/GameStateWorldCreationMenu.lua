@@ -1,4 +1,7 @@
-function drawWorldCreationMenu()
+GamestateWorldCreationMenu2 = GameStateBase:new()
+
+function GamestateWorldCreationMenu2:draw()
+	_JPROFILER.push("drawWorldCreationMenu")
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / WorldCreationBackground:getWidth()
 	local scaleY = h / WorldCreationBackground:getHeight()
@@ -26,9 +29,27 @@ function drawWorldCreationMenu()
 
 		posY = posY + lineHeight
 	end
+	_JPROFILER.pop("drawWorldCreationMenu")
 end
 
-function keysInitWorldCreationMenu(k)
+function GamestateWorldCreationMenu2:mousepressed(x, y, b)
+	if b == 1 then
+		local choiceClicked = math.floor((y - _WorldCreationMenu.y) / Font15:getHeight("X"))
+		if choiceClicked >= 1 and choiceClicked <= #_WorldCreationMenu.choice then
+			_WorldCreationMenu.selection = choiceClicked
+			if choiceClicked == 1 then
+				SetPlayingGameStatePlayingGame2()
+				love.mouse.setRelativeMode(true)
+				GenerateWorld()
+			elseif choiceClicked == 2 then
+				SetPlayingGamestateMainMenu2()
+				_WorldCreationMenu.selection = 0
+			end
+		end
+	end
+end
+
+function GamestateWorldCreationMenu2:keypressed(k)
 	if type(_WorldCreationMenu.choice) == "table" and _WorldCreationMenu.selection then
 		if k == BackWardKey then
 			if _WorldCreationMenu.selection < #_WorldCreationMenu.choice then
@@ -40,11 +61,11 @@ function keysInitWorldCreationMenu(k)
 			end
 		elseif k == "return" then
 			if _WorldCreationMenu.selection == 1 then
-				Gamestate = GamestatePlayingGame
+				SetPlayingGameStatePlayingGame2()
 				love.mouse.setRelativeMode(true)
 				GenerateWorld()
 			elseif _WorldCreationMenu.selection == 2 then
-				Gamestate = GamestateMainMenu
+				SetPlayingGamestateMainMenu2()
 				_WorldCreationMenu.selection = 0
 			end
 		end

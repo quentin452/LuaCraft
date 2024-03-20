@@ -225,6 +225,6 @@ end
 
 function UpdateGame(dt)
 	_JPROFILER.push("UpdateGameDT")
-	GamestatePlayingGameUpdateGame(dt)
+	LuaCraftCurrentGameState:update(dt)
 	_JPROFILER.pop("UpdateGameDT")
 end

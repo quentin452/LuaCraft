@@ -1,4 +1,6 @@
-function DrawMenuSettings()
+GamestateMainMenuSettings2 = GameStateBase:new()
+
+function GamestateMainMenuSettings2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuSettingsBackground:getWidth()
 	local scaleY = h / MainMenuSettingsBackground:getHeight()
@@ -71,7 +73,37 @@ function DrawMenuSettings()
 	end
 end
 
-function keysinitMenuSettings(k)
+function GamestateMainMenuSettings2:mousepressed(x, y, b)
+	if b == 1 then
+		local choiceClicked = math.floor((y - _MainMenuSettings.y) / Font25:getHeight("X"))
+		if choiceClicked >= 1 and choiceClicked <= #_MainMenuSettings.choice then
+			_MainMenuSettings.selection = choiceClicked
+			if choiceClicked == 1 then
+				LuaCraftSettingsUpdater("toggleVSync")
+			elseif choiceClicked == 2 then
+				LuaCraftSettingsUpdater("NormalLoggingToggler")
+				ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+			elseif choiceClicked == 3 then
+				LuaCraftSettingsUpdater("WarnLoggingToggler")
+				ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+			elseif choiceClicked == 4 then
+				LuaCraftSettingsUpdater("ErrorLoggingToggler")
+				ThreadLogChannel:supply({ "ResetLoggerKeys", false })
+			elseif choiceClicked == 5 then
+				LuaCraftSettingsUpdater("renderdistanceSetting")
+				Renderdistancegetresetted = true
+			elseif choiceClicked == 6 then
+				SetPlayingGamestateKeybindingMainSettings2()
+				_MainMenuSettings.selection = 0
+			elseif choiceClicked == 7 then
+				SetPlayingGamestateMainMenu2()
+				_MainMenuSettings.selection = 0
+			end
+		end
+	end
+end
+
+function GamestateMainMenuSettings2:keypressed(k)
 	if type(_MainMenuSettings.choice) == "table" and _MainMenuSettings.selection then
 		if k == BackWardKey then
 			if _MainMenuSettings.selection < #_MainMenuSettings.choice then
@@ -97,23 +129,11 @@ function keysinitMenuSettings(k)
 				LuaCraftSettingsUpdater("renderdistanceSetting")
 				Renderdistancegetresetted = true
 			elseif _MainMenuSettings.selection == 6 then
-				if Gamestate == GamestatePlayingGameSettings then
-					Gamestate = GamestateKeybindingPlayingGameSettings
-					_MainMenuSettings.selection = 0
-				elseif Gamestate == GamestateMainMenuSettings then
-					Gamestate = GamestateKeybindingMainSettings
-					_MainMenuSettings.selection = 0
-				end
+				SetPlayingGamestateKeybindingMainSettings2()
 				_MainMenuSettings.selection = 0
 			elseif _MainMenuSettings.selection == 7 then
-				if Gamestate == GamestatePlayingGameSettings then
-					Gamestate = GamestatePlayingGame
-					love.mouse.setRelativeMode(true)
-					_MainMenuSettings.selection = 0
-				elseif Gamestate == GamestateMainMenuSettings then
-					Gamestate = GamestateMainMenu
-					_MainMenuSettings.selection = 0
-				end
+				SetPlayingGamestateMainMenu2()
+				_MainMenuSettings.selection = 0
 			end
 		end
 	end

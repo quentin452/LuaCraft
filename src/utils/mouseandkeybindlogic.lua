@@ -1,27 +1,3 @@
-function MouseLogicOnPlay(x, y, b)
-	_JPROFILER.push("frame")
-	_JPROFILER.push("MouseLogicOnPlay")
-	if Gamestate == GamestateMainMenu then
-		GamestateMainMenuMouseAndKeybindLogic(x, y, b)
-	elseif Gamestate == GamestateKeybindingMainSettings then
-		GamestateKeybindingMainSettingsMouseAndKeybindLogic(x, y, b)
-	elseif Gamestate == GamestateKeybindingPlayingGameSettings then
-		GamestateKeybindingPlayingGameSettingsMouseAndKeybindLogic(x, y, b)
-	elseif Gamestate == GamestatePlayingGameSettings then
-		GamestatePlayingGameSettingsMouseAndKeybindLogic(x, y, b)
-	elseif Gamestate == GamestateMainMenuSettings then
-		GamestateMainMenuSettingsMouseAndKeybindLogic(x, y, b)
-	elseif Gamestate == GamestateWorldCreationMenu then
-		GamestateWorldCreationMenuMouseAndKeybindLogic(x, y, b)
-	elseif Gamestate == GamestateGamePausing then
-		GamestateGamePausingMouseAndKeybindLogic(x, y, b)
-	elseif IsPlayingGame() then
-		GamestatePlayingGameMouseAndKeybindLogic(x, y, b)
-	end
-	_JPROFILER.pop("frame")
-	_JPROFILER.pop("MouseLogicOnPlay")
-end
-
 function KeyPressed(k)
 	if k == "f11" then
 		LuaCraftSettingsUpdater("toggleFullScreen")
@@ -30,54 +6,8 @@ function KeyPressed(k)
 	local numberPress = tonumber(k)
 	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and FixinputforDrawCommandInput == false then
 		PlayerInventory.hotbarSelect = numberPress
-	elseif Gamestate == GamestateMainMenu then
-		_JPROFILER.push("keysinitMainMenu")
-		keysinitMainMenu(k)
-		_JPROFILER.pop("keysinitMainMenu")
-	elseif Gamestate == GamestateMainMenuSettings or Gamestate == GamestatePlayingGameSettings then
-		_JPROFILER.push("keysinitMenuSettings")
-		keysinitMenuSettings(k)
-		_JPROFILER.pop("keysinitMenuSettings")
-	elseif Gamestate == GamestateKeybindingMainSettings or Gamestate == GamestateKeybindingPlayingGameSettings then
-		_JPROFILER.push("keysinitKeybindingSettings")
-		keysinitKeybindingSettings(k)
-		_JPROFILER.pop("keysinitKeybindingSettings")
-	elseif Gamestate == GamestateWorldCreationMenu then
-		_JPROFILER.push("keysInitWorldCreationMenu")
-		keysInitWorldCreationMenu(k)
-		_JPROFILER.pop("keysInitWorldCreationMenu")
-	elseif IsPlayingGame() then
-		if k == "escape" then
-			if EnableCommandHUD then
-				FixinputforDrawCommandInput = false
-				EnableCommandHUD = false
-			else
-				love.mouse.setRelativeMode(false)
-				love.mouse.setGrabbed(true)
-				love.mouse.setVisible(true)
-				Gamestate = GamestateGamePausing
-			end
-		elseif k == "f3" then
-			EnableF3 = not EnableF3
-		elseif k == "f8" then
-			EnableF8 = not EnableF8
-		elseif k == "f1" then
-			--EnableTESTBLOCK = not EnableTESTBLOCK
-		elseif k == "w" then
-			if EnableCommandHUD == false then
-				CurrentCommand = ""
-				EnableCommandHUD = true
-			end
-		elseif k == "backspace" and EnableCommandHUD then
-			CurrentCommand = string.sub(CurrentCommand, 1, -2)
-		elseif k == "return" and EnableCommandHUD then
-			ExecuteCommand(CurrentCommand)
-			CurrentCommand = ""
-		end
-	elseif Gamestate == GamestateGamePausing then
-		_JPROFILER.push("keysinitGamePlayingPauseMenu")
-		keysinitGamePlayingPauseMenu(k)
-		_JPROFILER.pop("keysinitGamePlayingPauseMenu")
+	else
+		LuaCraftCurrentGameState:keypressed(k)
 	end
 	if ConfiguringMovementKey then
 		if k == "escape" then

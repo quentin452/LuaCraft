@@ -66,6 +66,7 @@ function InitializeGame()
 	_JPROFILER.push("iterateOverAllTiles")
 	iterateOverAllTiles()
 	_JPROFILER.pop("iterateOverAllTiles")
+	
 	--TODO FIX LIGHTING THREAD
 	--	_JPROFILER.push("createLightningThread")
 	--	ThreadLightingChannel = createLightningThread()

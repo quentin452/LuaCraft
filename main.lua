@@ -50,6 +50,7 @@ function love.load()
 	Lovefilesystem.setIdentity("LuaCraft")
 	love.mouse.setGrabbed(true)
 	love.mouse.setVisible(true)
+	SetPlayingGamestateMainMenu2()
 	--create_Test_Thread()
 	InitializeGame()
 	FixHudHotbarandTileScaling()
@@ -58,13 +59,13 @@ function love.load()
 end
 
 function love.textinput(text)
-	GamestatePlayingGameTextInput(text)
+	LuaCraftCurrentGameState:textinput(text)
 end
 
 function love.resize(w, h)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainresize")
-	GamestatePlayingGameResize(w, h)
+	LuaCraftCurrentGameState:resize(w, h)
 	local scaleCoefficient = 0.7
 	InterfaceWidth = w * scaleCoefficient
 	InterfaceHeight = h * scaleCoefficient
@@ -82,7 +83,7 @@ function love.update(dt)
 	UpdateGame(dt)
 	if HudTimeLeft > 0 then
 		HudTimeLeft = HudTimeLeft - dt
-		if HudTimeLeft <= 0 or Gamestate ~= GamestatePlayingGame then
+		if HudTimeLeft <= 0 or LuaCraftCurrentGameState ~= GameStatePlayingGame2 then
 			HudMessage = ""
 		end
 	end
@@ -115,7 +116,7 @@ end
 function love.mousemoved(x, y, dx, dy)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainmousemoved")
-	GamestatePlayingGameMouseMoved(x, y, dx, dy)
+	LuaCraftCurrentGameState:mousemoved(x, y, dx, dy)
 	_JPROFILER.pop("Mainmousemoved")
 	_JPROFILER.pop("frame")
 end
@@ -127,7 +128,7 @@ function love.wheelmoved(x, y)
 end
 
 function love.mousepressed(x, y, b)
-	MouseLogicOnPlay(x, y, b)
+	LuaCraftCurrentGameState:mousepressed(x, y, b)
 end
 function love.keypressed(k)
 	_JPROFILER.push("frame")
