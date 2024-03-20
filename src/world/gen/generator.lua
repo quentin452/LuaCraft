@@ -115,3 +115,8 @@ function OctaveNoise(x, y, octaves, seed1, seed2)
 	return ret
 end
 GlobalWorldType = StandardTerrain
+
+WorldTypeMap = {
+    [StandardTerrain] = { name = "Standard Terrain", nextType = ClassicTerrain },
+    [ClassicTerrain] = { name = "Classic Terrain", nextType = StandardTerrain },
+}

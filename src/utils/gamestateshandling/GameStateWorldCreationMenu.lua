@@ -1,5 +1,6 @@
 local _WorldCreationMenu = CreateLuaCraftMenu(0, 0, "World Creation Menu", {
 	"Create World?",
+	"WorldType",
 	"Exiting to main menu",
 })
 
@@ -27,7 +28,13 @@ function GamestateWorldCreationMenu2:draw()
 			marque = "   "
 		end
 		local choiceText = _WorldCreationMenu.choice[n]
-		drawColorString(marque .. "" .. choiceText, posX, posY)
+		if n == 2 then
+			local worldType = WorldTypeMap[GlobalWorldType]
+			local worldTypeName = worldType.name
+			drawColorString(marque .. choiceText .. " (" .. worldTypeName .. ")", posX, posY)
+		else
+			drawColorString(marque .. "" .. choiceText, posX, posY)
+		end
 		posY = posY + lineHeight
 	end
 
@@ -40,10 +47,14 @@ local function PerformMenuAction(action)
 		love.mouse.setRelativeMode(true)
 		GenerateWorld()
 	elseif action == 2 then
+		local worldType = WorldTypeMap[GlobalWorldType]
+		if worldType and worldType.nextType then
+			GlobalWorldType = worldType.nextType
+		end
+	elseif action == 3 then
 		SetCurrentGameState(GamestateMainMenu2)
 	end
 end
-
 function GamestateWorldCreationMenu2:mousepressed(x, y, b)
 	if b == 1 then
 		local w, h = Lovegraphics.getDimensions()

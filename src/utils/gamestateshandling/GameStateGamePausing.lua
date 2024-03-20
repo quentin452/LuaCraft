@@ -45,6 +45,7 @@ local function ClearChunksAndGoToMainMenu()
 	ChunkHashTable = {}
 	CaveList = {}
 	ThePlayer.IsPlayerHasSpawned = false
+	GlobalWorldType = StandardTerrain
 	SetCurrentGameState(GamestateMainMenu2)
 end
 
