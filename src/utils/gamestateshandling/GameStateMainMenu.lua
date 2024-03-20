@@ -40,13 +40,16 @@ local function PerformMenuAction(action)
 end
 function GamestateMainMenu2:mousepressed(x, y, b)
 	if b == 1 then
-		local choiceClicked = math.floor((y - _Mainmenu.y) / Font25:getHeight("X"))
+		local _, h = Lovegraphics.getDimensions()
+		local posY = h * 0.4
+		local choiceClicked = math.floor((y - posY) / Font25:getHeight("X"))
 		if choiceClicked >= 1 and choiceClicked <= #_Mainmenu.choice then
 			_Mainmenu.selection = choiceClicked
 			PerformMenuAction(choiceClicked)
 		end
 	end
 end
+
 function GamestateMainMenu2:keypressed(k)
 	if type(_Mainmenu.choice) == "table" and _Mainmenu.selection then
 		if k == BackWardKey then

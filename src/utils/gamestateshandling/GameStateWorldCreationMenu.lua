@@ -45,7 +45,9 @@ local function PerformMenuAction(action)
 end
 function GamestateWorldCreationMenu2:mousepressed(x, y, b)
 	if b == 1 then
-		local choiceClicked = math.floor((y - _WorldCreationMenu.y) / Font15:getHeight("X"))
+		local _, h = Lovegraphics.getDimensions()
+		local posY = h * 0.4
+		local choiceClicked = math.floor((y -posY) / Font15:getHeight("X"))
 		if choiceClicked >= 1 and choiceClicked <= #_WorldCreationMenu.choice then
 			_WorldCreationMenu.selection = choiceClicked
 			PerformMenuAction(choiceClicked)

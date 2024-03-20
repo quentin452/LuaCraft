@@ -61,7 +61,9 @@ end
 
 function GamestateGamePausing2:mousepressed(x, y, b)
 	if b == 1 then
-		local choiceClicked = math.floor((y - _GamePlayingPauseMenu.y) / Font25:getHeight("X"))
+		local _, h = Lovegraphics.getDimensions()
+		local posY = h * 0.4
+		local choiceClicked = math.floor((y -posY) / Font25:getHeight("X"))
 		if choiceClicked >= 1 and choiceClicked <= #_GamePlayingPauseMenu.choice then
 			_GamePlayingPauseMenu.selection = choiceClicked
 			PerformMenuAction(choiceClicked)
