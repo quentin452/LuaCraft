@@ -97,7 +97,7 @@ function NewPlayer(x, y, z)
 			do
 				i = i - 0.01
 			end
-			self.y = self.y + i + 0.01
+			--self.y = self.y + i + 0.01 --disabled to prevent https://github.com/quentin452/LuaCraft/issues/49 and https://github.com/quentin452/LuaCraft/issues/38
 			self.ySpeed = 0
 			self.onGround = true
 		end
