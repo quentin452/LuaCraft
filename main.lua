@@ -94,7 +94,8 @@ end
 function love.draw()
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainDraw")
-	DrawGame()
+	setFont()
+	LuaCraftCurrentGameState:draw()
 	if HudMessage ~= nil then
 		local width, height = Lovegraphics.getDimensions()
 		local font = Lovegraphics.getFont()
