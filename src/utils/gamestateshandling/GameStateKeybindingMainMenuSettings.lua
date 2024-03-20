@@ -10,7 +10,7 @@ function GamestateKeybindingMainSettings2:draw()
 	Lovegraphics.draw(KeybindingSettingsBackground, 0, 0, 0, scaleX, scaleY)
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = Font25:getHeight("X")
+	local lineHeight = self:setFont():getHeight("X")
 	drawColorString(_KeybindingMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
@@ -76,10 +76,10 @@ function GamestateKeybindingMainSettings2:mousepressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = Font25:getHeight("X")
+		local lineHeight = self:setFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_KeybindingMenuSettings.choice) do
-			local choiceWidth = Font25:getWidth(choice)
+			local choiceWidth = self:setFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end
