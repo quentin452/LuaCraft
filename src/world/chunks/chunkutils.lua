@@ -33,7 +33,11 @@ function PreventBlockPlacementOnThePlayer(gx, gy, gz)
 			and gz <= playerZFloor + range2
 		)
 	then
-		return true
+		if love.mouse.isDown(2) then
+			return true
+		elseif love.mouse.isDown(1) then
+			return Tiles.AIR_Block_id
+		end
 	end
 	return false
 end
