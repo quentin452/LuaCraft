@@ -140,14 +140,26 @@ function NewChunk(x, z)
 			self.changes[#self.changes + 1] = { x, y, z }
 		end
 	end
-	-- set voxel id of the voxel in this chunk's coordinate space
 	--TODO continue optimizing chunk.setVoxel
+	--[[
+    Sets a voxel at the specified position in the chunk.
+
+    @param x             The x-coordinate of the voxel position.
+    @param y             The y-coordinate of the voxel position.
+    @param z             The z-coordinate of the voxel position.
+    @param blockvalue    The value of the block to set.
+    @param manuallyPlaced    A boolean indicating if the block was manually placed.
+
+    @return              Nothing.
+--]]
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		_JPROFILER.push("setVoxel")
 		manuallyPlaced = manuallyPlaced or false
 		x, y, z = math.floor(x), math.floor(y), math.floor(z)
 		local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
+		-- Check if coordinates are within chunk limits
 		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+			-- Check if block placement is prevented (e.g., on the player or certain blocks)
 			if
 				PreventBlockPlacementOnThePlayer(gx, gy, gz)
 				or PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalue)
@@ -160,6 +172,7 @@ function NewChunk(x, z)
 			local placingLocalSource = false
 			local destroyLight = false
 			if TileLightable(blockvalue) then
+				--Fix https://github.com/quentin452/LuaCraft/issues/31
 				local blockAboveExists = false
 				for checkY = y + 1, WorldHeight do
 					if self:getVoxel(x, checkY, z) ~= Tiles.AIR_Block.id then
@@ -168,6 +181,7 @@ function NewChunk(x, z)
 					end
 				end
 				if inDirectSunlight and not blockAboveExists then
+					--Fix https://github.com/quentin452/LuaCraft/issues/53
 					if manuallyPlaced then
 						if love.mouse.isDown(2) then
 							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[0])
@@ -176,11 +190,13 @@ function NewChunk(x, z)
 							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
 							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
 						end
+					--Perform Normal SunDownAdd
 					else
 						NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
 						--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
 					end
 				else
+					-- Apply standard lighting for other cases
 					for dx = -1, 1 do
 						for dy = -1, 1 do
 							for dz = -1, 1 do
@@ -190,6 +206,7 @@ function NewChunk(x, z)
 						end
 					end
 				end
+				-- Handle manually placed blocks
 				if manuallyPlaced then
 					local source = TileLightSource(blockvalue)
 					if source > 0 then
@@ -208,6 +225,7 @@ function NewChunk(x, z)
 					end
 				end
 			else
+				-- Handle non-lightable blocks
 				local semiLightable = TileLightable(blockvalue, true)
 				if semiLightable and inDirectSunlight and manuallyPlaced then
 					NewLightOperation(gx, gy + 1, gz, LightOpe.SunCreationAdd.id)
@@ -229,12 +247,14 @@ function NewChunk(x, z)
 					end
 				end
 			end
+			-- Handle light source blocks
 			local source = TileLightSource(self:getVoxel(x, y, z))
 			if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
 				NewLightOperation(gx, gy, gz, LightOpe.LocalSubtract.id, source + LightSources[1])
 				--ThreadLightingChannel:push({"LightOperation",gx, gy, gz, LightOpe.LocalSubtract.id ,source + LightSources[1]})
 				destroyLight = true
 			end
+			-- Perform necessary light operations
 			if manuallyPlaced then
 				if destroyLight then
 					for dx = -1, 1 do
@@ -250,6 +270,7 @@ function NewChunk(x, z)
 						end
 					end
 				end
+				-- If the block is semi-luminous and has no local source, create local light
 				if TileLightable(blockvalue, true) and not placingLocalSource then
 					for dx = -1, 1 do
 						for dy = -1, 1 do
@@ -261,12 +282,15 @@ function NewChunk(x, z)
 					end
 				end
 			end
+			-- Update the voxel data
 			if blockvalue ~= -1 then
 				self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
+			--Fix https://github.com/quentin452/LuaCraft/issues/66
 			NewLightOperation(gx, gy, gz, LightOpe.SunDownSubtract.id)
 			--ThreadLightingChannel:push({"LightOperation", gx, gy, gz, LightOpe.SunDownSubtract.id })
+			--Perform normal SunDown Subtract
 			NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
 			--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
 		end
