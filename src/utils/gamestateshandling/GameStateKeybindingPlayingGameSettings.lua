@@ -1,4 +1,7 @@
 GamestateKeybindingPlayingGameSettings2 = GameStateBase:new()
+function GamestateKeybindingPlayingGameSettings2:resetMenuSelection()
+    _KeybindingMenuSettings.selection = 1
+end
 function GamestateKeybindingPlayingGameSettings2:draw()
 	_JPROFILER.push("drawMenuSettings")
 	local w, h = Lovegraphics.getDimensions()
@@ -63,7 +66,6 @@ local function PerformMenuAction(action)
 		ConfiguringMovementKey = true
 	elseif action == 5 then
 		SetCurrentGameState(GamestatePlayingGameSettings2)
-		_KeybindingMenuSettings.selection = 1
 	end
 end
 function GamestateKeybindingPlayingGameSettings2:mousepressed(x, y, b)

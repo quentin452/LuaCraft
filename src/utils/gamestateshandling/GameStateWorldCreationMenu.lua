@@ -1,5 +1,7 @@
 GamestateWorldCreationMenu2 = GameStateBase:new()
-
+function GamestateWorldCreationMenu2:resetMenuSelection()
+    _WorldCreationMenu.selection = 1
+end
 function GamestateWorldCreationMenu2:draw()
 	_JPROFILER.push("drawWorldCreationMenu")
 	local w, h = Lovegraphics.getDimensions()
@@ -30,7 +32,6 @@ local function PerformMenuAction(action)
 		GenerateWorld()
 	elseif action == 2 then
 		SetCurrentGameState(GamestateMainMenu2)
-		_WorldCreationMenu.selection = 1
 	end
 end
 function GamestateWorldCreationMenu2:mousepressed(x, y, b)

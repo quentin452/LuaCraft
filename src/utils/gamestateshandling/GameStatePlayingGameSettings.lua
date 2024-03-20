@@ -1,5 +1,7 @@
 GamestatePlayingGameSettings2 = GameStateBase:new()
-
+function GamestatePlayingGameSettings2:resetMenuSelection()
+    _MainMenuSettings.selection = 1
+end
 function GamestatePlayingGameSettings2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuSettingsBackground:getWidth()
@@ -79,11 +81,9 @@ local function PerformMenuAction(action)
 		Renderdistancegetresetted = true
 	elseif action == 6 then
 		SetCurrentGameState(GamestateKeybindingPlayingGameSettings2)
-		_MainMenuSettings.selection = 1
 	elseif action == 7 then
 		SetCurrentGameState(GameStatePlayingGame2)
 		love.mouse.setRelativeMode(true)
-		_MainMenuSettings.selection = 1
 	end
 end
 function GamestatePlayingGameSettings2:mousepressed(x, y, b)

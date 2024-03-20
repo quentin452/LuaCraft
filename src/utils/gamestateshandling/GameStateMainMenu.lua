@@ -1,5 +1,7 @@
 GamestateMainMenu2 = GameStateBase:new()
-
+function GamestateMainMenu2:resetMenuSelection()
+    _Mainmenu.selection = 1
+end
 function GamestateMainMenu2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuBackground:getWidth()
@@ -23,7 +25,6 @@ end
 
 local function PerformMenuAction(action)
 	if action == 1 then
-		_WorldCreationMenu.selection = 1
 		SetCurrentGameState(GamestateWorldCreationMenu2)
 	elseif action == 2 then
 		SetCurrentGameState(GamestateMainMenuSettings2)

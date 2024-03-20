@@ -1,5 +1,7 @@
 GamestateGamePausing2 = GameStateBase:new()
-
+function GamestateGamePausing2:resetMenuSelection()
+    _GamePlayingPauseMenu.selection = 1
+end
 function GamestateGamePausing2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / PlayingGamePauseMenu:getWidth()
@@ -47,7 +49,6 @@ local function PerformMenuAction(action)
 		SetCurrentGameState(GamestatePlayingGameSettings2)
 	elseif action == 3 then
 		ClearChunksAndGoToMainMenu()
-		_GamePlayingPauseMenu.selection = 1
 	end
 end
 

@@ -1,5 +1,4 @@
 GameStatePlayingGame2 = GameStateBase:new()
-
 function GameStatePlayingGame2:textinput(text)
 	if EnableCommandHUD == true then
 		CurrentCommand = CurrentCommand .. text
