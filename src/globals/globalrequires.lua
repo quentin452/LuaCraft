@@ -22,7 +22,8 @@ local modules = {
 	"utils/settingshandling",
 	"utils/commands/commandsexec",
 	"client/huds/drawhud",
-	"client/huds/tests/drawhudtest",
+	"client/models/debug/drawhudtest",
+	"client/models/debug/chunkbordermodelling",
 	"utils/gamestateshandling/GameStateBase",
 	"utils/gamestateshandling/GameStateGamePausing",
 	"utils/gamestateshandling/GameStateKeybindingMainMenuSettings",
@@ -48,8 +49,8 @@ local modules = {
 	"world/chunks/chunkutils",
 	"world/chunks/chunkmain",
 	"init/!init",
-	"client/blocks/tilerendering",
-	"client/blocks/blockrendering",
+	"client/models/blocks/tilerendering",
+	"client/models/blocks/blockrendering",
 	"modloader/modloaderinit",
 }
 local function requireGroup(group, path)
