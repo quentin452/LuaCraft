@@ -94,11 +94,11 @@ function GamestatePlayingGameSettings2:mousepressed(x, y, b)
 				Renderdistancegetresetted = true
 			elseif choiceClicked == 6 then
 				SetPlayingGamestateKeybindingPlayingGameSettings2()
-				_MainMenuSettings.selection = 0
+				_MainMenuSettings.selection = 1
 			elseif choiceClicked == 7 then
 				SetPlayingGameStatePlayingGame2()
 				love.mouse.setRelativeMode(true)
-				_MainMenuSettings.selection = 0
+				_MainMenuSettings.selection = 1
 			end
 		end
 	end
@@ -131,11 +131,11 @@ function GamestatePlayingGameSettings2:keypressed(k)
 				Renderdistancegetresetted = true
 			elseif _MainMenuSettings.selection == 6 then
 				SetPlayingGamestateKeybindingPlayingGameSettings2()
-				_MainMenuSettings.selection = 0
+				_MainMenuSettings.selection = 1
 			elseif _MainMenuSettings.selection == 7 then
 				SetPlayingGameStatePlayingGame2()
 				love.mouse.setRelativeMode(true)
-				_MainMenuSettings.selection = 0
+				_MainMenuSettings.selection = 1
 			end
 		end
 	end

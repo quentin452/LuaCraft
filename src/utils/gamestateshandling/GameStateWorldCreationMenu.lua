@@ -43,7 +43,7 @@ function GamestateWorldCreationMenu2:mousepressed(x, y, b)
 				GenerateWorld()
 			elseif choiceClicked == 2 then
 				SetPlayingGamestateMainMenu2()
-				_WorldCreationMenu.selection = 0
+				_WorldCreationMenu.selection = 1
 			end
 		end
 	end
@@ -66,7 +66,7 @@ function GamestateWorldCreationMenu2:keypressed(k)
 				GenerateWorld()
 			elseif _WorldCreationMenu.selection == 2 then
 				SetPlayingGamestateMainMenu2()
-				_WorldCreationMenu.selection = 0
+				_WorldCreationMenu.selection = 1
 			end
 		end
 	end

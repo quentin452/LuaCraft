@@ -33,7 +33,7 @@ function GamestateMainMenu2:mousepressed(x, y, b)
 		if choiceClicked >= 1 and choiceClicked <= #_Mainmenu.choice then
 			_Mainmenu.selection = choiceClicked
 			if choiceClicked == 1 then
-				_WorldCreationMenu.selection = 0
+				_WorldCreationMenu.selection = 1
 				SetPlayingGamestateWorldCreationMenu2()
 			elseif choiceClicked == 2 then
 				SetPlayingGamestateMainMenuSettings2()
@@ -55,7 +55,7 @@ function GamestateMainMenu2:keypressed(k)
 			end
 		elseif k == "return" then
 			if _Mainmenu.selection == 1 then
-				_WorldCreationMenu.selection = 0 --prevent https://github.com/quentin452/LuaCraft/issues/9
+				_WorldCreationMenu.selection = 1
 				SetPlayingGamestateWorldCreationMenu2()
 			elseif _Mainmenu.selection == 2 then
 				SetPlayingGamestateMainMenuSettings2()

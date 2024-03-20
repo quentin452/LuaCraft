@@ -10,7 +10,7 @@ local function createMenu(x, y, title, choices)
 		y = y,
 		title = title,
 		choice = choices,
-		selection = 0, -- initialize to 0 to prevent unwanted object selection
+		selection = 1,
 	}
 end
 
