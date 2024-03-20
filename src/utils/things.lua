@@ -15,7 +15,6 @@ function NewThing(x, y, z)
 	t.modelID = -1
 	t.model = nil
 	t.direction = 0
-	t.name = "thing"
 	t.assignedModel = 0
 
 	t.update = function(self, dt)
@@ -41,6 +40,7 @@ function NewThing(x, y, z)
 
 	t.mousepressed = function(self, b) end
 
+	--UNTESTED CODE	
 	t.distanceToThing = function(self, thing, radius, ignorey)
 		for i = 1, #ThingList do
 			local this = ThingList[i]
@@ -50,9 +50,10 @@ function NewThing(x, y, z)
 				distcheck = math.dist3d(this.x, 0, this.z, self.x, 0, self.z) < radius
 			end
 
-			if this.name == thing and this ~= self and distcheck then
+			if this.model == thing and this ~= self and distcheck then
 				return this
 			end
+			
 		end
 
 		return nil
@@ -65,7 +66,6 @@ end
 --TODO
 function NewBillboard(x, y, z)
 	local t = NewThing(x, y, z)
-	t.name = "billboardthing"
 	local verts = {}
 	local scale = 6
 	local hs = scale / 2

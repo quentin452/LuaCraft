@@ -21,7 +21,6 @@ function NewPlayer(x, y, z)
 	t.moveSpeed = 0.01
 	t.viewBob = 0
 	t.viewBobMult = 0
-	t.name = "player"
 	t.cursorpos = {}
 	t.cursorposPrev = {}
 	t.onGround = false

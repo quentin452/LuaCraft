@@ -140,7 +140,6 @@ end
 function NewChunkSlice(x, y, z, parent)
 	local t = NewThing(x, y, z)
 	t.parent = parent
-	t.name = "chunkslice"
 	local compmodel = Engine.newModel(nil, LightingTexture, { 0, 0, 0 })
 	compmodel.culling = false
 	t:assignModel(compmodel)

@@ -12,7 +12,6 @@ function NewChunk(x, z)
 	chunk.voxels = {}
 	chunk.slices = {}
 	chunk.heightMap = {}
-	chunk.name = "chunk"
 	chunk.requests = {}
 	-- store a list of voxels to be updated on next modelUpdate
 	chunk.changes = {}

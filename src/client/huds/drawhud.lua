@@ -173,7 +173,6 @@ function DrawChunkBorders3D()
 				}
 
 				local t = NewThing(x, y, z)
-				t.name = "ChunkBorders"
 
 				local chunkBordersModel = Engine.newModel(ChunkVerts, ChunkBorders, coords, color, format)
 				chunkBordersModel.culling = false
