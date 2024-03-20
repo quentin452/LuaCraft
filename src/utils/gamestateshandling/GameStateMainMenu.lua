@@ -34,9 +34,9 @@ function GamestateMainMenu2:mousepressed(x, y, b)
 			_Mainmenu.selection = choiceClicked
 			if choiceClicked == 1 then
 				_WorldCreationMenu.selection = 1
-				SetPlayingGamestateWorldCreationMenu2()
+				SetCurrentGameState(GamestateWorldCreationMenu2)
 			elseif choiceClicked == 2 then
-				SetPlayingGamestateMainMenuSettings2()
+				SetCurrentGameState(GamestateMainMenuSettings2)
 			elseif choiceClicked == 3 then
 				love.event.push("quit")
 			end
@@ -56,9 +56,9 @@ function GamestateMainMenu2:keypressed(k)
 		elseif k == "return" then
 			if _Mainmenu.selection == 1 then
 				_WorldCreationMenu.selection = 1
-				SetPlayingGamestateWorldCreationMenu2()
+				SetCurrentGameState(GamestateWorldCreationMenu2)
 			elseif _Mainmenu.selection == 2 then
-				SetPlayingGamestateMainMenuSettings2()
+				SetCurrentGameState(GamestateMainMenuSettings2)
 			elseif _Mainmenu.selection == 3 then
 				love.event.push("quit")
 			end

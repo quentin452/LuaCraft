@@ -38,11 +38,11 @@ function GamestateWorldCreationMenu2:mousepressed(x, y, b)
 		if choiceClicked >= 1 and choiceClicked <= #_WorldCreationMenu.choice then
 			_WorldCreationMenu.selection = choiceClicked
 			if choiceClicked == 1 then
-				SetPlayingGameStatePlayingGame2()
+				SetCurrentGameState(GameStatePlayingGame2)
 				love.mouse.setRelativeMode(true)
 				GenerateWorld()
 			elseif choiceClicked == 2 then
-				SetPlayingGamestateMainMenu2()
+				SetCurrentGameState(GamestateMainMenu2)
 				_WorldCreationMenu.selection = 1
 			end
 		end
@@ -61,11 +61,11 @@ function GamestateWorldCreationMenu2:keypressed(k)
 			end
 		elseif k == "return" then
 			if _WorldCreationMenu.selection == 1 then
-				SetPlayingGameStatePlayingGame2()
+				SetCurrentGameState(GameStatePlayingGame2)
 				love.mouse.setRelativeMode(true)
 				GenerateWorld()
 			elseif _WorldCreationMenu.selection == 2 then
-				SetPlayingGamestateMainMenu2()
+				SetCurrentGameState(GamestateMainMenu2)
 				_WorldCreationMenu.selection = 1
 			end
 		end

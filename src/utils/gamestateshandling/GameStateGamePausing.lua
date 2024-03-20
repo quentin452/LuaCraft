@@ -34,9 +34,9 @@ function GamestateGamePausing2:mousepressed(x, y, b)
 			_GamePlayingPauseMenu.selection = choiceClicked
 			if choiceClicked == 1 then
 				love.mouse.setRelativeMode(true)
-				SetPlayingGameStatePlayingGame2()
+				SetCurrentGameState(GameStatePlayingGame2)
 			elseif choiceClicked == 2 then
-				SetPlayingGamestatePlayingGameSettings2()
+				SetCurrentGameState(GamestatePlayingGameSettings2)
 			elseif choiceClicked == 3 then
 				--TODO here add chunk saving system before going to MainMenu and during gameplay
 				for chunk in pairs(ChunkSet) do
@@ -50,7 +50,7 @@ function GamestateGamePausing2:mousepressed(x, y, b)
 				ChunkHashTable = {}
 				CaveList = {}
 				ThePlayer.IsPlayerHasSpawned = false
-				SetPlayingGamestateMainMenu2()
+				SetCurrentGameState(GamestateMainMenu2)
 			end
 		end
 	end
@@ -69,9 +69,9 @@ function GamestateGamePausing2:keypressed(k)
 		elseif k == "return" then
 			if _GamePlayingPauseMenu.selection == 1 then
 				love.mouse.setRelativeMode(true)
-				SetPlayingGameStatePlayingGame2()
+				SetCurrentGameState(GameStatePlayingGame2)
 			elseif _GamePlayingPauseMenu.selection == 2 then
-				SetPlayingGamestatePlayingGameSettings2()
+				SetCurrentGameState(GamestatePlayingGameSettings2)
 			elseif _GamePlayingPauseMenu.selection == 3 then
 				--TODO here add chunk saving system before going to MainMenu and during gameplay
 				for chunk in pairs(ChunkSet) do
@@ -85,7 +85,7 @@ function GamestateGamePausing2:keypressed(k)
 				ChunkHashTable = {}
 				CaveList = {}
 				ThePlayer.IsPlayerHasSpawned = false
-				SetPlayingGamestateMainMenu2()
+				SetCurrentGameState(GamestateMainMenu2)
 			end
 		end
 	end

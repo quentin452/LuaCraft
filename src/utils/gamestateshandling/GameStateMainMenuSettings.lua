@@ -93,10 +93,10 @@ function GamestateMainMenuSettings2:mousepressed(x, y, b)
 				LuaCraftSettingsUpdater("renderdistanceSetting")
 				Renderdistancegetresetted = true
 			elseif choiceClicked == 6 then
-				SetPlayingGamestateKeybindingMainSettings2()
+				SetCurrentGameState(GamestateKeybindingMainSettings2)
 				_MainMenuSettings.selection = 1
 			elseif choiceClicked == 7 then
-				SetPlayingGamestateMainMenu2()
+				SetCurrentGameState(GamestateMainMenu2)
 				_MainMenuSettings.selection = 1
 			end
 		end
@@ -129,10 +129,10 @@ function GamestateMainMenuSettings2:keypressed(k)
 				LuaCraftSettingsUpdater("renderdistanceSetting")
 				Renderdistancegetresetted = true
 			elseif _MainMenuSettings.selection == 6 then
-				SetPlayingGamestateKeybindingMainSettings2()
+				SetCurrentGameState(GamestateKeybindingMainSettings2)
 				_MainMenuSettings.selection = 1
 			elseif _MainMenuSettings.selection == 7 then
-				SetPlayingGamestateMainMenu2()
+				SetCurrentGameState(GamestateMainMenu2)
 				_MainMenuSettings.selection = 1
 			end
 		end

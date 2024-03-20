@@ -84,7 +84,7 @@ function GameStatePlayingGame2:keypressed(k)
 			love.mouse.setRelativeMode(false)
 			love.mouse.setGrabbed(true)
 			love.mouse.setVisible(true)
-			SetPlayingGamestateGamePausing2()
+			SetCurrentGameState(GamestateGamePausing2)
 		end
 	elseif k == "f3" then
 		EnableF3 = not EnableF3

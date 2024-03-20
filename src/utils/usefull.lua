@@ -54,15 +54,15 @@ end
 --TODO MADE THIS MORE MAINTAINABLE
 function getSelectedFont()
 	if
-		IsPlayingGamestateMainMenuSettings2()
-		or IsPlayingGamestateGamePausing2()
-		or IsPlayingGamestatePlayingGameSettings2()
-		or IsPlayingGamestateKeybindingMainSettings2()
-		or IsPlayingGamestateKeybindingPlayingGameSettings2()
-		or IsPlayingGamestateMainMenu2()
+		IsCurrentGameState(GamestateMainMenuSettings2)
+		or IsCurrentGameState(GamestateGamePausing2)
+		or IsCurrentGameState(GamestatePlayingGameSettings2)
+		or IsCurrentGameState(GamestateKeybindingMainSettings2)
+		or IsCurrentGameState(GamestateKeybindingPlayingGameSettings2)
+		or IsCurrentGameState(GamestateMainMenu2)
 	then
 		return Font25
-	elseif IsPlayingGamestateWorldCreationMenu2() or IsPlayingGame() then
+	elseif IsCurrentGameState(GamestateWorldCreationMenu2) or IsCurrentGameState(GameStatePlayingGame2) then
 		return Font15
 	end
 end

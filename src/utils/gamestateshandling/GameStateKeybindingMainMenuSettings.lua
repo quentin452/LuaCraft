@@ -79,7 +79,7 @@ function GamestateKeybindingMainSettings2:mousepressed(x, y, b)
 			elseif choiceClicked == 4 then
 				ConfiguringMovementKey = true
 			elseif choiceClicked == 5 then
-				SetPlayingGamestateMainMenuSettings2()
+				SetCurrentGameState(GamestateMainMenuSettings2)
 				_KeybindingMenuSettings.selection = 1
 			end
 		end
@@ -106,7 +106,7 @@ function GamestateKeybindingMainSettings2:keypressed(k)
 			elseif _KeybindingMenuSettings.selection == 4 then
 				ConfiguringMovementKey = true
 			elseif _KeybindingMenuSettings.selection == 5 then
-				SetPlayingGamestateMainMenuSettings2()
+				SetCurrentGameState(GamestateMainMenuSettings2)
 				_KeybindingMenuSettings.selection = 1
 			end
 		end
