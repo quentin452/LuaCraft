@@ -2,13 +2,7 @@ function KeyPressed(k)
 	if k == "f11" then
 		LuaCraftSettingsUpdater("toggleFullScreen")
 	end
-	-- simplified hotbar number press code, thanks nico-abram!
-	local numberPress = tonumber(k)
-	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and FixinputforDrawCommandInput == false then
-		PlayerInventory.hotbarSelect = numberPress
-	else
-		LuaCraftCurrentGameState:keypressed(k)
-	end
+	LuaCraftCurrentGameState:keypressed(k)
 	if ConfiguringMovementKey then
 		if k == "escape" then
 			ConfiguringMovementKey = false

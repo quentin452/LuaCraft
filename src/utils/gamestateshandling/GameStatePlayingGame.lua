@@ -22,7 +22,7 @@ function GameStatePlayingGame2:draw()
 	love.graphics.setColor(1, 1, 1)
 	DrawCanevas()
 	if WorldSuccessfullyLoaded == true then
-	PlayerSuffocationCheck()
+		PlayerSuffocationCheck()
 	end
 	_JPROFILER.pop("DrawGameScene")
 end
@@ -44,14 +44,16 @@ end
 
 function GameStatePlayingGame2:mousepressed(x, y, b)
 	-- Forward mousepress events to all things in ThingList
-	if ThingList == nil then
-		return
-	end
 	for i = 1, #ThingList do
 		local thing = ThingList[i]
 		if thing and thing.mousepressed then
 			thing:mousepressed(b)
 		end
+	end
+
+	local numberPress = tonumber(k)
+	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and FixinputforDrawCommandInput == false then
+		PlayerInventory.hotbarSelect = numberPress
 	end
 	-- Handle clicking to place / destroy blocks
 	local pos = ThePlayer and ThePlayer.cursorpos
