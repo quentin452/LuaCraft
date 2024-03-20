@@ -15,75 +15,36 @@ TilesById = { [0] = {
 	blockstringname = "AIR_Block",
 } }
 BlockThatUseCustomTexturesForTopandSide = {}
---TODO remove BlockThatUseCustomTexturesForTopandSide + add an error if a thing is equal at nil , pass if the thing is equal at "none" + remove unecessary things in addBlock method
+--TODO remove BlockThatUseCustomTexturesForTopandSide
 function addBlock(
 	blockstringname,
 	BlockOrLiquidOrTile,
 	Cancollide,
 	transparency,
 	LightSources,
-	blockBottomMasterTexture,
+	blockBottomMasterTextureString,
 	blockBottomMasterTextureUserData,
-	blockSideTexture,
+	blockSideTextureString,
 	blockSideTextureUserData,
-	blockTopTexture,
+	blockTopTextureString,
 	blockTopTextureUserData
 )
-	if Tiles[blockstringname] then
+	if type(blockstringname) ~= "string" then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
-			"Duplicate blockstringname detected: " .. tostring(blockstringname),
+			"blockstringname is not a string or is missing",
 		})
 		return
 	end
-
-	local properties =
-		{ "transparency", "LightSources", "Cancollide", "BlockOrLiquidOrTile", "blockBottomMasterTexture" }
-	local block = {
-		BlockOrLiquidOrTile = BlockOrLiquidOrTile,
-		Cancollide = Cancollide,
-		transparency = transparency,
-		LightSources = LightSources,
-		blockBottomMasterTexture = blockBottomMasterTexture,
-	}
-
-	if blockSideTexture ~= nil then
-		block.blockSideTexture = blockSideTexture
+	if type(LightSources) ~= "number" or LightSources < 0 or LightSources > 15 then
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"Missing property or not in range property for LightSources in block "
+				.. tostring(blockstringname)
+				.. ". please ensure that 'LightSources' is within the range of 0 to 15",
+		})
+		return
 	end
-
-	if blockTopTexture ~= nil then
-		block.blockTopTexture = blockTopTexture
-	end
-
-	local seen = {}
-
-	for _, prop in ipairs(properties) do
-		if block[prop] ~= nil then
-			if seen[prop] then
-				ThreadLogChannel:push({
-					LuaCraftLoggingLevel.ERROR,
-					"Property " .. prop .. " is defined more than once in block " .. tostring(blockstringname),
-				})
-			else
-				seen[prop] = true
-			end
-		else
-			if prop == "LightSources" then
-				ThreadLogChannel:push({
-					LuaCraftLoggingLevel.ERROR,
-					"Missing property or not in range property for " .. prop .. " in block " .. tostring(
-						blockstringname
-					) .. ". please ensure that 'LightSources' is within the range of 0 to 15",
-				})
-			else
-				ThreadLogChannel:push({
-					LuaCraftLoggingLevel.ERROR,
-					"Missing property " .. prop .. " in block " .. tostring(blockstringname),
-				})
-			end
-		end
-	end
-	seen = {}
 	local id = nextId
 	Tiles[blockstringname] = {
 		id = id,
@@ -92,31 +53,22 @@ function addBlock(
 		LightSources = LightSources,
 		Cancollide = Cancollide,
 		BlockOrLiquidOrTile = BlockOrLiquidOrTile,
-		blockBottomMasterTexture = blockBottomMasterTexture,
+		blockBottomMasterTextureString = blockBottomMasterTextureString,
 		blockBottomMasterTextureUserData = blockBottomMasterTextureUserData,
-		blockSideTexture = blockSideTexture,
+		blockSideTextureString = blockSideTextureString,
 		blockSideTextureUserData = blockSideTextureUserData,
-		blockTopTexture = blockTopTexture,
+		blockTopTextureString = blockTopTextureString,
 		blockTopTextureUserData = blockTopTextureUserData,
 	}
-
 	TilesById[id] = Tiles[blockstringname]
-	if blockTopTexture ~= nil or blockSideTexture ~= nil then
-		if type(blockTopTexture) == "string" then
-			blockTopTexture = Lovegraphics.newImage(blockTopTexture)
+	if blockTopTextureString ~= nil or blockSideTextureString ~= nil then
+		if type(blockTopTextureString) == "string" then
+			blockTopTextureString = Lovegraphics.newImage(blockTopTextureString)
 		end
-		if type(blockSideTexture) == "string" then
-			blockSideTexture = Lovegraphics.newImage(blockSideTexture)
+		if type(blockSideTextureString) == "string" then
+			blockSideTextureString = Lovegraphics.newImage(blockSideTextureString)
 		end
-		if BlockThatUseCustomTexturesForTopandSide[id] then
-			ThreadLogChannel:push({
-				LuaCraftLoggingLevel.ERROR,
-				"Key already exists in BlockThatUseCustomTexturesForTopandSide: " .. block.blockstringname,
-			})
-			return
-		end
-
-		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTexture, side = blockSideTexture }
+		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTextureString, side = blockSideTextureString }
 	end
 	nextId = nextId + 1
 	return id

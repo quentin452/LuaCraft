@@ -90,19 +90,19 @@ function InitalizeTextureStatic()
 		if type(tileData) == "table" and tileData.id ~= 0 then
 			TilesTextureFORAtlasList[tileData.id] = {}
 
-			if tileData.blockTopTexture then
-				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockTopTexture)
+			if tileData.blockTopTextureString then
+				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockTopTextureString)
 			end
 
-			if tileData.blockBottomMasterTexture then
-				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockBottomMasterTexture)
+			if tileData.blockBottomMasterTextureString then
+				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockBottomMasterTextureString)
 			end
 
-			if tileData.blockSideTexture then
-				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockSideTexture)
+			if tileData.blockSideTextureString then
+				table.insert(TilesTextureFORAtlasList[tileData.id], tileData.blockSideTextureString)
 			end
 		elseif type(tileData) ~= "table" then
-			TilesTextureFORAtlasList[tileData.id] = { tileData.blockBottomMasterTexture }
+			TilesTextureFORAtlasList[tileData.id] = { tileData.blockBottomMasterTextureString }
 		end
 	end
 end

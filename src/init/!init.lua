@@ -6,9 +6,9 @@ require("src/init/modelloader")
 
 function iterateOverAllTiles()
 	for _, value in pairs(Tiles) do
-		local blockTopTexture = value.blockTopTexture or "N/A"
-		local blockSideTexture = value.blockSideTexture or "N/A"
-		local blockBottomMasterTexture = value.blockBottomMasterTexture or "N/A"
+		local blockTopTextureString = value.blockTopTextureString or "N/A"
+		local blockSideTextureString = value.blockSideTextureString or "N/A"
+		local blockBottomMasterTextureString = value.blockBottomMasterTextureString or "N/A"
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.NORMAL,
 			"Tile Name: "
@@ -24,11 +24,11 @@ function iterateOverAllTiles()
 				.. " Type: "
 				.. value.BlockOrLiquidOrTile
 				.. " BottomMaster Texture: "
-				.. blockBottomMasterTexture
+				.. blockBottomMasterTextureString
 				.. " Side Texture: "
-				.. blockSideTexture
+				.. blockSideTextureString
 				.. " Top Texture: "
-				.. blockTopTexture
+				.. blockTopTextureString
 				.. "\n-----------------------------------------------------------------------------------------------------------------------",
 		})
 	end
