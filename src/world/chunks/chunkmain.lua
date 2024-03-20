@@ -265,6 +265,8 @@ function NewChunk(x, z)
 				self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
+			NewLightOperation(gx, gy, gz, LightOpe.SunDownSubtract.id)
+			--ThreadLightingChannel:push({"LightOperation", gx, gy, gz, LightOpe.SunDownSubtract.id })
 			NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
 			--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
 		end
