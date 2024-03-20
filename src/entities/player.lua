@@ -127,6 +127,7 @@ function NewPlayer(x, y, z)
 				love.keyboard.isDown("space")
 				and self.onGround
 				and not TileCollisions(GetVoxel(self.x, self.y + self.height + 1, self.z))
+				and not TileCollisions(GetVoxel(self.x, self.y + self.height + self.ySpeed, self.z))
 			then
 				self.ySpeed = self.ySpeed + 0.15
 			end
