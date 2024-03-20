@@ -9,12 +9,8 @@ function GamestateGamePausing2:draw()
 
 	local posY = _GamePlayingPauseMenu.y
 	local lineHeight = Font25:getHeight("X")
-
-	-- Title Screen
 	drawColorString(_GamePlayingPauseMenu.title, _GamePlayingPauseMenu.x, posY)
 	posY = posY + lineHeight
-
-	-- Choices
 	local marque = ""
 	for n = 1, #_GamePlayingPauseMenu.choice do
 		if _GamePlayingPauseMenu.selection == n then
@@ -27,34 +23,44 @@ function GamestateGamePausing2:draw()
 	end
 end
 
+local function ClearChunksAndGoToMainMenu()
+	--TODO here add chunk saving system before going to MainMenu and during gameplay
+	for chunk in pairs(ChunkSet) do
+		for _, chunkSlice in ipairs(chunk.slices) do
+			chunkSlice.alreadyrendered = false
+			chunkSlice.model = nil
+		end
+	end
+
+	ChunkSet = {}
+	ChunkHashTable = {}
+	CaveList = {}
+	ThePlayer.IsPlayerHasSpawned = false
+	SetCurrentGameState(GamestateMainMenu2)
+end
+
+local function PerformMenuAction(action)
+	if action == 1 then
+		love.mouse.setRelativeMode(true)
+		SetCurrentGameState(GameStatePlayingGame2)
+	elseif action == 2 then
+		SetCurrentGameState(GamestatePlayingGameSettings2)
+	elseif action == 3 then
+		ClearChunksAndGoToMainMenu()
+		_GamePlayingPauseMenu.selection = 1
+	end
+end
+
 function GamestateGamePausing2:mousepressed(x, y, b)
 	if b == 1 then
 		local choiceClicked = math.floor((y - _GamePlayingPauseMenu.y) / Font25:getHeight("X"))
 		if choiceClicked >= 1 and choiceClicked <= #_GamePlayingPauseMenu.choice then
 			_GamePlayingPauseMenu.selection = choiceClicked
-			if choiceClicked == 1 then
-				love.mouse.setRelativeMode(true)
-				SetCurrentGameState(GameStatePlayingGame2)
-			elseif choiceClicked == 2 then
-				SetCurrentGameState(GamestatePlayingGameSettings2)
-			elseif choiceClicked == 3 then
-				--TODO here add chunk saving system before going to MainMenu and during gameplay
-				for chunk in pairs(ChunkSet) do
-					for _, chunkSlice in ipairs(chunk.slices) do
-						chunkSlice.alreadyrendered = false
-						chunkSlice.model = nil
-					end
-				end
-
-				ChunkSet = {}
-				ChunkHashTable = {}
-				CaveList = {}
-				ThePlayer.IsPlayerHasSpawned = false
-				SetCurrentGameState(GamestateMainMenu2)
-			end
+			PerformMenuAction(choiceClicked)
 		end
 	end
 end
+
 function GamestateGamePausing2:keypressed(k)
 	_JPROFILER.push("keysinitGamePlayingPauseMenu")
 	if type(_GamePlayingPauseMenu.choice) == "table" and _GamePlayingPauseMenu.selection then
@@ -67,26 +73,7 @@ function GamestateGamePausing2:keypressed(k)
 				_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection - 1
 			end
 		elseif k == "return" then
-			if _GamePlayingPauseMenu.selection == 1 then
-				love.mouse.setRelativeMode(true)
-				SetCurrentGameState(GameStatePlayingGame2)
-			elseif _GamePlayingPauseMenu.selection == 2 then
-				SetCurrentGameState(GamestatePlayingGameSettings2)
-			elseif _GamePlayingPauseMenu.selection == 3 then
-				--TODO here add chunk saving system before going to MainMenu and during gameplay
-				for chunk in pairs(ChunkSet) do
-					for _, chunkSlice in ipairs(chunk.slices) do
-						chunkSlice.alreadyrendered = false
-						chunkSlice.model = nil
-					end
-				end
-
-				ChunkSet = {}
-				ChunkHashTable = {}
-				CaveList = {}
-				ThePlayer.IsPlayerHasSpawned = false
-				SetCurrentGameState(GamestateMainMenu2)
-			end
+			PerformMenuAction(_GamePlayingPauseMenu.selection)
 		end
 	end
 	_JPROFILER.pop("keysinitGamePlayingPauseMenu")

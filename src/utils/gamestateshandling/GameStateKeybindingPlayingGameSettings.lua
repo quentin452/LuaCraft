@@ -4,44 +4,33 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / KeybindingSettingsBackground:getWidth()
 	local scaleY = h / KeybindingSettingsBackground:getHeight()
-
 	Lovegraphics.draw(KeybindingSettingsBackground, 0, 0, 0, scaleX, scaleY)
-
 	local posY = _KeybindingMenuSettings.y
 	local lineHeight = Font25:getHeight("X")
-
-	-- Title Screen
 	drawColorString(_KeybindingMenuSettings.title, _KeybindingMenuSettings.x, posY)
 	posY = posY + lineHeight
-
-	-- Choices
 	local marque = ""
 	local file_content, error_message = customReadFile(Luacraftconfig)
-
 	if file_content then
 		local Settings = {}
 		local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey" }
-
 		for _, key in ipairs(orderedKeys) do
 			local value = file_content:match(key .. "=(%w+)")
 			if value then
 				Settings[key] = value
 			end
 		end
-
 		for n = 1, #_KeybindingMenuSettings.choice do
 			if _KeybindingMenuSettings.selection == n then
 				marque = "%1*%0 "
 			else
 				marque = "   "
 			end
-
 			local choiceText = _KeybindingMenuSettings.choice[n]
 			local numberOfSpaces = 1
 			if n == 1 and Settings["forwardmovementkey"] then
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["forwardmovementkey"]
 			end
-
 			if n == 2 and Settings["backwardmovementkey"] then
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["backwardmovementkey"]
 			end
@@ -52,7 +41,6 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["rightmovementkey"]
 			end
 			drawColorString(marque .. "" .. choiceText, _KeybindingMenuSettings.x, posY)
-
 			posY = posY + lineHeight
 		end
 	else
@@ -64,23 +52,26 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 	_JPROFILER.pop("drawMenuSettings")
 end
 
+local function PerformMenuAction(action)
+	if action == 1 then
+		ConfiguringMovementKey = true
+	elseif action == 2 then
+		ConfiguringMovementKey = true
+	elseif action == 3 then
+		ConfiguringMovementKey = true
+	elseif action == 4 then
+		ConfiguringMovementKey = true
+	elseif action == 5 then
+		SetCurrentGameState(GamestatePlayingGameSettings2)
+		_KeybindingMenuSettings.selection = 1
+	end
+end
 function GamestateKeybindingPlayingGameSettings2:mousepressed(x, y, b)
 	if b == 1 then
 		local choiceClicked = math.floor((y - _KeybindingMenuSettings.y) / Font25:getHeight("X"))
 		if choiceClicked >= 1 and choiceClicked <= #_KeybindingMenuSettings.choice then
 			_KeybindingMenuSettings.selection = choiceClicked
-			if choiceClicked == 1 then
-				ConfiguringMovementKey = true
-			elseif choiceClicked == 2 then
-				ConfiguringMovementKey = true
-			elseif choiceClicked == 3 then
-				ConfiguringMovementKey = true
-			elseif choiceClicked == 4 then
-				ConfiguringMovementKey = true
-			elseif choiceClicked == 5 then
-				SetCurrentGameState(GamestatePlayingGameSettings2)
-				_KeybindingMenuSettings.selection = 1
-			end
+			PerformMenuAction(choiceClicked)
 		end
 	end
 end
@@ -96,18 +87,7 @@ function GamestateKeybindingPlayingGameSettings2:keypressed(k)
 				_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection - 1
 			end
 		elseif k == "return" then
-			if _KeybindingMenuSettings.selection == 1 then
-				ConfiguringMovementKey = true
-			elseif _KeybindingMenuSettings.selection == 2 then
-				ConfiguringMovementKey = true
-			elseif _KeybindingMenuSettings.selection == 3 then
-				ConfiguringMovementKey = true
-			elseif _KeybindingMenuSettings.selection == 4 then
-				ConfiguringMovementKey = true
-			elseif _KeybindingMenuSettings.selection == 5 then
-				SetCurrentGameState(GamestatePlayingGameSettings2)
-				_KeybindingMenuSettings.selection = 1
-			end
+			PerformMenuAction(_KeybindingMenuSettings.selection)
 		end
 	end
 end

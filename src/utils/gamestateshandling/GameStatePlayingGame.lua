@@ -34,11 +34,9 @@ function GameStatePlayingGame2:resize(w, h)
 	local scaleY = h / GraphicsHeight
 	Lovegraphics.scale(scaleX, scaleY)
 	local newCanvas = Lovegraphics.newCanvas(w, h)
-
 	Lovegraphics.setCanvas(newCanvas)
 	Lovegraphics.draw(Scene.twoCanvas)
 	Lovegraphics.setCanvas()
-
 	Scene.twoCanvas = newCanvas
 end
 
@@ -53,18 +51,14 @@ function GameStatePlayingGame2:mousepressed(x, y, b)
 			thing:mousepressed(b)
 		end
 	end
-
 	-- Handle clicking to place / destroy blocks
 	local pos = ThePlayer and ThePlayer.cursorpos
 	local value = 0
-
 	if b == 2 and FixinputforDrawCommandInput == false then
 		pos = ThePlayer and ThePlayer.cursorposPrev
 		value = PlayerInventory.items[PlayerInventory.hotbarSelect] or Tiles.AIR_Block.id
 	end
-
 	local chunk = pos and pos.chunk
-
 	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
 		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
 		LightingUpdate()
