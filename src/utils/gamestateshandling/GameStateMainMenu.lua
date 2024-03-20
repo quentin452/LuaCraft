@@ -1,4 +1,4 @@
-local _Mainmenu = CreateLuaCraftMenu(50, 50, "LuaCraft", {
+local _Mainmenu = CreateLuaCraftMenu(0, 0, "LuaCraft", {
 	"%2World Creation Menu%0",
 	"Settings",
 	"Exit",
@@ -12,9 +12,10 @@ function GamestateMainMenu2:draw()
 	local scaleX = w / MainMenuBackground:getWidth()
 	local scaleY = h / MainMenuBackground:getHeight()
 	Lovegraphics.draw(MainMenuBackground, 0, 0, 0, scaleX, scaleY)
-	local posY = _Mainmenu.y
+	local posX = w * 0.4
+	local posY = h * 0.4
 	local lineHeight = Font25:getHeight("X")
-	drawColorString(_Mainmenu.title, _Mainmenu.x, posY)
+	drawColorString(_Mainmenu.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
 	for n = 1, #_Mainmenu.choice do
@@ -23,7 +24,7 @@ function GamestateMainMenu2:draw()
 		else
 			marque = "   "
 		end
-		drawColorString(marque .. "" .. _Mainmenu.choice[n], _Mainmenu.x, posY)
+		drawColorString(marque .. "" .. _Mainmenu.choice[n], posX, posY)
 		posY = posY + lineHeight
 	end
 end

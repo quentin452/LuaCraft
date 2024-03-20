@@ -1,4 +1,4 @@
-local _GamePlayingPauseMenu = CreateLuaCraftMenu(50, 50, "Pause", {
+local _GamePlayingPauseMenu = CreateLuaCraftMenu(0, 0, "Pause", {
 	"UnPause",
 	"Settings",
 	"Exit to main menu",
@@ -6,7 +6,7 @@ local _GamePlayingPauseMenu = CreateLuaCraftMenu(50, 50, "Pause", {
 
 GamestateGamePausing2 = GameStateBase:new()
 function GamestateGamePausing2:resetMenuSelection()
-    _GamePlayingPauseMenu.selection = 1
+	_GamePlayingPauseMenu.selection = 1
 end
 function GamestateGamePausing2:draw()
 	local w, h = Lovegraphics.getDimensions()
@@ -15,9 +15,10 @@ function GamestateGamePausing2:draw()
 
 	Lovegraphics.draw(PlayingGamePauseMenu, 0, 0, 0, scaleX, scaleY)
 
-	local posY = _GamePlayingPauseMenu.y
+	local posX = w * 0.4
+	local posY = h * 0.4
 	local lineHeight = Font25:getHeight("X")
-	drawColorString(_GamePlayingPauseMenu.title, _GamePlayingPauseMenu.x, posY)
+	drawColorString(_GamePlayingPauseMenu.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
 	for n = 1, #_GamePlayingPauseMenu.choice do
@@ -26,7 +27,7 @@ function GamestateGamePausing2:draw()
 		else
 			marque = "   "
 		end
-		drawColorString(marque .. "" .. _GamePlayingPauseMenu.choice[n], _GamePlayingPauseMenu.x, posY)
+		drawColorString(marque .. "" .. _GamePlayingPauseMenu.choice[n], posX, posY)
 		posY = posY + lineHeight
 	end
 end

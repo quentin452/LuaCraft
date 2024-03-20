@@ -1,15 +1,16 @@
 GamestateMainMenuSettings2 = GameStateBase:new()
 function GamestateMainMenuSettings2:resetMenuSelection()
-    _MainMenuSettings.selection = 1
+	_MainMenuSettings.selection = 1
 end
 function GamestateMainMenuSettings2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuSettingsBackground:getWidth()
 	local scaleY = h / MainMenuSettingsBackground:getHeight()
 	Lovegraphics.draw(MainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
-	local posY = _MainMenuSettings.y
+	local posX = w * 0.4
+	local posY = h * 0.4
 	local lineHeight = Font25:getHeight("X")
-	drawColorString(_MainMenuSettings.title, _MainMenuSettings.x, posY)
+	drawColorString(_MainMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
 	local file_content, error_message = customReadFile(Luacraftconfig)
@@ -52,7 +53,7 @@ function GamestateMainMenuSettings2:draw()
 				local numberOfSpaces = 1
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["renderdistance"]
 			end
-			drawColorString(marque .. "" .. choiceText, _MainMenuSettings.x, posY)
+			drawColorString(marque .. "" .. choiceText, posX, posY)
 
 			posY = posY + lineHeight
 		end

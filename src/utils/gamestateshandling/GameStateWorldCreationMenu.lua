@@ -1,11 +1,11 @@
-local _WorldCreationMenu = CreateLuaCraftMenu(50, 50, "World Creation Menu", {
+local _WorldCreationMenu = CreateLuaCraftMenu(0, 0, "World Creation Menu", {
 	"Create World?",
 	"Exiting to main menu",
 })
 
 GamestateWorldCreationMenu2 = GameStateBase:new()
 function GamestateWorldCreationMenu2:resetMenuSelection()
-    _WorldCreationMenu.selection = 1
+	_WorldCreationMenu.selection = 1
 end
 function GamestateWorldCreationMenu2:draw()
 	_JPROFILER.push("drawWorldCreationMenu")
@@ -13,10 +13,12 @@ function GamestateWorldCreationMenu2:draw()
 	local scaleX = w / WorldCreationBackground:getWidth()
 	local scaleY = h / WorldCreationBackground:getHeight()
 	Lovegraphics.draw(WorldCreationBackground, 0, 0, 0, scaleX, scaleY)
-	local posY = _WorldCreationMenu.y
+	local posX = w * 0.4
+	local posY = h * 0.4
 	local lineHeight = Font15:getHeight("X")
-	drawColorString(_WorldCreationMenu.title, _WorldCreationMenu.x, posY)
+	drawColorString(_WorldCreationMenu.title, posX, posY)
 	posY = posY + lineHeight
+
 	local marque = ""
 	for n = 1, #_WorldCreationMenu.choice do
 		if _WorldCreationMenu.selection == n then
@@ -25,11 +27,13 @@ function GamestateWorldCreationMenu2:draw()
 			marque = "   "
 		end
 		local choiceText = _WorldCreationMenu.choice[n]
-		drawColorString(marque .. "" .. choiceText, _WorldCreationMenu.x, posY)
+		drawColorString(marque .. "" .. choiceText, posX, posY)
 		posY = posY + lineHeight
 	end
+
 	_JPROFILER.pop("drawWorldCreationMenu")
 end
+
 local function PerformMenuAction(action)
 	if action == 1 then
 		SetCurrentGameState(GameStatePlayingGame2)

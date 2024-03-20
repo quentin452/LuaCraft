@@ -4,7 +4,7 @@ CrosshairShader = Lovegraphics.newShader(
 	[[uniform Image source;uniform number xProportion;uniform number yProportion;vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords){vec2 scaled_coords = (texture_coords - vec2(0.9375, 0)) * 16.0;vec4 sourcecolor = texture2D(source, vec2(0.5 + (-0.5 + scaled_coords.x) * xProportion, 0.5 + (0.5 - scaled_coords.y) * yProportion));sourcecolor.rgb = vec3(1.0) - sourcecolor.rgb;sourcecolor.a = texture2D(texture, texture_coords).a;return sourcecolor;}]]
 )
 --init Menus tables
-_MainMenuSettings = CreateLuaCraftMenu(50, 50, "Settings", {
+_MainMenuSettings = CreateLuaCraftMenu(0, 0, "Settings", {
 	"Enable Vsync?",
 	"Enable Logging (no warn or errors)?",
 	"Enable warns logging?",
@@ -13,7 +13,7 @@ _MainMenuSettings = CreateLuaCraftMenu(50, 50, "Settings", {
 	"Keybinding Settings Menu",
 	"Exiting to main menu",
 })
-_KeybindingMenuSettings = CreateLuaCraftMenu(50, 50, "Keybinding Settings", {
+_KeybindingMenuSettings = CreateLuaCraftMenu(0, 0, "Keybinding Settings", {
 	"Forward keybind",
 	"Backward keybind",
 	"Left keybind",

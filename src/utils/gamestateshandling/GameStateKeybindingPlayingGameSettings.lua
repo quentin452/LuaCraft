@@ -1,6 +1,6 @@
 GamestateKeybindingPlayingGameSettings2 = GameStateBase:new()
 function GamestateKeybindingPlayingGameSettings2:resetMenuSelection()
-    _KeybindingMenuSettings.selection = 1
+	_KeybindingMenuSettings.selection = 1
 end
 function GamestateKeybindingPlayingGameSettings2:draw()
 	_JPROFILER.push("drawMenuSettings")
@@ -8,9 +8,10 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 	local scaleX = w / KeybindingSettingsBackground:getWidth()
 	local scaleY = h / KeybindingSettingsBackground:getHeight()
 	Lovegraphics.draw(KeybindingSettingsBackground, 0, 0, 0, scaleX, scaleY)
-	local posY = _KeybindingMenuSettings.y
+	local posX = w * 0.4
+	local posY = h * 0.4
 	local lineHeight = Font25:getHeight("X")
-	drawColorString(_KeybindingMenuSettings.title, _KeybindingMenuSettings.x, posY)
+	drawColorString(_KeybindingMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
 	local file_content, error_message = customReadFile(Luacraftconfig)
@@ -43,7 +44,7 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 			if n == 4 and Settings["rightmovementkey"] then
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["rightmovementkey"]
 			end
-			drawColorString(marque .. "" .. choiceText, _KeybindingMenuSettings.x, posY)
+			drawColorString(marque .. "" .. choiceText, posX, posY)
 			posY = posY + lineHeight
 		end
 	else
