@@ -115,7 +115,7 @@ function NewPlayer(x, y, z)
 			}
 
 			for key, dir in pairs(directionKeys) do
-				if love.keyboard.isDown(key) then
+				if love.keyboard.isDown(key) and not TileCollisions(GetVoxel(self.x, self.y + self.height + self.ySpeed, self.z)) then
 					mx = mx + dir[1]
 					my = my + dir[2]
 					moving = true
