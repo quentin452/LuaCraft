@@ -2,6 +2,9 @@ local temp = {}
 local dirt = 4
 local grass = true
 local OneHundredThoused = 100000
+local chunkfloor = 48
+local maxHeight = 120
+
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 	for i = 1, ChunkSize do
@@ -20,7 +23,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				if sunlight then
 					temp[yy + 1] = string.char(LightSources[15])
 				end
-				if j < chunk.floor then
+				if j < chunkfloor then
 					temp[yy] = string.char(Tiles.STONE_Block.id)
 					sunlight = false
 				else
@@ -51,10 +54,8 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 	temp = {}
 	_JPROFILER.pop("GenerateTerrain")
 end
-
 function StandardTerrain(chunk, xx, j, zz)
-	return ChunkNoise(xx, j, zz)
-		> (j - chunk.floor) / (chunk.ceiling - chunk.floor) * (Noise2D(xx, zz, 128, 5) * 0.75 + 0.75)
+	return ChunkNoise(xx, j, zz) > (j - chunkfloor) / (maxHeight - chunkfloor) * (Noise2D(xx, zz, 128, 5) * 0.75 + 0.75)
 end
 
 function ClassicTerrain(chunk, xx, j, zz)
@@ -81,7 +82,7 @@ function ClassicTerrain(chunk, xx, j, zz)
 	heightResult = heightResult + 64 -- water level
 	_JPROFILER.pop("ClassicTerrain")
 
-	return j <= heightResult --ChunkNoise(xx,j,zz) > (j-chunk.floor)/(chunk.ceiling-chunk.floor)*(Noise2D(xx,zz, 128,5)*0.75 +0.75)
+	return j <= heightResult --ChunkNoise(xx,j,zz) > (j-chunkfloor)/(maxHeight-chunkfloor)*(Noise2D(xx,zz, 128,5)*0.75 +0.75)
 end
 
 -- noise function used in chunk generation
@@ -117,6 +118,6 @@ end
 GlobalWorldType = StandardTerrain
 
 WorldTypeMap = {
-    [StandardTerrain] = { name = "Standard Terrain", nextType = ClassicTerrain },
-    [ClassicTerrain] = { name = "Classic Terrain", nextType = StandardTerrain },
+	[StandardTerrain] = { name = "Standard Terrain", nextType = ClassicTerrain },
+	[ClassicTerrain] = { name = "Classic Terrain", nextType = StandardTerrain },
 }

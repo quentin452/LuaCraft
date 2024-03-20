@@ -1,5 +1,3 @@
-local ADJUSTMENT_FACTOR_OTX_OTY = 256 / FinalAtlasSize
-local ADJUSTMENT_FACTOR_TEXTURE_COORDINATES = FinalAtlasSize / 256
 -- Shared block vertices
 local blockVertices = {}
 -- Checks if a face can be drawn based on transparency
