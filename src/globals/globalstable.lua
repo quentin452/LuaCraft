@@ -3,6 +3,7 @@
 CrosshairShader = Lovegraphics.newShader(
 	[[uniform Image source;uniform number xProportion;uniform number yProportion;vec4 effect(vec4 color, Image texture, vec2 texture_coords, vec2 screen_coords){vec2 scaled_coords = (texture_coords - vec2(0.9375, 0)) * 16.0;vec4 sourcecolor = texture2D(source, vec2(0.5 + (-0.5 + scaled_coords.x) * xProportion, 0.5 + (0.5 - scaled_coords.y) * yProportion));sourcecolor.rgb = vec3(1.0) - sourcecolor.rgb;sourcecolor.a = texture2D(texture, texture_coords).a;return sourcecolor;}]]
 )
+--TODO REWRITE MENU TABLE?????
 --init Menus tables
 local function createMenu(x, y, title, choices)
 	return {
