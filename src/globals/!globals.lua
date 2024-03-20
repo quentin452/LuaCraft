@@ -8,6 +8,9 @@ Loveevent = Lovez.event
 Lovehandlers = Lovez.handlers
 Loveargs = love.arg
 
+--global methods
+require("src/globals/globalmethods")
+
 --global tables
 require("src/globals/globalstable")
 

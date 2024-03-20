@@ -1,3 +1,8 @@
+local _Mainmenu = CreateLuaCraftMenu(50, 50, "LuaCraft", {
+	"%2World Creation Menu%0",
+	"Settings",
+	"Exit",
+})
 GamestateMainMenu2 = GameStateBase:new()
 function GamestateMainMenu2:resetMenuSelection()
 	_Mainmenu.selection = 1

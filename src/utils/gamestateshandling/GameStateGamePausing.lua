@@ -1,3 +1,9 @@
+local _GamePlayingPauseMenu = CreateLuaCraftMenu(50, 50, "Pause", {
+	"UnPause",
+	"Settings",
+	"Exit to main menu",
+})
+
 GamestateGamePausing2 = GameStateBase:new()
 function GamestateGamePausing2:resetMenuSelection()
     _GamePlayingPauseMenu.selection = 1

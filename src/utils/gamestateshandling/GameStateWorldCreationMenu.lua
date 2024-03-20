@@ -1,3 +1,8 @@
+local _WorldCreationMenu = CreateLuaCraftMenu(50, 50, "World Creation Menu", {
+	"Create World?",
+	"Exiting to main menu",
+})
+
 GamestateWorldCreationMenu2 = GameStateBase:new()
 function GamestateWorldCreationMenu2:resetMenuSelection()
     _WorldCreationMenu.selection = 1
