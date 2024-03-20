@@ -20,3 +20,6 @@ function GameStateBase:textinput(text) end
 function GameStateBase:keypressed(k) end
 
 function GameStateBase:resize(w, h) end
+function GameStateBase:setFont()
+	return Font15
+end

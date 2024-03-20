@@ -94,3 +94,7 @@ function GamestateKeybindingMainSettings2:keypressed(k)
 		end
 	end
 end
+
+function GamestateKeybindingMainSettings2:setFont()
+	return Font25
+end

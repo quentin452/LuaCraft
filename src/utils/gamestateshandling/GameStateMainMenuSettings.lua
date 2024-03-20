@@ -109,3 +109,6 @@ function GamestateMainMenuSettings2:keypressed(k)
 		end
 	end
 end
+function GamestateMainMenuSettings2:setFont()
+	return Font25
+end

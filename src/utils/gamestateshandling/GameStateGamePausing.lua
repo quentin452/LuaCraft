@@ -79,3 +79,7 @@ function GamestateGamePausing2:keypressed(k)
 	end
 	_JPROFILER.pop("keysinitGamePlayingPauseMenu")
 end
+
+function GamestateGamePausing2:setFont()
+	return Font25
+end

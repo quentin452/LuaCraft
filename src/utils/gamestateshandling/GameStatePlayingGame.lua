@@ -97,3 +97,6 @@ function GameStatePlayingGame2:keypressed(k)
 		CurrentCommand = ""
 	end
 end
+function GameStatePlayingGame2:setFont()
+	return Font15
+end

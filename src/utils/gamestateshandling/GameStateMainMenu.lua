@@ -1,6 +1,6 @@
 GamestateMainMenu2 = GameStateBase:new()
 function GamestateMainMenu2:resetMenuSelection()
-    _Mainmenu.selection = 1
+	_Mainmenu.selection = 1
 end
 function GamestateMainMenu2:draw()
 	local w, h = Lovegraphics.getDimensions()
@@ -55,4 +55,7 @@ function GamestateMainMenu2:keypressed(k)
 			PerformMenuAction(_Mainmenu.selection)
 		end
 	end
+end
+function GamestateMainMenu2:setFont()
+	return Font25
 end

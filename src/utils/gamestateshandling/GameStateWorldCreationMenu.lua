@@ -59,3 +59,7 @@ function GamestateWorldCreationMenu2:keypressed(k)
 		end
 	end
 end
+
+function GamestateWorldCreationMenu2:setFont()
+	return Font15
+end

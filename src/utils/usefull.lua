@@ -7,6 +7,12 @@ local colorMap = {
 	["2"] = { 0, 255, 0 }, -- green
 	["3"] = { 0, 255, 255 }, -- blue
 }
+local selectedFont = nil
+
+local function getSelectedFont()
+	return selectedFont
+end
+
 function drawColorString(Pstring, Px, Py)
 	_JPROFILER.push("drawColorString")
 	local rx, ry = Px, Py
@@ -28,9 +34,11 @@ function drawColorString(Pstring, Px, Py)
 			i = i + 2 -- skip both '%' and the color digit
 		else
 			Lovegraphics.print(c, rx, ry)
-			local selectedFont = getSelectedFont()
-			local fontWidth = selectedFont:getWidth(c)
-			rx = rx + fontWidth
+			selectedFont = getSelectedFont()
+			if selectedFont then
+				local fontWidth = selectedFont:getWidth(c)
+				rx = rx + fontWidth
+			end
 			i = i + 1
 		end
 	end
@@ -42,29 +50,12 @@ local previousGamestate = nil
 
 function setFont()
 	_JPROFILER.push("setFont")
-	local selectedFont = getSelectedFont()
-	if selectedFont then
-		if LuaCraftCurrentGameState ~= previousGamestate then
-			Lovegraphics.setFont(selectedFont)
-			previousGamestate = LuaCraftCurrentGameState
-		end
+	if LuaCraftCurrentGameState ~= previousGamestate then
+		selectedFont = LuaCraftCurrentGameState:setFont()
+		Lovegraphics.setFont(selectedFont)
+		previousGamestate = LuaCraftCurrentGameState
 	end
 	_JPROFILER.pop("setFont")
-end
---TODO MADE THIS MORE MAINTAINABLE
-function getSelectedFont()
-	if
-		IsCurrentGameState(GamestateMainMenuSettings2)
-		or IsCurrentGameState(GamestateGamePausing2)
-		or IsCurrentGameState(GamestatePlayingGameSettings2)
-		or IsCurrentGameState(GamestateKeybindingMainSettings2)
-		or IsCurrentGameState(GamestateKeybindingPlayingGameSettings2)
-		or IsCurrentGameState(GamestateMainMenu2)
-	then
-		return Font25
-	elseif IsCurrentGameState(GamestateWorldCreationMenu2) or IsCurrentGameState(GameStatePlayingGame2) then
-		return Font15
-	end
 end
 
 -- Calculates texture coordinates for given offsets
