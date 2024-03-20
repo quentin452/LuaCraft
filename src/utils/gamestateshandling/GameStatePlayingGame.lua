@@ -15,15 +15,15 @@ function GameStatePlayingGame2:draw()
 	_JPROFILER.push("DrawGameScene")
 	-- draw 3d scene
 	Scene:render(true)
+	if WorldSuccessfullyLoaded == true then
+		PlayerSuffocationCheck()
+	end
 	-- draw HUD
 	Scene:renderFunction(function()
 		DrawHudMain()
 	end, false)
 	love.graphics.setColor(1, 1, 1)
 	DrawCanevas()
-	if WorldSuccessfullyLoaded == true then
-		PlayerSuffocationCheck()
-	end
 	_JPROFILER.pop("DrawGameScene")
 end
 
