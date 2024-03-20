@@ -168,8 +168,18 @@ function NewChunk(x, z)
 					end
 				end
 				if inDirectSunlight and not blockAboveExists then
-					NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
-					--ThreadLightingChannel:push({ "LightOperation", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
+					if manuallyPlaced then
+						if love.mouse.isDown(2) then
+							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[0])
+						--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,LightSources[0] })
+						elseif love.mouse.isDown(1) then
+							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
+							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
+						end
+					else
+						NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
+						--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
+					end
 				else
 					for dx = -1, 1 do
 						for dy = -1, 1 do
