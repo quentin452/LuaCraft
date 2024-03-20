@@ -15,6 +15,7 @@ TilesById = { [0] = {
 	blockstringname = "AIR_Block",
 } }
 BlockThatUseCustomTexturesForTopandSide = {}
+--TODO remove BlockThatUseCustomTexturesForTopandSide + add an error if a thing is equal at nil , pass if the thing is equal at "none" + remove unecessary things in addBlock method
 function addBlock(
 	blockstringname,
 	BlockOrLiquidOrTile,
@@ -22,8 +23,11 @@ function addBlock(
 	transparency,
 	LightSources,
 	blockBottomMasterTexture,
+	blockBottomMasterTextureUserData,
 	blockSideTexture,
-	blockTopTexture
+	blockSideTextureUserData,
+	blockTopTexture,
+	blockTopTextureUserData
 )
 	if Tiles[blockstringname] then
 		ThreadLogChannel:push({
@@ -89,8 +93,11 @@ function addBlock(
 		Cancollide = Cancollide,
 		BlockOrLiquidOrTile = BlockOrLiquidOrTile,
 		blockBottomMasterTexture = blockBottomMasterTexture,
+		blockBottomMasterTextureUserData = blockBottomMasterTextureUserData,
 		blockSideTexture = blockSideTexture,
+		blockSideTextureUserData = blockSideTextureUserData,
 		blockTopTexture = blockTopTexture,
+		blockTopTextureUserData = blockTopTextureUserData,
 	}
 
 	TilesById[id] = Tiles[blockstringname]
@@ -101,7 +108,6 @@ function addBlock(
 		if type(blockSideTexture) == "string" then
 			blockSideTexture = Lovegraphics.newImage(blockSideTexture)
 		end
-
 		if BlockThatUseCustomTexturesForTopandSide[id] then
 			ThreadLogChannel:push({
 				LuaCraftLoggingLevel.ERROR,

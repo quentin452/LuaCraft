@@ -10,6 +10,9 @@ function stone_block.initialize()
 			TilesTransparency.FULL,
 			LightSources[0],
 			roseflowerTexture,
+			Lovegraphics.newImage(roseflowerTexture),
+			nil,
+			nil,
 			nil,
 			nil
 		)

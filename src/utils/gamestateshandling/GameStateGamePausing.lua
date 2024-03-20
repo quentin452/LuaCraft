@@ -52,6 +52,7 @@ end
 local function PerformMenuAction(action)
 	if action == 1 then
 		love.mouse.setRelativeMode(true)
+		WorldSuccessfullyLoaded = true
 		SetCurrentGameState(GameStatePlayingGame2)
 	elseif action == 2 then
 		SetCurrentGameState(GamestatePlayingGameSettings2)
@@ -83,17 +84,17 @@ function GamestateGamePausing2:mousepressed(x, y, b)
 end
 function GamestateGamePausing2:keypressed(k)
 	_JPROFILER.push("keysinitGamePlayingPauseMenu")
-		if k == BackWardKey then
-			if _GamePlayingPauseMenu.selection < #_GamePlayingPauseMenu.choice then
-				_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection + 1
-			end
-		elseif k == ForWardKey then
-			if _GamePlayingPauseMenu.selection > 1 then
-				_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection - 1
-			end
-		elseif k == "return" then
-			PerformMenuAction(_GamePlayingPauseMenu.selection)
+	if k == BackWardKey then
+		if _GamePlayingPauseMenu.selection < #_GamePlayingPauseMenu.choice then
+			_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection + 1
 		end
+	elseif k == ForWardKey then
+		if _GamePlayingPauseMenu.selection > 1 then
+			_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection - 1
+		end
+	elseif k == "return" then
+		PerformMenuAction(_GamePlayingPauseMenu.selection)
+	end
 	_JPROFILER.pop("keysinitGamePlayingPauseMenu")
 end
 

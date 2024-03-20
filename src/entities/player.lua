@@ -115,7 +115,10 @@ function NewPlayer(x, y, z)
 			}
 
 			for key, dir in pairs(directionKeys) do
-				if love.keyboard.isDown(key) and not TileCollisions(GetVoxel(self.x, self.y + self.height + self.ySpeed, self.z)) then
+				if
+					love.keyboard.isDown(key)
+					and not TileCollisions(GetVoxel(self.x, self.y + self.height + self.ySpeed, self.z))
+				then
 					mx = mx + dir[1]
 					my = my + dir[2]
 					moving = true
@@ -270,6 +273,7 @@ function ChooseSpawnLocation()
 	ThePlayer.x = playerX
 	ThePlayer.y = playerY + 1.1
 	ThePlayer.z = playerZ
+	WorldSuccessfullyLoaded = true
 	ThePlayer.IsPlayerHasSpawned = true
 	_JPROFILER.pop("ChooseSpawnLocation")
 end
@@ -301,4 +305,23 @@ function getPlayerPosition()
 		y = math.floor(ThePlayer.y + 0.5),
 		z = math.floor(ThePlayer.z + 0.5),
 	}
+end
+
+function PlayerSuffocationCheck()
+	if
+		ThePlayer
+		and TileCollisions(GetVoxel(ThePlayer.x, ThePlayer.y + ThePlayer.height, ThePlayer.z))
+		and TileCollisions(GetVoxel(ThePlayer.x, ThePlayer.y + ThePlayer.height + ThePlayer.ySpeed, ThePlayer.z))
+	then
+		local voxelId = GetVoxel(ThePlayer.x, ThePlayer.y + ThePlayer.height, ThePlayer.z)
+		local voxelData = GetValueFromTilesById(voxelId)
+		if voxelData then
+			local blockBottomMasterTexture = voxelData.blockBottomMasterTextureUserData
+			if blockBottomMasterTexture then
+				local scale_x = love.graphics.getWidth() / blockBottomMasterTexture:getWidth()
+				local scale_y = love.graphics.getHeight() / blockBottomMasterTexture:getHeight()
+				love.graphics.draw(blockBottomMasterTexture, 0, 0, 0, scale_x, scale_y)
+			end
+		end
+	end
 end

@@ -21,6 +21,9 @@ function GameStatePlayingGame2:draw()
 	end, false)
 	love.graphics.setColor(1, 1, 1)
 	DrawCanevas()
+	if WorldSuccessfullyLoaded == true then
+	PlayerSuffocationCheck()
+	end
 	_JPROFILER.pop("DrawGameScene")
 end
 
@@ -77,6 +80,7 @@ function GameStatePlayingGame2:keypressed(k)
 			love.mouse.setRelativeMode(false)
 			love.mouse.setGrabbed(true)
 			love.mouse.setVisible(true)
+			WorldSuccessfullyLoaded = false
 			SetCurrentGameState(GamestateGamePausing2)
 		end
 	elseif k == "f3" then

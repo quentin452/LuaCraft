@@ -62,6 +62,7 @@ EnableTESTBLOCK = false
 EnableCommandHUD = false
 FixinputforDrawCommandInput = false
 ConfiguringMovementKey = false
+WorldSuccessfullyLoaded = false
 HudMessage = nil
 BlockGetTop = nil
 BlockGetBottom = nil

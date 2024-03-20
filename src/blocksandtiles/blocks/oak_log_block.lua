@@ -12,8 +12,11 @@ function stone_block.initialize()
 			TilesTransparency.OPAQUE,
 			LightSources[0],
 			oak_logsBottomTexture,
+			Lovegraphics.newImage(oak_logsBottomTexture),
 			oak_logsSideTexture,
-			oak_logsTopTexture
+			Lovegraphics.newImage(oak_logsSideTexture),
+			oak_logsTopTexture,
+			Lovegraphics.newImage(oak_logsTopTexture)
 		)
 	end, GetSourcePath())
 end

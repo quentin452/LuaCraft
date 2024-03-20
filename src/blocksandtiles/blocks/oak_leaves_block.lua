@@ -10,6 +10,9 @@ function stone_block.initialize()
 			TilesTransparency.PARTIAL,
 			LightSources[0],
 			oak_leavesTexture,
+			Lovegraphics.newImage(oak_leavesTexture),
+			nil,
+			nil,
 			nil,
 			nil
 		)

@@ -223,9 +223,6 @@ local function CalculateHudVertices(hudX, hudY)
 	return topQuadVertices, rightFrontQuadVertices, leftSideQuadVertices
 end
 
---TODO remove Table_HudTextureCache
-local Table_HudTextureCache = {}
-
 function DrawHudTile(tile, hudX, hudY)
 	_JPROFILER.push("DrawHudTile")
 	local tileData = GetValueFromTilesById(tile)
@@ -235,9 +232,9 @@ function DrawHudTile(tile, hudX, hudY)
 	if Tile2DHUD(tile) then
 		DrawTileQuad2D(tileData, hudX, hudY, size)
 	else
-		local textures = { tileData.blockTopTexture, tileData.blockSideTexture }
-		if not tileData.blockTopTexture and not tileData.blockSideTexture then
-			textures = { tileData.blockBottomMasterTexture, tileData.blockBottomMasterTexture }
+		local textures = { tileData.blockTopTextureUserData, tileData.blockSideTextureUserData }
+		if not tileData.blockTopTextureUserData and not tileData.blockSideTextureUserData then
+			textures = { tileData.blockBottomMasterTextureUserData, tileData.blockBottomMasterTextureUserData }
 		end
 		if textures[1] and textures[2] then
 			local topQuadVertices, rightFrontQuadVertices, leftSideQuadVertices = CalculateHudVertices(hudX, hudY)
@@ -253,30 +250,19 @@ end
 
 function DrawTileQuadPersonalized(texture, points)
 	_JPROFILER.push("DrawTileQuadPersonalized")
-	if not Table_HudTextureCache[texture] then
-		Table_HudTextureCache[texture] = Lovegraphics.newImage(texture)
-	end
-	Perspective.quad(Table_HudTextureCache[texture], unpack(points))
+	Perspective.quad(texture, unpack(points))
 	_JPROFILER.pop("DrawTileQuadPersonalized")
 end
 
 function DrawTileQuad2D(tileData, x, y, size)
 	_JPROFILER.push("DrawTileQuad2D")
-	local texture = tileData.blockBottomMasterTexture
-	if not Table_HudTextureCache[texture] then
-		Table_HudTextureCache[texture] = Lovegraphics.newImage(texture)
+	local texture = tileData.blockBottomMasterTextureUserData
+	if texture then
+		local prevFilter = texture:getFilter()
+		texture:setFilter("nearest", "nearest")
+		Lovegraphics.draw(texture, x + 6, y + 6, 0, size * 2 / texture:getWidth(), size * 2 / texture:getHeight())
+		texture:setFilter(prevFilter)
 	end
-	local prevFilter = Table_HudTextureCache[texture]:getFilter()
-	Table_HudTextureCache[texture]:setFilter("nearest", "nearest")
-	Lovegraphics.draw(
-		Table_HudTextureCache[texture],
-		x + 6,
-		y + 6,
-		0,
-		size * 2 / Table_HudTextureCache[texture]:getWidth(),
-		size * 2 / Table_HudTextureCache[texture]:getHeight()
-	)
-	Table_HudTextureCache[texture]:setFilter(prevFilter)
 	_JPROFILER.pop("DrawTileQuad2D")
 end
 

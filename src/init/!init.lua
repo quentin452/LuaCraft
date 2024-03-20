@@ -9,7 +9,6 @@ function iterateOverAllTiles()
 		local blockTopTexture = value.blockTopTexture or "N/A"
 		local blockSideTexture = value.blockSideTexture or "N/A"
 		local blockBottomMasterTexture = value.blockBottomMasterTexture or "N/A"
-
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.NORMAL,
 			"Tile Name: "
@@ -66,7 +65,7 @@ function InitializeGame()
 	_JPROFILER.push("iterateOverAllTiles")
 	iterateOverAllTiles()
 	_JPROFILER.pop("iterateOverAllTiles")
-	
+
 	--TODO FIX LIGHTING THREAD
 	--	_JPROFILER.push("createLightningThread")
 	--	ThreadLightingChannel = createLightningThread()
