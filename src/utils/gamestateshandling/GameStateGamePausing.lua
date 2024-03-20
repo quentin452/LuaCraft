@@ -83,7 +83,6 @@ function GamestateGamePausing2:mousepressed(x, y, b)
 end
 function GamestateGamePausing2:keypressed(k)
 	_JPROFILER.push("keysinitGamePlayingPauseMenu")
-	if type(_GamePlayingPauseMenu.choice) == "table" and _GamePlayingPauseMenu.selection then
 		if k == BackWardKey then
 			if _GamePlayingPauseMenu.selection < #_GamePlayingPauseMenu.choice then
 				_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection + 1
@@ -95,7 +94,6 @@ function GamestateGamePausing2:keypressed(k)
 		elseif k == "return" then
 			PerformMenuAction(_GamePlayingPauseMenu.selection)
 		end
-	end
 	_JPROFILER.pop("keysinitGamePlayingPauseMenu")
 end
 

@@ -94,7 +94,6 @@ end
 
 
 function GamestateKeybindingPlayingGameSettings2:keypressed(k)
-	if type(_KeybindingMenuSettings.choice) == "table" and _KeybindingMenuSettings.selection then
 		if k == BackWardKey and ConfiguringMovementKey == false then
 			if _KeybindingMenuSettings.selection < #_KeybindingMenuSettings.choice then
 				_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection + 1
@@ -105,7 +104,6 @@ function GamestateKeybindingPlayingGameSettings2:keypressed(k)
 			end
 		elseif k == "return" then
 			PerformMenuAction(_KeybindingMenuSettings.selection)
-		end
 	end
 end
 

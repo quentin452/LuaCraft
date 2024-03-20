@@ -79,18 +79,16 @@ function GamestateWorldCreationMenu2:mousepressed(x, y, b)
 end
 
 function GamestateWorldCreationMenu2:keypressed(k)
-	if type(_WorldCreationMenu.choice) == "table" and _WorldCreationMenu.selection then
-		if k == BackWardKey then
-			if _WorldCreationMenu.selection < #_WorldCreationMenu.choice then
-				_WorldCreationMenu.selection = _WorldCreationMenu.selection + 1
-			end
-		elseif k == ForWardKey then
-			if _WorldCreationMenu.selection > 1 then
-				_WorldCreationMenu.selection = _WorldCreationMenu.selection - 1
-			end
-		elseif k == "return" then
-			PerformMenuAction(_WorldCreationMenu.selection)
+	if k == BackWardKey then
+		if _WorldCreationMenu.selection < #_WorldCreationMenu.choice then
+			_WorldCreationMenu.selection = _WorldCreationMenu.selection + 1
 		end
+	elseif k == ForWardKey then
+		if _WorldCreationMenu.selection > 1 then
+			_WorldCreationMenu.selection = _WorldCreationMenu.selection - 1
+		end
+	elseif k == "return" then
+		PerformMenuAction(_WorldCreationMenu.selection)
 	end
 end
 

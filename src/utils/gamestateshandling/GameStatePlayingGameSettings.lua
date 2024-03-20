@@ -111,18 +111,16 @@ function GamestatePlayingGameSettings2:mousepressed(x, y, b)
 	end
 end
 function GamestatePlayingGameSettings2:keypressed(k)
-	if type(_MainMenuSettings.choice) == "table" and _MainMenuSettings.selection then
-		if k == BackWardKey then
-			if _MainMenuSettings.selection < #_MainMenuSettings.choice then
-				_MainMenuSettings.selection = _MainMenuSettings.selection + 1
-			end
-		elseif k == ForWardKey then
-			if _MainMenuSettings.selection > 1 then
-				_MainMenuSettings.selection = _MainMenuSettings.selection - 1
-			end
-		elseif k == "return" then
-			PerformMenuAction(_MainMenuSettings.selection)
+	if k == BackWardKey then
+		if _MainMenuSettings.selection < #_MainMenuSettings.choice then
+			_MainMenuSettings.selection = _MainMenuSettings.selection + 1
 		end
+	elseif k == ForWardKey then
+		if _MainMenuSettings.selection > 1 then
+			_MainMenuSettings.selection = _MainMenuSettings.selection - 1
+		end
+	elseif k == "return" then
+		PerformMenuAction(_MainMenuSettings.selection)
 	end
 end
 function GamestatePlayingGameSettings2:setFont()
