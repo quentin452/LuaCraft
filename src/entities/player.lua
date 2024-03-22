@@ -280,9 +280,9 @@ function getPlayerPosition()
 	_JPROFILER.push("getPlayerPosition")
 	_JPROFILER.pop("getPlayerPosition")
 	return {
-		x = math.floor(ThePlayer.x + 0.5),
-		y = math.floor(ThePlayer.y + 0.5),
-		z = math.floor(ThePlayer.z + 0.5),
+		x = math.floor(ThePlayer.x),
+		y = math.floor(ThePlayer.y),
+		z = math.floor(ThePlayer.z),
 	}
 end
 
