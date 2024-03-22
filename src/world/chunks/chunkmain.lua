@@ -99,7 +99,7 @@ function NewChunk(x, z)
 			if column then
 				local voxelData = column[z]
 				if voxelData then
-					if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+					if IsWithinChunkLimits(x, y, z) then
 						local startIndex = (y - 1) * TileDataSize + 1
 						local byte1, byte2, byte3 = string.byte(voxelData, startIndex, startIndex + 2)
 						return byte1, byte2, byte3
@@ -111,7 +111,7 @@ function NewChunk(x, z)
 	end
 	chunk.getVoxelData = function(self, x, y, z, dataIndex)
 		x, y, z = math.floor(x), math.floor(y), math.floor(z)
-		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+		if IsWithinChunkLimits(x, y, z) then
 			local column = self.voxels[x]
 			if column then
 				local voxelData = column[z]

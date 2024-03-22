@@ -313,12 +313,16 @@ function PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalu
 	return false
 end
 
+function IsWithinChunkLimits(x, y, z)
+	return x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize
+end
+
 function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 	_JPROFILER.push("SetVoxelInternal")
 	manuallyPlaced = manuallyPlaced or false
 	local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 	-- Check if coordinates are within chunk limits
-	if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+	if IsWithinChunkLimits(x, y, z) then
 		-- Check if block placement is prevented (e.g., on the player or certain blocks)
 		if
 			PreventBlockPlacementOnThePlayer(gx, gy, gz)
