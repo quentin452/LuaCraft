@@ -168,7 +168,6 @@ function NewChunk(x, z)
 			local sunget = self:getVoxel(x, y + 1, z)
 			local sunlight = self:getVoxelFirstData(x, y + 1, z)
 			local inDirectSunlight = TileLightable(sunget) and sunlight == LightSources[15]
-			local placingLocalSource = false
 			local destroyLight = false
 
 			if TileLightable(blockvalue) then
@@ -207,7 +206,6 @@ function NewChunk(x, z)
 					if source > 0 then
 						NewLightOperation(gx, gy, gz, LightOpe.LocalAdd.id, source)
 						--ThreadLightingChannel:push({ "LightOperation",gx, gy, gz, LightOpe.LocalAdd.id, source })
-						placingLocalSource = true
 					else
 						for dx = -1, 1 do
 							for dy = -1, 1 do
@@ -261,17 +259,6 @@ function NewChunk(x, z)
 									NewLightOperation(xd, yd, zd, LightOpe.LocalSubtract.id, nget + LightSources[1])
 									--ThreadLightingChannel:push({"LightOperation",xd, yd, zd, LightOpe.LocalSubtract.id ,nget + LightSources[1]})
 								end
-							end
-						end
-					end
-				end
-				-- If the block is semi-luminous and has no local source, create local light
-				if TileLightable(blockvalue, true) and not placingLocalSource then
-					for dx = -1, 1 do
-						for dy = -1, 1 do
-							for dz = -1, 1 do
-								NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id)
-								--ThreadLightingChannel:push({"LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id})
 							end
 						end
 					end
