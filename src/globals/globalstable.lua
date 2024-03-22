@@ -41,6 +41,7 @@ TilesTextureFORAtlasList = {}
 RenderChunks = {}
 LightingQueue = {}
 LightingRemovalQueue = {}
+PlayerDirectionKey = {}
 PlayerInventory = {
 	items = {},
 	hotbarSelect = 1,

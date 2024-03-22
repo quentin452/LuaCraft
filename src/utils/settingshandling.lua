@@ -8,6 +8,32 @@ local configParams = {
 	leftmovementkey = { variable = "ReloadLeftKey", expectedValue = "q" },
 	rightmovementkey = { variable = "ReloadRightKey", expectedValue = "d" },
 }
+function ReLoadMovementKeyValues()
+	local file_content, error_message = customReadFile(Luacraftconfig)
+	if file_content then
+		ForWardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
+		BackWardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
+		LeftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
+		RightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
+	else
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
+		})
+	end
+	if not PlayerDirectionKey[ForWardKey] then
+		PlayerDirectionKey[ForWardKey] = { 0, -1 }
+	end
+	if not PlayerDirectionKey[LeftKey] then
+		PlayerDirectionKey[LeftKey] = { -1, 0 }
+	end
+	if not PlayerDirectionKey[BackWardKey] then
+		PlayerDirectionKey[BackWardKey] = { 0, 1 }
+	end
+	if not PlayerDirectionKey[RightKey] then
+		PlayerDirectionKey[RightKey] = { 1, 0 }
+	end
+end
 function updateConfigFile(key, value)
 	local fileContent, errorMessage = customReadFile(Luacraftconfig)
 	if fileContent then

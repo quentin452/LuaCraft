@@ -1,19 +1,5 @@
 local playerReach = 5
 
-function ReLoadMovementKeyValues()
-	local file_content, error_message = customReadFile(Luacraftconfig)
-	if file_content then
-		ForWardKey = file_content:match("forwardmovementkey=([%a%d]+)") or "z"
-		BackWardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
-		LeftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
-		RightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
-	else
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
-		})
-	end
-end
 function NewPlayer(x, y, z)
 	_JPROFILER.push("NewPlayer")
 	local t = NewThing(x, y, z)
@@ -107,14 +93,7 @@ function NewPlayer(x, y, z)
 
 		-- take player input
 		if FixinputforDrawCommandInput == false then
-			local directionKeys = {
-				[ForWardKey] = { 0, -1 },
-				[LeftKey] = { -1, 0 },
-				[BackWardKey] = { 0, 1 },
-				[RightKey] = { 1, 0 },
-			}
-
-			for key, dir in pairs(directionKeys) do
+			for key, dir in pairs(PlayerDirectionKey) do
 				if
 					love.keyboard.isDown(key)
 					and not TileCollisions(GetVoxel(self.x, self.y + self.height + self.ySpeed, self.z))
