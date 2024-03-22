@@ -50,11 +50,6 @@ function GameStatePlayingGame2:mousepressed(x, y, b)
 			thing:mousepressed(b)
 		end
 	end
-
-	local numberPress = tonumber(k)
-	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and FixinputforDrawCommandInput == false then
-		PlayerInventory.hotbarSelect = numberPress
-	end
 	-- Handle clicking to place / destroy blocks
 	local pos = ThePlayer and ThePlayer.cursorpos
 	local value = 0
@@ -74,6 +69,10 @@ function GameStatePlayingGame2:mousepressed(x, y, b)
 end
 
 function GameStatePlayingGame2:keypressed(k)
+	local numberPress = tonumber(k)
+	if numberPress ~= nil and numberPress >= 1 and numberPress <= 9 and FixinputforDrawCommandInput == false then
+		PlayerInventory.hotbarSelect = numberPress
+	end
 	if k == "escape" then
 		if EnableCommandHUD then
 			FixinputforDrawCommandInput = false
