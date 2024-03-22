@@ -169,22 +169,23 @@ function NewChunk(x, z)
 			local sunlight = self:getVoxelFirstData(x, y + 1, z)
 			local inDirectSunlight = TileLightable(sunget) and sunlight == LightSources[15]
 			local destroyLight = false
+			local leftMouseDown = love.mouse.isDown(1)
+			local rightMouseDown = love.mouse.isDown(2)
 
 			if TileLightable(blockvalue) then
 				if inDirectSunlight then
 					--Fix https://github.com/quentin452/LuaCraft/issues/53
 					if manuallyPlaced then
-						if love.mouse.isDown(1) and love.mouse.isDown(2) then
+						if leftMouseDown and rightMouseDown then
 							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
-							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
-						elseif love.mouse.isDown(2) then
+						--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
+						elseif rightMouseDown then
 							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[0])
-							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,LightSources[0] })
-						elseif love.mouse.isDown(1) then
+						--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,LightSources[0] })
+						elseif leftMouseDown then
 							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
 							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
 						end
-					--Perform Normal SunDownAdd
 					else
 						NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
 						--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
@@ -270,8 +271,10 @@ function NewChunk(x, z)
 				self.changes[#self.changes + 1] = { x, y, z }
 			end
 			--Fix https://github.com/quentin452/LuaCraft/issues/66
-			NewLightOperation(gx, gy, gz, LightOpe.SunDownSubtract.id)
-			--ThreadLightingChannel:push({"LightOperation", gx, gy, gz, LightOpe.SunDownSubtract.id })
+			if TileModel(GetVoxel(gx, gy, gz)) == 0 then
+				NewLightOperation(gx, gy, gz, LightOpe.SunDownSubtract.id)
+				--ThreadLightingChannel:push({"LightOperation", gx, gy, gz, LightOpe.SunDownSubtract.id })
+			end
 			--Perform normal SunDown Subtract
 			NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
 			--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
