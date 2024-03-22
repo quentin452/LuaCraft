@@ -183,12 +183,15 @@ function NewChunk(x, z)
 				if inDirectSunlight and not blockAboveExists then
 					--Fix https://github.com/quentin452/LuaCraft/issues/53
 					if manuallyPlaced then
-						if love.mouse.isDown(2) then
+						if love.mouse.isDown(1) and love.mouse.isDown(2) then
+							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
+							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
+						elseif love.mouse.isDown(2) then
 							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[0])
-						--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,LightSources[0] })
+							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,LightSources[0] })
 						elseif love.mouse.isDown(1) then
 							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
-							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
+							--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
 						end
 					--Perform Normal SunDownAdd
 					else
