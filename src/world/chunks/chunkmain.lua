@@ -129,7 +129,7 @@ function NewChunk(x, z)
 	chunk.getVoxelSecondData = function(self, x, y, z)
 		return self:getVoxelData(x, y, z, 3)
 	end
-	chunk.setVoxelRaw = function(self, x, y, z, blockvalue, light)
+	chunk.setVoxelRawNotSupportLight = function(self, x, y, z, blockvalue)
 		if self.voxels == nil or self.voxels[x] == nil or self.voxels[x][z] == nil then
 			return 0, 0, 0
 		end

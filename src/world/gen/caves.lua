@@ -72,7 +72,7 @@ function NewCave(x, y, z)
 							local gx, gy, gz = self.x + i, self.y + j, self.z + k
 							local chunk, cx, cy, cz = GetChunk(gx, gy, gz)
 							if chunk ~= nil then
-								chunk:setVoxelRaw(cx, cy, cz, Tiles.AIR_Block.id, LightSources[0])
+								chunk:setVoxelRawNotSupportLight(cx, cy, cz, Tiles.AIR_Block.id)
 								if cy == chunk.heightMap[cx][cz] then
 									NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[15])
 									--[[	ThreadLightingChannel:push({"LightOperation",
