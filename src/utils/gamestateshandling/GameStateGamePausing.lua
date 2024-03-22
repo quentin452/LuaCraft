@@ -17,7 +17,7 @@ function GamestateGamePausing2:draw()
 
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = self:setFont():getHeight("X")
+	local lineHeight = getSelectedFont():getHeight("X")
 	drawColorString(_GamePlayingPauseMenu.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
@@ -65,10 +65,10 @@ function GamestateGamePausing2:mousepressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = self:setFont():getHeight("X")
+		local lineHeight = getSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_GamePlayingPauseMenu.choice) do
-			local choiceWidth = self:setFont():getWidth(choice)
+			local choiceWidth = getSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end

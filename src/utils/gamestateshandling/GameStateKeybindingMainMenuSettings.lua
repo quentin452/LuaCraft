@@ -10,7 +10,7 @@ function GamestateKeybindingMainSettings2:draw()
 	Lovegraphics.draw(KeybindingSettingsBackground, 0, 0, 0, scaleX, scaleY)
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = self:setFont():getHeight("X")
+	local lineHeight = getSelectedFont():getHeight("X")
 	drawColorString(_KeybindingMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
@@ -70,16 +70,15 @@ local function PerformMenuAction(action)
 	end
 end
 
-
 function GamestateKeybindingMainSettings2:mousepressed(x, y, b)
 	if b == 1 then
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = self:setFont():getHeight("X")
+		local lineHeight = getSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_KeybindingMenuSettings.choice) do
-			local choiceWidth = self:setFont():getWidth(choice)
+			local choiceWidth = getSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end
@@ -95,16 +94,16 @@ function GamestateKeybindingMainSettings2:mousepressed(x, y, b)
 end
 
 function GamestateKeybindingMainSettings2:keypressed(k)
-		if k == BackWardKey and ConfiguringMovementKey == false then
-			if _KeybindingMenuSettings.selection < #_KeybindingMenuSettings.choice then
-				_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection + 1
-			end
-		elseif k == ForWardKey and ConfiguringMovementKey == false then
-			if _KeybindingMenuSettings.selection > 1 then
-				_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection - 1
-			end
-		elseif k == "return" then
-			PerformMenuAction(_KeybindingMenuSettings.selection)
+	if k == BackWardKey and ConfiguringMovementKey == false then
+		if _KeybindingMenuSettings.selection < #_KeybindingMenuSettings.choice then
+			_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection + 1
+		end
+	elseif k == ForWardKey and ConfiguringMovementKey == false then
+		if _KeybindingMenuSettings.selection > 1 then
+			_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection - 1
+		end
+	elseif k == "return" then
+		PerformMenuAction(_KeybindingMenuSettings.selection)
 	end
 end
 

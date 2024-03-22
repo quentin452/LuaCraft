@@ -9,7 +9,7 @@ local colorMap = {
 }
 local selectedFont = nil
 
-local function getSelectedFont()
+function getSelectedFont()
 	return selectedFont
 end
 

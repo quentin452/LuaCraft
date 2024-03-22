@@ -9,7 +9,7 @@ function GamestateMainMenuSettings2:draw()
 	Lovegraphics.draw(MainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = self:setFont():getHeight("X")
+	local lineHeight = getSelectedFont():getHeight("X")
 	drawColorString(_MainMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
 	local marque = ""
@@ -91,10 +91,10 @@ function GamestateMainMenuSettings2:mousepressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = self:setFont():getHeight("X")
+		local lineHeight = getSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_MainMenuSettings.choice) do
-			local choiceWidth = self:setFont():getWidth(choice)
+			local choiceWidth = getSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end
@@ -110,16 +110,16 @@ function GamestateMainMenuSettings2:mousepressed(x, y, b)
 end
 
 function GamestateMainMenuSettings2:keypressed(k)
-		if k == BackWardKey then
-			if _MainMenuSettings.selection < #_MainMenuSettings.choice then
-				_MainMenuSettings.selection = _MainMenuSettings.selection + 1
-			end
-		elseif k == ForWardKey then
-			if _MainMenuSettings.selection > 1 then
-				_MainMenuSettings.selection = _MainMenuSettings.selection - 1
-			end
-		elseif k == "return" then
-			PerformMenuAction(_MainMenuSettings.selection)
+	if k == BackWardKey then
+		if _MainMenuSettings.selection < #_MainMenuSettings.choice then
+			_MainMenuSettings.selection = _MainMenuSettings.selection + 1
+		end
+	elseif k == ForWardKey then
+		if _MainMenuSettings.selection > 1 then
+			_MainMenuSettings.selection = _MainMenuSettings.selection - 1
+		end
+	elseif k == "return" then
+		PerformMenuAction(_MainMenuSettings.selection)
 	end
 end
 function GamestateMainMenuSettings2:setFont()
