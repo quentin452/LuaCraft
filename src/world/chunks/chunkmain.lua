@@ -171,16 +171,9 @@ function NewChunk(x, z)
 			local inDirectSunlight = TileLightable(sunget) and sunlight == LightSources[15]
 			local placingLocalSource = false
 			local destroyLight = false
+
 			if TileLightable(blockvalue) then
-				--Fix https://github.com/quentin452/LuaCraft/issues/31
-				local blockAboveExists = false
-				for checkY = y + 1, WorldHeight do
-					if self:getVoxel(x, checkY, z) ~= Tiles.AIR_Block.id then
-						blockAboveExists = true
-						break
-					end
-				end
-				if inDirectSunlight and not blockAboveExists then
+				if inDirectSunlight then
 					--Fix https://github.com/quentin452/LuaCraft/issues/53
 					if manuallyPlaced then
 						if love.mouse.isDown(1) and love.mouse.isDown(2) then
