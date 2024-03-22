@@ -135,9 +135,7 @@ function NewChunk(x, z)
 		end
 		if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
 			local _, _, _ = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
-			self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
-
-			self.changes[#self.changes + 1] = { x, y, z }
+			UpdateVoxelData(self, blockvalue, x, y, z)
 		end
 	end
 	--TODO continue optimizing chunk.setVoxel
@@ -153,7 +151,7 @@ function NewChunk(x, z)
     @return              Nothing.
 --]]
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
-		SetVoxelInternal(manuallyPlaced,self,x,y,z,blockvalue)
+		SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 	end
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)
 		SetVoxelDataInternal(self, x, y, z, blockvalue, "First")

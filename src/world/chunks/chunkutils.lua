@@ -249,11 +249,9 @@ local function HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPla
 	end
 end
 
-local function UpdateVoxelData(self, blockvalue, x, y, z)
-	if blockvalue ~= -1 then
-		self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
-		self.changes[#self.changes + 1] = { x, y, z }
-	end
+function UpdateVoxelData(self, blockvalue, x, y, z)
+	self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
+	self.changes[#self.changes + 1] = { x, y, z }
 end
 
 local function HandleSunDownSubstract(gx, gy, gz)
@@ -346,7 +344,9 @@ function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 		end
 		HandleLightSourceBlock(self, gx, gy, gz, x, y, z, blockvalue, destroyLight)
 		HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPlaced, destroyLight)
-		UpdateVoxelData(self, blockvalue, x, y, z)
+		if blockvalue ~= -1 then
+			UpdateVoxelData(self, blockvalue, x, y, z)
+		end
 		HandleSunDownSubstract(gx, gy, gz)
 	end
 	_JPROFILER.pop("SetVoxelInternal")
