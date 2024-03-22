@@ -337,12 +337,6 @@ function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 			ApplySunlightEffect(gx, gy, gz, sunlight, manuallyPlaced, leftMouseDown, rightMouseDown, inDirectSunlight)
 			HandleManuallyPlacedBlockTileLightableAdd(gx, gy, gz, manuallyPlaced, blockvalue)
 		else
-			-- Handle non-lightable blocks
-			local semiLightable = TileLightable(blockvalue, true)
-			if semiLightable and inDirectSunlight and manuallyPlaced then
-				NewLightOperation(gx, gy + 1, gz, LightOpe.SunCreationAdd.id)
-				--ThreadLightingChannel:push({ "LightOperation",gx, gy + 1, gz, LightOpe.SunCreationAdd.id })
-			end
 			destroyLight =
 				HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue, destroyLight, inDirectSunlight)
 		end
