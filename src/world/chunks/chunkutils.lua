@@ -248,12 +248,6 @@ local function HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPla
 		end
 	end
 end
-
-function UpdateVoxelData(self, blockvalue, x, y, z)
-	self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
-	self.changes[#self.changes + 1] = { x, y, z }
-end
-
 local function HandleSunDownSubstract(gx, gy, gz)
 	--Fix https://github.com/quentin452/LuaCraft/issues/66
 	if TileModel(GetVoxel(gx, gy, gz)) == 0 then
@@ -264,45 +258,41 @@ local function HandleSunDownSubstract(gx, gy, gz)
 	NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
 	--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
 end
-
-function PreventBlockPlacementOnThePlayer(gx, gy, gz)
-	--prevent block placements on the player
-	local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
-	local range1 = 1
-	local range2 = 0.1
-	local playerXFloor = math.floor(playerX)
-	local playerYFloor = math.floor(playerY)
-	local playerZFloor = math.floor(playerZ)
+local placementRange1SpaceKeyOn = 1
+local placementRange1SpaceKeyOff = 0.1
+local function PreventBlockPlacementOnThePlayer(gx, gy, gz, leftMouseDown, rightMouseDown, spaceKey)
+	local playerPos = getPlayerPosition()
+	local playerXFloor, playerYFloor, playerZFloor = playerPos.x, playerPos.y, playerPos.z
 	if
 		(
-			love.keyboard.isDown("space")
-			and gx >= playerXFloor + 0.5 - range1
-			and gx <= playerXFloor + range1
+			spaceKey
+			and gx >= playerXFloor + 0.5 - placementRange1SpaceKeyOn
+			and gx <= playerXFloor + placementRange1SpaceKeyOn
 			and gy >= playerYFloor
 			and gy <= playerYFloor + 1
-			and gz >= playerZFloor - range1
-			and gz <= playerZFloor + 0.5 + range1
+			and gz >= playerZFloor - placementRange1SpaceKeyOn
+			and gz <= playerZFloor + 0.5 + placementRange1SpaceKeyOn
 		)
 		or (
-			not love.keyboard.isDown("space")
-			and gx >= playerXFloor - range2
-			and gx <= playerXFloor + range2
+			not spaceKey
+			and gx >= playerXFloor - placementRange1SpaceKeyOff
+			and gx <= playerXFloor + placementRange1SpaceKeyOff
 			and gy >= playerYFloor
 			and gy <= playerYFloor + 1
-			and gz >= playerZFloor - range2
-			and gz <= playerZFloor + range2
+			and gz >= playerZFloor - placementRange1SpaceKeyOff
+			and gz <= playerZFloor + placementRange1SpaceKeyOff
 		)
 	then
-		if love.mouse.isDown(2) then
+		if rightMouseDown then
 			return true
-		elseif love.mouse.isDown(1) then
+		elseif leftMouseDown then
 			return Tiles.AIR_Block_id
 		end
 	end
 	return false
 end
 
-function PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalue)
+local function PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalue)
 	local blockBelow = self:getVoxel(x, y - 1, z)
 	local blockAbove = self:getVoxel(x, y + 1, z)
 	if TileModel(blockvalue) == 1 and (TileModel(blockBelow) == 1 or TileModel(blockAbove) == 1) then
@@ -310,20 +300,18 @@ function PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalu
 	end
 	return false
 end
-
-function IsWithinChunkLimits(x, y, z)
-	return x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize
-end
-
 function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 	_JPROFILER.push("SetVoxelInternal")
 	manuallyPlaced = manuallyPlaced or false
+	local leftMouseDown = love.mouse.isDown(1)
+	local rightMouseDown = love.mouse.isDown(2)
+	local spaceKey = love.keyboard.isDown("space")
 	local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 	-- Check if coordinates are within chunk limits
 	if IsWithinChunkLimits(x, y, z) then
 		-- Check if block placement is prevented (e.g., on the player or certain blocks)
 		if
-			PreventBlockPlacementOnThePlayer(gx, gy, gz)
+			PreventBlockPlacementOnThePlayer(gx, gy, gz, leftMouseDown, rightMouseDown, spaceKey)
 			or PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalue)
 		then
 			return
@@ -332,8 +320,6 @@ function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 		local sunlight = self:getVoxelFirstData(x, y + 1, z)
 		local inDirectSunlight = TileLightable(sunget) and sunlight == LightSources[15]
 		local destroyLight = false
-		local leftMouseDown = love.mouse.isDown(1)
-		local rightMouseDown = love.mouse.isDown(2)
 
 		if TileLightable(blockvalue) then
 			ApplySunlightEffect(gx, gy, gz, sunlight, manuallyPlaced, leftMouseDown, rightMouseDown, inDirectSunlight)
@@ -350,4 +336,13 @@ function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 		HandleSunDownSubstract(gx, gy, gz)
 	end
 	_JPROFILER.pop("SetVoxelInternal")
+end
+
+function IsWithinChunkLimits(x, y, z)
+	return x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize
+end
+
+function UpdateVoxelData(self, blockvalue, x, y, z)
+	self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
+	self.changes[#self.changes + 1] = { x, y, z }
 end
