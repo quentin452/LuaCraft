@@ -5,66 +5,6 @@ local transparency3 = TilesTransparency.OPAQUE
 function ReplaceChar(str, pos, r)
 	return str:sub(1, pos - 1) .. r .. str:sub(pos + #r)
 end
-function PreventBlockPlacementOnThePlayer(gx, gy, gz)
-	--prevent block placements on the player
-	local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
-	local range1 = 1
-	local range2 = 0.1
-	local playerXFloor = math.floor(playerX)
-	local playerYFloor = math.floor(playerY)
-	local playerZFloor = math.floor(playerZ)
-	if
-		(
-			love.keyboard.isDown("space")
-			and gx >= playerXFloor + 0.5 - range1
-			and gx <= playerXFloor + range1
-			and gy >= playerYFloor
-			and gy <= playerYFloor + 1
-			and gz >= playerZFloor - range1
-			and gz <= playerZFloor + 0.5 + range1
-		)
-		or (
-			not love.keyboard.isDown("space")
-			and gx >= playerXFloor - range2
-			and gx <= playerXFloor + range2
-			and gy >= playerYFloor
-			and gy <= playerYFloor + 1
-			and gz >= playerZFloor - range2
-			and gz <= playerZFloor + range2
-		)
-	then
-		if love.mouse.isDown(2) then
-			return true
-		elseif love.mouse.isDown(1) then
-			return Tiles.AIR_Block_id
-		end
-	end
-	return false
-end
-
-local function isBlockInTileModelTable(block)
-	local value = GetValueFromTilesById(block)
-	if value then
-		local blockstringname = value.blockstringname
-		if Tiles[blockstringname].BlockOrLiquidOrTile == TileMode.TileMode then
-			return true
-		end
-	end
-	return false
-end
-
-function PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalue)
-	--prevent placing a block on an another block(like flowers)
-	local blockBelow = self:getVoxel(x, y - 1, z)
-	local blockAbove = self:getVoxel(x, y + 1, z)
-	if
-		(isBlockInTileModelTable(blockvalue))
-		and ((isBlockInTileModelTable(blockBelow)) or (isBlockInTileModelTable(blockAbove)))
-	then
-		return true
-	end
-	return false
-end
 
 -- used for building structures across chunk borders
 -- by requesting a block to be built in a chunk that does not yet exist
@@ -194,4 +134,222 @@ function NewChunkSlice(x, y, z, parent)
 		chunk.model.dead = true
 	end
 	return t
+end
+
+local function ApplySunlightEffect(
+	gx,
+	gy,
+	gz,
+	sunlight,
+	manuallyPlaced,
+	leftMouseDown,
+	rightMouseDown,
+	inDirectSunlight
+)
+	if inDirectSunlight then
+		--Fix https://github.com/quentin452/LuaCraft/issues/53
+		if manuallyPlaced then
+			if leftMouseDown and rightMouseDown then
+				NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
+			--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
+			elseif rightMouseDown then
+				NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[0])
+			--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,LightSources[0] })
+			elseif leftMouseDown then
+				NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
+				--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
+			end
+		else
+			NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
+			--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
+		end
+	else
+		-- Apply standard lighting for other cases
+		for dx = -1, 1 do
+			for dy = -1, 1 do
+				for dz = -1, 1 do
+					NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id)
+					--ThreadLightingChannel:push({"LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id})
+				end
+			end
+		end
+	end
+end
+
+local function HandleManuallyPlacedBlockTileLightableAdd(gx, gy, gz, manuallyPlaced, blockvalue)
+	if manuallyPlaced then
+		local source = TileLightSource(blockvalue)
+		if source > 0 then
+			NewLightOperation(gx, gy, gz, LightOpe.LocalAdd.id, source)
+		--ThreadLightingChannel:push({ "LightOperation",gx, gy, gz, LightOpe.LocalAdd.id, source })
+		else
+			for dx = -1, 1 do
+				for dy = -1, 1 do
+					for dz = -1, 1 do
+						NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id)
+						--ThreadLightingChannel:push({ "LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id })
+					end
+				end
+			end
+		end
+	end
+end
+
+local function HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue, destroyLight, inDirectSunlight)
+	-- Handle non-lightable blocks
+	local semiLightable = TileLightable(blockvalue, true)
+	if semiLightable and inDirectSunlight and manuallyPlaced then
+		NewLightOperation(gx, gy + 1, gz, LightOpe.SunCreationAdd.id)
+		--ThreadLightingChannel:push({ "LightOperation",gx, gy + 1, gz, LightOpe.SunCreationAdd.id })
+	end
+	if not semiLightable or manuallyPlaced then
+		destroyLight = not TileLightable(blockvalue, true)
+		for dx = -1, 1 do
+			for dy = -1, 1 do
+				for dz = -1, 1 do
+					local nx, ny, nz = gx + dx, gy + dy, gz + dz
+					local nget = GetVoxelFirstData(nx, ny, nz)
+					if nget < LightSources[15] then
+						NewLightOperation(nx, ny, nz, LightOpe.SunSubtract.id, nget + LightSources[1])
+						--ThreadLightingChannel:push({ "LightOperation",nx, ny, nz, LightOpe.SunSubtract.id,nget + LightSources[1] })
+					end
+				end
+			end
+		end
+	end
+	return destroyLight
+end
+
+local function HandleLightSourceBlock(self, gx, gy, gz, x, y, z, blockvalue, destroyLight)
+	-- Handle light source blocks
+	local source = TileLightSource(self:getVoxel(x, y, z))
+	if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
+		NewLightOperation(gx, gy, gz, LightOpe.LocalSubtract.id, source + LightSources[1])
+		--ThreadLightingChannel:push({"LightOperation",gx, gy, gz, LightOpe.LocalSubtract.id ,source + LightSources[1]})
+		destroyLight = true
+	end
+	return destroyLight
+end
+local function HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPlaced, destroyLight)
+	if manuallyPlaced then
+		if destroyLight then
+			for dx = -1, 1 do
+				for dy = -1, 1 do
+					for dz = -1, 1 do
+						local nget = GetVoxelSecondData(gx + dx, gy + dy, gz + dz)
+						if nget < LightSources[15] then
+							local xd, yd, zd = gx + dx, gy + dy, gz + dz
+							NewLightOperation(xd, yd, zd, LightOpe.LocalSubtract.id, nget + LightSources[1])
+							--ThreadLightingChannel:push({"LightOperation",xd, yd, zd, LightOpe.LocalSubtract.id ,nget + LightSources[1]})
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+local function UpdateVoxelData(self, blockvalue, x, y, z)
+	if blockvalue ~= -1 then
+		self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
+		self.changes[#self.changes + 1] = { x, y, z }
+	end
+end
+
+local function HandleSunDownSubstract(gx, gy, gz)
+	--Fix https://github.com/quentin452/LuaCraft/issues/66
+	if TileModel(GetVoxel(gx, gy, gz)) == 0 then
+		NewLightOperation(gx, gy, gz, LightOpe.SunDownSubtract.id)
+		--ThreadLightingChannel:push({"LightOperation", gx, gy, gz, LightOpe.SunDownSubtract.id })
+	end
+	--Perform normal SunDown Subtract
+	NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
+	--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
+end
+
+function PreventBlockPlacementOnThePlayer(gx, gy, gz)
+	--prevent block placements on the player
+	local playerX, playerY, playerZ = ThePlayer.x, ThePlayer.y, ThePlayer.z
+	local range1 = 1
+	local range2 = 0.1
+	local playerXFloor = math.floor(playerX)
+	local playerYFloor = math.floor(playerY)
+	local playerZFloor = math.floor(playerZ)
+	if
+		(
+			love.keyboard.isDown("space")
+			and gx >= playerXFloor + 0.5 - range1
+			and gx <= playerXFloor + range1
+			and gy >= playerYFloor
+			and gy <= playerYFloor + 1
+			and gz >= playerZFloor - range1
+			and gz <= playerZFloor + 0.5 + range1
+		)
+		or (
+			not love.keyboard.isDown("space")
+			and gx >= playerXFloor - range2
+			and gx <= playerXFloor + range2
+			and gy >= playerYFloor
+			and gy <= playerYFloor + 1
+			and gz >= playerZFloor - range2
+			and gz <= playerZFloor + range2
+		)
+	then
+		if love.mouse.isDown(2) then
+			return true
+		elseif love.mouse.isDown(1) then
+			return Tiles.AIR_Block_id
+		end
+	end
+	return false
+end
+
+function PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalue)
+	local blockBelow = self:getVoxel(x, y - 1, z)
+	local blockAbove = self:getVoxel(x, y + 1, z)
+	if TileModel(blockvalue) == 1 and (TileModel(blockBelow) == 1 or TileModel(blockAbove) == 1) then
+		return true
+	end
+	return false
+end
+
+function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
+	_JPROFILER.push("SetVoxelInternal")
+	manuallyPlaced = manuallyPlaced or false
+	local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
+	-- Check if coordinates are within chunk limits
+	if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
+		-- Check if block placement is prevented (e.g., on the player or certain blocks)
+		if
+			PreventBlockPlacementOnThePlayer(gx, gy, gz)
+			or PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blockvalue)
+		then
+			return
+		end
+		local sunget = self:getVoxel(x, y + 1, z)
+		local sunlight = self:getVoxelFirstData(x, y + 1, z)
+		local inDirectSunlight = TileLightable(sunget) and sunlight == LightSources[15]
+		local destroyLight = false
+		local leftMouseDown = love.mouse.isDown(1)
+		local rightMouseDown = love.mouse.isDown(2)
+
+		if TileLightable(blockvalue) then
+			ApplySunlightEffect(gx, gy, gz, sunlight, manuallyPlaced, leftMouseDown, rightMouseDown, inDirectSunlight)
+			HandleManuallyPlacedBlockTileLightableAdd(gx, gy, gz, manuallyPlaced, blockvalue)
+		else
+			-- Handle non-lightable blocks
+			local semiLightable = TileLightable(blockvalue, true)
+			if semiLightable and inDirectSunlight and manuallyPlaced then
+				NewLightOperation(gx, gy + 1, gz, LightOpe.SunCreationAdd.id)
+				--ThreadLightingChannel:push({ "LightOperation",gx, gy + 1, gz, LightOpe.SunCreationAdd.id })
+			end
+			destroyLight =
+				HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue, destroyLight, inDirectSunlight)
+		end
+		HandleLightSourceBlock(self, gx, gy, gz, x, y, z, blockvalue, destroyLight)
+		HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPlaced, destroyLight)
+		UpdateVoxelData(self, blockvalue, x, y, z)
+		HandleSunDownSubstract(gx, gy, gz)
+	end
+	_JPROFILER.pop("SetVoxelInternal")
 end
