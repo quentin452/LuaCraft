@@ -155,7 +155,6 @@ function NewChunk(x, z)
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
 		_JPROFILER.push("setVoxel")
 		manuallyPlaced = manuallyPlaced or false
-		x, y, z = math.floor(x), math.floor(y), math.floor(z)
 		local gx, gy, gz = (self.x - 1) * ChunkSize + x - 1, y, (self.z - 1) * ChunkSize + z - 1
 		-- Check if coordinates are within chunk limits
 		if x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize then
