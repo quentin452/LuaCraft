@@ -1,8 +1,4 @@
-GamestatePlayingGameSettings2 = GameStateBase:new()
-function GamestatePlayingGameSettings2:resetMenuSelection()
-	_MainMenuSettings.selection = 1
-end
-function GamestatePlayingGameSettings2:draw()
+function SharedSettingsDraw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuSettingsBackground:getWidth()
 	local scaleY = h / MainMenuSettingsBackground:getHeight()
@@ -65,7 +61,7 @@ function GamestatePlayingGameSettings2:draw()
 	end
 end
 
-local function PerformMenuAction(action)
+local function SharedSettingsPerformMenuAction(action)
 	if action == 1 then
 		LuaCraftSettingsUpdater("toggleVSync")
 	elseif action == 2 then
@@ -89,8 +85,8 @@ local function PerformMenuAction(action)
 	end
 end
 
-function GamestatePlayingGameSettings2:mousepressed(x, y, b)
-	if b == 1 then
+function SharedSettingsMousePressed(x, y, b) 
+    if b == 1 then
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
@@ -107,11 +103,13 @@ function GamestatePlayingGameSettings2:mousepressed(x, y, b)
 		local maxX = posX + menuWidth
 		if choiceClicked >= 1 and choiceClicked <= #_MainMenuSettings.choice and x >= minX and x <= maxX then
 			_MainMenuSettings.selection = choiceClicked
-			PerformMenuAction(choiceClicked)
+			SharedSettingsPerformMenuAction(choiceClicked)
 		end
 	end
 end
-function GamestatePlayingGameSettings2:keypressed(k)
+
+
+function SharedSettingsKeyPressed(k)
 	if k == BackWardKey then
 		if _MainMenuSettings.selection < #_MainMenuSettings.choice then
 			_MainMenuSettings.selection = _MainMenuSettings.selection + 1
@@ -121,9 +119,6 @@ function GamestatePlayingGameSettings2:keypressed(k)
 			_MainMenuSettings.selection = _MainMenuSettings.selection - 1
 		end
 	elseif k == "return" then
-		PerformMenuAction(_MainMenuSettings.selection)
+		SharedSettingsPerformMenuAction(_MainMenuSettings.selection)
 	end
-end
-function GamestatePlayingGameSettings2:setFont()
-	return Font25
 end

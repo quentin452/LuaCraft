@@ -1,9 +1,5 @@
-GamestateKeybindingPlayingGameSettings2 = GameStateBase:new()
-function GamestateKeybindingPlayingGameSettings2:resetMenuSelection()
-	_KeybindingMenuSettings.selection = 1
-end
-function GamestateKeybindingPlayingGameSettings2:draw()
-	_JPROFILER.push("drawMenuSettings")
+function SharedKeybindingSettingsDraw()
+    _JPROFILER.push("drawMenuSettings")
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / KeybindingSettingsBackground:getWidth()
 	local scaleY = h / KeybindingSettingsBackground:getHeight()
@@ -56,8 +52,8 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 	_JPROFILER.pop("drawMenuSettings")
 end
 
-local function PerformMenuAction(action)
-	if action == 1 then
+local function SharedKeybindingSettingsPerformMenuAction(action)
+    if action == 1 then
 		ConfiguringMovementKey = true
 	elseif action == 2 then
 		ConfiguringMovementKey = true
@@ -66,11 +62,12 @@ local function PerformMenuAction(action)
 	elseif action == 4 then
 		ConfiguringMovementKey = true
 	elseif action == 5 then
-		SetCurrentGameState(GamestatePlayingGameSettings2)
+		SetCurrentGameState(GamestateMainMenuSettings2)
 	end
 end
-function GamestateKeybindingPlayingGameSettings2:mousepressed(x, y, b)
-	if b == 1 then
+
+function SharedKeybindingSettingsMousePressed(x, y, b) 
+    if b == 1 then
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
@@ -87,12 +84,13 @@ function GamestateKeybindingPlayingGameSettings2:mousepressed(x, y, b)
 		local maxX = posX + menuWidth
 		if choiceClicked >= 1 and choiceClicked <= #_KeybindingMenuSettings.choice and x >= minX and x <= maxX then
 			_KeybindingMenuSettings.selection = choiceClicked
-			PerformMenuAction(choiceClicked)
+			SharedKeybindingSettingsPerformMenuAction(choiceClicked)
 		end
 	end
 end
 
-function GamestateKeybindingPlayingGameSettings2:keypressed(k)
+
+function SharedKeybindingSettingsKeyPressed(k)
 	if k == BackWardKey and ConfiguringMovementKey == false then
 		if _KeybindingMenuSettings.selection < #_KeybindingMenuSettings.choice then
 			_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection + 1
@@ -102,10 +100,6 @@ function GamestateKeybindingPlayingGameSettings2:keypressed(k)
 			_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection - 1
 		end
 	elseif k == "return" then
-		PerformMenuAction(_KeybindingMenuSettings.selection)
+		SharedKeybindingSettingsPerformMenuAction(_KeybindingMenuSettings.selection)
 	end
-end
-
-function GamestateKeybindingPlayingGameSettings2:setFont()
-	return Font25
 end
