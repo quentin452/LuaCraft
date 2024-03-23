@@ -1,9 +1,8 @@
-local transparency3 = TilesTransparency.OPAQUE
-
 --TODO ReplaceChar is a source a memory problem and should be fixed
 function ReplaceChar(str, pos, r)
-	return str:sub(1, pos - 1) .. r .. str:sub(pos + #r)
+	return str:sub(1, pos - 1) .. r .. str:sub(pos + 1)
 end
+
 function UpdateVoxelData(self, blockvalue, x, y, z)
 	self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
 	self.changes[#self.changes + 1] = { x, y, z }
@@ -16,6 +15,7 @@ function SetVoxelDataInternal(self, x, y, z, blockvalue, dataIndex)
 		self.changes[#self.changes + 1] = { x, y, z }
 	end
 end
+
 -- used for building structures across chunk borders
 -- by requesting a block to be built in a chunk that does not yet exist
 function NewChunkRequest(gx, gy, gz, valueg)
@@ -101,7 +101,7 @@ function NewChunkSlice(x, y, z, parent)
 					local thisTransparency = TileTransparency(this)
 					local x, y, z =
 						(chunk.x - 1) * ChunkSize + i - 1, 1 * j * BlockModelScale, (chunk.z - 1) * ChunkSize + k - 1
-					if thisTransparency < transparency3 then
+					if thisTransparency < TilesTransparency.OPAQUE then
 						TileRendering(chunk, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
 						BlockRendering(chunk, i, j, k, x, y, z, thisTransparency, Light, SliceModels, BlockModelScale)
 						--[[local data = {
