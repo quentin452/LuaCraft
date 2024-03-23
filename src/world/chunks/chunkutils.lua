@@ -146,6 +146,7 @@ local function ApplySunlightEffect(
 	inDirectSunlight
 )
 	if inDirectSunlight then
+		--Fix https://github.com/quentin452/LuaCraft/issues/53
 		local addSunlight = leftMouseDown and rightMouseDown and sunlight
 			or (rightMouseDown and LightSources[0] or (leftMouseDown and sunlight))
 		if manuallyPlaced or addSunlight then
