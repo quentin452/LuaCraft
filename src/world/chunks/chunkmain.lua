@@ -9,7 +9,7 @@ local populatelog2 = "in chunkPopulateTag took too long to execute. Total time t
 function NewChunk(x, z)
 	_JPROFILER.push("NewChunk")
 	local chunk = NewThing(x, 0, z)
-	chunk.voxels = {}
+	chunk.voxels = Set()
 	chunk.slices = {}
 	chunk.heightMap = {}
 	chunk.requests = {}

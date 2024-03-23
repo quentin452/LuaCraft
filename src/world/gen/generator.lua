@@ -8,7 +8,7 @@ local maxHeight = 120
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 	for i = 1, ChunkSize do
-		chunk.voxels[i] = {}
+		chunk.voxels[i] = Set()
 		local xx = (x - 1) * ChunkSize + i
 		for k = 1, ChunkSize do
 			local zz = (z - 1) * ChunkSize + k
@@ -54,6 +54,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 	temp = {}
 	_JPROFILER.pop("GenerateTerrain")
 end
+
 function StandardTerrain(chunk, xx, j, zz)
 	return ChunkNoise(xx, j, zz) > (j - chunkfloor) / (maxHeight - chunkfloor) * (Noise2D(xx, zz, 128, 5) * 0.75 + 0.75)
 end

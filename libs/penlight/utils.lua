@@ -6,7 +6,7 @@
 --
 -- @module pl.utils
 local format = string.format
-local compat = require 'pl.compat'
+local compat = require 'libs/penlight/compat'
 local stdout = io.stdout
 local append = table.insert
 local concat = table.concat

@@ -3,7 +3,7 @@ Minecraft Like written in Lua using Love2D
 
 # libraries
 
-Penlight : https://github.com/lunarmodules/Penlight (not used currently)
+Penlight : https://github.com/lunarmodules/Penlight
 
 cpml : https://github.com/quentin452/cpml
 

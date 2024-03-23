@@ -1,5 +1,7 @@
 require("src/modloader/modloaderinit")
 Cpml = require("libs/cpml")
+local import = require("libs/penlight/import_into")
+import(_G)
 PROF_CAPTURE = false
 _JPROFILER = require("libs/jprofiler/jprof")
 --profs instruction
