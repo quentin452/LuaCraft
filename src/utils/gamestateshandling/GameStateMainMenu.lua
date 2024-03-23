@@ -16,8 +16,8 @@ function GamestateMainMenu2:draw()
 	Lovegraphics.draw(MainMenuBackground, 0, 0, 0, scaleX, scaleY)
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = getSelectedFont():getHeight("X")
-	drawColorString(_Mainmenu.title, posX, posY)
+	local lineHeight = GetSelectedFont():getHeight("X")
+	DrawColorString(_Mainmenu.title, posX, posY)
 	posY = posY + lineHeight
 	for n = 1, #_Mainmenu.choice do
 		if _Mainmenu.selection == n then
@@ -25,7 +25,7 @@ function GamestateMainMenu2:draw()
 		else
 			marque = "   "
 		end
-		drawColorString(marque .. "" .. _Mainmenu.choice[n], posX, posY)
+		DrawColorString(marque .. "" .. _Mainmenu.choice[n], posX, posY)
 		posY = posY + lineHeight
 	end
 end
@@ -44,10 +44,10 @@ function GamestateMainMenu2:mousepressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = getSelectedFont():getHeight("X")
+		local lineHeight = GetSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_Mainmenu.choice) do
-			local choiceWidth = getSelectedFont():getWidth(choice)
+			local choiceWidth = GetSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end

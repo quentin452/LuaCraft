@@ -17,8 +17,8 @@ function GamestateWorldCreationMenu2:draw()
 	Lovegraphics.draw(WorldCreationBackground, 0, 0, 0, scaleX, scaleY)
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = getSelectedFont():getHeight("X")
-	drawColorString(_WorldCreationMenu.title, posX, posY)
+	local lineHeight = GetSelectedFont():getHeight("X")
+	DrawColorString(_WorldCreationMenu.title, posX, posY)
 	posY = posY + lineHeight
 
 	for n = 1, #_WorldCreationMenu.choice do
@@ -31,9 +31,9 @@ function GamestateWorldCreationMenu2:draw()
 		if n == 2 then
 			local worldType = WorldTypeMap[GlobalWorldType]
 			local worldTypeName = worldType.name
-			drawColorString(marque .. choiceText .. " (" .. worldTypeName .. ")", posX, posY)
+			DrawColorString(marque .. choiceText .. " (" .. worldTypeName .. ")", posX, posY)
 		else
-			drawColorString(marque .. "" .. choiceText, posX, posY)
+			DrawColorString(marque .. "" .. choiceText, posX, posY)
 		end
 		posY = posY + lineHeight
 	end
@@ -60,10 +60,10 @@ function GamestateWorldCreationMenu2:mousepressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = getSelectedFont():getHeight("X")
+		local lineHeight = GetSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_WorldCreationMenu.choice) do
-			local choiceWidth = getSelectedFont():getWidth(choice)
+			local choiceWidth = GetSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end

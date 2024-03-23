@@ -6,8 +6,8 @@ local function createTileModel(tileID, thisLight, BlockModelScale)
 
 	-- Retrieve texture and light coordinates for the tile
 	local texture = TileTextures(tileID)[1]
-	local otx, oty = getTextureCoordinatesAndLight(texture, thisLight)
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+	local otx, oty = GetTextureCoordinatesAndLight(texture, thisLight)
+	local tx, ty, tx2, ty2 = Calculationotxoty(otx, oty)
 
 	-- Define vertices for the 2D tile model
 	local diagLong = 0.7071 * BlockModelScale * 0.5 + 0.5

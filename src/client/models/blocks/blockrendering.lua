@@ -30,7 +30,7 @@ end
 -- Adds a face to the model based on direction and transparency
 local function addFaceToModel(model, x, y, z, otx, oty, BlockModelScale, gettype)
 	_JPROFILER.push("addFaceToModel")
-	local tx, ty, tx2, ty2 = calculationotxoty(otx, oty)
+	local tx, ty, tx2, ty2 = Calculationotxoty(otx, oty)
 	local x_plus_scale = x + BlockModelScale
 	local y_plus_scale = y + BlockModelScale
 	local z_plus_scale = z + BlockModelScale
@@ -93,7 +93,7 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 		local textureIndex = math.min(2 + y_offset, #TileTextures(direction))
 		local texture = (gettype == "getTop" or gettype == "getBottom") and TileTextures(direction)[textureIndex]
 			or TileTextures(direction)[1]
-		local otx, oty = getTextureCoordinatesAndLight(texture, math.max(thisLight - light_offset, 0))
+		local otx, oty = GetTextureCoordinatesAndLight(texture, math.max(thisLight - light_offset, 0))
 		addFaceToModel(model, x, y + y_offset * scale, z, otx, oty, scale, gettype)
 	end
 	_JPROFILER.pop("addFace_blockrendering")

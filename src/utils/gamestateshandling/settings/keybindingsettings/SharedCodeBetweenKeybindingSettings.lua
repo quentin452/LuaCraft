@@ -10,8 +10,8 @@ function SharedKeybindingSettingsDraw()
 	Lovegraphics.draw(KeybindingSettingsBackground, 0, 0, 0, scaleX, scaleY)
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = getSelectedFont():getHeight("X")
-	drawColorString(_KeybindingMenuSettings.title, posX, posY)
+	local lineHeight = GetSelectedFont():getHeight("X")
+	DrawColorString(_KeybindingMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
@@ -41,7 +41,7 @@ function SharedKeybindingSettingsDraw()
 			if n == 4 and Settings["rightmovementkey"] then
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["rightmovementkey"]
 			end
-			drawColorString(marque .. "" .. choiceText, posX, posY)
+			DrawColorString(marque .. "" .. choiceText, posX, posY)
 			posY = posY + lineHeight
 		end
 	else
@@ -76,10 +76,10 @@ function SharedKeybindingSettingsMousePressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = getSelectedFont():getHeight("X")
+		local lineHeight = GetSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_KeybindingMenuSettings.choice) do
-			local choiceWidth = getSelectedFont():getWidth(choice)
+			local choiceWidth = GetSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end

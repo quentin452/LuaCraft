@@ -14,8 +14,8 @@ function SharedSettingsDraw()
 	Lovegraphics.draw(MainMenuSettingsBackground, 0, 0, 0, scaleX, scaleY)
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = getSelectedFont():getHeight("X")
-	drawColorString(_MainMenuSettings.title, posX, posY)
+	local lineHeight = GetSelectedFont():getHeight("X")
+	DrawColorString(_MainMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
@@ -49,7 +49,7 @@ function SharedSettingsDraw()
 				local numberOfSpaces = 1
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["renderdistance"]
 			end
-			drawColorString(marque .. "" .. choiceText, posX, posY)
+			DrawColorString(marque .. "" .. choiceText, posX, posY)
 
 			posY = posY + lineHeight
 		end
@@ -98,10 +98,10 @@ function SharedSettingsMousePressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = getSelectedFont():getHeight("X")
+		local lineHeight = GetSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_MainMenuSettings.choice) do
-			local choiceWidth = getSelectedFont():getWidth(choice)
+			local choiceWidth = GetSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end

@@ -19,8 +19,8 @@ function GamestateGamePausing2:draw()
 
 	local posX = w * 0.4
 	local posY = h * 0.4
-	local lineHeight = getSelectedFont():getHeight("X")
-	drawColorString(_GamePlayingPauseMenu.title, posX, posY)
+	local lineHeight = GetSelectedFont():getHeight("X")
+	DrawColorString(_GamePlayingPauseMenu.title, posX, posY)
 	posY = posY + lineHeight
 	for n = 1, #_GamePlayingPauseMenu.choice do
 		if _GamePlayingPauseMenu.selection == n then
@@ -28,7 +28,7 @@ function GamestateGamePausing2:draw()
 		else
 			marque = "   "
 		end
-		drawColorString(marque .. "" .. _GamePlayingPauseMenu.choice[n], posX, posY)
+		DrawColorString(marque .. "" .. _GamePlayingPauseMenu.choice[n], posX, posY)
 		posY = posY + lineHeight
 	end
 end
@@ -66,10 +66,10 @@ function GamestateGamePausing2:mousepressed(x, y, b)
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
-		local lineHeight = getSelectedFont():getHeight("X")
+		local lineHeight = GetSelectedFont():getHeight("X")
 		local menuWidth = 0
 		for _, choice in ipairs(_GamePlayingPauseMenu.choice) do
-			local choiceWidth = getSelectedFont():getWidth(choice)
+			local choiceWidth = GetSelectedFont():getWidth(choice)
 			if choiceWidth > menuWidth then
 				menuWidth = choiceWidth
 			end
