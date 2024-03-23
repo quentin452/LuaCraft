@@ -1,4 +1,3 @@
---TODO ReplaceChar is a source a memory problem and should be fixed
 function ReplaceChar(str, pos, r)
 	return str:sub(1, pos - 1) .. r .. str:sub(pos + 1)
 end
