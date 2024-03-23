@@ -186,20 +186,25 @@ function DrawHotBar()
 	)
 	_JPROFILER.pop("DrawHotBar")
 end
---TODO cleanString is a source a memory problem and should be fixed
-
-function cleanString(str)
+local function CleanString(str)
 	_JPROFILER.push("cleanString")
-	-- Cette fonction supprime les caractères non valides en UTF-8 de la chaîne donnée
-	local cleaned = ""
+	local cleaned = {}
+	local containsInvalidChar = false
 	for i = 1, #str do
 		local c = str:sub(i, i)
-		if c:match("[%w%p%s]") then
-			cleaned = cleaned .. c
+		if not c:match("[%w%p%s]") then
+			containsInvalidChar = true
+		else
+			table.insert(cleaned, c)
 		end
 	end
 	_JPROFILER.pop("cleanString")
-	return cleaned
+
+	if containsInvalidChar then
+		return table.concat(cleaned)
+	else
+		return str
+	end
 end
 
 function DrawCommandInput()
@@ -219,7 +224,7 @@ function DrawCommandInput()
 		Lovegraphics.rectangle("line", InterfaceWidth / 2 - 300, InterfaceHeight - 80, 600, 30)
 
 		-- Dessiner le texte de la commande actuelle
-		local cleanedCommand = cleanString(CurrentCommand)
+		local cleanedCommand = CleanString(CurrentCommand)
 
 		-- Limiter le texte à la largeur du rectangle
 		local maxTextWidth = 600 -- La largeur du rectangle
