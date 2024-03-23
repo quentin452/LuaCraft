@@ -1,11 +1,21 @@
 local transparency3 = TilesTransparency.OPAQUE
 
---TODO Prevent Block Placements methods should be upgraded/debuggified
-
+--TODO ReplaceChar is a source a memory problem and should be fixed
 function ReplaceChar(str, pos, r)
 	return str:sub(1, pos - 1) .. r .. str:sub(pos + #r)
 end
-
+function UpdateVoxelData(self, blockvalue, x, y, z)
+	self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
+	self.changes[#self.changes + 1] = { x, y, z }
+end
+function SetVoxelDataInternal(self, x, y, z, blockvalue, dataIndex)
+	if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
+		local dataIndexOffset = (dataIndex == "First" and 2 or 3)
+		self.voxels[x][z] =
+			ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + dataIndexOffset, string.char(blockvalue))
+		self.changes[#self.changes + 1] = { x, y, z }
+	end
+end
 -- used for building structures across chunk borders
 -- by requesting a block to be built in a chunk that does not yet exist
 function NewChunkRequest(gx, gy, gz, valueg)
@@ -21,14 +31,6 @@ function NewChunkRequest(gx, gy, gz, valueg)
 	_JPROFILER.pop("NewChunkRequest")
 end
 
-function SetVoxelDataInternal(self, x, y, z, blockvalue, dataIndex)
-	if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
-		local dataIndexOffset = (dataIndex == "First" and 2 or 3)
-		self.voxels[x][z] =
-			ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + dataIndexOffset, string.char(blockvalue))
-		self.changes[#self.changes + 1] = { x, y, z }
-	end
-end
 function InitSliceUpdates()
 	for i = 1, WorldHeight / SliceHeight do
 		SliceUpdates[i] = { false, false, false, false, false }
@@ -300,9 +302,4 @@ end
 
 function IsWithinChunkLimits(x, y, z)
 	return x >= 1 and x <= ChunkSize and y >= 1 and y <= WorldHeight and z >= 1 and z <= ChunkSize
-end
-
-function UpdateVoxelData(self, blockvalue, x, y, z)
-	self.voxels[x][z] = ReplaceChar(self.voxels[x][z], (y - 1) * TileDataSize + 1, string.char(blockvalue))
-	self.changes[#self.changes + 1] = { x, y, z }
 end
