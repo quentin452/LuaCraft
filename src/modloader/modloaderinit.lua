@@ -45,6 +45,53 @@ function addBlock(
 		})
 		return
 	end
+	if blockBottomMasterTextureString ~= nil and type(blockBottomMasterTextureString) ~= "string" then
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"blockBottomMasterTextureString is not a string for block: " .. tostring(blockstringname),
+		})
+		return
+	end
+
+	if blockSideTextureString ~= nil and  type(blockSideTextureString) ~= "string" then
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"blockSideTextureString is not a string or is missing for block: " .. tostring(blockstringname),
+		})
+		return
+	end
+
+	if blockTopTextureString ~= nil and  type(blockTopTextureString) ~= "string" then
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"blockTopTextureString is not a string for block: " .. tostring(blockstringname),
+		})
+		return
+	end
+
+	if blockBottomMasterTextureUserData ~= nil and  type(blockBottomMasterTextureUserData) ~= "userdata" then
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"blockBottomMasterTextureUserData is not a userdata for block: " .. tostring(blockstringname),
+		})
+		return
+	end
+
+	if blockSideTextureUserData ~= nil and  type(blockSideTextureUserData) ~= "userdata" then
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"blockSideTextureUserData is not a userdata for block: " .. tostring(blockstringname),
+		})
+		return
+	end
+
+	if blockTopTextureUserData ~= nil and  type(blockTopTextureUserData) ~= "userdata" then
+		ThreadLogChannel:push({
+			LuaCraftLoggingLevel.ERROR,
+			"blockTopTextureUserData is not a userdata  for block: " .. tostring(blockstringname),
+		})
+		return
+	end
 	local id = nextId
 	Tiles[blockstringname] = {
 		id = id,
