@@ -186,6 +186,7 @@ function DrawHotBar()
 	)
 	_JPROFILER.pop("DrawHotBar")
 end
+--TODO cleanString is a source a memory problem and should be fixed
 
 function cleanString(str)
 	_JPROFILER.push("cleanString")
