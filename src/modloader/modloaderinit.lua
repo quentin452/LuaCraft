@@ -62,13 +62,7 @@ function addBlock(
 	}
 	TilesById[id] = Tiles[blockstringname]
 	if blockTopTextureString ~= nil or blockSideTextureString ~= nil then
-		if type(blockTopTextureString) == "string" then
-			blockTopTextureString = Lovegraphics.newImage(blockTopTextureString)
-		end
-		if type(blockSideTextureString) == "string" then
-			blockSideTextureString = Lovegraphics.newImage(blockSideTextureString)
-		end
-		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTextureString, side = blockSideTextureString }
+		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTextureUserData, side = blockSideTextureUserData }
 	end
 	nextId = nextId + 1
 	return id
