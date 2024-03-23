@@ -135,7 +135,6 @@ function NewChunkSlice(x, y, z, parent)
 	end
 	return t
 end
-
 local function ApplySunlightEffect(
 	gx,
 	gy,
@@ -147,31 +146,18 @@ local function ApplySunlightEffect(
 	inDirectSunlight
 )
 	if inDirectSunlight then
-		--Fix https://github.com/quentin452/LuaCraft/issues/53
-		if manuallyPlaced then
-			if leftMouseDown and rightMouseDown then
-				NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
-			--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
-			elseif rightMouseDown then
-				NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[0])
-			--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,LightSources[0] })
-			elseif leftMouseDown then
-				NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
-				--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id,sunlight })
-			end
-		else
-			NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, sunlight)
-			--ThreadLightingChannel:push({ "LightOpe ration", gx, gy, gz, LightOpe.SunDownAdd.id, sunlight })
+		local addSunlight = leftMouseDown and rightMouseDown and sunlight
+			or (rightMouseDown and LightSources[0] or (leftMouseDown and sunlight))
+		if manuallyPlaced or addSunlight then
+			NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, addSunlight)
+			--ThreadLightingChannel:push({ "LightOperation", gx, gy, gz, LightOpe.SunDownAdd.id, addSunlight })
 		end
 	else
-		-- Apply standard lighting for other cases
-		for dx = -1, 1 do
-			for dy = -1, 1 do
-				for dz = -1, 1 do
-					NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id)
-					--ThreadLightingChannel:push({"LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id})
-				end
-			end
+		-- Appliquer l'éclairage standard pour les autres cas
+		for _, offset in ipairs(VoxelNeighborOffsets) do
+			local dx, dy, dz = unpack(offset)
+			NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id)
+			--ThreadLightingChannel:push({"LightOperation", gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id})
 		end
 	end
 end
@@ -181,15 +167,12 @@ local function HandleManuallyPlacedBlockTileLightableAdd(gx, gy, gz, manuallyPla
 		local source = TileLightSource(blockvalue)
 		if source > 0 then
 			NewLightOperation(gx, gy, gz, LightOpe.LocalAdd.id, source)
-		--ThreadLightingChannel:push({ "LightOperation",gx, gy, gz, LightOpe.LocalAdd.id, source })
+			--ThreadLightingChannel:push({ "LightOperation", gx, gy, gz, LightOpe.LocalAdd.id, source })
 		else
-			for dx = -1, 1 do
-				for dy = -1, 1 do
-					for dz = -1, 1 do
-						NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id)
-						--ThreadLightingChannel:push({ "LightOperation",gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id })
-					end
-				end
+			for _, offset in ipairs(VoxelNeighborOffsets) do
+				local dx, dy, dz = unpack(offset)
+				NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id)
+				--ThreadLightingChannel:push({ "LightOperation", gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id })
 			end
 		end
 	end
@@ -204,16 +187,13 @@ local function HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue,
 	end
 	if not semiLightable or manuallyPlaced then
 		destroyLight = not TileLightable(blockvalue, true)
-		for dx = -1, 1 do
-			for dy = -1, 1 do
-				for dz = -1, 1 do
-					local nx, ny, nz = gx + dx, gy + dy, gz + dz
-					local nget = GetVoxelFirstData(nx, ny, nz)
-					if nget < LightSources[15] then
-						NewLightOperation(nx, ny, nz, LightOpe.SunSubtract.id, nget + LightSources[1])
-						--ThreadLightingChannel:push({ "LightOperation",nx, ny, nz, LightOpe.SunSubtract.id,nget + LightSources[1] })
-					end
-				end
+		for _, offset in ipairs(VoxelNeighborOffsets) do
+			local dx, dy, dz = unpack(offset)
+			local nx, ny, nz = gx + dx, gy + dy, gz + dz
+			local nget = GetVoxelFirstData(nx, ny, nz)
+			if nget < LightSources[15] then
+				NewLightOperation(nx, ny, nz, LightOpe.SunSubtract.id, nget + LightSources[1])
+				--ThreadLightingChannel:push({ "LightOperation",nx, ny, nz, LightOpe.SunSubtract.id,nget + LightSources[1] })
 			end
 		end
 	end
@@ -231,23 +211,19 @@ local function HandleLightSourceBlock(self, gx, gy, gz, x, y, z, blockvalue, des
 	return destroyLight
 end
 local function HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPlaced, destroyLight)
-	if manuallyPlaced then
-		if destroyLight then
-			for dx = -1, 1 do
-				for dy = -1, 1 do
-					for dz = -1, 1 do
-						local nget = GetVoxelSecondData(gx + dx, gy + dy, gz + dz)
-						if nget < LightSources[15] then
-							local xd, yd, zd = gx + dx, gy + dy, gz + dz
-							NewLightOperation(xd, yd, zd, LightOpe.LocalSubtract.id, nget + LightSources[1])
-							--ThreadLightingChannel:push({"LightOperation",xd, yd, zd, LightOpe.LocalSubtract.id ,nget + LightSources[1]})
-						end
-					end
-				end
+	if manuallyPlaced and destroyLight then
+		for _, offset in ipairs(VoxelNeighborOffsets) do
+			local dx, dy, dz = unpack(offset)
+			local xd, yd, zd = gx + dx, gy + dy, gz + dz
+			local nget = GetVoxelSecondData(xd, yd, zd)
+			if nget < LightSources[15] then
+				NewLightOperation(xd, yd, zd, LightOpe.LocalSubtract.id, nget + LightSources[1])
+				--ThreadLightingChannel:push({"LightOperation", xd, yd, zd, LightOpe.LocalSubtract.id ,nget + LightSources[1]})
 			end
 		end
 	end
 end
+
 local function HandleSunDownSubstract(gx, gy, gz)
 	--Fix https://github.com/quentin452/LuaCraft/issues/66
 	if TileModel(GetVoxel(gx, gy, gz)) == 0 then
