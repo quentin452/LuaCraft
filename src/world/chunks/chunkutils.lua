@@ -240,26 +240,12 @@ local placementRange1SpaceKeyOff = 0.1
 local function PreventBlockPlacementOnThePlayer(gx, gy, gz, leftMouseDown, rightMouseDown, spaceKey)
 	local playerPos = getPlayerPosition()
 	local playerXFloor, playerYFloor, playerZFloor = playerPos.x, playerPos.y, playerPos.z
-	if
-		(
-			spaceKey
-			and gx >= playerXFloor + 0.5 - placementRange1SpaceKeyOn
-			and gx <= playerXFloor + placementRange1SpaceKeyOn
-			and gy >= playerYFloor
-			and gy <= playerYFloor + 1
-			and gz >= playerZFloor - placementRange1SpaceKeyOn
-			and gz <= playerZFloor + 0.5 + placementRange1SpaceKeyOn
-		)
-		or (
-			not spaceKey
-			and gx >= playerXFloor - placementRange1SpaceKeyOff
-			and gx <= playerXFloor + placementRange1SpaceKeyOff
-			and gy >= playerYFloor
-			and gy <= playerYFloor + 1
-			and gz >= playerZFloor - placementRange1SpaceKeyOff
-			and gz <= playerZFloor + placementRange1SpaceKeyOff
-		)
-	then
+	local range = spaceKey and placementRange1SpaceKeyOn or placementRange1SpaceKeyOff
+	local minX, maxX = playerXFloor - range, playerXFloor + range
+	local minY, maxY = playerYFloor, playerYFloor + 1
+	local minZ, maxZ = playerZFloor - range, playerZFloor + range
+
+	if gx >= minX and gx <= maxX and gy >= minY and gy <= maxY and gz >= minZ and gz <= maxZ then
 		if rightMouseDown then
 			return true
 		elseif leftMouseDown then
