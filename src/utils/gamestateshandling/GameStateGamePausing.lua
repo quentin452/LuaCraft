@@ -8,6 +8,8 @@ GamestateGamePausing2 = GameStateBase:new()
 function GamestateGamePausing2:resetMenuSelection()
 	_GamePlayingPauseMenu.selection = 1
 end
+local marque = ""
+
 function GamestateGamePausing2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / PlayingGamePauseMenu:getWidth()
@@ -20,7 +22,6 @@ function GamestateGamePausing2:draw()
 	local lineHeight = getSelectedFont():getHeight("X")
 	drawColorString(_GamePlayingPauseMenu.title, posX, posY)
 	posY = posY + lineHeight
-	local marque = ""
 	for n = 1, #_GamePlayingPauseMenu.choice do
 		if _GamePlayingPauseMenu.selection == n then
 			marque = "%1*%0 "

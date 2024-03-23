@@ -8,6 +8,7 @@ GamestateWorldCreationMenu2 = GameStateBase:new()
 function GamestateWorldCreationMenu2:resetMenuSelection()
 	_WorldCreationMenu.selection = 1
 end
+local marque = ""
 function GamestateWorldCreationMenu2:draw()
 	_JPROFILER.push("drawWorldCreationMenu")
 	local w, h = Lovegraphics.getDimensions()
@@ -20,7 +21,6 @@ function GamestateWorldCreationMenu2:draw()
 	drawColorString(_WorldCreationMenu.title, posX, posY)
 	posY = posY + lineHeight
 
-	local marque = ""
 	for n = 1, #_WorldCreationMenu.choice do
 		if _WorldCreationMenu.selection == n then
 			marque = "%1*%0 "

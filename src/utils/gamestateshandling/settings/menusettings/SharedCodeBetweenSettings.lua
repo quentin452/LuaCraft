@@ -1,3 +1,12 @@
+local Settings = {}
+local orderedKeys = {
+	"vsync",
+	"LuaCraftPrintLoggingNormal",
+	"LuaCraftWarnLogging",
+	"LuaCraftErrorLogging",
+	"renderdistance",
+}
+local marque = ""
 function SharedSettingsDraw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuSettingsBackground:getWidth()
@@ -8,17 +17,8 @@ function SharedSettingsDraw()
 	local lineHeight = getSelectedFont():getHeight("X")
 	drawColorString(_MainMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
-	local marque = ""
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
-		local Settings = {}
-		local orderedKeys = {
-			"vsync",
-			"LuaCraftPrintLoggingNormal",
-			"LuaCraftWarnLogging",
-			"LuaCraftErrorLogging",
-			"renderdistance",
-		}
 		for _, key in ipairs(orderedKeys) do
 			local value = file_content:match(key .. "=(%w+)")
 			if value then

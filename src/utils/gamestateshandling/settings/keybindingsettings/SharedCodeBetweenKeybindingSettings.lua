@@ -1,3 +1,7 @@
+local Settings = {}
+local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey" }
+local marque = ""
+
 function SharedKeybindingSettingsDraw()
 	_JPROFILER.push("drawMenuSettings")
 	local w, h = Lovegraphics.getDimensions()
@@ -9,11 +13,8 @@ function SharedKeybindingSettingsDraw()
 	local lineHeight = getSelectedFont():getHeight("X")
 	drawColorString(_KeybindingMenuSettings.title, posX, posY)
 	posY = posY + lineHeight
-	local marque = ""
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
-		local Settings = {}
-		local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey" }
 		for _, key in ipairs(orderedKeys) do
 			local value = file_content:match(key .. "=(%w+)")
 			if value then

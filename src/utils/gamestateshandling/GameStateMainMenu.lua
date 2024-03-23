@@ -7,6 +7,8 @@ GamestateMainMenu2 = GameStateBase:new()
 function GamestateMainMenu2:resetMenuSelection()
 	_Mainmenu.selection = 1
 end
+local marque = ""
+
 function GamestateMainMenu2:draw()
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / MainMenuBackground:getWidth()
@@ -17,7 +19,6 @@ function GamestateMainMenu2:draw()
 	local lineHeight = getSelectedFont():getHeight("X")
 	drawColorString(_Mainmenu.title, posX, posY)
 	posY = posY + lineHeight
-	local marque = ""
 	for n = 1, #_Mainmenu.choice do
 		if _Mainmenu.selection == n then
 			marque = "%1*%0 "
@@ -62,16 +63,16 @@ function GamestateMainMenu2:mousepressed(x, y, b)
 end
 
 function GamestateMainMenu2:keypressed(k)
-		if k == BackWardKey then
-			if _Mainmenu.selection < #_Mainmenu.choice then
-				_Mainmenu.selection = _Mainmenu.selection + 1
-			end
-		elseif k == ForWardKey then
-			if _Mainmenu.selection > 1 then
-				_Mainmenu.selection = _Mainmenu.selection - 1
-			end
-		elseif k == "return" then
-			PerformMenuAction(_Mainmenu.selection)
+	if k == BackWardKey then
+		if _Mainmenu.selection < #_Mainmenu.choice then
+			_Mainmenu.selection = _Mainmenu.selection + 1
+		end
+	elseif k == ForWardKey then
+		if _Mainmenu.selection > 1 then
+			_Mainmenu.selection = _Mainmenu.selection - 1
+		end
+	elseif k == "return" then
+		PerformMenuAction(_Mainmenu.selection)
 	end
 end
 function GamestateMainMenu2:setFont()
