@@ -1,5 +1,5 @@
 function SharedKeybindingSettingsDraw()
-    _JPROFILER.push("drawMenuSettings")
+	_JPROFILER.push("drawMenuSettings")
 	local w, h = Lovegraphics.getDimensions()
 	local scaleX = w / KeybindingSettingsBackground:getWidth()
 	local scaleY = h / KeybindingSettingsBackground:getHeight()
@@ -53,7 +53,7 @@ function SharedKeybindingSettingsDraw()
 end
 
 local function SharedKeybindingSettingsPerformMenuAction(action)
-    if action == 1 then
+	if action == 1 then
 		ConfiguringMovementKey = true
 	elseif action == 2 then
 		ConfiguringMovementKey = true
@@ -62,12 +62,16 @@ local function SharedKeybindingSettingsPerformMenuAction(action)
 	elseif action == 4 then
 		ConfiguringMovementKey = true
 	elseif action == 5 then
-		SetCurrentGameState(GamestateMainMenuSettings2)
+		if IsCurrentGameState(GamestateKeybindingMainSettings2) then
+			SetCurrentGameState(GamestateMainMenuSettings2)
+		elseif IsCurrentGameState(GamestateKeybindingPlayingGameSettings2) then
+			SetCurrentGameState(GamestatePlayingGameSettings2)
+		end
 	end
 end
 
-function SharedKeybindingSettingsMousePressed(x, y, b) 
-    if b == 1 then
+function SharedKeybindingSettingsMousePressed(x, y, b)
+	if b == 1 then
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
@@ -88,7 +92,6 @@ function SharedKeybindingSettingsMousePressed(x, y, b)
 		end
 	end
 end
-
 
 function SharedKeybindingSettingsKeyPressed(k)
 	if k == BackWardKey and ConfiguringMovementKey == false then

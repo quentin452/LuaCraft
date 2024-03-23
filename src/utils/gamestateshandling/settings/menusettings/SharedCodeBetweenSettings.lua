@@ -77,16 +77,24 @@ local function SharedSettingsPerformMenuAction(action)
 		LuaCraftSettingsUpdater("renderdistanceSetting")
 		Renderdistancegetresetted = true
 	elseif action == 6 then
-		SetCurrentGameState(GamestateKeybindingPlayingGameSettings2)
+		if IsCurrentGameState(GamestatePlayingGameSettings2) then
+			SetCurrentGameState(GamestateKeybindingPlayingGameSettings2)
+		elseif IsCurrentGameState(GamestateMainMenuSettings2) then
+			SetCurrentGameState(GamestateKeybindingMainSettings2)
+		end
 	elseif action == 7 then
 		WorldSuccessfullyLoaded = true
-		SetCurrentGameState(GameStatePlayingGame2)
+		if IsCurrentGameState(GamestatePlayingGameSettings2) then
+			SetCurrentGameState(GameStatePlayingGame2)
+		elseif IsCurrentGameState(GamestateMainMenuSettings2) then
+			SetCurrentGameState(GamestateMainMenu2)
+		end
 		love.mouse.setRelativeMode(true)
 	end
 end
 
-function SharedSettingsMousePressed(x, y, b) 
-    if b == 1 then
+function SharedSettingsMousePressed(x, y, b)
+	if b == 1 then
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
@@ -107,7 +115,6 @@ function SharedSettingsMousePressed(x, y, b)
 		end
 	end
 end
-
 
 function SharedSettingsKeyPressed(k)
 	if k == BackWardKey then
