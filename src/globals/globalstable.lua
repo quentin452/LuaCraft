@@ -105,31 +105,13 @@ LightOpe = {
 	LocalForceAdd = { id = "LocalForceAdd", lightope = LightingQueueAdd },
 	LocalCreationAdd = { id = "LocalCreationAdd", lightope = LightingQueueAdd },
 }
-VoxelNeighborOffsets = {
-	{ -1, -1, -1 },
-	{ -1, -1, 0 },
-	{ -1, -1, 1 },
-	{ -1, 0, -1 },
-	{ -1, 0, 0 },
-	{ -1, 0, 1 },
-	{ -1, 1, -1 },
-	{ -1, 1, 0 },
-	{ -1, 1, 1 },
-	{ 0, -1, -1 },
-	{ 0, -1, 0 },
-	{ 0, -1, 1 },
-	{ 0, 0, -1 },
-	{ 0, 0, 1 },
-	{ 0, 1, -1 },
-	{ 0, 1, 0 },
-	{ 0, 1, 1 },
-	{ 1, -1, -1 },
-	{ 1, -1, 0 },
-	{ 1, -1, 1 },
-	{ 1, 0, -1 },
-	{ 1, 0, 0 },
-	{ 1, 0, 1 },
-	{ 1, 1, -1 },
-	{ 1, 1, 0 },
-	{ 1, 1, 1 },
-}
+VoxelNeighborOffsets = {}
+for dx = -1, 1 do
+    for dy = -1, 1 do
+        for dz = -1, 1 do
+            if dx ~= 0 or dy ~= 0 or dz ~= 0 then
+                table.insert(VoxelNeighborOffsets, {dx, dy, dz})
+            end
+        end
+    end
+end

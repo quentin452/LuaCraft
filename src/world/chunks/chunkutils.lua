@@ -153,7 +153,7 @@ local function ApplySunlightEffect(
 			--ThreadLightingChannel:push({ "LightOperation", gx, gy, gz, LightOpe.SunDownAdd.id, addSunlight })
 		end
 	else
-		-- Appliquer l'éclairage standard pour les autres cas
+		-- Apply standard lighting for other cases
 		for _, offset in ipairs(VoxelNeighborOffsets) do
 			local dx, dy, dz = unpack(offset)
 			NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id)
