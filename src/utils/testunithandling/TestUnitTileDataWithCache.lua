@@ -50,10 +50,11 @@ function TestUnitTileDataWithCache2()
 	local elapsedTimeFill = endTimeFill - startTime
 	ThreadLogChannel:push({
 		LuaCraftLoggingLevel.NORMAL,
-		"Elapsed time to fill cache: " .. elapsedTimeFill, "seconds"
+		"Elapsed time to fill cache: " .. elapsedTimeFill,
+		"seconds",
 	})
 	local startTimeAccess = os.clock()
-		for id = 1, TILE_COUNT do
+	for id = 1, TILE_COUNT do
 		MockGetTilePropertyWithCache(id, "collision")
 		MockGetTilePropertyWithCache(id, "transparency")
 		MockGetTilePropertyWithCache(id, "lightsource")
@@ -62,7 +63,8 @@ function TestUnitTileDataWithCache2()
 	local elapsedTimeAccess = endTimeAccess - startTimeAccess
 	ThreadLogChannel:push({
 		LuaCraftLoggingLevel.NORMAL,
-		"Elapsed time with cache: " .. elapsedTimeAccess, "seconds"
+		"Elapsed time with cache: " .. elapsedTimeAccess,
+		"seconds",
 	})
 	local startTimeSecond = os.clock()
 	for id = 1, TILE_COUNT do
@@ -74,6 +76,10 @@ function TestUnitTileDataWithCache2()
 	local elapsedTimeSecond = endTimeSecond - startTimeSecond
 	ThreadLogChannel:push({
 		LuaCraftLoggingLevel.NORMAL,
-		"Elapsed time with cache (third loop): " .. elapsedTimeSecond, "seconds"
+		"Elapsed time with cache (third loop): " .. elapsedTimeSecond,
+		"seconds",
 	})
+	TilesById = nil
+	Tiles = nil
+	tilePropertyCache = nil
 end

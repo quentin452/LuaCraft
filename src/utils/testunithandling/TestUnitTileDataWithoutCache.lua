@@ -41,7 +41,8 @@ function TestUnitTileDataWithoutCache2()
 	local elapsedTimeFirst = endTimeFirst - startTime
 	ThreadLogChannel:push({
 		LuaCraftLoggingLevel.NORMAL,
-		"Elapsed time without cache (first loop): " .. elapsedTimeFirst, "seconds"
+		"Elapsed time without cache (first loop): " .. elapsedTimeFirst,
+		"seconds",
 	})
 	local startTimeSecond = os.clock()
 	for id = 1, TILE_COUNT do
@@ -53,7 +54,8 @@ function TestUnitTileDataWithoutCache2()
 	local elapsedTimeSecond = endTimeSecond - startTimeSecond
 	ThreadLogChannel:push({
 		LuaCraftLoggingLevel.NORMAL,
-		"Elapsed time without cache (second loop): " .. elapsedTimeSecond, "seconds"
+		"Elapsed time without cache (second loop): " .. elapsedTimeSecond,
+		"seconds",
 	})
 	local startTimeSecond = os.clock()
 	for id = 1, TILE_COUNT do
@@ -65,6 +67,9 @@ function TestUnitTileDataWithoutCache2()
 	local elapsedTimeSecond = endTimeSecond - startTimeSecond
 	ThreadLogChannel:push({
 		LuaCraftLoggingLevel.NORMAL,
-		"Elapsed time without cache (third loop): " .. elapsedTimeSecond, "seconds"
+		"Elapsed time without cache (third loop): " .. elapsedTimeSecond,
+		"seconds",
 	})
+	TilesById = nil
+	Tiles = nil
 end

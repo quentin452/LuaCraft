@@ -59,6 +59,7 @@ Renderdistancegetresetted = true
 ResetMovementKeys = true
 ResetLoggerKeys = true
 PhysicsStep = true
+EnableTestUnitWaitingScreen = false
 EnableF3 = false
 EnableF8 = false
 EnableTESTBLOCK = false
@@ -78,3 +79,5 @@ ForWardKey = nil
 BackWardKey = nil
 LeftKey = nil
 RightKey = nil
+
+EnableTestUnitWaitingScreenChannel = love.thread.getChannel("EnableTestUnitWaitingScreenChannel")

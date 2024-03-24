@@ -46,6 +46,7 @@ local modules = {
 	"utils/threads/!testings/chunkhashtable/chunkhashtableThreadCreator",
 	"utils/threads/modeling/blockmodellingThreadCreator",
 	"utils/threads/lighting/lightingThreadCreator",
+	"utils/threads/testunit/testunitThreadCreator",
 	"entities/player",
 	"world/lighting",
 	"world/updatelogic",

@@ -41,21 +41,25 @@ function GameStateTestUnit:draw()
 			end
 		end
 		for n = 1, #_GameStateTestUnitMenuSettings.choice do
-			if _GameStateTestUnitMenuSettings.selection == n then
-				marque = "%1*%0 "
-			else
-				marque = "   "
-			end
-			local choiceText = _GameStateTestUnitMenuSettings.choice[n]
-			if n == 2 then
-				local testUnit = TestUnitType[UnitTest]
-				local testUnitName = testUnit.name
-				DrawColorString(marque .. choiceText .. " (" .. testUnitName .. ")", posX, posY)
-			else
+			if EnableTestUnitWaitingScreen == true then
+				DrawColorString("Wait Some Seconds and see logs...", posX, posY)
+			elseif EnableTestUnitWaitingScreen == false then
+				if _GameStateTestUnitMenuSettings.selection == n then
+					marque = "%1*%0 "
+				else
+					marque = "   "
+				end
+				local choiceText = _GameStateTestUnitMenuSettings.choice[n]
+				if n == 2 then
+					local testUnit = TestUnitType[UnitTest]
+					local testUnitName = testUnit.name
+					DrawColorString(marque .. choiceText .. " (" .. testUnitName .. ")", posX, posY)
+				else
+					DrawColorString(marque .. "" .. choiceText, posX, posY)
+				end
 				DrawColorString(marque .. "" .. choiceText, posX, posY)
+				posY = posY + lineHeight
 			end
-			DrawColorString(marque .. "" .. choiceText, posX, posY)
-			posY = posY + lineHeight
 		end
 	else
 		ThreadLogChannel:push({
@@ -67,19 +71,22 @@ function GameStateTestUnit:draw()
 end
 
 local function PerformMenuAction(action)
-	if action == 1 then
-		if UnitTest == TileDataWithCache then
-			TestUnitTileDataWithCache2()
-		elseif UnitTest == TileDataWithoutCache then
-			TestUnitTileDataWithoutCache2()
+	if EnableTestUnitWaitingScreen == false then
+		if action == 1 then
+			EnableTestUnitWaitingScreen = true
+			if UnitTest == TileDataWithCache then
+				TestUnitThreadChannel:push({ "TestUnitTileDataWithCache2" })
+			elseif UnitTest == TileDataWithoutCache then
+				TestUnitThreadChannel:push({ "TestUnitTileDataWithoutCache2" })
+			end
+		elseif action == 2 then
+			local unitType = TestUnitType[UnitTest]
+			if unitType and unitType.nextType then
+				UnitTest = unitType.nextType
+			end
+		elseif action == 3 then
+			SetCurrentGameState(GamestateMainMenu2)
 		end
-	elseif action == 2 then
-		local unitType = TestUnitType[UnitTest]
-		if unitType and unitType.nextType then
-			UnitTest = unitType.nextType
-		end
-	elseif action == 3 then
-		SetCurrentGameState(GamestateMainMenu2)
 	end
 end
 function GameStateTestUnit:mousepressed(x, y, b)
