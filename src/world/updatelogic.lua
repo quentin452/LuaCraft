@@ -137,20 +137,20 @@ local function processChunkUpdates(chunk)
 		_JPROFILER.push("updateSunlight")
 		chunk:sunlight()
 		_JPROFILER.pop("updateSunlight")
-		chunk.updatedSunLight = true
+		chunk.updatedSunLight = nil
 	elseif chunk.isPopulated == false then
 		_JPROFILER.push("populateChunk")
 		chunk:populate()
 		UpdateCaves()
 		chunk:processRequests()
 		_JPROFILER.pop("populateChunk")
-		chunk.isPopulated = true
+		chunk.isPopulated = nil
 	elseif chunk.updateLighting == false then
 		_JPROFILER.push("LightingUpdate_processChunkUpdates")
 		LightingUpdate()
 		--	ThreadLightingChannel:push({ "updateLighting" })
 		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
-		chunk.updateLighting = true
+		chunk.updateLighting = nil
 	elseif ThePlayer.IsPlayerHasSpawned == false then
 		_JPROFILER.push("spawnPlayer")
 		ChooseSpawnLocation()
