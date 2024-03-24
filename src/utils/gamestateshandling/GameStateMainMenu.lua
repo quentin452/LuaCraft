@@ -1,5 +1,6 @@
 local _Mainmenu = CreateLuaCraftMenu(0, 0, "LuaCraft", {
 	"%2World Creation Menu%0",
+	"%3Test Unit Menu%0",
 	"Settings",
 	"Exit",
 })
@@ -34,8 +35,10 @@ local function PerformMenuAction(action)
 	if action == 1 then
 		SetCurrentGameState(GamestateWorldCreationMenu2)
 	elseif action == 2 then
-		SetCurrentGameState(GamestateMainMenuSettings2)
+		SetCurrentGameState(GameStateTestUnit)
 	elseif action == 3 then
+		SetCurrentGameState(GamestateMainMenuSettings2)
+	elseif action == 4 then
 		love.event.push("quit")
 	end
 end

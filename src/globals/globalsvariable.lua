@@ -22,6 +22,8 @@ MainMenuSettingsBackgroundPath = "resources/assets/backgrounds/Mainmenusettingsb
 KeybindingSettingsBackgroundPath = "resources/assets/backgrounds/KeyBindingSettingsBackground.png"
 PlayingGamePauseMenuPath = "resources/assets/backgrounds/gameplayingpausemenu.png"
 WorldCreationBackgroundPath = "resources/assets/backgrounds/WorldCreationBackground.png"
+TestUnitBackgroundPath = "resources/assets/backgrounds/testunitbackground.png"
+
 BlockTest = Lovegraphics.newImage(TexturepathLuaCraft .. "debug/defaulttexture.png")
 GuiSprites = Lovegraphics.newImage(TexturepathLuaCraft .. "guis/gui.png")
 DefaultTexture = BlockTest
@@ -41,6 +43,7 @@ Font15 = Lovegraphics.newFont(15)
 MainMenuBackground = Lovegraphics.newImage(MainMenuBackgroundPath)
 MainMenuSettingsBackground = Lovegraphics.newImage(MainMenuSettingsBackgroundPath)
 KeybindingSettingsBackground = Lovegraphics.newImage(KeybindingSettingsBackgroundPath)
+TestUnitBackground = Lovegraphics.newImage(TestUnitBackgroundPath)
 PlayingGamePauseMenu = Lovegraphics.newImage(PlayingGamePauseMenuPath)
 WorldCreationBackground = Lovegraphics.newImage(WorldCreationBackgroundPath)
 GuiHotbarQuad = Lovegraphics.newQuad(0, 0, 182, 22, GuiSprites:getDimensions())
