@@ -1,5 +1,5 @@
 --TODO DON4T USE OBJECTS IN NewCave to reduce memory usage
-
+--TODO Try removing CaveList
 function UpdateCaves()
 	_JPROFILER.push("UpdateCaves")
 

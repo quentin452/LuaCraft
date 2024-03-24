@@ -167,7 +167,8 @@ local function removeChunksOutsideRenderDistance(playerChunkX, playerChunkZ, Ren
 	destroyChunkModels = destroyChunkModels + 1
 	if destroyChunkModels > 50000 then
 		local maxChunkDistanceSquared = (RenderDistance / ChunkSize) ^ 2
-
+		--Todo see if its possible to remove ChunkSet
+		--TODO WHEN A chunk model is removed remove the chunk from ChunkSet
 		for otherChunk, _ in pairs(ChunkSet) do
 			local otherChunkXCenter = otherChunk.x
 			local otherChunkZCenter = otherChunk.z
