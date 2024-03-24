@@ -1,3 +1,5 @@
+--TODO DON4T USE OBJECTS IN NewCave to reduce memory usage
+
 function UpdateCaves()
 	_JPROFILER.push("UpdateCaves")
 
