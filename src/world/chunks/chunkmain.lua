@@ -151,6 +151,7 @@ function NewChunk(x, z)
     @return              Nothing.
 --]]
 	chunk.setVoxel = function(self, x, y, z, blockvalue, manuallyPlaced)
+		x, y, z = math.floor(x), math.floor(y), math.floor(z)
 		SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 	end
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)

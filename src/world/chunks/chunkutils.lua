@@ -7,6 +7,7 @@ function UpdateVoxelData(self, blockvalue, x, y, z)
 	self.changes[#self.changes + 1] = { x, y, z }
 end
 function SetVoxelDataInternal(self, x, y, z, blockvalue, dataIndex)
+	x, y, z = math.floor(x), math.floor(y), math.floor(z)
 	if x <= ChunkSize and x >= 1 and z <= ChunkSize and z >= 1 and y >= 1 and y <= WorldHeight then
 		local dataIndexOffset = (dataIndex == "First" and 2 or 3)
 		self.voxels[x][z] =
