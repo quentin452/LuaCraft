@@ -13,6 +13,13 @@ end
 local nextId = 1
 BlockThatUseCustomTexturesForTopandSide = {}
 --TODO remove BlockThatUseCustomTexturesForTopandSide
+local function loadImage(imageString)
+	if imageString ~= nil and type(imageString) == "string" then
+		return Lovegraphics.newImage(imageString)
+	else
+		return nil
+	end
+end
 function addBlock(
 	blockstringname,
 	BlockOrLiquidOrTile,
@@ -40,15 +47,6 @@ function addBlock(
 		})
 		return
 	end
-
-	local function loadImage(imageString)
-		if imageString ~= nil and type(imageString) == "string" then
-			return Lovegraphics.newImage(imageString)
-		else
-			return nil
-		end
-	end
-
 	local id = nextId
 	Tiles[blockstringname] = {
 		id = id,
