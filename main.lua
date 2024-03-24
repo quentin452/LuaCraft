@@ -77,9 +77,9 @@ function love.update(dt)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("MainUpdate")
 	local message = EnableTestUnitWaitingScreenChannel:pop()
-    if message then
-        EnableTestUnitWaitingScreen = false
-    end
+	if message then
+		EnableTestUnitWaitingScreen = false
+	end
 	if ResetMovementKeys == true then
 		ReLoadMovementKeyValues()
 		ResetMovementKeys = false

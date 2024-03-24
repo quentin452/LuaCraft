@@ -39,8 +39,6 @@ local modules = {
 	"utils/gamestateshandling/settings/menusettings/GameStatePlayingGameSettings",
 	"utils/gamestateshandling/GameStateWorldCreationMenu",
 	"utils/gamestateshandling/!PlayingOrSetGameState",
-	"utils/testunithandling/TestUnitTileDataWithCache",
-	"utils/testunithandling/TestUnitTileDataWithoutCache",
 	"utils/threads/!testings/threadtest",
 	"utils/threads/loggers/loggingThreadCreator",
 	"utils/threads/!testings/chunkhashtable/chunkhashtableThreadCreator",
