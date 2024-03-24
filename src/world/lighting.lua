@@ -177,7 +177,7 @@ local function LightningQueriesTestUnit(x, y, z, lightoperation, value)
 	end
 
 	local query = function()
-		local startTime = love.timer.getTime()
+		local startTime2 = love.timer.getTime()
 		if lightoperation == LightOpe.SunForceAdd.id then
 			SunForceAdd(cget, cx, cy, cz, value, x, y, z)
 		elseif lightoperation == LightOpe.SunCreationAdd.id then
@@ -199,7 +199,7 @@ local function LightningQueriesTestUnit(x, y, z, lightoperation, value)
 		elseif lightoperation == LightOpe.SunDownSubtract.id then
 			SunDownSubtract(x, y, z)
 		end
-		local queryTime = love.timer.getTime() - startTime
+		local queryTime = love.timer.getTime() - startTime2
 		if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
 			ThreadLogChannel:push({
 				LuaCraftLoggingLevel.NORMAL,
@@ -235,7 +235,7 @@ function NewLightOperation(x, y, z, lightoperation, value)
 			operationFunction(query)
 			local endTime = love.timer.getTime() - startTime
 			LightningQueriesTestUnitOperationCounter[lightoperation] = LightningQueriesTestUnitOperationCounter[lightoperation]
-			+ 1
+				+ 1
 			if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
 				ThreadLogChannel:push({
 					LuaCraftLoggingLevel.NORMAL,
