@@ -8,8 +8,8 @@
 --
 -- Dependencies: `pl.utils`, `pl.types`
 -- @module pl.stringx
-local utils = require("penlight/utils")
-local is_callable = require("penlight/types").is_callable
+local utils = require("libs/penlight/utils")
+local is_callable = require("libs/penlight/types").is_callable
 local string = string
 local find = string.find
 local type, setmetatable, ipairs = type, setmetatable, ipairs

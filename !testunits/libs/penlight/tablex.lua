@@ -4,8 +4,8 @@
 --
 -- Dependencies: `pl.utils`, `pl.types`
 -- @module pl.tablex
-local utils = require("penlight/utils")
-local types = require("penlight/types")
+local utils = require("libs/penlight/utils")
+local types = require("libs/penlight/types")
 local getmetatable, setmetatable, require = getmetatable, setmetatable, require
 local tsort, append, remove = table.sort, table.insert, table.remove
 local min = math.min
@@ -19,16 +19,16 @@ local tablex = {}
 -- However, when the source has no obvious type, then we attach appropriate metatables
 -- like List, Map, etc to the result.
 local function setmeta(res, tbl, pl_class)
-	local mt = getmetatable(tbl) or pl_class and require("penlight/" .. pl_class)
+	local mt = getmetatable(tbl) or pl_class and require("libs/penlight/" .. pl_class)
 	return mt and setmetatable(res, mt) or res
 end
 
 local function makelist(l)
-	return setmetatable(l, require("penlight/List"))
+	return setmetatable(l, require("libs/penlight/List"))
 end
 
 local function makemap(m)
-	return setmetatable(m, require("penlight/Map"))
+	return setmetatable(m, require("libs/penlight/Map"))
 end
 
 local function complain(idx, msg)

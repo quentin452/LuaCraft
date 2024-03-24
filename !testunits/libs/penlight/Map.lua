@@ -9,16 +9,16 @@
 -- Dependencies: `pl.utils`, `pl.class`, `pl.tablex`, `pl.pretty`
 -- @classmod pl.Map
 
-local tablex = require("penlight/tablex")
-local utils = require("penlight/utils")
+local tablex = require("libs/penlight/tablex")
+local utils = require("libs/penlight/utils")
 local stdmt = utils.stdmt
 local deepcompare = tablex.deepcompare
 
-local pretty_write = require("penlight/pretty").write
+local pretty_write = require("libs/penlight/pretty").write
 local Map = stdmt.Map
 local Set = stdmt.Set
 
-local class = require("penlight/class")
+local class = require("libs/penlight/class")
 
 -- the Map class ---------------------
 class(nil, nil, Map)

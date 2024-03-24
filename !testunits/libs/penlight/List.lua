@@ -20,12 +20,12 @@
 
 local tinsert, tremove, concat, tsort = table.insert, table.remove, table.concat, table.sort
 local setmetatable, getmetatable, type, tostring, string = setmetatable, getmetatable, type, tostring, string
-local tablex = require("penlight/tablex")
+local tablex = require("libs/penlight/tablex")
 local filter, imap, imap2, reduce, transform, tremovevalues =
 	tablex.filter, tablex.imap, tablex.imap2, tablex.reduce, tablex.transform, tablex.removevalues
 local tsub = tablex.sub
-local utils = require("penlight/utils")
-local class = require("penlight/class")
+local utils = require("libs/penlight/utils")
+local class = require("libs/penlight/class")
 
 local array_tostring, split, assert_arg, function_arg =
 	utils.array_tostring, utils.split, utils.assert_arg, utils.function_arg

@@ -1,6 +1,6 @@
 -- Import LuaTest framework
 local luaunit = require("luaunit")
-local import = require("penlight/import_into")
+local import = require("libs/penlight/import_into")
 import(_G)
 -- Nombre de tuiles à générer
 local TILE_COUNT = 1000000

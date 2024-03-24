@@ -22,12 +22,12 @@
 -- Dependencies: `pl.utils`, `pl.tablex`, `pl.class`, `pl.Map`, (`pl.List` if __tostring is used)
 -- @classmod pl.Set
 
-local tablex = require("penlight/tablex")
-local utils = require("penlight/utils")
+local tablex = require("libs/penlight/tablex")
+local utils = require("libs/penlight/utils")
 local array_tostring, concat = utils.array_tostring, table.concat
 local merge, difference = tablex.merge, tablex.difference
-local Map = require("penlight/Map")
-local class = require("penlight/class")
+local Map = require("libs/penlight/Map")
+local class = require("libs/penlight/class")
 local stdmt = utils.stdmt
 local Set = stdmt.Set
 

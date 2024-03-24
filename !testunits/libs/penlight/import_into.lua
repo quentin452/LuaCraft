@@ -58,7 +58,7 @@ return function(env)
 		MultiMap = true,
 		Date = true,
 	}
-	rawset(env, "utils", require("penlight/utils"))
+	rawset(env, "utils", require("libs/penlight/utils"))
 
 	for name, klass in pairs(env.utils.stdmt) do
 		klass.__index = function(t, key)
@@ -90,7 +90,7 @@ return function(env)
 		-- either way, we load the required module and make it globally available.
 		if found then
 			-- e..g pretty.dump causes pl.pretty to become available as 'pretty'
-			rawset(env, name, require("penlight/" .. name))
+			rawset(env, name, require("libs/penlight/" .. name))
 			return env[name]
 		else
 			local res
