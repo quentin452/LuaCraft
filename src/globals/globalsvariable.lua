@@ -79,5 +79,3 @@ ForWardKey = nil
 BackWardKey = nil
 LeftKey = nil
 RightKey = nil
-
-EnableTestUnitWaitingScreenChannel = love.thread.getChannel("EnableTestUnitWaitingScreenChannel")
