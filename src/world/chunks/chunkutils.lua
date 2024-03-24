@@ -296,7 +296,6 @@ local function PreventBlockPlacementOnCertainBlocksLikeFlower(self, x, y, z, blo
 	return false
 end
 function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
-	_JPROFILER.push("SetVoxelInternal")
 	manuallyPlaced = manuallyPlaced or false
 	local leftMouseDown = love.mouse.isDown(1)
 	local rightMouseDown = love.mouse.isDown(2)
@@ -330,7 +329,6 @@ function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 		end
 		HandleSunDownSubstract(gx, gy, gz)
 	end
-	_JPROFILER.pop("SetVoxelInternal")
 end
 
 function IsWithinChunkLimits(x, y, z)

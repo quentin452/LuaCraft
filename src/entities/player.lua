@@ -277,8 +277,6 @@ function initPlayerInventory()
 end
 
 function getPlayerPosition()
-	_JPROFILER.push("getPlayerPosition")
-	_JPROFILER.pop("getPlayerPosition")
 	return {
 		x = math.floor(ThePlayer.x),
 		y = math.floor(ThePlayer.y),
