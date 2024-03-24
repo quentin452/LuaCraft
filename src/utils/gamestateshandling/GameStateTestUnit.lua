@@ -13,12 +13,14 @@ end
 local TileDataWithCache = "TileDataWithCache"
 local TileDataWithoutCache = "TileDataWithoutCache"
 local LightningEngineTestUnit = "LightningEngineTestUnit"
+local BlockModelingTestUnit = "BlockModelingTestUnit"
 local UnitTest = TileDataWithCache
 
 local TestUnitType = {
 	[TileDataWithCache] = { name = "Tile Data With Cache", nextType = TileDataWithoutCache },
 	[TileDataWithoutCache] = { name = "Tile Data Without Cache", nextType = LightningEngineTestUnit },
-	[LightningEngineTestUnit] = { name = "Lightning Engine", nextType = TileDataWithCache },
+	[LightningEngineTestUnit] = { name = "Lightning Engine", nextType = BlockModelingTestUnit },
+	[BlockModelingTestUnit] = { name = "Block Modeling", nextType = TileDataWithCache },
 }
 
 function GameStateTestUnit:draw()
@@ -74,6 +76,12 @@ local function PerformMenuAction(action)
 				TestUnitThreadChannel:push({ "TestUnitTileDataWithoutCache2" })
 			elseif UnitTest == LightningEngineTestUnit then
 				EnableLightningEngineDebug = true
+				SetCurrentGameState(GameStatePlayingGame2)
+				love.mouse.setRelativeMode(true)
+				GenerateWorld()
+				EnableTestUnitWaitingScreen = false
+			elseif UnitTest == BlockModelingTestUnit then
+				EnableBlockRenderingTestUnit = true
 				SetCurrentGameState(GameStatePlayingGame2)
 				love.mouse.setRelativeMode(true)
 				GenerateWorld()

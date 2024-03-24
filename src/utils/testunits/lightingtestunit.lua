@@ -29,18 +29,15 @@ local function GetChunkDebug(x, y, z)
 		})
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.NORMAL,
-			"Hash:"..
-			hashTime,
+			"Hash:" .. hashTime,
 		})
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.NORMAL,
-			"Get from hash:"..
-			getTime,
+			"Get from hash:" .. getTime,
 		})
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.NORMAL,
-			"Total:"..
-			endTime,
+			"Total:" .. endTime,
 		})
 		getChunkCounter = getChunkCounter + 1
 	end

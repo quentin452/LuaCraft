@@ -83,6 +83,8 @@ function GameStatePlayingGame2:keypressed(k)
 			love.mouse.setVisible(true)
 			WorldSuccessfullyLoaded = false
 			EnableLightningEngineDebug = false
+			EnableBlockRenderingTestUnit = false
+			BlockModellingTestUnitTimer = 0
 			LightningQueriesTestUnitOperationCounter = {}
 			for _, operation in pairs(LightOpe) do
 				LightningQueriesTestUnitOperationCounter[operation.id] = 0
