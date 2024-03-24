@@ -4,7 +4,7 @@ local grass = true
 local OneHundredThoused = 100000
 local chunkfloor = 48
 local maxHeight = 120
-
+--TODO REMOVE string.char USAGE IF POSSIBLE
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 	for i = 1, ChunkSize do
@@ -23,7 +23,9 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				if sunlight then
 					temp[yy + 1] = string.char(LightSources[15])
 				end
-				if j < chunkfloor then
+				if j == 1 then
+					temp[yy] = string.char(Tiles.BEDROCK_Block.id)
+				elseif j < chunkfloor then
 					temp[yy] = string.char(Tiles.STONE_Block.id)
 					sunlight = false
 				else
