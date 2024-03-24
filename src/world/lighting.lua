@@ -32,7 +32,7 @@ local function SunForceAdd(cget, cx, cy, cz, value, x, y, z)
 		end
 	end
 end
-local function SunCreationAdd(cget, cx, cy, cz,x, y, z)
+local function SunCreationAdd(cget, cx, cy, cz, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	local dat = cget:getVoxelFirstData(cx, cy, cz)
 	if TileLightable(val, true) and dat > 0 then
@@ -57,8 +57,7 @@ local function LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
 	if value >= 0 and TileLightable(val, true) then
 		cget:setVoxelSecondData(cx, cy, cz, value)
 		for _, dir in ipairs(SIXDIRECTIONS) do
-			local x = x + dir.x
-			NewLightOperation(x, y + dir.y, z + dir.z, LightOpe.LocalAdd.id, value - 1)
+			NewLightOperation(x + dir.x, y + dir.y, z + dir.z, LightOpe.LocalAdd.id, value - 1)
 		end
 	end
 end
@@ -80,7 +79,7 @@ local function LocalSubtract(cget, cx, cy, cz, value, x, y, z)
 	end
 end
 
-local function LocalCreationAdd(cget, cx, cy, cz,x, y, z)
+local function LocalCreationAdd(cget, cx, cy, cz, x, y, z)
 	local val, _, dat = cget:getVoxel(cx, cy, cz)
 	if TileLightable(val, true) and dat > 0 then
 		NewLightOperation(x, y, z, LightOpe.LocalForceAdd.id, dat)
