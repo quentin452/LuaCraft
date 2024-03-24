@@ -15,46 +15,34 @@ function GetValueFromTilesById(n)
 	return TilesById[n]
 end
 
--- Retrieves collision property of a tile by ID
-function TileCollisions(n)
-	if TileCollisionCache[n] ~= nil then
-		return TileCollisionCache[n]
-	end
+local function GetTileProperty(n, property)
 	local value = GetValueFromTilesById(n)
 	if value then
-		local collision = value.Cancollide == CollideMode.YesCanCollide
-		TileCollisionCache[n] = collision
-		return collision
+		local blockstringname = value.blockstringname
+		local propertyValue
+		if property == "collision" then
+			propertyValue = value.Cancollide == CollideMode.YesCanCollide
+		elseif property == "transparency" then
+			propertyValue = Tiles[blockstringname].transparency
+		elseif property == "lightsource" then
+			propertyValue = Tiles[blockstringname].LightSources
+		end
+		return propertyValue
 	end
-	return false
+end
+-- Retrieves collision property of a tile by ID
+function TileCollisions(n)
+	return GetTileProperty(n, "collision")
 end
 
 -- Retrieves transparency level of a tile by ID
 function TileTransparency(n)
-	if TileTransparencyCache[n] ~= nil then
-		return TileTransparencyCache[n]
-	end
-	local value = GetValueFromTilesById(n)
-	if value then
-		local blockstringname = value.blockstringname
-		local transparency = Tiles[blockstringname].transparency
-		TileTransparencyCache[n] = transparency
-		return transparency
-	end
+	return GetTileProperty(n, "transparency")
 end
 
 -- Retrieves light source value of a tile by ID
 function TileLightSource(n)
-	if TileLightSourceCache[n] ~= nil then
-		return TileLightSourceCache[n]
-	end
-	local value = GetValueFromTilesById(n)
-	if value then
-		local blockstringname = value.blockstringname
-		local lightSource = Tiles[blockstringname].LightSources
-		TileLightSourceCache[n] = lightSource
-		return lightSource
-	end
+	return GetTileProperty(n, "lightsource")
 end
 
 -- Checks if a tile can emit light

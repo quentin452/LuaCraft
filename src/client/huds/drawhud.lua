@@ -25,9 +25,6 @@ local DrawF3Tab = {
 	["TextureAtlasCoordinates"] = TextureAtlasCoordinates,
 	["SliceModels"] = SliceModels,
 	["TileModelCaching"] = TileModelCaching,
-	["TileTransparencyCache"] = TileTransparencyCache,
-	["TileLightSourceCache"] = TileLightSourceCache,
-	["TileCollisionCache"] = TileCollisionCache,
 }
 function DrawF3()
 	_JPROFILER.push("DrawF3")

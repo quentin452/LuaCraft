@@ -22,9 +22,6 @@ _KeybindingMenuSettings = CreateLuaCraftMenu(0, 0, "Keybinding Settings", {
 })
 
 --init global tables
-TileTransparencyCache = {}
-TileLightSourceCache = {}
-TileCollisionCache = {}
 TileModelCaching = {}
 TextureAtlasCoordinates = {}
 TileCanvas = {}
@@ -76,6 +73,9 @@ Tiles = {
 		BlockOrLiquidOrTile = TileMode.BlockMode,
 	},
 }
+TilesById = { [0] = {
+	blockstringname = "AIR_Block",
+} }
 LuaCraftLoggingLevel = {
 	NORMAL = "NORMAL",
 	WARNING = "WARN",

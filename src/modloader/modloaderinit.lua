@@ -11,9 +11,6 @@ function GetSourcePath()
 	return debug.getinfo(2).source
 end
 local nextId = 1
-TilesById = { [0] = {
-	blockstringname = "AIR_Block",
-} }
 BlockThatUseCustomTexturesForTopandSide = {}
 --TODO remove BlockThatUseCustomTexturesForTopandSide
 function addBlock(
@@ -53,7 +50,7 @@ function addBlock(
 		return
 	end
 
-	if blockSideTextureString ~= nil and  type(blockSideTextureString) ~= "string" then
+	if blockSideTextureString ~= nil and type(blockSideTextureString) ~= "string" then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
 			"blockSideTextureString is not a string or is missing for block: " .. tostring(blockstringname),
@@ -61,7 +58,7 @@ function addBlock(
 		return
 	end
 
-	if blockTopTextureString ~= nil and  type(blockTopTextureString) ~= "string" then
+	if blockTopTextureString ~= nil and type(blockTopTextureString) ~= "string" then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
 			"blockTopTextureString is not a string for block: " .. tostring(blockstringname),
@@ -69,7 +66,7 @@ function addBlock(
 		return
 	end
 
-	if blockBottomMasterTextureUserData ~= nil and  type(blockBottomMasterTextureUserData) ~= "userdata" then
+	if blockBottomMasterTextureUserData ~= nil and type(blockBottomMasterTextureUserData) ~= "userdata" then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
 			"blockBottomMasterTextureUserData is not a userdata for block: " .. tostring(blockstringname),
@@ -77,7 +74,7 @@ function addBlock(
 		return
 	end
 
-	if blockSideTextureUserData ~= nil and  type(blockSideTextureUserData) ~= "userdata" then
+	if blockSideTextureUserData ~= nil and type(blockSideTextureUserData) ~= "userdata" then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
 			"blockSideTextureUserData is not a userdata for block: " .. tostring(blockstringname),
@@ -85,7 +82,7 @@ function addBlock(
 		return
 	end
 
-	if blockTopTextureUserData ~= nil and  type(blockTopTextureUserData) ~= "userdata" then
+	if blockTopTextureUserData ~= nil and type(blockTopTextureUserData) ~= "userdata" then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
 			"blockTopTextureUserData is not a userdata  for block: " .. tostring(blockstringname),
