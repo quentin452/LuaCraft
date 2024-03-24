@@ -32,7 +32,7 @@ local function SunForceAdd(cget, cx, cy, cz, value, x, y, z)
 		end
 	end
 end
-local function SunCreationAdd(cget, cx, cy, cz, value, x, y, z)
+local function SunCreationAdd(cget, cx, cy, cz,x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	local dat = cget:getVoxelFirstData(cx, cy, cz)
 	if TileLightable(val, true) and dat > 0 then
@@ -80,7 +80,7 @@ local function LocalSubtract(cget, cx, cy, cz, value, x, y, z)
 	end
 end
 
-local function LocalCreationAdd(cget, cx, cy, cz, value, x, y, z)
+local function LocalCreationAdd(cget, cx, cy, cz,x, y, z)
 	local val, _, dat = cget:getVoxel(cx, cy, cz)
 	if TileLightable(val, true) and dat > 0 then
 		NewLightOperation(x, y, z, LightOpe.LocalForceAdd.id, dat)
@@ -97,7 +97,7 @@ local function SunAdd(cget, cx, cy, cz, value, x, y, z)
 		end
 	end
 end
-local function LocalAdd(cget, cx, cy, cz, value, x, y, z)
+local function LocalAdd(cget, value, x, y, z)
 	local localcx, localcy, localcz = Localize(x, y, z)
 	local val, _, dat = cget:getVoxel(localcx, localcy, localcz)
 	if TileLightable(val, true) and dat < value then
@@ -124,7 +124,7 @@ local function SunSubtract(cget, cx, cy, cz, value, x, y, z)
 		return false
 	end
 end
-local function SunDownSubtract(cget, cx, cy, cz, value, x, y, z)
+local function SunDownSubtract(x, y, z)
 	if TileLightable(GetVoxel(x, y, z), true) then
 		SetVoxelFirstData(x, y, z, Tiles.AIR_Block.id)
 		NewLightOperation(x, y - 1, z, LightOpe.SunDownSubtract.id)
@@ -146,7 +146,7 @@ local function LightningQueries(x, y, z, lightoperation, value)
 		if lightoperation == LightOpe.SunForceAdd.id then
 			SunForceAdd(cget, cx, cy, cz, value, x, y, z)
 		elseif lightoperation == LightOpe.SunCreationAdd.id then
-			SunCreationAdd(cget, cx, cy, cz, value, x, y, z)
+			SunCreationAdd(cget, cx, cy, cz, x, y, z)
 		elseif lightoperation == LightOpe.SunDownAdd.id then
 			SunDownAdd(cget, cx, cy, cz, value, x, y, z)
 		elseif lightoperation == LightOpe.LocalForceAdd.id then
@@ -154,15 +154,15 @@ local function LightningQueries(x, y, z, lightoperation, value)
 		elseif lightoperation == LightOpe.LocalSubtract.id then
 			LocalSubtract(cget, cx, cy, cz, value, x, y, z)
 		elseif lightoperation == LightOpe.LocalCreationAdd.id then
-			LocalCreationAdd(cget, cx, cy, cz, value, x, y, z)
+			LocalCreationAdd(cget, cx, cy, cz, x, y, z)
 		elseif lightoperation == LightOpe.SunAdd.id then
 			SunAdd(cget, cx, cy, cz, value, x, y, z)
 		elseif lightoperation == LightOpe.LocalAdd.id then
-			LocalAdd(cget, cx, cy, cz, value, x, y, z)
+			LocalAdd(cget, value, x, y, z)
 		elseif lightoperation == LightOpe.SunSubtract.id then
 			SunSubtract(cget, cx, cy, cz, value, x, y, z)
 		elseif lightoperation == LightOpe.SunDownSubtract.id then
-			SunDownSubtract(cget, cx, cy, cz, value, x, y, z)
+			SunDownSubtract(x, y, z)
 		end
 	end
 	return query
