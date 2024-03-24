@@ -102,7 +102,11 @@ function NewChunkSlice(x, y, z, parent)
 					local x, y, z =
 						(chunk.x - 1) * ChunkSize + i - 1, 1 * j * BlockModelScale, (chunk.z - 1) * ChunkSize + k - 1
 					if thisTransparency < TilesTransparency.OPAQUE then
-						TileRendering(chunk, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
+						if EnableTilesRenderingTestUnit == true then
+							TileRenderingTestUnit(chunk, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
+						else
+							TileRendering(chunk, i, j, k, x, y, z, Light, SliceModels, BlockModelScale)
+						end
 						if EnableBlockRenderingTestUnit == true then
 							BlockRenderingTestUnit(
 								chunk,

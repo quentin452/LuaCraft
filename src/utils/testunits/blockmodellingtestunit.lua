@@ -194,7 +194,7 @@ local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 	elseif k == ChunkSize then
 		BlockGetNegativeZ = getVoxelFromChunk(GetChunk, x, y, z + 1, i, j, 1)
 	end
-    local endTime = os.clock()
+	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.NORMAL,

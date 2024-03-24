@@ -46,6 +46,7 @@ local modules = {
 	"utils/threads/lighting/lightingThreadCreator",
 	"utils/threads/testunit/testunitThreadCreator",
 	"utils/testunits/lightingtestunit",
+	"utils/testunits/tilemodellingtestunit",
 	"utils/testunits/blockmodellingtestunit",
 	"entities/player",
 	"world/lighting",
