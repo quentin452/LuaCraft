@@ -26,7 +26,11 @@ local function GetOrCreateChunk(chunkX, chunkZ)
 	_JPROFILER.push("GetOrCreateChunk")
 	local chunk = ChunkHashTable[ChunkHash(chunkX)] and ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)]
 	if not chunk then
-		chunk = NewChunk(chunkX, chunkZ)
+		if EnableChunkTestUnit then
+			chunk = NewChunkWithTestUnit(chunkX, chunkZ)
+		else
+			chunk = NewChunk(chunkX, chunkZ)
+		end
 		ChunkSet[chunk] = true
 		ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 		ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk

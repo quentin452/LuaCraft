@@ -86,6 +86,7 @@ function GameStatePlayingGame2:keypressed(k)
 			EnableBlockRenderingTestUnit = false
 			BlockModellingTestUnitTimer = 0
 			TilesModellingTestUnitTimer = 0
+			ChunkTestUnitTimer = 0
 			EnableTilesRenderingTestUnit = false
 			LightningQueriesTestUnitOperationCounter = {}
 			for _, operation in pairs(LightOpe) do

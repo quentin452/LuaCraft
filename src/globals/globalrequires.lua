@@ -48,6 +48,7 @@ local modules = {
 	"utils/testunits/lightingtestunit",
 	"utils/testunits/tilemodellingtestunit",
 	"utils/testunits/blockmodellingtestunit",
+	"utils/testunits/chunktestunit",
 	"entities/player",
 	"world/lighting",
 	"world/updatelogic",
