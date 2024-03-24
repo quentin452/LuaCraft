@@ -1,15 +1,16 @@
 -- Import LuaTest framework
 local luaunit = require("luaunit")
-
+local import = require("penlight/import_into")
+import(_G)
 -- Nombre de tuiles à générer
-local TILE_COUNT = 100000
+local TILE_COUNT = 1000000
 
 -- Liste des types de tuiles disponibles
 local tileTypes = { "stone", "dirt", "grass" }
 
 -- Tables pour stocker les données
-local Tiles = {}
-local TilesById = {}
+local Tiles = Set()
+local TilesById = Set()
 
 -- Génération aléatoire
 for id = 1, TILE_COUNT do
