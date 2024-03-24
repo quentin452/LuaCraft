@@ -1,5 +1,3 @@
-local Settings = {}
-local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey" }
 local marque = ""
 local _GameStateTestUnitMenuSettings = CreateLuaCraftMenu(0, 0, "Test Unit Menu", {
 	"Play a Test Unit",
@@ -14,11 +12,13 @@ end
 
 local TileDataWithCache = "TileDataWithCache"
 local TileDataWithoutCache = "TileDataWithoutCache"
+local LightningEngineTestUnit = "LightningEngineTestUnit"
 local UnitTest = TileDataWithCache
 
 local TestUnitType = {
 	[TileDataWithCache] = { name = "Tile Data With Cache", nextType = TileDataWithoutCache },
-	[TileDataWithoutCache] = { name = "Tile Data Without Cache", nextType = TileDataWithCache },
+	[TileDataWithoutCache] = { name = "Tile Data Without Cache", nextType = LightningEngineTestUnit },
+	[LightningEngineTestUnit] = { name = "Lightning Engine", nextType = TileDataWithCache },
 }
 
 function GameStateTestUnit:draw()
@@ -34,12 +34,6 @@ function GameStateTestUnit:draw()
 	posY = posY + lineHeight
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
-		for _, key in ipairs(orderedKeys) do
-			local value = file_content:match(key .. "=(%w+)")
-			if value then
-				Settings[key] = value
-			end
-		end
 		for n = 1, #_GameStateTestUnitMenuSettings.choice do
 			if EnableTestUnitWaitingScreen == true then
 				DrawColorString("Wait Some Seconds and see logs...", posX, posY)
@@ -78,6 +72,12 @@ local function PerformMenuAction(action)
 				TestUnitThreadChannel:push({ "TestUnitTileDataWithCache2" })
 			elseif UnitTest == TileDataWithoutCache then
 				TestUnitThreadChannel:push({ "TestUnitTileDataWithoutCache2" })
+			elseif UnitTest == LightningEngineTestUnit then
+				EnableLightningEngineDebug = true
+				SetCurrentGameState(GameStatePlayingGame2)
+				love.mouse.setRelativeMode(true)
+				GenerateWorld()
+				EnableTestUnitWaitingScreen = false
 			end
 		elseif action == 2 then
 			local unitType = TestUnitType[UnitTest]

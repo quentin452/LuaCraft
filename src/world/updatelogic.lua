@@ -144,7 +144,7 @@ local function processChunkUpdates(chunk)
 	elseif chunk.updateLighting == false then
 		_JPROFILER.push("LightingUpdate_processChunkUpdates")
 		LightingUpdate()
-	--	ThreadLightingChannel:push({ "updateLighting" })
+		--	ThreadLightingChannel:push({ "updateLighting" })
 		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
 		chunk.updateLighting = true
 	elseif ThePlayer.IsPlayerHasSpawned == false then

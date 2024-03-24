@@ -105,6 +105,10 @@ LightOpe = {
 	LocalForceAdd = { id = "LocalForceAdd", lightope = LightingQueueAdd },
 	LocalCreationAdd = { id = "LocalCreationAdd", lightope = LightingQueueAdd },
 }
+LightningQueriesTestUnitOperationCounter = {}
+for _, operation in pairs(LightOpe) do
+	LightningQueriesTestUnitOperationCounter[operation.id] = 0
+end
 VoxelNeighborOffsets = {}
 for dx = -1, 1 do
 	for dy = -1, 1 do

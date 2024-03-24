@@ -1,4 +1,5 @@
-TestUnitThreadChannel, ThreadLogChannel, LuaCraftLoggingLevel, EnableTestUnitWaitingScreen,EnableTestUnitWaitingScreenChannel = ...
+TestUnitThreadChannel, ThreadLogChannel, LuaCraftLoggingLevel, EnableTestUnitWaitingScreen, EnableTestUnitWaitingScreenChannel =
+	...
 
 local TILE_COUNT = 10000000
 local tileTypes = { "stone", "dirt", "grass" }
@@ -166,11 +167,9 @@ while true do
 		local level = unpack(message)
 		if level == "TestUnitTileDataWithCache2" then
 			TestUnitTileDataWithCache2()
-			--EnableTestUnitWaitingScreen = false
 			EnableTestUnitWaitingScreenChannel:push(true)
 		elseif level == "TestUnitTileDataWithoutCache2" then
 			TestUnitTileDataWithoutCache2()
-			--EnableTestUnitWaitingScreen = false
 			EnableTestUnitWaitingScreenChannel:push(true)
 		end
 	end

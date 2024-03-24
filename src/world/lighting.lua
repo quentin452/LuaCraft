@@ -167,12 +167,85 @@ local function LightningQueries(x, y, z, lightoperation, value)
 	return query
 end
 
+local function LightningQueriesTestUnit(x, y, z, lightoperation, value)
+	local startTime = love.timer.getTime()
+	local cget, cx, cy, cz = GetChunk(x, y, z)
+	local chunkTime = love.timer.getTime() - startTime
+
+	if cget == nil then
+		return
+	end
+
+	local query = function()
+		local startTime = love.timer.getTime()
+		if lightoperation == LightOpe.SunForceAdd.id then
+			SunForceAdd(cget, cx, cy, cz, value, x, y, z)
+		elseif lightoperation == LightOpe.SunCreationAdd.id then
+			SunCreationAdd(cget, cx, cy, cz, x, y, z)
+		elseif lightoperation == LightOpe.SunDownAdd.id then
+			SunDownAdd(cget, cx, cy, cz, value, x, y, z)
+		elseif lightoperation == LightOpe.LocalForceAdd.id then
+			LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
+		elseif lightoperation == LightOpe.LocalSubtract.id then
+			LocalSubtract(cget, cx, cy, cz, value, x, y, z)
+		elseif lightoperation == LightOpe.LocalCreationAdd.id then
+			LocalCreationAdd(cget, cx, cy, cz, x, y, z)
+		elseif lightoperation == LightOpe.SunAdd.id then
+			SunAdd(cget, cx, cy, cz, value, x, y, z)
+		elseif lightoperation == LightOpe.LocalAdd.id then
+			LocalAdd(cget, value, x, y, z)
+		elseif lightoperation == LightOpe.SunSubtract.id then
+			SunSubtract(cget, cx, cy, cz, value, x, y, z)
+		elseif lightoperation == LightOpe.SunDownSubtract.id then
+			SunDownSubtract(x, y, z)
+		end
+		local queryTime = love.timer.getTime() - startTime
+		if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
+			ThreadLogChannel:push({
+				LuaCraftLoggingLevel.NORMAL,
+				lightoperation .. " query time: " .. queryTime .. " seconds",
+			})
+			LightningQueriesTestUnitOperationCounter[lightoperation] = LightningQueriesTestUnitOperationCounter[lightoperation]
+				+ 1
+			ThreadLogChannel:push({
+				LuaCraftLoggingLevel.NORMAL,
+				lightoperation .. " counter: " .. LightningQueriesTestUnitOperationCounter[lightoperation],
+			})
+			ThreadLogChannel:push({
+				LuaCraftLoggingLevel.NORMAL,
+				"Chunk time: " .. chunkTime .. " seconds",
+			})
+		end
+	end
+	return query
+end
+
 function NewLightOperation(x, y, z, lightoperation, value)
-	local query = LightningQueries(x, y, z, lightoperation, value)
+	local query
+	if EnableLightningEngineDebug == true then
+		query = LightningQueriesTestUnit(x, y, z, lightoperation, value)
+	else
+		query = LightningQueries(x, y, z, lightoperation, value)
+	end
 	local operation = LightOpe[lightoperation]
 	if operation then
-		local operationFunction = operation.lightope
-		operationFunction(query)
+		if EnableLightningEngineDebug == true then
+			local startTime = love.timer.getTime()
+			local operationFunction = operation.lightope
+			operationFunction(query)
+			local endTime = love.timer.getTime() - startTime
+			LightningQueriesTestUnitOperationCounter[lightoperation] = LightningQueriesTestUnitOperationCounter[lightoperation]
+			+ 1
+			if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
+				ThreadLogChannel:push({
+					LuaCraftLoggingLevel.NORMAL,
+					lightoperation .. " operation time: " .. endTime .. " seconds",
+				})
+			end
+		else
+			local operationFunction = operation.lightope
+			operationFunction(query)
+		end
 	else
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,

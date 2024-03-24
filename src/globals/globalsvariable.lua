@@ -59,6 +59,7 @@ Renderdistancegetresetted = true
 ResetMovementKeys = true
 ResetLoggerKeys = true
 PhysicsStep = true
+EnableLightningEngineDebug = false
 EnableTestUnitWaitingScreen = false
 EnableF3 = false
 EnableF8 = false
