@@ -93,29 +93,27 @@ function ChunkNoise(x, y, z)
 	return Noise(x, y, z, 20, 12, 1)
 end
 
-function Noise(x, y, z, freq, yfreq, si)
-	return love.math.noise(
-		x / freq + Salt[si] * OneHundredThoused,
-		y / yfreq + Salt[si + 1] * OneHundredThoused,
-		z / freq + Salt[si + 2] * OneHundredThoused
-	)
+function Noise(x, y, z, freq, yfreq)
+	return love.math.noise(x / freq, y / yfreq, z / freq)
 end
-function Noise2D(x, z, freq, si)
-	return love.math.noise(x / freq + Salt[si] * OneHundredThoused, z / freq + Salt[si + 2] * OneHundredThoused)
+
+function Noise2D(x, z, freq)
+	return love.math.noise(x / freq, z / freq)
 end
+
 function OctaveNoise(x, y, octaves, seed1, seed2)
 	local ret = 0
-
 	local freq = 1
 	local amp = 1
 	for i = 1, octaves do
-		ret = ret
-			+ love.math.noise(x * freq + Salt[seed1] * OneHundredThoused, y * freq + Salt[seed2] * OneHundredThoused) * amp
-			- amp / 2
+		math.randomseed(seed1)
+		local rand1 = math.random()
+		math.randomseed(seed2)
+		local rand2 = math.random()
+		ret = ret + love.math.noise(x * freq, y * freq) * amp - amp / 2
 		freq = freq * 0.5
 		amp = amp * 2
 	end
-
 	return ret
 end
 GlobalWorldType = StandardTerrain
