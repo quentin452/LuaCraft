@@ -10,9 +10,6 @@ function stone_block.initialize()
 			TilesTransparency.FULL,
 			LightSources[0],
 			oak_sapplingsTexture,
-			Lovegraphics.newImage(oak_sapplingsTexture),
-			nil,
-			nil,
 			nil,
 			nil
 		)

@@ -10,9 +10,6 @@ function stone_block.initialize()
 			TilesTransparency.OPAQUE,
 			LightSources[0],
 			oak_planksTexture,
-			Lovegraphics.newImage(oak_planksTexture),
-			nil,
-			nil,
 			nil,
 			nil
 		)

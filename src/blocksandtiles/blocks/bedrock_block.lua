@@ -10,9 +10,6 @@ function stone_block.initialize()
 			TilesTransparency.OPAQUE,
 			LightSources[0],
 			bedrockTexture,
-			Lovegraphics.newImage(bedrockTexture),
-			nil,
-			nil,
 			nil,
 			nil
 		)

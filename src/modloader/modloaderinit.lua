@@ -20,11 +20,8 @@ function addBlock(
 	transparency,
 	LightSources,
 	blockBottomMasterTextureString,
-	blockBottomMasterTextureUserData,
 	blockSideTextureString,
-	blockSideTextureUserData,
-	blockTopTextureString,
-	blockTopTextureUserData
+	blockTopTextureString
 )
 	if type(blockstringname) ~= "string" then
 		ThreadLogChannel:push({
@@ -33,6 +30,7 @@ function addBlock(
 		})
 		return
 	end
+
 	if type(LightSources) ~= "number" or LightSources < 0 or LightSources > 15 then
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,
@@ -42,53 +40,15 @@ function addBlock(
 		})
 		return
 	end
-	if blockBottomMasterTextureString ~= nil and type(blockBottomMasterTextureString) ~= "string" then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"blockBottomMasterTextureString is not a string for block: " .. tostring(blockstringname),
-		})
-		return
+
+	local function loadImage(imageString)
+		if imageString ~= nil and type(imageString) == "string" then
+			return Lovegraphics.newImage(imageString)
+		else
+			return nil
+		end
 	end
 
-	if blockSideTextureString ~= nil and type(blockSideTextureString) ~= "string" then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"blockSideTextureString is not a string or is missing for block: " .. tostring(blockstringname),
-		})
-		return
-	end
-
-	if blockTopTextureString ~= nil and type(blockTopTextureString) ~= "string" then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"blockTopTextureString is not a string for block: " .. tostring(blockstringname),
-		})
-		return
-	end
-
-	if blockBottomMasterTextureUserData ~= nil and type(blockBottomMasterTextureUserData) ~= "userdata" then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"blockBottomMasterTextureUserData is not a userdata for block: " .. tostring(blockstringname),
-		})
-		return
-	end
-
-	if blockSideTextureUserData ~= nil and type(blockSideTextureUserData) ~= "userdata" then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"blockSideTextureUserData is not a userdata for block: " .. tostring(blockstringname),
-		})
-		return
-	end
-
-	if blockTopTextureUserData ~= nil and type(blockTopTextureUserData) ~= "userdata" then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"blockTopTextureUserData is not a userdata  for block: " .. tostring(blockstringname),
-		})
-		return
-	end
 	local id = nextId
 	Tiles[blockstringname] = {
 		id = id,
@@ -98,15 +58,18 @@ function addBlock(
 		Cancollide = Cancollide,
 		BlockOrLiquidOrTile = BlockOrLiquidOrTile,
 		blockBottomMasterTextureString = blockBottomMasterTextureString,
-		blockBottomMasterTextureUserData = blockBottomMasterTextureUserData,
+		blockBottomMasterTextureUserData = loadImage(blockBottomMasterTextureString),
 		blockSideTextureString = blockSideTextureString,
-		blockSideTextureUserData = blockSideTextureUserData,
+		blockSideTextureUserData = loadImage(blockSideTextureString),
 		blockTopTextureString = blockTopTextureString,
-		blockTopTextureUserData = blockTopTextureUserData,
+		blockTopTextureUserData = loadImage(blockTopTextureString),
 	}
 	TilesById[id] = Tiles[blockstringname]
 	if blockTopTextureString ~= nil or blockSideTextureString ~= nil then
-		BlockThatUseCustomTexturesForTopandSide[id] = { top = blockTopTextureUserData, side = blockSideTextureUserData }
+		BlockThatUseCustomTexturesForTopandSide[id] = {
+			top = loadImage(blockTopTextureString),
+			side = loadImage(blockSideTextureString),
+		}
 	end
 	nextId = nextId + 1
 	return id

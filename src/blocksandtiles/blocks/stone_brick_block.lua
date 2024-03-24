@@ -10,9 +10,6 @@ function stone_block.initialize()
 			TilesTransparency.OPAQUE,
 			LightSources[0],
 			stone_brickTexture,
-			Lovegraphics.newImage(stone_brickTexture),
-			nil,
-			nil,
 			nil,
 			nil
 		)

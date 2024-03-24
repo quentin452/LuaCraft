@@ -12,11 +12,8 @@ function grass_block.initialize()
 			TilesTransparency.OPAQUE,
 			LightSources[0],
 			grassBottomTexture,
-			Lovegraphics.newImage(grassBottomTexture),
 			grassSideTexture,
-			Lovegraphics.newImage(grassSideTexture),
-			grassTopTexture,
-			Lovegraphics.newImage(grassTopTexture)
+			grassTopTexture
 		)
 	end, GetSourcePath())
 end
