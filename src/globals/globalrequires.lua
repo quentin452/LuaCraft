@@ -45,6 +45,7 @@ local modules = {
 	"utils/threads/modeling/blockmodellingThreadCreator",
 	"utils/threads/lighting/lightingThreadCreator",
 	"utils/threads/testunit/testunitThreadCreator",
+	"utils/testunits/lightingtestunit",
 	"entities/player",
 	"world/lighting",
 	"world/updatelogic",

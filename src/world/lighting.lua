@@ -22,7 +22,7 @@ function LightingUpdate()
 	LightingRemovalQueue = {}
 	LightingQueue = {}
 end
-local function SunForceAdd(cget, cx, cy, cz, value, x, y, z)
+function SunForceAdd(cget, cx, cy, cz, value, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	if value >= 0 and TileLightable(val, true) then
 		cget:setVoxelFirstData(cx, cy, cz, value)
@@ -32,14 +32,14 @@ local function SunForceAdd(cget, cx, cy, cz, value, x, y, z)
 		end
 	end
 end
-local function SunCreationAdd(cget, cx, cy, cz, x, y, z)
+function SunCreationAdd(cget, cx, cy, cz, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	local dat = cget:getVoxelFirstData(cx, cy, cz)
 	if TileLightable(val, true) and dat > 0 then
 		NewLightOperation(x, y, z, LightOpe.SunForceAdd.id, dat)
 	end
 end
-local function SunDownAdd(cget, cx, cy, cz, value, x, y, z)
+function SunDownAdd(cget, cx, cy, cz, value, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	local dat = cget:getVoxelFirstData(cx, cy, cz)
 	if TileLightable(val) and dat <= value then
@@ -52,7 +52,7 @@ local function SunDownAdd(cget, cx, cy, cz, value, x, y, z)
 	end
 end
 
-local function LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
+function LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
 	local val, _, _ = cget:getVoxel(cx, cy, cz)
 	if value >= 0 and TileLightable(val, true) then
 		cget:setVoxelSecondData(cx, cy, cz, value)
@@ -62,7 +62,7 @@ local function LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
 	end
 end
 
-local function LocalSubtract(cget, cx, cy, cz, value, x, y, z)
+function LocalSubtract(cget, cx, cy, cz, value, x, y, z)
 	local val, _ = cget:getVoxel(cx, cy, cz)
 	local fget = cget:getVoxelSecondData(cx, cy, cz)
 	if fget > 0 and value >= 0 and TileLightable(val, true) then
@@ -79,14 +79,14 @@ local function LocalSubtract(cget, cx, cy, cz, value, x, y, z)
 	end
 end
 
-local function LocalCreationAdd(cget, cx, cy, cz, x, y, z)
+function LocalCreationAdd(cget, cx, cy, cz, x, y, z)
 	local val, _, dat = cget:getVoxel(cx, cy, cz)
 	if TileLightable(val, true) and dat > 0 then
 		NewLightOperation(x, y, z, LightOpe.LocalForceAdd.id, dat)
 	end
 end
 
-local function SunAdd(cget, cx, cy, cz, value, x, y, z)
+function SunAdd(cget, cx, cy, cz, value, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	local dat = cget:getVoxelFirstData(cx, cy, cz)
 	if value >= 0 and TileLightable(val, true) and dat < value then
@@ -96,7 +96,7 @@ local function SunAdd(cget, cx, cy, cz, value, x, y, z)
 		end
 	end
 end
-local function LocalAdd(cget, value, x, y, z)
+function LocalAdd(cget, value, x, y, z)
 	local localcx, localcy, localcz = Localize(x, y, z)
 	local val, _, dat = cget:getVoxel(localcx, localcy, localcz)
 	if TileLightable(val, true) and dat < value then
@@ -108,7 +108,7 @@ local function LocalAdd(cget, value, x, y, z)
 		end
 	end
 end
-local function SunSubtract(cget, cx, cy, cz, value, x, y, z)
+function SunSubtract(cget, cx, cy, cz, value, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	local fget = cget:getVoxelFirstData(cx, cy, cz)
 	if fget > 0 and value >= 0 and TileLightable(val, true) then
@@ -123,7 +123,7 @@ local function SunSubtract(cget, cx, cy, cz, value, x, y, z)
 		return false
 	end
 end
-local function SunDownSubtract(x, y, z)
+function SunDownSubtract(x, y, z)
 	if TileLightable(GetVoxel(x, y, z), true) then
 		SetVoxelFirstData(x, y, z, Tiles.AIR_Block.id)
 		NewLightOperation(x, y - 1, z, LightOpe.SunDownSubtract.id)
@@ -162,59 +162,6 @@ local function LightningQueries(x, y, z, lightoperation, value)
 			SunSubtract(cget, cx, cy, cz, value, x, y, z)
 		elseif lightoperation == LightOpe.SunDownSubtract.id then
 			SunDownSubtract(x, y, z)
-		end
-	end
-	return query
-end
-
-local function LightningQueriesTestUnit(x, y, z, lightoperation, value)
-	local startTime = love.timer.getTime()
-	local cget, cx, cy, cz = GetChunk(x, y, z)
-	local chunkTime = love.timer.getTime() - startTime
-
-	if cget == nil then
-		return
-	end
-
-	local query = function()
-		local startTime2 = love.timer.getTime()
-		if lightoperation == LightOpe.SunForceAdd.id then
-			SunForceAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.SunCreationAdd.id then
-			SunCreationAdd(cget, cx, cy, cz, x, y, z)
-		elseif lightoperation == LightOpe.SunDownAdd.id then
-			SunDownAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalForceAdd.id then
-			LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalSubtract.id then
-			LocalSubtract(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalCreationAdd.id then
-			LocalCreationAdd(cget, cx, cy, cz, x, y, z)
-		elseif lightoperation == LightOpe.SunAdd.id then
-			SunAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalAdd.id then
-			LocalAdd(cget, value, x, y, z)
-		elseif lightoperation == LightOpe.SunSubtract.id then
-			SunSubtract(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.SunDownSubtract.id then
-			SunDownSubtract(x, y, z)
-		end
-		local queryTime = love.timer.getTime() - startTime2
-		if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
-			ThreadLogChannel:push({
-				LuaCraftLoggingLevel.NORMAL,
-				lightoperation .. " query time: " .. queryTime .. " seconds",
-			})
-			LightningQueriesTestUnitOperationCounter[lightoperation] = LightningQueriesTestUnitOperationCounter[lightoperation]
-				+ 1
-			ThreadLogChannel:push({
-				LuaCraftLoggingLevel.NORMAL,
-				lightoperation .. " counter: " .. LightningQueriesTestUnitOperationCounter[lightoperation],
-			})
-			ThreadLogChannel:push({
-				LuaCraftLoggingLevel.NORMAL,
-				"Chunk time: " .. chunkTime .. " seconds",
-			})
 		end
 	end
 	return query

@@ -12,9 +12,7 @@ end
 
 -- get chunk from reading chunk hash table at given position
 function GetChunk(x, y, z)
-	local x = math.floor(x)
-	local y = math.floor(y)
-	local z = math.floor(z)
+	local x, y, z = math.floor(x), math.floor(y), math.floor(z)
 	local hashx, hashy = ChunkHash(math.floor(x / ChunkSize) + 1), ChunkHash(math.floor(z / ChunkSize) + 1)
 	local getChunk = nil
 	if ChunkHashTable[hashx] ~= nil then
