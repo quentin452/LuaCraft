@@ -135,14 +135,14 @@ local function processChunkUpdates(chunk)
 	_JPROFILER.push("processChunkUpdates")
 	if chunk.updatedSunLight == false then
 		_JPROFILER.push("updateSunlight")
-		chunk:sunlight()
+		InitSunLightForChunk(chunk)
 		_JPROFILER.pop("updateSunlight")
 		chunk.updatedSunLight = nil
 	elseif chunk.isPopulated == false then
 		_JPROFILER.push("populateChunk")
-		chunk:populate()
+		PopulateChunk(chunk)
 		UpdateCaves()
-		chunk:processRequests()
+		InitProcessRequest(chunk)
 		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = nil
 	elseif ThePlayer.IsPlayerHasSpawned == false then

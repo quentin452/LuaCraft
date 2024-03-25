@@ -30,67 +30,6 @@ function NewChunk(x, z)
 			end
 		end
 	end
-	chunk.sunlight = function(self)
-		for i = 1, ChunkSize do
-			for j = 1, ChunkSize do
-				local gridX, gridZ = (self.x - 1) * ChunkSize + i - 1, (self.z - 1) * ChunkSize + j - 1
-				if self.heightMap[i] and self.heightMap[i][j] then
-					local this = self.heightMap[i][j]
-					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
-						NewLightOperation(gridX - 1, this, gridZ, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[ThreadLightingChannel:push({"LightOperation",gridX - 1,this,gridZ,LightOpe.SunDownAdd.id,LightSources[15],})]]
-					end
-					if j == 1 or this > self.heightMap[i][j - 1] then
-						NewLightOperation(gridX, this, gridZ - 1, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[	ThreadLightingChannel:push({"LightOperation",gridX,this,gridZ - 1,LightOpe.SunDownAdd.id,LightSources[15],})]]
-					end
-					if i == ChunkSize or this > self.heightMap[i + 1][j] then
-						NewLightOperation(gridX + 1, this, gridZ, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[	ThreadLightingChannel:push({"LightOperation",gridX + 1,this,gridZ,LightOpe.SunDownAdd.id,LightSources[15],})]]
-					end
-					if j == ChunkSize or this > self.heightMap[i][j + 1] then
-						NewLightOperation(gridX, this, gridZ + 1, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[ThreadLightingChannel:push({"LightOperation",	gridX,this,	gridZ + 1,	LightOpe.SunDownAdd.id,	LightSources[15],	})]]
-					end
-				end
-			end
-		end
-	end
-	chunk.processRequests = function(self)
-		for j = 1, #self.requests do
-			local block = self.requests[j]
-			if not TileCollisions(self:getVoxel(block.x, block.y, block.z)) then
-				self:setVoxel(block.x, block.y, block.z, block.value, false)
-			end
-		end
-	end
-	-- populate chunk with trees and flowers
-	chunk.populate = function(self)
-		totalLongExecutionTime = 0
-		for i = 1, ChunkSize do
-			local heightMap_i = self.heightMap[i]
-			if heightMap_i then
-				for j = 1, ChunkSize do
-					local height = heightMap_i[j]
-					if height and TileCollisions(self:getVoxel(i, height, j)) then
-						for _, taggedFunc in ipairs(ModLoaderTable["chunkPopulateTag"]) do
-							local start_time = love.timer.getTime()
-							taggedFunc.func(self, i, height, j)
-							local elapsed_time = love.timer.getTime() - start_time
-							if elapsed_time > MAX_EXECUTION_TIME then
-								totalLongExecutionTime = totalLongExecutionTime + elapsed_time
-								local log3 = totalLongExecutionTime
-								ThreadLogChannel:push({
-									LuaCraftLoggingLevel.WARNING,
-									populatelog1 .. taggedFunc.sourcePath .. populatelog2 .. log3 .. " seconds.",
-								})
-							end
-						end
-					end
-				end
-			end
-		end
-	end
 	-- get voxel id of the voxel in this chunk's coordinate space
 	chunk.getVoxel = function(self, x, y, z)
 		if self.voxels then
@@ -173,3 +112,68 @@ function NewChunk(x, z)
 	_JPROFILER.pop("NewChunk")
 	return chunk
 end
+
+function PopulateChunk(chunk)
+	totalLongExecutionTime = 0
+	for i = 1, ChunkSize do
+		local heightMap_i = chunk.heightMap[i]
+		if heightMap_i then
+			for j = 1, ChunkSize do
+				local height = heightMap_i[j]
+				if height and TileCollisions(chunk:getVoxel(i, height, j)) then
+					for _, taggedFunc in ipairs(ModLoaderTable["chunkPopulateTag"]) do
+						local start_time = love.timer.getTime()
+						taggedFunc.func(chunk, i, height, j)
+						local elapsed_time = love.timer.getTime() - start_time
+						if elapsed_time > MAX_EXECUTION_TIME then
+							totalLongExecutionTime = totalLongExecutionTime + elapsed_time
+							local log3 = totalLongExecutionTime
+							ThreadLogChannel:push({
+								LuaCraftLoggingLevel.WARNING,
+								populatelog1 .. taggedFunc.sourcePath .. populatelog2 .. log3 .. " seconds.",
+							})
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+function InitSunLightForChunk(chunk)
+	for i = 1, ChunkSize do
+		for j = 1, ChunkSize do
+			local gridX, gridZ = (chunk.x - 1) * ChunkSize + i - 1, (chunk.z - 1) * ChunkSize + j - 1
+			if chunk.heightMap[i] and chunk.heightMap[i][j] then
+				local this = chunk.heightMap[i][j]
+				if i == 1 or this > (chunk.heightMap[i - 1] and chunk.heightMap[i - 1][j] or 0) + 1 then
+					NewLightOperation(gridX - 1, this, gridZ, LightOpe.SunDownAdd.id, LightSources[15])
+					--[[ThreadLightingChannel:push({"LightOperation",gridX - 1,this,gridZ,LightOpe.SunDownAdd.id,LightSources[15],})]]
+				end
+				if j == 1 or this > chunk.heightMap[i][j - 1] then
+					NewLightOperation(gridX, this, gridZ - 1, LightOpe.SunDownAdd.id, LightSources[15])
+					--[[	ThreadLightingChannel:push({"LightOperation",gridX,this,gridZ - 1,LightOpe.SunDownAdd.id,LightSources[15],})]]
+				end
+				if i == ChunkSize or this > chunk.heightMap[i + 1][j] then
+					NewLightOperation(gridX + 1, this, gridZ, LightOpe.SunDownAdd.id, LightSources[15])
+					--[[	ThreadLightingChannel:push({"LightOperation",gridX + 1,this,gridZ,LightOpe.SunDownAdd.id,LightSources[15],})]]
+				end
+				if j == ChunkSize or this > chunk.heightMap[i][j + 1] then
+					NewLightOperation(gridX, this, gridZ + 1, LightOpe.SunDownAdd.id, LightSources[15])
+					--[[ThreadLightingChannel:push({"LightOperation",	gridX,this,	gridZ + 1,	LightOpe.SunDownAdd.id,	LightSources[15],	})]]
+				end
+			end
+		end
+	end
+end
+
+function InitProcessRequest(chunk)
+	for j = 1, #chunk.requests do
+		local block = chunk.requests[j]
+		if not TileCollisions(chunk:getVoxel(block.x, block.y, block.z)) then
+			chunk:setVoxel(block.x, block.y, block.z, block.value, false)
+		end
+	end
+end
+
+
