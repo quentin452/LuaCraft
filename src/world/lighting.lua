@@ -53,7 +53,7 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 	elseif lightoperation == LightOpe.SunDownAdd.id then
 		local val = cget:getVoxel(cx, cy, cz)
 		local dat = cget:getVoxelFirstData(cx, cy, cz)
-		if TileLightable(val) and dat <= value then
+		if TileLightable(val) and (dat and dat <= value) then
 			cget:setVoxelFirstData(cx, cy, cz, value)
 			NewLightOperation(x, y - 1, z, LightOpe.SunDownAdd.id, value)
 			for _, dir in ipairs(FOURDIRECTIONS) do
