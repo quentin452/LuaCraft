@@ -8,7 +8,7 @@ function GameStatePlayingGame2:update(dt)
 	_JPROFILER.push("GameStatePlayingGame2:update")
 	renderdistancevalue()
 	PlayerInitIfNeeded()
-	--UpdateAndGenerateChunks(RenderDistance)
+	UpdateAndGenerateChunks(RenderDistance)
 	UpdateLogic(dt)
 	_JPROFILER.pop("GameStatePlayingGame2:update")
 end
