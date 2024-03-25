@@ -1,12 +1,13 @@
 local temp = {}
 local dirt = 4
 local grass = true
-local OneHundredThoused = 100000
 local chunkfloor = 48
 local maxHeight = 120
 --TODO REMOVE string.char USAGE IF POSSIBLE
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
+	dirt = 4
+	grass = true
 	for i = 1, ChunkSize do
 		chunk.voxels[i] = Set()
 		local xx = (x - 1) * ChunkSize + i
@@ -101,7 +102,7 @@ function OctaveNoise(x, y, octaves)
 	local ret = 0
 	local freq = 1
 	local amp = 1
-	for i = 1, octaves do
+	for _ = 1, octaves do
 		ret = ret + love.math.noise(x * freq, y * freq) * amp - amp / 2
 		freq = freq * 0.5
 		amp = amp * 2
