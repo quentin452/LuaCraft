@@ -1,5 +1,6 @@
 --TODO DON4T USE OBJECTS IN NewCave to reduce memory usage
 --TODO Try removing CaveList
+local CaveObject
 function UpdateCaves()
 	_JPROFILER.push("UpdateCaves")
 
@@ -20,6 +21,7 @@ function UpdateCaves()
 			i = 1
 			_JPROFILER.pop("RestartCaveListIteration")
 		end
+		CaveObject = nil
 	end
 
 	_JPROFILER.pop("UpdateCaves")
@@ -74,7 +76,7 @@ end
 
 function NewCave(x, y, z)
 	_JPROFILER.push("NewCave")
-	local cave = {
+	CaveObject = {
 		x = x,
 		y = y,
 		z = z,
@@ -88,8 +90,7 @@ function NewCave(x, y, z)
 		query = caveQuery,
 		carve = caveCarve,
 	}
-	CaveList[#CaveList + 1] = cave
-	cave = nil
+	CaveList[#CaveList + 1] = CaveObject
 	_JPROFILER.pop("NewCave")
-	return cave
+	return CaveObject
 end
