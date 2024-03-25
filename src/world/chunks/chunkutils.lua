@@ -322,12 +322,12 @@ function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 			destroyLight =
 				HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue, destroyLight, inDirectSunlight)
 		end
+		HandleSunDownSubstract(gx, gy, gz)
 		HandleLightSourceBlock(self, gx, gy, gz, x, y, z, blockvalue, destroyLight)
 		HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPlaced, destroyLight)
 		if blockvalue ~= -1 then
 			UpdateVoxelData(self, blockvalue, x, y, z)
 		end
-		HandleSunDownSubstract(gx, gy, gz)
 	end
 end
 

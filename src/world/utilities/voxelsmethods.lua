@@ -1,13 +1,3 @@
--- get voxel by looking at chunk at given position's local coordinate system
-function GetVoxelGeneric(x, y, z, getFunction)
-	local chunk, cx, cy, cz = GetChunk(x, y, z)
-	local result = 0
-	if chunk ~= nil then
-		result = getFunction(chunk, cx, cy, cz)
-	end
-	return result
-end
-
 -- Retrieves voxel from a chunk, accounting for edge cases
 function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	_JPROFILER.push("getVoxelFromChunk_blockrendering")
@@ -18,6 +8,14 @@ function getVoxelFromChunk(chunkGetter, x, y, z, i, j, k)
 	end
 	_JPROFILER.pop("getVoxelFromChunk_blockrendering")
 	return nil
+end
+
+local function GetVoxelGeneric(x, y, z, voxelFunc)
+	local chunk, cx, cy, cz = GetChunk(x, y, z)
+	if chunk ~= nil then
+		return voxelFunc(chunk, cx, cy, cz)
+	end
+	return 0
 end
 
 function GetVoxel(x, y, z)
