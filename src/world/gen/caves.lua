@@ -50,7 +50,6 @@ local function caveQuery(cave)
 end
 
 local function caveCarve(cave)
-	if GetVoxel(cave.x, cave.y, cave.z) ~= 0 then
 		local halfRandom = math.random() / 2
 		local squaredRadius = cave.radius * cave.radius
 
@@ -71,7 +70,6 @@ local function caveCarve(cave)
 				end
 			end
 		end
-	end
 end
 
 function NewCave(x, y, z)
