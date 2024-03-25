@@ -114,10 +114,9 @@ function NewPlayer(x, y, z)
 				self.ySpeed = self.ySpeed + 0.15
 			end
 		end
-
 		-- hit head ceilings
 		if
-			math.abs(self.ySpeed) == self.ySpeed
+			self.ySpeed >= 0
 			and (
 				TileCollisions(GetVoxel(self.x - self.width, self.y + self.height + self.ySpeed, self.z + self.width))
 				or TileCollisions(
@@ -133,7 +132,6 @@ function NewPlayer(x, y, z)
 		then
 			self.ySpeed = -0.5 * self.ySpeed
 		end
-
 		-- convert WASD keys pressed into an angle, move xSpeed and zSpeed according to cos and sin
 		if moving then
 			local angle = math.angle(0, 0, mx, my)
