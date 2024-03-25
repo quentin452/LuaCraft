@@ -56,19 +56,15 @@ function NewChunkWithTestUnit(x, z)
 					local this = self.heightMap[i][j]
 					if i == 1 or this > (self.heightMap[i - 1] and self.heightMap[i - 1][j] or 0) + 1 then
 						NewLightOperation(gridX - 1, this, gridZ, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[ThreadLightingChannel:push({"LightOperation",gridX - 1,this,gridZ,LightOpe.SunDownAdd.id,LightSources[15],})]]
 					end
 					if j == 1 or this > self.heightMap[i][j - 1] then
 						NewLightOperation(gridX, this, gridZ - 1, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[	ThreadLightingChannel:push({"LightOperation",gridX,this,gridZ - 1,LightOpe.SunDownAdd.id,LightSources[15],})]]
 					end
 					if i == ChunkSize or this > self.heightMap[i + 1][j] then
 						NewLightOperation(gridX + 1, this, gridZ, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[	ThreadLightingChannel:push({"LightOperation",gridX + 1,this,gridZ,LightOpe.SunDownAdd.id,LightSources[15],})]]
 					end
 					if j == ChunkSize or this > self.heightMap[i][j + 1] then
 						NewLightOperation(gridX, this, gridZ + 1, LightOpe.SunDownAdd.id, LightSources[15])
-						--[[ThreadLightingChannel:push({"LightOperation",	gridX,this,	gridZ + 1,	LightOpe.SunDownAdd.id,	LightSources[15],	})]]
 					end
 				end
 			end

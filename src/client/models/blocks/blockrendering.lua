@@ -156,35 +156,6 @@ function BlockRendering(self, i, j, k, x, y, z, thisTransparency, thisLight, mod
 		return
 	end
 	updateAdjacentBlocks(self, i, j, k, x, y, z)
-
-	-- Préparez les données des faces à envoyer
-	--	local faceData = {
-	--		x = x,
-	--		y = y,
-	--		z = z,
-	--		thisTransparency = thisTransparency,
-	--	thisLight = thisLight,
-	--	model = model,
-	---		BlockModelScale = BlockModelScale,
-	--	}
-
-	-- Envoyez les données via le canal
-	--	BlockModellingChannel:push(faceData)
-	--[[BlockModellingChannel:push({
-		x = x,
-		y = y,
-		z = z,
-		thisTransparency = thisTransparency,
-		thisLight = thisLight,
-		model = model,
-		BlockModelScale = BlockModelScale,
-		BlockGetTop = BlockGetTop,
-		BlockGetBottom = BlockGetBottom,
-		BlockGetPositiveX = BlockGetPositiveX,
-		BlockGetNegativeX = BlockGetNegativeX,
-		BlockGetPositiveZ = BlockGetPositiveZ,
-		BlockGetNegativeZ = BlockGetNegativeZ,
-	})]]
 	DrawFaces(model, thisTransparency, thisLight, BlockModelScale, x, y, z)
 
 	_JPROFILER.pop("BlockRendering")

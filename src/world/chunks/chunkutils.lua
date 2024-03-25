@@ -136,23 +136,6 @@ function NewChunkSlice(x, y, z, parent)
 								BlockModelScale
 							)
 						end
-
-						--[[local data = {
-							i,
-							j,
-							k,
-							x,
-							y,
-							z,
-							thisTransparency,
-							Light,
-							SliceModels,
-							BlockModelScale,
-							chunk.x,
-							chunk.y,
-							chunk.z,
-						}
-						BlockModellingChannel:push(data)]]
 					end
 				end
 			end
@@ -183,14 +166,12 @@ local function ApplySunlightEffect(
 			or (rightMouseDown and LightSources[0] or (leftMouseDown and sunlight))
 		if manuallyPlaced or addSunlight then
 			NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, addSunlight)
-			--ThreadLightingChannel:push({ "LightOperation", gx, gy, gz, LightOpe.SunDownAdd.id, addSunlight })
 		end
 	else
 		-- Apply standard lighting for other cases
 		for _, offset in ipairs(VoxelNeighborOffsets) do
 			local dx, dy, dz = unpack(offset)
 			NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id)
-			--ThreadLightingChannel:push({"LightOperation", gx + dx, gy + dy, gz + dz, LightOpe.SunCreationAdd.id})
 		end
 	end
 end
@@ -200,12 +181,10 @@ local function HandleManuallyPlacedBlockTileLightableAdd(gx, gy, gz, manuallyPla
 		local source = TileLightSource(blockvalue)
 		if source > 0 then
 			NewLightOperation(gx, gy, gz, LightOpe.LocalAdd.id, source)
-			--ThreadLightingChannel:push({ "LightOperation", gx, gy, gz, LightOpe.LocalAdd.id, source })
 		else
 			for _, offset in ipairs(VoxelNeighborOffsets) do
 				local dx, dy, dz = unpack(offset)
 				NewLightOperation(gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id)
-				--ThreadLightingChannel:push({ "LightOperation", gx + dx, gy + dy, gz + dz, LightOpe.LocalCreationAdd.id })
 			end
 		end
 	end
@@ -216,7 +195,6 @@ local function HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue,
 	local semiLightable = TileLightable(blockvalue, true)
 	if semiLightable and inDirectSunlight and manuallyPlaced then
 		NewLightOperation(gx, gy + 1, gz, LightOpe.SunCreationAdd.id)
-		--ThreadLightingChannel:push({ "LightOperation",gx, gy + 1, gz, LightOpe.SunCreationAdd.id })
 	end
 	if not semiLightable or manuallyPlaced then
 		destroyLight = not TileLightable(blockvalue, true)
@@ -226,7 +204,6 @@ local function HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue,
 			local nget = GetVoxelFirstData(nx, ny, nz)
 			if nget < LightSources[15] then
 				NewLightOperation(nx, ny, nz, LightOpe.SunSubtract.id, nget + LightSources[1])
-				--ThreadLightingChannel:push({ "LightOperation",nx, ny, nz, LightOpe.SunSubtract.id,nget + LightSources[1] })
 			end
 		end
 	end
@@ -238,7 +215,6 @@ local function HandleLightSourceBlock(self, gx, gy, gz, x, y, z, blockvalue, des
 	local source = TileLightSource(self:getVoxel(x, y, z))
 	if source > 0 and TileLightSource(blockvalue) == Tiles.AIR_Block.id then
 		NewLightOperation(gx, gy, gz, LightOpe.LocalSubtract.id, source + LightSources[1])
-		--ThreadLightingChannel:push({"LightOperation",gx, gy, gz, LightOpe.LocalSubtract.id ,source + LightSources[1]})
 		destroyLight = true
 	end
 	return destroyLight
@@ -251,7 +227,6 @@ local function HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPla
 			local nget = GetVoxelSecondData(xd, yd, zd)
 			if nget < LightSources[15] then
 				NewLightOperation(xd, yd, zd, LightOpe.LocalSubtract.id, nget + LightSources[1])
-				--ThreadLightingChannel:push({"LightOperation", xd, yd, zd, LightOpe.LocalSubtract.id ,nget + LightSources[1]})
 			end
 		end
 	end
@@ -262,11 +237,9 @@ local function HandleSunDownSubstract(gx, gy, gz)
 	local voxel = GetVoxel(gx, gy, gz)
 	if TileModel(voxel) == 0 then
 		NewLightOperation(gx, gy, gz, LightOpe.SunDownSubtract.id)
-		--ThreadLightingChannel:push({"LightOperation", gx, gy, gz, LightOpe.SunDownSubtract.id })
 	end
 	--Perform normal SunDown Subtract
 	NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
-	--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
 end
 local placementRange1SpaceKeyOn = 1
 local placementRange1SpaceKeyOff = 0.1
