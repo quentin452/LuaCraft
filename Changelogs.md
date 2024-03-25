@@ -1,4 +1,74 @@
 
+**LuaCraft V0.5**
+
+
+This version is compatible with LOVE2D 11.5 and probably newer versions.
+
+NEW FEATURES/IMPROVEMENTS:
+    
+    Rewrite GameStateHandling for maintainability
+    Rewrite MenusHandling for really better performances
+    Rewrite filesystem/settings
+    Add Keybind Settings for Player Movements
+    Add a warn if a generation is too much slow from by example the tag : chunkPopulateTag
+    Add bedrock layer
+    Add mouse support on menus 
+    Add TestUnit Handling for Block Modelling + Chunk + Lightning + TileModel (not really test unit , just "benchmark" of performances)
+    Optimize checkAndUpdateDefaults method from filesystem.lua
+    Optimize Lightning Engine Code
+    Optimize Cave Gen Code
+    Optimize Chunk Code
+    Optimize PreventBlockPlacementOnThePlayer
+    Fix nil when toggling fullscreen
+    Fix a critical bug that made EnableLuaCraftLoggingError + EnableLuaCraftLoggingWarn + EnableLuaCraftPrintLoggingNormal are nil at first game launch
+    Fix correctly https://github.com/quentin452/LuaCraft/issues/31
+    Fix correctly https://github.com/quentin452/LuaCraft/issues/9
+    Fix https://github.com/quentin452/LuaCraft/issues/38
+    Fix https://github.com/quentin452/LuaCraft/issues/49
+    Fix https://github.com/quentin452/LuaCraft/issues/61
+    Fix https://github.com/quentin452/LuaCraft/issues/64
+    Fix https://github.com/quentin452/LuaCraft/issues/53
+    Fix https://github.com/quentin452/LuaCraft/issues/66
+    Fix https://github.com/quentin452/LuaCraft/issues/83
+    Fix a potential bug in GenerateTerrain
+    Fixed large lag caused by SunDownSubtract operation 
+    Fix a mistake in DrawF3Tab 
+    Fix some mistakes with Jprofiler code
+    Fix Button size detection 
+    Fix some bugs in the logic system of the player 
+    Fix player Getter pos 
+    Fixed MAJORITY OF THE lags caused by DrawColorString
+    Fix a potential memory problem caused by CleanString from drawhud.lua  
+    Code Refactor For Chunks + Lightning
+    Remove texturestatic.lua (merge code into an another script) 
+    Remove table.concat usage in loggers 
+    Remove Table_HudTextureCache
+    Remove a redundant LocalCreationAdd call in chunk.setVoxel
+    Remove Salt Table usage
+    Rename setVoxelRaw to setVoxelRawNotSupportLight  
+    Reduce code redudancy in engine.lua for Verts
+    Avoid nested loops in chunk.setVoxel 
+    Avoid reasigning BlockAndTilesModelScale 
+    Avoid unecessary GetVoxel check in caveCarve
+    Avoid attempt to compare number with boolean caused by SunDownAdd
+    Made a globale for WorldType 
+    Made ReplaceChar "probably" more efficient 
+    Made tiledata code more efficient 
+    Reorganize global variables 
+    Threading Testings
+    Make A Thread for logging to avoid blocking main thread when logging alot of things
+    Make A Thread for some TestUnits
+    Disable texture atlas PNG creation to potentially reduce loading time 
+    Call temp = {} at the end of GenerateTerrain instead of start to empty memory
+    Memory Usage Improvments in some way
+    Use Minetest resourcepack instead of the normal mc
+    Use math.random instead of love.math.noise for Flower/Tree Generation
+     Use Set from penlight for chunk.voxels it probably change nothing :D
+    Simplify addBlock method 
+    Reorganize huds/models scripts 
+    Move IsWithinChunkLimits check into an auxiliary method 
+    and more ....
+
 **LuaCraft V0.4HOTFIX**
 
 This version is compatible with LOVE2D 11.5 and probably newer versions.
