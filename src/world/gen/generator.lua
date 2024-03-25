@@ -37,7 +37,6 @@ function GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
 		if sunlight then
 			temp[yy + 1] = string.char(LightSources[15])
 		end
-		local tileID
 		if j == 1 then
 			tileID = Tiles.BEDROCK_Block.id
 		elseif j < chunkfloor then
