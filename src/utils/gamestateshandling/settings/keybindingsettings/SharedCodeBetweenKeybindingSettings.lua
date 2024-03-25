@@ -1,5 +1,5 @@
 local Settings = {}
-local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey" }
+local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey" , "chatkey" }
 local marque = ""
 
 function SharedKeybindingSettingsDraw()
@@ -41,6 +41,9 @@ function SharedKeybindingSettingsDraw()
 			if n == 4 and Settings["rightmovementkey"] then
 				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["rightmovementkey"]
 			end
+			if n == 5 and Settings["chatkey"] then
+				choiceText = choiceText .. string.rep(" ", numberOfSpaces) .. Settings["chatkey"]
+			end
 			DrawColorString(marque .. "" .. choiceText, posX, posY)
 			posY = posY + lineHeight
 		end
@@ -63,6 +66,8 @@ function SharedKeybindingSettingsPerformMenuAction(action)
 	elseif action == 4 then
 		ConfiguringMovementKey_KeyPressed = true
 	elseif action == 5 then
+		ConfiguringMovementKey_KeyPressed = true
+	elseif action == 6 then
 		if IsCurrentGameState(GamestateKeybindingMainSettings2) then
 			SetCurrentGameState(GamestateMainMenuSettings2)
 		elseif IsCurrentGameState(GamestateKeybindingPlayingGameSettings2) then

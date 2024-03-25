@@ -93,7 +93,7 @@ function GameStatePlayingGame2:keypressed(k)
 		EnableF8 = not EnableF8
 	elseif k == "f1" then
 		--EnableTESTBLOCK = not EnableTESTBLOCK
-	elseif k == "w" then
+	elseif k == ChatKey then
 		if EnableCommandHUD == false then
 			CurrentCommand = ""
 			EnableCommandHUD = true

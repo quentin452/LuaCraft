@@ -9,6 +9,7 @@ local DefaultSettings = {
 	backwardmovementkey = "s",
 	leftmovementkey = "q",
 	rightmovementkey = "d",
+	chatkey = "w",
 }
 
 Ffi.cdef([[
@@ -75,6 +76,7 @@ function loadAndSaveLuaCraftFileSystem()
 		"backwardmovementkey",
 		"leftmovementkey",
 		"rightmovementkey",
+		"chatkey",
 	}
 	local settings = {}
 	for _, key in ipairs(orderedKeys) do

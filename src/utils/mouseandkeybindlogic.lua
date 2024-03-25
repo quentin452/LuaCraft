@@ -17,6 +17,8 @@ function KeyPressed(k)
 					keyToUpdate = "leftmovementkey"
 				elseif _KeybindingMenuSettings.selection == 4 then
 					keyToUpdate = "rightmovementkey"
+				elseif _KeybindingMenuSettings.selection == 5 then
+					keyToUpdate = "chatkey"
 				end
 				if keyToUpdate then
 					local forwardKey

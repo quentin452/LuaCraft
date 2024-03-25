@@ -18,6 +18,7 @@ _KeybindingMenuSettings = CreateLuaCraftMenu(0, 0, "Keybinding Settings", {
 	"Backward keybind",
 	"Left keybind",
 	"Right keybind",
+	"Chat/Command keybind",
 	"Exiting to settings menu",
 })
 

@@ -7,6 +7,7 @@ local configParams = {
 	backwardmovementkey = { variable = "ReloadBackwardKey", expectedValue = "s" },
 	leftmovementkey = { variable = "ReloadLeftKey", expectedValue = "q" },
 	rightmovementkey = { variable = "ReloadRightKey", expectedValue = "d" },
+	chatkey = { variable = "ReloadChatKey", expectedValue = "w" },
 }
 function ReLoadMovementKeyValues()
 	local file_content, error_message = customReadFile(Luacraftconfig)
@@ -15,6 +16,7 @@ function ReLoadMovementKeyValues()
 		BackWardKey = file_content:match("backwardmovementkey=([%a%d]+)") or "s"
 		LeftKey = file_content:match("leftmovementkey=([%a%d]+)") or "q"
 		RightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
+		ChatKey = file_content:match("chatkey=([%a%d]+)") or "d"
 	else
 		ThreadLogChannel:push({
 			LuaCraftLoggingLevel.ERROR,

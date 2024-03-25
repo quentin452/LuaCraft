@@ -87,3 +87,5 @@ ForWardKey = nil
 BackWardKey = nil
 LeftKey = nil
 RightKey = nil
+
+ChatKey = nil
