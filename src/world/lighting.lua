@@ -15,10 +15,12 @@ local FOURDIRECTIONS = {
 function LightingUpdate()
 	for _, query in ipairs(LightingRemovalQueue) do
 		query()
+		query = nil
 	end
 	LightingRemovalQueue = {}
 	for _, query in ipairs(LightingQueue) do
 		query()
+		query = nil
 	end
 	LightingQueue = {}
 end
@@ -113,7 +115,6 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 			end
 			return true
 		end
-		
 		return false
 	end
 end
