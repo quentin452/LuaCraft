@@ -69,7 +69,7 @@ function GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
 end
 
 function StandardTerrain(chunk, xx, j, zz)
-	return ChunkNoise(xx, j, zz) > (j - chunkfloor) / (maxHeight - chunkfloor) * (Noise2D(xx, zz, 128, 5) * 0.75 + 0.75)
+	return ChunkNoise(xx, j, zz) > (j - chunkfloor) / (maxHeight - chunkfloor) * (Noise2D(xx, zz, 128) * 0.75 + 0.75)
 end
 function ClassicTerrain(chunk, xx, j, zz)
 	_JPROFILER.push("ClassicTerrain")
