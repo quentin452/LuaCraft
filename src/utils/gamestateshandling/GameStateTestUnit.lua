@@ -61,10 +61,7 @@ function GameStateTestUnit:draw()
 			end
 		end
 	else
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("drawMenuSettings")
 end

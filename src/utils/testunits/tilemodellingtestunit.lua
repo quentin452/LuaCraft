@@ -25,10 +25,10 @@ local function createTileModel(tileID, thisLight, BlockModelScale)
 	local endTime = os.clock()
 	TilesModellingTestUnitTimer = TilesModellingTestUnitTimer + 1
 	if TilesModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"createTileModel Execution Time: " .. tostring(endTime - startTime),
-		})
+			"createTileModel Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("createTileModel")
 	return vertices
@@ -72,10 +72,10 @@ function TileRenderingTestUnit(chunk, i, j, k, x, y, z, thisLight, model, BlockM
 	end
 	local endTime = os.clock()
 	if TilesModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"TileRenderingTestUnit Execution Time: " .. tostring(endTime - startTime),
-		})
+			"TileRenderingTestUnit Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("TileRendering")
 end

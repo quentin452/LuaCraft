@@ -23,22 +23,10 @@ local function GetChunkDebug(x, y, z)
 	local endTime = os.clock() - startTime
 
 	if getChunkCounter < 1000 then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			"GetChunk timings:",
-		})
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			"Hash:" .. hashTime,
-		})
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			"Get from hash:" .. getTime,
-		})
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			"Total:" .. endTime,
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "GetChunk timings:")
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Hash:" .. hashTime)
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Get from hash:" .. getTime)
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Total:" .. endTime)
 		getChunkCounter = getChunkCounter + 1
 	end
 	return getChunk, mx, y, mz, hashx, hashy
@@ -55,32 +43,29 @@ function LightningQueriesTestUnit(x, y, z, lightoperation, value)
 		return
 	end
 	if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			chunkStatus .. " - Chunk time: " .. chunkTime .. " seconds",
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, chunkStatus .. " - Chunk time: " .. chunkTime .. " seconds")
 	end
 	local query = function()
 		local startTime2 = love.timer.getTime()
 		PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		local queryTime = love.timer.getTime() - startTime2
 		if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				lightoperation .. " query time: " .. queryTime .. " seconds",
-			})
+				lightoperation .. " query time: " .. queryTime .. " seconds"
+			)
 			LightningQueriesTestUnitOperationCounter[lightoperation] = LightningQueriesTestUnitOperationCounter[lightoperation]
 				+ 1
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				lightoperation .. " counter: " .. LightningQueriesTestUnitOperationCounter[lightoperation],
-			})
+				lightoperation .. " counter: " .. LightningQueriesTestUnitOperationCounter[lightoperation]
+			)
 		end
 	end
 	return query
 end
 
-function NewLightOperationTestUnit( query, lightoperation)
+function NewLightOperationTestUnit(query, lightoperation)
 	local startTime = love.timer.getTime()
 	ChooseLightingQueue(lightoperation, query)
 	local endTime = love.timer.getTime() - startTime
@@ -88,9 +73,6 @@ function NewLightOperationTestUnit( query, lightoperation)
 		LightningQueriesTestUnitOperationCounter[lightoperation] or 0
 	) + 1
 	if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			lightoperation .. " operation time: " .. endTime .. " seconds",
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, lightoperation .. " operation time: " .. endTime .. " seconds")
 	end
 end

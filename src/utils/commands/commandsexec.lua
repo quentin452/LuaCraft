@@ -29,15 +29,15 @@ function ExecuteCommand(command)
 				ThePlayer.x = x
 				ThePlayer.y = y
 				ThePlayer.z = z
-				ThreadLogChannel:push({
+				LuaCraftLoggingFunc(
 					LuaCraftLoggingLevel.NORMAL,
-					"Player teleported to: " .. x .. ", " .. y .. ", " .. z,
-				})
+					"Player teleported to: " .. x .. ", " .. y .. ", " .. z
+				)
 			else
-				ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "Invalid coordinates." })
+				LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Invalid coordinates.")
 			end
 		else
-			ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "Command executed: " .. command })
+			LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Command executed: " .. command)
 		end
 	end
 end

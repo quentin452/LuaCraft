@@ -229,19 +229,13 @@ function ChooseSpawnLocation()
 		else
 			currentTry = currentTry + 1
 			if currentTry % 100 == 0 then
-				ThreadLogChannel:push({
-					LuaCraftLoggingLevel.NORMAL,
-					"Still trying to find a suitable spawn position... Try #" .. currentTry,
-				})
+				LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL,  "Still trying to find a suitable spawn position... Try #" .. currentTry)
 			end
 		end
 	end
 
 	if not foundSolidBlock then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"Unable to find a suitable spawn position after " .. maxTries .. " tries.",
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR,  "Unable to find a suitable spawn position after " .. maxTries .. " tries.")
 		_JPROFILER.pop("ChooseSpawnLocation")
 		return
 	end

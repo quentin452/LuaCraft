@@ -31,20 +31,17 @@ function addBlock(
 	blockTopTextureString
 )
 	if type(blockstringname) ~= "string" then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"blockstringname is not a string or is missing",
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "blockstringname is not a string or is missing")
 		return
 	end
 
 	if type(LightSources) ~= "number" or LightSources < 0 or LightSources > 15 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.ERROR,
 			"Missing property or not in range property for LightSources in block "
 				.. tostring(blockstringname)
-				.. ". please ensure that 'LightSources' is within the range of 0 to 15",
-		})
+				.. ". please ensure that 'LightSources' is within the range of 0 to 15"
+		)
 		return
 	end
 	local id = nextId
@@ -92,12 +89,12 @@ function LoadMods()
 					end
 					local endTime = os.clock()
 					local loadTime = endTime - startTime
-					ThreadLogChannel:push({
+					LuaCraftLoggingFunc(
 						LuaCraftLoggingLevel.NORMAL,
-						"Load time for" .. modName .. ": " .. loadTime .. " seconds",
-					})
+						"Load time for" .. modName .. ": " .. loadTime .. " seconds"
+					)
 				else
-					ThreadLogChannel:push({ LuaCraftLoggingLevel.ERROR, "Failed to load mod:", modName })
+					LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to load mod:" .. modName)
 				end
 				table.insert(directories, fullPath)
 			end
@@ -123,7 +120,7 @@ function LoadBlocksAndTiles(rootDirectory)
 						block.initialize()
 					end
 				else
-					ThreadLogChannel:push({ LuaCraftLoggingLevel.ERROR, "Failed to load block:", blockName })
+					LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to load block:" .. blockName)
 				end
 			end
 		end

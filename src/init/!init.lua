@@ -9,7 +9,7 @@ function iterateOverAllTiles()
 		local blockTopTextureString = value.blockTopTextureString or "N/A"
 		local blockSideTextureString = value.blockSideTextureString or "N/A"
 		local blockBottomMasterTextureString = value.blockBottomMasterTextureString or "N/A"
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
 			"Tile Name: "
 				.. value.blockstringname
@@ -29,8 +29,8 @@ function iterateOverAllTiles()
 				.. blockSideTextureString
 				.. " Top Texture: "
 				.. blockTopTextureString
-				.. "\n-----------------------------------------------------------------------------------------------------------------------",
-		})
+				.. "\n-----------------------------------------------------------------------------------------------------------------------"
+		)
 	end
 end
 function InitializeGame()

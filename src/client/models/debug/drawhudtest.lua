@@ -18,9 +18,9 @@ function DrawTestBlock()
 
 			exampleModelReference = nil
 			Modelalreadycreated = 0
-			ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "Modelalreadycreated reset to 0" })
+			LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Modelalreadycreated reset to 0")
 		end
-		ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "Modelalreadycreated" })
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Modelalreadycreated")
 	elseif EnableTESTBLOCK and Modelalreadycreated == 0 then
 		if Modelalreadycreated == 1 then
 			return
@@ -94,6 +94,6 @@ function DrawTestBlock()
 
 		exampleModelReference = myModel
 		Modelalreadycreated = 1
-		ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, "DrawTestBlock completed." })
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "DrawTestBlock completed.")
 	end
 end

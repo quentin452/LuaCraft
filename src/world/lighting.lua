@@ -141,10 +141,7 @@ local function isSubtractOperation(lightoperation)
 		or lightoperation == LightOpe.LocalSubtract.id
 end
 local function logInvalidLightOperation(lightoperation)
-	ThreadLogChannel:push({
-		LuaCraftLoggingLevel.ERROR,
-		"Invalid lightoperation: " .. lightoperation,
-	})
+	LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Invalid lightoperation: " .. lightoperation)
 end
 function ChooseLightingQueue(lightoperation, query)
 	if isAddOperation(lightoperation) then

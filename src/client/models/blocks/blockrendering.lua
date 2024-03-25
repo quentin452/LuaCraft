@@ -80,7 +80,7 @@ local function addFaceToModel(model, x, y, z, otx, oty, BlockModelScale, gettype
 			{ x_plus_scale, y, z_plus_scale, tx, ty2 },
 		}
 	else
-		ThreadLogChannel:push({ LuaCraftLoggingLevel.ERROR, "Invalid gettype: " .. gettype })
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR,  "Invalid gettype: " .. gettype)
 	end
 	createBlockVertices(blockVertices, model)
 	_JPROFILER.pop("addFaceToModel")

@@ -60,11 +60,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 	end
 	temp = {}
 	_JPROFILER.pop("GenerateTerrain")
-	--ThreadLogChannel:push({
----		LuaCraftLoggingLevel.NORMAL,
---		"Number of elements in chunk.voxels:",
---		voxelCount,
---	})
+	--LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Number of elements in chunk.voxels: " .. voxelCount)
 end
 
 function StandardTerrain(chunk, xx, j, zz)

@@ -129,10 +129,10 @@ function PopulateChunk(chunk)
 						if elapsed_time > MAX_EXECUTION_TIME then
 							totalLongExecutionTime = totalLongExecutionTime + elapsed_time
 							local log3 = totalLongExecutionTime
-							ThreadLogChannel:push({
+							LuaCraftLoggingFunc(
 								LuaCraftLoggingLevel.WARNING,
-								populatelog1 .. taggedFunc.sourcePath .. populatelog2 .. log3 .. " seconds.",
-							})
+								populatelog1 .. taggedFunc.sourcePath .. populatelog2 .. log3 .. " seconds."
+							)
 						end
 					end
 				end

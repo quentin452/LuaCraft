@@ -52,13 +52,13 @@ local function createTextureAtlas(memoryorpng)
 				TextureAtlasCoordinates[blockType] = ids and { index, index - 2, index - 1 } or { index }
 				x = x + width
 			else
-				ThreadLogChannel:push({ LuaCraftLoggingLevel.ERROR, "Failed to read file:", texturePath })
+				LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to read file:" .. texturePath)
 			end
 		end
 	end
 
 	local totalTimeElapsed = os.clock() - totalTimeStart
-	ThreadLogChannel:push({ LuaCraftLoggingLevel.NORMAL, " Atlas Total time taken: " .. totalTimeElapsed .. " seconds" })
+	LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, " Atlas Total time taken: " .. totalTimeElapsed .. " seconds")
 	if memoryorpng == "PNG" then
 		local atlasDirectory = "Atlas"
 		Lovefilesystem.createDirectory(atlasDirectory)
@@ -78,10 +78,10 @@ local function createTILEINGameAssets()
 		if not TilesTextureList[blockType] then
 			TilesTextureList[blockType] = { unpack(TextureAtlasCoordinates[blockType]) }
 		else
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				"This BlockType " .. blockType .. " Has been already registered.",
-			})
+				"This BlockType " .. blockType .. " Has been already registered."
+			)
 		end
 	end
 end

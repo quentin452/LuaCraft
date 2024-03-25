@@ -1,5 +1,5 @@
 local Settings = {}
-local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey" , "chatkey" }
+local orderedKeys = { "forwardmovementkey", "backwardmovementkey", "leftmovementkey", "rightmovementkey", "chatkey" }
 local marque = ""
 
 function SharedKeybindingSettingsDraw()
@@ -48,10 +48,7 @@ function SharedKeybindingSettingsDraw()
 			posY = posY + lineHeight
 		end
 	else
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("drawMenuSettings")
 end

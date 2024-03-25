@@ -18,10 +18,7 @@ function ReLoadMovementKeyValues()
 		RightKey = file_content:match("rightmovementkey=([%a%d]+)") or "d"
 		ChatKey = file_content:match("chatkey=([%a%d]+)") or "d"
 	else
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	if not PlayerDirectionKey[ForWardKey] then
 		PlayerDirectionKey[ForWardKey] = { 0, -1 }
@@ -45,13 +42,10 @@ function updateConfigFile(key, value)
 			file:write(fileContent)
 			file:close()
 		else
-			ThreadLogChannel:push({ LuaCraftLoggingLevel.ERROR, "Failed to open file for writing. Error: " .. err })
+			LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to open file for writing. Error: " .. err)
 		end
 	else
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"Failed to read Luacraftconfig.txt. Error: " .. errorMessage,
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to read Luacraftconfig.txt. Error: " .. errorMessage)
 	end
 end
 
@@ -186,4 +180,11 @@ function SettingsHandlingInit()
 		error("Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 	_JPROFILER.pop("SettingsHandlingInit")
+end
+
+function LuaCraftLoggingFunc(logginglevel, query)
+	ThreadLogChannel:push({
+		logginglevel,
+		query,
+	})
 end

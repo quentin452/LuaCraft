@@ -26,10 +26,10 @@ function NewChunkWithTestUnit(x, z)
 	GenerateTerrain(chunk, x, z, GlobalWorldType)
 	local endTime = os.clock()
 	if ChunkTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"GenerateTerrain Execution Time: " .. tostring(endTime - startTime),
-		})
+			"GenerateTerrain Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	local startTime = os.clock()
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
@@ -42,10 +42,10 @@ function NewChunkWithTestUnit(x, z)
 	end
 	local endTime = os.clock()
 	if ChunkTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"NewCave Choose Execution Time: " .. tostring(endTime - startTime),
-		})
+			"NewCave Choose Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	chunk.sunlight = function(self)
 		local startTime = os.clock()
@@ -72,10 +72,10 @@ function NewChunkWithTestUnit(x, z)
 		end
 		local endTime = os.clock()
 		if ChunkTestUnitTimer <= 10000 then
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				"chunk.sunlight Execution Time: " .. tostring(endTime - startTime),
-			})
+				"chunk.sunlight Execution Time: " .. tostring(endTime - startTime)
+			)
 		end
 	end
 	chunk.processRequests = function(self)
@@ -88,10 +88,10 @@ function NewChunkWithTestUnit(x, z)
 		end
 		local endTime = os.clock()
 		if ChunkTestUnitTimer <= 10000 then
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				"processRequests Execution Time: " .. tostring(endTime - startTime),
-			})
+				"processRequests Execution Time: " .. tostring(endTime - startTime)
+			)
 		end
 	end
 	-- populate chunk with trees and flowers
@@ -112,10 +112,10 @@ function NewChunkWithTestUnit(x, z)
 							if elapsed_time > MAX_EXECUTION_TIME then
 								totalLongExecutionTime = totalLongExecutionTime + elapsed_time
 								local log3 = totalLongExecutionTime
-								ThreadLogChannel:push({
+								LuaCraftLoggingFunc(
 									LuaCraftLoggingLevel.WARNING,
-									populatelog1 .. taggedFunc.sourcePath .. populatelog2 .. log3 .. " seconds.",
-								})
+									populatelog1 .. taggedFunc.sourcePath .. populatelog2 .. log3 .. " seconds."
+								)
 							end
 						end
 					end
@@ -124,10 +124,10 @@ function NewChunkWithTestUnit(x, z)
 		end
 		local endTime = os.clock()
 		if ChunkTestUnitTimer <= 10000 then
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				"chunk.populate Execution Time: " .. tostring(endTime - startTime),
-			})
+				"chunk.populate Execution Time: " .. tostring(endTime - startTime)
+			)
 		end
 	end
 	-- get voxel id of the voxel in this chunk's coordinate space
@@ -195,10 +195,10 @@ function NewChunkWithTestUnit(x, z)
 		SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 		local endTime = os.clock()
 		if ChunkTestUnitTimer <= 10000 then
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				"chunk.setVoxel Execution Time: " .. tostring(endTime - startTime),
-			})
+				"chunk.setVoxel Execution Time: " .. tostring(endTime - startTime)
+			)
 		end
 	end
 	chunk.setVoxelData = function(self, x, y, z, blockvalue)
@@ -220,10 +220,10 @@ function NewChunkWithTestUnit(x, z)
 		self.changes = {}
 		local endTime = os.clock()
 		if ChunkTestUnitTimer <= 10000 then
-			ThreadLogChannel:push({
+			LuaCraftLoggingFunc(
 				LuaCraftLoggingLevel.NORMAL,
-				"chunk.updateModel Execution Time: " .. tostring(endTime - startTime),
-			})
+				"chunk.updateModel Execution Time: " .. tostring(endTime - startTime)
+			)
 		end
 		_JPROFILER.pop("chunk.updateModel")
 	end

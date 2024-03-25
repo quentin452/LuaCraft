@@ -54,10 +54,7 @@ function SharedSettingsDraw()
 			posY = posY + lineHeight
 		end
 	else
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.ERROR,
-			"Failed to read Luacraftconfig.txt. Error: " .. error_message,
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Failed to read Luacraftconfig.txt. Error: " .. error_message)
 	end
 end
 

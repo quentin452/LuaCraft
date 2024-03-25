@@ -16,10 +16,10 @@ local function CanDrawFace(get, thisTransparency)
 	local endTime = os.clock()
 	BlockModellingTestUnitTimer = BlockModellingTestUnitTimer + 1
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"CanDrawFace Execution Time: " .. tostring(endTime - startTime),
-		})
+			"CanDrawFace Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("CanDrawFace")
 	return result
@@ -35,10 +35,10 @@ local function createBlockVertices(vertices, model)
 	end
 	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"createBlockVertices Execution Time: " .. tostring(endTime - startTime),
-		})
+			"createBlockVertices Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("createBlockVertices")
 end
@@ -97,15 +97,15 @@ local function addFaceToModel(model, x, y, z, otx, oty, BlockModelScale, gettype
 			{ x_plus_scale, y, z_plus_scale, tx, ty2 },
 		}
 	else
-		ThreadLogChannel:push({ LuaCraftLoggingLevel.ERROR, "Invalid gettype: " .. gettype })
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Invalid gettype: " .. gettype)
 	end
 	createBlockVertices(blockVertices, model)
 	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"addFaceToModel Execution Time: " .. tostring(endTime - startTime),
-		})
+			"addFaceToModel Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("addFaceToModel")
 end
@@ -123,10 +123,7 @@ local function addFace(gettype, direction, y_offset, light_offset, thisLight, mo
 	end
 	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			"addFace Execution Time: " .. tostring(endTime - startTime),
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "addFace Execution Time: " .. tostring(endTime - startTime))
 	end
 	_JPROFILER.pop("addFace_blockrendering")
 end
@@ -143,10 +140,7 @@ local function DrawFaces(model, thisTransparency, thisLight, BlockModelScale, x,
 	addFace("getNegativeZ", BlockGetNegativeZ, 0, 1, thisLight, model, thisTransparency, BlockModelScale, x, y, z)
 	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
-			LuaCraftLoggingLevel.NORMAL,
-			"DrawFaces Execution Time: " .. tostring(endTime - startTime),
-		})
+		LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "DrawFaces Execution Time: " .. tostring(endTime - startTime))
 	end
 	_JPROFILER.pop("DrawFaces_blockrendering")
 end
@@ -165,10 +159,10 @@ local function checkBlockValidity(self, i, j, k)
 	end
 	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"checkBlockValidity Execution Time: " .. tostring(endTime - startTime),
-		})
+			"checkBlockValidity Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("checkBlockValidity_blockrendering")
 	return true
@@ -196,10 +190,10 @@ local function updateAdjacentBlocks(self, i, j, k, x, y, z)
 	end
 	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"updateAdjacentBlocks Execution Time: " .. tostring(endTime - startTime),
-		})
+			"updateAdjacentBlocks Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("updateAdjacentBlocks_blockrendering")
 	return BlockGetTop, BlockGetBottom, BlockGetPositiveX, BlockGetNegativeX, BlockGetPositiveZ, BlockGetNegativeZ
@@ -216,10 +210,10 @@ function BlockRenderingTestUnit(self, i, j, k, x, y, z, thisTransparency, thisLi
 	DrawFaces(model, thisTransparency, thisLight, BlockModelScale, x, y, z)
 	local endTime = os.clock()
 	if BlockModellingTestUnitTimer <= 10000 then
-		ThreadLogChannel:push({
+		LuaCraftLoggingFunc(
 			LuaCraftLoggingLevel.NORMAL,
-			"BlockRenderingTestUnit Execution Time: " .. tostring(endTime - startTime),
-		})
+			"BlockRenderingTestUnit Execution Time: " .. tostring(endTime - startTime)
+		)
 	end
 	_JPROFILER.pop("BlockRendering")
 end
