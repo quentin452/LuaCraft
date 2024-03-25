@@ -268,7 +268,6 @@ local function HandleSunDownSubstract(gx, gy, gz)
 	NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
 	--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
 end
-
 local placementRange1SpaceKeyOn = 1
 local placementRange1SpaceKeyOff = 0.1
 local function PreventBlockPlacementOnThePlayer(gx, gy, gz, leftMouseDown, rightMouseDown, spaceKey)
@@ -324,12 +323,12 @@ function SetVoxelInternal(manuallyPlaced, self, x, y, z, blockvalue)
 			destroyLight =
 				HandleSemiLightableBlocks(gx, gy, gz, manuallyPlaced, blockvalue, destroyLight, inDirectSunlight)
 		end
-		HandleSunDownSubstract(gx, gy, gz)
 		HandleLightSourceBlock(self, gx, gy, gz, x, y, z, blockvalue, destroyLight)
 		HandleManuallyPlacedBlockTileLightableSub(gx, gy, gz, manuallyPlaced, destroyLight)
 		if blockvalue ~= -1 then
 			UpdateVoxelData(self, blockvalue, x, y, z)
 		end
+		HandleSunDownSubstract(gx, gy, gz)
 	end
 end
 
