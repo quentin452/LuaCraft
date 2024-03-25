@@ -54,13 +54,10 @@ end
 local seuilVersLeHaut = Mathpi / 4
 local seuilVersLeBas = -Mathpi / 4
 function GetPlayerDirection(rotation, pitch)
-	_JPROFILER.push("GetPlayerDirection")
 	if pitch then
 		if pitch > seuilVersLeHaut then
-			_JPROFILER.pop("GetPlayerDirection")
 			return "Bas"
 		elseif pitch < seuilVersLeBas then
-			_JPROFILER.pop("GetPlayerDirection")
 			return "Haut"
 		end
 	end
@@ -70,7 +67,6 @@ function GetPlayerDirection(rotation, pitch)
 		local index = math.floor(((rotation + Mathpi / 8) % (2 * Mathpi)) / (Mathpi / 4)) + 1
 		return directions[index]
 	end
-	_JPROFILER.pop("GetPlayerDirection")
 	return nil
 end
 

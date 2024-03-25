@@ -19,7 +19,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 			local zz = (z - 1) * ChunkSize + k
 			chunk.heightMap[i][k] = 0
 			local sunlight = true
-			GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
+			--GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
 		end
 	end
 	temp = {}

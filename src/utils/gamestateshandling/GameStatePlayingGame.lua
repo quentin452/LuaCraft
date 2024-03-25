@@ -5,10 +5,12 @@ function GameStatePlayingGame2:textinput(text)
 	end
 end
 function GameStatePlayingGame2:update(dt)
+	_JPROFILER.push("GameStatePlayingGame2:update")
 	renderdistancevalue()
 	PlayerInitIfNeeded()
-	UpdateAndGenerateChunks(RenderDistance)
+	--UpdateAndGenerateChunks(RenderDistance)
 	UpdateLogic(dt)
+	_JPROFILER.pop("GameStatePlayingGame2:update")
 end
 
 function GameStatePlayingGame2:draw()
