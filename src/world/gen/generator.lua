@@ -5,6 +5,8 @@ local chunkfloor = 48
 local maxHeight = 120
 local scalar = 1.3
 local waterlevel = 64
+local tileID
+
 --TODO REMOVE string.char USAGE IF POSSIBLE
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
@@ -31,7 +33,6 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				if sunlight then
 					temp[yy + 1] = string.char(LightSources[15])
 				end
-				local tileID
 				if j == 1 then
 					tileID = Tiles.BEDROCK_Block.id
 				elseif j < chunkfloor then
