@@ -145,17 +145,13 @@ local function processChunkUpdates(chunk)
 		chunk:processRequests()
 		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = nil
-	elseif chunk.updateLighting == false then
-		_JPROFILER.push("LightingUpdate_processChunkUpdates")
-		LightingUpdate()
-		--	ThreadLightingChannel:push({ "updateLighting" })
-		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
-		chunk.updateLighting = nil
 	elseif ThePlayer.IsPlayerHasSpawned == false then
 		_JPROFILER.push("spawnPlayer")
 		ChooseSpawnLocation()
 		_JPROFILER.pop("spawnPlayer")
 	else
+		LightingUpdate()
+		--	ThreadLightingChannel:push({ "updateLighting" })
 		addChunkToRenderQueue(chunk)
 		forceModelUpdatesForChunks(chunk)
 		processRenderChunks()

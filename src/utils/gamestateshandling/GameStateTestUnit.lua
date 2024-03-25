@@ -79,6 +79,10 @@ local function PerformMenuAction(action)
 				TestUnitThreadChannel:push({ "TestUnitTileDataWithoutCache2" })
 			elseif UnitTest == LightningEngineTestUnit then
 				EnableLightningEngineDebug = true
+				LightningQueriesTestUnitOperationCounter = {}
+				for _, operation in pairs(LightOpe) do
+					LightningQueriesTestUnitOperationCounter[operation.id] = 0
+				end
 			elseif UnitTest == BlockModelingTestUnit then
 				EnableBlockRenderingTestUnit = true
 			elseif UnitTest == TilesModelingTestUnit then

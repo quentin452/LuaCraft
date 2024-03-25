@@ -82,32 +82,18 @@ LuaCraftLoggingLevel = {
 	ERROR = "FATAL",
 }
 
--- Function to add an item to the lighting queue
-local function LightingQueueAdd(lthing)
-    LightingQueue[#LightingQueue + 1] = lthing
-end
-
--- Function to add an item to the lighting removal queue
-local function LightingRemovalQueueAdd(lthing)
-    LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
-end
-
 LightOpe = {
-	SunDownAdd = { id = "SunDownAdd", lightope = LightingQueueAdd },
-	SunForceAdd = { id = "SunForceAdd", lightope = LightingQueueAdd },
-	SunCreationAdd = { id = "SunCreationAdd", lightope = LightingQueueAdd },
-	SunAdd = { id = "SunAdd", lightope = LightingQueueAdd },
-	SunSubtract = { id = "SunSubtract", lightope = LightingRemovalQueueAdd },
-	SunDownSubtract = { id = "SunDownSubtract", lightope = LightingRemovalQueueAdd },
-	LocalAdd = { id = "LocalAdd", lightope = LightingQueueAdd },
-	LocalSubtract = { id = "LocalSubtract", lightope = LightingRemovalQueueAdd },
-	LocalForceAdd = { id = "LocalForceAdd", lightope = LightingQueueAdd },
-	LocalCreationAdd = { id = "LocalCreationAdd", lightope = LightingQueueAdd },
+	SunDownAdd = { id = "SunDownAdd" },
+	SunForceAdd = { id = "SunForceAdd" },
+	SunCreationAdd = { id = "SunCreationAdd" },
+	SunAdd = { id = "SunAdd" },
+	SunSubtract = { id = "SunSubtract" },
+	SunDownSubtract = { id = "SunDownSubtract" },
+	LocalAdd = { id = "LocalAdd" },
+	LocalSubtract = { id = "LocalSubtract" },
+	LocalForceAdd = { id = "LocalForceAdd" },
+	LocalCreationAdd = { id = "LocalCreationAdd" },
 }
-LightningQueriesTestUnitOperationCounter = {}
-for _, operation in pairs(LightOpe) do
-	LightningQueriesTestUnitOperationCounter[operation.id] = 0
-end
 VoxelNeighborOffsets = {}
 for dx = -1, 1 do
 	for dy = -1, 1 do

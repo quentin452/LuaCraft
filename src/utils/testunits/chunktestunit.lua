@@ -17,7 +17,6 @@ function NewChunkWithTestUnit(x, z)
 	chunk.changes = {}
 	chunk.updatedSunLight = false
 	chunk.isPopulated = false
-	chunk.updateLighting = false
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
 	end

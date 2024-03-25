@@ -85,10 +85,7 @@ function GameStatePlayingGame2:keypressed(k)
 			TilesModellingTestUnitTimer = 0
 			ChunkTestUnitTimer = 0
 			EnableTilesRenderingTestUnit = false
-			LightningQueriesTestUnitOperationCounter = {}
-			for _, operation in pairs(LightOpe) do
-				LightningQueriesTestUnitOperationCounter[operation.id] = 0
-			end
+			LightningQueriesTestUnitOperationCounter = nil
 			SetCurrentGameState(GamestateGamePausing2)
 		end
 	elseif k == "f3" then
