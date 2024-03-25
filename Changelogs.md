@@ -1,6 +1,4 @@
-
 **LuaCraft V0.5**
-
 
 This version is compatible with LOVE2D 11.5 and probably newer versions.
 
