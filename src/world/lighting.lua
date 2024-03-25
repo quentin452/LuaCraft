@@ -108,11 +108,12 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		if TileLightable(val, true) then
 			SetVoxelFirstData(x, y, z, Tiles.AIR_Block.id)
 			PerformLightLoop(x, y, z, FOURDIRECTIONS, LightOpe.SunSubtract.id, LightSources[15])
-			if GetVoxel(x, y - 1, z) == Tiles.AIR_Block.id then
+			if GetVoxel(x, y - 1, z) == Tiles.AIR_Block.id or TileModel(GetVoxel(x, y - 1, z)) == 1 then
 				NewLightOperation(x, y - 1, z, LightOpe.SunDownSubtract.id)
 			end
 			return true
 		end
+		
 		return false
 	end
 end
