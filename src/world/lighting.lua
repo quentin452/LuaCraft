@@ -15,13 +15,16 @@ local FOURDIRECTIONS = {
 function LightingUpdate()
 	for _, query in ipairs(LightingRemovalQueue) do
 		query()
-	end
-	for _, query in ipairs(LightingQueue) do
-		query()
+		query = nil
 	end
 	LightingRemovalQueue = {}
+	for _, query in ipairs(LightingQueue) do
+		query()
+		query = nil
+	end
 	LightingQueue = {}
 end
+
 function SunForceAdd(cget, cx, cy, cz, value, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	if value >= 0 and TileLightable(val, true) then
@@ -124,7 +127,8 @@ function SunSubtract(cget, cx, cy, cz, value, x, y, z)
 	end
 end
 function SunDownSubtract(x, y, z)
-	if TileLightable(GetVoxel(x, y, z), true) then
+	local val = GetVoxel(x, y, z)
+	if TileLightable(val, true) then
 		SetVoxelFirstData(x, y, z, Tiles.AIR_Block.id)
 		NewLightOperation(x, y - 1, z, LightOpe.SunDownSubtract.id)
 		for _, dir in ipairs(FOURDIRECTIONS) do
@@ -132,39 +136,44 @@ function SunDownSubtract(x, y, z)
 		end
 		return true
 	end
+	return false
 end
+
 --TODO REMOVE ANONYMES FUNCTION
 --TODO REMOVE RECURSIVE CALLS
 --TODO put lightning into another thread
+local function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
+	if lightoperation == LightOpe.SunForceAdd.id then
+		SunForceAdd(cget, cx, cy, cz, value, x, y, z)
+	elseif lightoperation == LightOpe.SunCreationAdd.id then
+		SunCreationAdd(cget, cx, cy, cz, x, y, z)
+	elseif lightoperation == LightOpe.SunDownAdd.id then
+		SunDownAdd(cget, cx, cy, cz, value, x, y, z)
+	elseif lightoperation == LightOpe.LocalForceAdd.id then
+		LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
+	elseif lightoperation == LightOpe.LocalSubtract.id then
+		LocalSubtract(cget, cx, cy, cz, value, x, y, z)
+	elseif lightoperation == LightOpe.LocalCreationAdd.id then
+		LocalCreationAdd(cget, cx, cy, cz, x, y, z)
+	elseif lightoperation == LightOpe.SunAdd.id then
+		SunAdd(cget, cx, cy, cz, value, x, y, z)
+	elseif lightoperation == LightOpe.LocalAdd.id then
+		LocalAdd(cget, value, x, y, z)
+	elseif lightoperation == LightOpe.SunSubtract.id then
+		SunSubtract(cget, cx, cy, cz, value, x, y, z)
+	elseif lightoperation == LightOpe.SunDownSubtract.id then
+		SunDownSubtract(x, y, z)
+	end
+end
+
 local function LightningQueries(x, y, z, lightoperation, value)
 	local cget, cx, cy, cz = GetChunk(x, y, z)
 	if cget == nil then
 		return
 	end
-	local query = function()
-		if lightoperation == LightOpe.SunForceAdd.id then
-			SunForceAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.SunCreationAdd.id then
-			SunCreationAdd(cget, cx, cy, cz, x, y, z)
-		elseif lightoperation == LightOpe.SunDownAdd.id then
-			SunDownAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalForceAdd.id then
-			LocalForceAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalSubtract.id then
-			LocalSubtract(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalCreationAdd.id then
-			LocalCreationAdd(cget, cx, cy, cz, x, y, z)
-		elseif lightoperation == LightOpe.SunAdd.id then
-			SunAdd(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.LocalAdd.id then
-			LocalAdd(cget, value, x, y, z)
-		elseif lightoperation == LightOpe.SunSubtract.id then
-			SunSubtract(cget, cx, cy, cz, value, x, y, z)
-		elseif lightoperation == LightOpe.SunDownSubtract.id then
-			SunDownSubtract(x, y, z)
-		end
+	return function()
+		PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 	end
-	return query
 end
 
 function NewLightOperation(x, y, z, lightoperation, value)
@@ -181,8 +190,9 @@ function NewLightOperation(x, y, z, lightoperation, value)
 			local operationFunction = operation.lightope
 			operationFunction(query)
 			local endTime = love.timer.getTime() - startTime
-			LightningQueriesTestUnitOperationCounter[lightoperation] = LightningQueriesTestUnitOperationCounter[lightoperation]
-				+ 1
+			LightningQueriesTestUnitOperationCounter[lightoperation] = (
+				LightningQueriesTestUnitOperationCounter[lightoperation] or 0
+			) + 1
 			if LightningQueriesTestUnitOperationCounter[lightoperation] <= 1000 then
 				ThreadLogChannel:push({
 					LuaCraftLoggingLevel.NORMAL,

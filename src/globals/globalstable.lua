@@ -84,15 +84,14 @@ LuaCraftLoggingLevel = {
 
 -- Function to add an item to the lighting queue
 local function LightingQueueAdd(lthing)
-	LightingQueue[#LightingQueue + 1] = lthing
-	return lthing
+    LightingQueue[#LightingQueue + 1] = lthing
 end
 
 -- Function to add an item to the lighting removal queue
 local function LightingRemovalQueueAdd(lthing)
-	LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
-	return lthing
+    LightingRemovalQueue[#LightingRemovalQueue + 1] = lthing
 end
+
 LightOpe = {
 	SunDownAdd = { id = "SunDownAdd", lightope = LightingQueueAdd },
 	SunForceAdd = { id = "SunForceAdd", lightope = LightingQueueAdd },
