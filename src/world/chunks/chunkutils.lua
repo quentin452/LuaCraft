@@ -259,7 +259,8 @@ end
 
 local function HandleSunDownSubstract(gx, gy, gz)
 	--Fix https://github.com/quentin452/LuaCraft/issues/66
-	if TileModel(GetVoxel(gx, gy, gz)) == 0 then
+	local voxel = GetVoxel(gx, gy, gz)
+	if TileModel(voxel) == 0 then
 		NewLightOperation(gx, gy, gz, LightOpe.SunDownSubtract.id)
 		--ThreadLightingChannel:push({"LightOperation", gx, gy, gz, LightOpe.SunDownSubtract.id })
 	end
@@ -267,6 +268,7 @@ local function HandleSunDownSubstract(gx, gy, gz)
 	NewLightOperation(gx, gy - 1, gz, LightOpe.SunDownSubtract.id)
 	--ThreadLightingChannel:push({"LightOperation", gx, gy - 1, gz, LightOpe.SunDownSubtract.id })
 end
+
 local placementRange1SpaceKeyOn = 1
 local placementRange1SpaceKeyOff = 0.1
 local function PreventBlockPlacementOnThePlayer(gx, gy, gz, leftMouseDown, rightMouseDown, spaceKey)
