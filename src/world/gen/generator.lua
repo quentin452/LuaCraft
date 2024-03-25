@@ -10,6 +10,7 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 	dirt = 4
 	grass = true
+	--local voxelCount = 0
 	for i = 1, ChunkSize do
 		chunk.voxels[i] = Set()
 		local xx = (x - 1) * ChunkSize + i
@@ -26,38 +27,44 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 				if sunlight then
 					temp[yy + 1] = string.char(LightSources[15])
 				end
+				local tileID
 				if j == 1 then
-					temp[yy] = string.char(Tiles.BEDROCK_Block.id)
+					tileID = Tiles.BEDROCK_Block.id
 				elseif j < chunkfloor then
-					temp[yy] = string.char(Tiles.STONE_Block.id)
+					tileID = Tiles.STONE_Block.id
 					sunlight = false
-				else
-					temp[yy] = string.char(Tiles.AIR_Block.id)
-					if genFuncResult then
-						if not grass and dirt > 0 then
-							dirt = dirt - 1
-							temp[yy] = string.char(Tiles.DIRT_Block.id)
-						elseif not grass then
-							temp[yy] = string.char(Tiles.STONE_Block.id)
-						else
-							grass = false
-							temp[yy] = string.char(Tiles.GRASS_Block.id)
-						end
-						if sunlight then
-							chunk.heightMap[i][k] = j
-							sunlight = false
-						end
+				elseif genFuncResult then
+					if not grass and dirt > 0 then
+						dirt = dirt - 1
+						tileID = Tiles.DIRT_Block.id
+					elseif not grass then
+						tileID = Tiles.STONE_Block.id
 					else
-						grass = true
-						dirt = 4
+						grass = false
+						tileID = Tiles.GRASS_Block.id
 					end
+					if sunlight then
+						chunk.heightMap[i][k] = j
+						sunlight = false
+					end
+				else
+					grass = true
+					dirt = 4
+					tileID = Tiles.AIR_Block.id
 				end
+				temp[yy] = string.char(tileID)
+				--voxelCount = voxelCount + 1
 			end
 			chunk.voxels[i][k] = table.concat(temp)
 		end
 	end
 	temp = {}
 	_JPROFILER.pop("GenerateTerrain")
+	--ThreadLogChannel:push({
+---		LuaCraftLoggingLevel.NORMAL,
+--		"Number of elements in chunk.voxels:",
+--		voxelCount,
+--	})
 end
 
 function StandardTerrain(chunk, xx, j, zz)
