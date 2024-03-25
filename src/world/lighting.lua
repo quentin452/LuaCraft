@@ -126,32 +126,20 @@ local function LightningQueries(x, y, z, lightoperation, value)
 		PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 	end
 end
-local function isAddOperation(lightoperation)
-	return lightoperation == LightOpe.SunDownAdd.id
-		or lightoperation == LightOpe.SunForceAdd.id
-		or lightoperation == LightOpe.SunCreationAdd.id
-		or lightoperation == LightOpe.SunAdd.id
-		or lightoperation == LightOpe.LocalAdd.id
-		or lightoperation == LightOpe.LocalForceAdd.id
-		or lightoperation == LightOpe.LocalCreationAdd.id
-end
 local function isSubtractOperation(lightoperation)
 	return lightoperation == LightOpe.SunSubtract.id
 		or lightoperation == LightOpe.SunDownSubtract.id
 		or lightoperation == LightOpe.LocalSubtract.id
 end
-local function logInvalidLightOperation(lightoperation)
-	LuaCraftLoggingFunc(LuaCraftLoggingLevel.ERROR, "Invalid lightoperation: " .. lightoperation)
-end
+
 function ChooseLightingQueue(lightoperation, query)
-	if isAddOperation(lightoperation) then
-		LightingQueue[#LightingQueue + 1] = query
-	elseif isSubtractOperation(lightoperation) then
+	if isSubtractOperation(lightoperation) then
 		LightingRemovalQueue[#LightingRemovalQueue + 1] = query
 	else
-		logInvalidLightOperation(lightoperation)
+		LightingQueue[#LightingQueue + 1] = query
 	end
 end
+
 function NewLightOperation(x, y, z, lightoperation, value)
 	local query
 	if EnableLightningEngineDebug == true then
@@ -166,8 +154,6 @@ function NewLightOperation(x, y, z, lightoperation, value)
 		else
 			ChooseLightingQueue(lightoperation, query)
 		end
-	else
-		logInvalidLightOperation(lightoperation)
 	end
 	query = nil
 end
