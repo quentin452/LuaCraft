@@ -8,7 +8,7 @@ local MenuTable = _Mainmenu
 GamestateMainMenu2 = GameStateBase:new()
 
 function GamestateMainMenu2:resetMenuSelection()
-	_Mainmenu.selection = 1
+	MenuTable.selection = 1
 end
 
 local marque = ""
@@ -21,15 +21,15 @@ function GamestateMainMenu2:draw()
 	local posX = w * 0.4
 	local posY = h * 0.4
 	local lineHeight = GetSelectedFont():getHeight("X")
-	DrawColorString(_Mainmenu.title, posX, posY)
+	DrawColorString(MenuTable.title, posX, posY)
 	posY = posY + lineHeight
-	for n = 1, #_Mainmenu.choice do
-		if _Mainmenu.selection == n then
+	for n = 1, #MenuTable.choice do
+		if MenuTable.selection == n then
 			marque = "%1*%0 "
 		else
 			marque = "   "
 		end
-		DrawColorString(marque .. "" .. _Mainmenu.choice[n], posX, posY)
+		DrawColorString(marque .. "" .. MenuTable.choice[n], posX, posY)
 		posY = posY + lineHeight
 	end
 end

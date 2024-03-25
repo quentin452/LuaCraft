@@ -7,7 +7,7 @@ local _GameStateTestUnitMenuSettings = CreateLuaCraftMenu(0, 0, "Test Unit Menu"
 local MenuTable = _GameStateTestUnitMenuSettings
 GameStateTestUnit = GameStateBase:new()
 function GameStateTestUnit:resetMenuSelection()
-	_GameStateTestUnitMenuSettings.selection = 1
+	MenuTable.selection = 1
 end
 
 local TileDataWithCache = "TileDataWithCache"
@@ -36,20 +36,20 @@ function GameStateTestUnit:draw()
 	local posX = w * 0.4
 	local posY = h * 0.4
 	local lineHeight = GetSelectedFont():getHeight("X")
-	DrawColorString(_GameStateTestUnitMenuSettings.title, posX, posY)
+	DrawColorString(MenuTable.title, posX, posY)
 	posY = posY + lineHeight
 	local file_content, error_message = customReadFile(Luacraftconfig)
 	if file_content then
-		for n = 1, #_GameStateTestUnitMenuSettings.choice do
+		for n = 1, #MenuTable.choice do
 			if EnableTestUnitWaitingScreen == true then
 				DrawColorString("Wait Some Seconds and see logs...", posX, posY)
 			elseif EnableTestUnitWaitingScreen == false then
-				if _GameStateTestUnitMenuSettings.selection == n then
+				if MenuTable.selection == n then
 					marque = "%1*%0 "
 				else
 					marque = "   "
 				end
-				local choiceText = _GameStateTestUnitMenuSettings.choice[n]
+				local choiceText = MenuTable.choice[n]
 				if n == 2 then
 					local testUnit = TestUnitType[UnitTest]
 					local testUnitName = testUnit.name

@@ -6,7 +6,7 @@ local _WorldCreationMenu = CreateLuaCraftMenu(0, 0, "World Creation Menu", {
 local MenuTable = _WorldCreationMenu
 GamestateWorldCreationMenu2 = GameStateBase:new()
 function GamestateWorldCreationMenu2:resetMenuSelection()
-	_WorldCreationMenu.selection = 1
+	MenuTable.selection = 1
 end
 local marque = ""
 function GamestateWorldCreationMenu2:draw()
@@ -18,16 +18,16 @@ function GamestateWorldCreationMenu2:draw()
 	local posX = w * 0.4
 	local posY = h * 0.4
 	local lineHeight = GetSelectedFont():getHeight("X")
-	DrawColorString(_WorldCreationMenu.title, posX, posY)
+	DrawColorString(MenuTable.title, posX, posY)
 	posY = posY + lineHeight
 
-	for n = 1, #_WorldCreationMenu.choice do
-		if _WorldCreationMenu.selection == n then
+	for n = 1, #MenuTable.choice do
+		if MenuTable.selection == n then
 			marque = "%1*%0 "
 		else
 			marque = "   "
 		end
-		local choiceText = _WorldCreationMenu.choice[n]
+		local choiceText = MenuTable.choice[n]
 		if n == 2 then
 			local worldType = WorldTypeMap[GlobalWorldType]
 			local worldTypeName = worldType.name
@@ -65,7 +65,6 @@ function GamestateWorldCreationMenu2:keypressed(k)
 	MenuTable.choice, MenuTable.selection =
 		SharedSelectionKeyPressedBetweenGameState(k, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
-
 
 function GamestateWorldCreationMenu2:setFont()
 	return Font15
