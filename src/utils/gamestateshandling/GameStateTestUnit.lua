@@ -80,26 +80,30 @@ local function PerformMenuAction(action)
 				TestUnitThreadChannel:push({ "TestUnitTileDataWithoutCache2" })
 			elseif UnitTest == LightningEngineTestUnit then
 				EnableLightningEngineDebug = true
-				SetCurrentGameState(GameStatePlayingGame2)
-				EnableTestUnitWaitingScreen = false
 			elseif UnitTest == BlockModelingTestUnit then
 				EnableBlockRenderingTestUnit = true
-				SetCurrentGameState(GameStatePlayingGame2)
-				EnableTestUnitWaitingScreen = false
 			elseif UnitTest == TilesModelingTestUnit then
 				EnableTilesRenderingTestUnit = true
-				SetCurrentGameState(GameStatePlayingGame2)
-				EnableTestUnitWaitingScreen = false
 			elseif UnitTest == ChunkTestUnit then
 				EnableChunkTestUnit = true
-				SetCurrentGameState(GameStatePlayingGame2)
-				EnableTestUnitWaitingScreen = false
 			end
 		elseif action == 2 then
 			local unitType = TestUnitType[UnitTest]
 			if unitType and unitType.nextType then
 				UnitTest = unitType.nextType
 			end
+		end
+		if
+			action == 1
+			and (
+				UnitTest == LightningEngineTestUnit
+				or UnitTest == BlockModelingTestUnit
+				or UnitTest == TilesModelingTestUnit
+				or UnitTest == ChunkTestUnit
+			)
+		then
+			SetCurrentGameState(GameStatePlayingGame2)
+			EnableTestUnitWaitingScreen = false
 		elseif action == 3 then
 			SetCurrentGameState(GamestateMainMenu2)
 		end
