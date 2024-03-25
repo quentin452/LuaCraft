@@ -106,10 +106,6 @@ function OctaveNoise(x, y, octaves, seed1, seed2)
 	local freq = 1
 	local amp = 1
 	for i = 1, octaves do
-		math.randomseed(seed1)
-		local rand1 = math.random()
-		math.randomseed(seed2)
-		local rand2 = math.random()
 		ret = ret + love.math.noise(x * freq, y * freq) * amp - amp / 2
 		freq = freq * 0.5
 		amp = amp * 2
