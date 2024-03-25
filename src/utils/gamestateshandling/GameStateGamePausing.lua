@@ -52,7 +52,6 @@ end
 
 local function PerformMenuAction(action)
 	if action == 1 then
-		love.mouse.setRelativeMode(true)
 		WorldSuccessfullyLoaded = true
 		SetCurrentGameState(GameStatePlayingGame2)
 	elseif action == 2 then

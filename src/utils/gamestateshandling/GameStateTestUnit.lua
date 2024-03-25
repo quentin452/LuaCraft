@@ -81,26 +81,18 @@ local function PerformMenuAction(action)
 			elseif UnitTest == LightningEngineTestUnit then
 				EnableLightningEngineDebug = true
 				SetCurrentGameState(GameStatePlayingGame2)
-				love.mouse.setRelativeMode(true)
-				GenerateWorld()
 				EnableTestUnitWaitingScreen = false
 			elseif UnitTest == BlockModelingTestUnit then
 				EnableBlockRenderingTestUnit = true
 				SetCurrentGameState(GameStatePlayingGame2)
-				love.mouse.setRelativeMode(true)
-				GenerateWorld()
 				EnableTestUnitWaitingScreen = false
 			elseif UnitTest == TilesModelingTestUnit then
 				EnableTilesRenderingTestUnit = true
 				SetCurrentGameState(GameStatePlayingGame2)
-				love.mouse.setRelativeMode(true)
-				GenerateWorld()
 				EnableTestUnitWaitingScreen = false
 			elseif UnitTest == ChunkTestUnit then
 				EnableChunkTestUnit = true
 				SetCurrentGameState(GameStatePlayingGame2)
-				love.mouse.setRelativeMode(true)
-				GenerateWorld()
 				EnableTestUnitWaitingScreen = false
 			end
 		elseif action == 2 then

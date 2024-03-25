@@ -85,7 +85,6 @@ function SharedSettingsPerformMenuAction(action)
 	elseif action == 7 then
 		WorldSuccessfullyLoaded = true
 		if IsCurrentGameState(GamestatePlayingGameSettings2) then
-			love.mouse.setRelativeMode(true)
 			SetCurrentGameState(GameStatePlayingGame2)
 		elseif IsCurrentGameState(GamestateMainMenuSettings2) then
 			SetCurrentGameState(GamestateMainMenu2)

@@ -67,6 +67,7 @@ TilesModellingTestUnitTimer = 0
 EnableChunkTestUnit = false
 ChunkTestUnitTimer = 0
 EnableTestUnitWaitingScreen = false
+InitGamePlayingWorld = false
 EnableF3 = false
 EnableF8 = false
 EnableTESTBLOCK = false

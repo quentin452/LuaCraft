@@ -44,8 +44,6 @@ end
 local function PerformMenuAction(action)
 	if action == 1 then
 		SetCurrentGameState(GameStatePlayingGame2)
-		love.mouse.setRelativeMode(true)
-		GenerateWorld()
 	elseif action == 2 then
 		local worldType = WorldTypeMap[GlobalWorldType]
 		if worldType and worldType.nextType then

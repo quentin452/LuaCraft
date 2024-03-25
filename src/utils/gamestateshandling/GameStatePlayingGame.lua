@@ -78,9 +78,6 @@ function GameStatePlayingGame2:keypressed(k)
 			FixinputforDrawCommandInput = false
 			EnableCommandHUD = false
 		else
-			love.mouse.setRelativeMode(false)
-			love.mouse.setGrabbed(true)
-			love.mouse.setVisible(true)
 			WorldSuccessfullyLoaded = false
 			EnableLightningEngineDebug = false
 			EnableBlockRenderingTestUnit = false
