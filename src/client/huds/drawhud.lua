@@ -27,7 +27,6 @@ local DrawF3Tab = {
 	["TileModelCaching"] = TileModelCaching,
 }
 function DrawF3()
-	_JPROFILER.push("DrawF3")
 	Lovegraphics.setColor(1, 1, 1)
 	local playerPosition = getPlayerPosition()
 	Lovegraphics.print("x: " .. playerPosition.x .. "\ny: " .. playerPosition.y .. "\nz: " .. playerPosition.z)
@@ -49,8 +48,6 @@ function DrawF3()
 		Lovegraphics.print("Number of " .. tableName .. ": " .. count, 0, yOffset)
 		yOffset = yOffset + 20
 	end
-
-	_JPROFILER.pop("DrawF3")
 end
 
 -- Fonction pour obtenir la direction du joueur

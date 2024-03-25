@@ -13,57 +13,60 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 	dirt = 4
 	grass = true
 	for i = 1, ChunkSize do
-		_JPROFILER.push("ChunkSizeLoop")
 		chunk.voxels[i] = Set()
 		local xx = (x - 1) * ChunkSize + i
 		for k = 1, ChunkSize do
 			local zz = (z - 1) * ChunkSize + k
 			chunk.heightMap[i][k] = 0
 			local sunlight = true
-			for j = WorldHeight, 1, -1 do
-				_JPROFILER.push("WorldHeightLoop")
-				local yy = (j - 1) * TileDataSize + 1
-				local genFuncResult = generationFunction(chunk, xx, j, zz)
-				for a = 1, TileDataSize - 1 do
-					temp[yy + a] = string.char(LightSources[0])
-				end
-				if sunlight then
-					temp[yy + 1] = string.char(LightSources[15])
-				end
-				if j == 1 then
-					tileID = Tiles.BEDROCK_Block.id
-				elseif j < chunkfloor then
-					tileID = Tiles.STONE_Block.id
-					sunlight = false
-				elseif genFuncResult then
-					if not grass and dirt > 0 then
-						dirt = dirt - 1
-						tileID = Tiles.DIRT_Block.id
-					elseif not grass then
-						tileID = Tiles.STONE_Block.id
-					else
-						grass = false
-						tileID = Tiles.GRASS_Block.id
-					end
-
-					if sunlight then
-						chunk.heightMap[i][k] = j
-						sunlight = false
-					end
-				else
-					grass = true
-					dirt = 4
-					tileID = Tiles.AIR_Block.id
-				end
-				temp[yy] = string.char(tileID)
-				_JPROFILER.pop("WorldHeightLoop")
-			end
-			chunk.voxels[i][k] = table.concat(temp)
+			GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
 		end
-		_JPROFILER.pop("ChunkSizeLoop")
 	end
 	temp = {}
 	_JPROFILER.pop("GenerateTerrain")
+end
+
+function GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
+	_JPROFILER.push("GenerateChunk")
+	for j = WorldHeight, 1, -1 do
+		local yy = (j - 1) * TileDataSize + 1
+		local genFuncResult = generationFunction(chunk, xx, j, zz)
+		for a = 1, TileDataSize - 1 do
+			temp[yy + a] = string.char(LightSources[0])
+		end
+		if sunlight then
+			temp[yy + 1] = string.char(LightSources[15])
+		end
+		local tileID
+		if j == 1 then
+			tileID = Tiles.BEDROCK_Block.id
+		elseif j < chunkfloor then
+			tileID = Tiles.STONE_Block.id
+			sunlight = false
+		elseif genFuncResult then
+			if not grass and dirt > 0 then
+				dirt = dirt - 1
+				tileID = Tiles.DIRT_Block.id
+			elseif not grass then
+				tileID = Tiles.STONE_Block.id
+			else
+				grass = false
+				tileID = Tiles.GRASS_Block.id
+			end
+
+			if sunlight then
+				chunk.heightMap[i][k] = j
+				sunlight = false
+			end
+		else
+			grass = true
+			dirt = 4
+			tileID = Tiles.AIR_Block.id
+		end
+		temp[yy] = string.char(tileID)
+	end
+	chunk.voxels[i][k] = table.concat(temp)
+	_JPROFILER.pop("GenerateChunk")
 end
 
 function StandardTerrain(chunk, xx, j, zz)

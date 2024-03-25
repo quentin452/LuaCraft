@@ -134,7 +134,11 @@ function love.wheelmoved(x, y)
 end
 
 function love.mousepressed(x, y, b)
+	_JPROFILER.push("frame")
+	_JPROFILER.push("mousepressed")
 	LuaCraftCurrentGameState:mousepressed(x, y, b)
+	_JPROFILER.pop("mousepressed")
+	_JPROFILER.pop("frame")
 end
 function love.keypressed(k)
 	_JPROFILER.push("frame")

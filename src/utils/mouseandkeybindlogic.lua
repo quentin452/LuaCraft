@@ -1,4 +1,5 @@
 function KeyPressed(k)
+	_JPROFILER.push("KeyPressed")
 	if k == "f11" then
 		LuaCraftSettingsUpdater("toggleFullScreen")
 	end
@@ -33,4 +34,5 @@ function KeyPressed(k)
 			end
 		end
 	end
+	_JPROFILER.pop("KeyPressed")
 end

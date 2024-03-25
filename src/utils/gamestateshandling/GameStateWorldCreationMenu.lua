@@ -37,11 +37,11 @@ function GamestateWorldCreationMenu2:draw()
 		end
 		posY = posY + lineHeight
 	end
-
 	_JPROFILER.pop("drawWorldCreationMenu")
 end
 
 local function PerformMenuAction(action)
+	_JPROFILER.push("PerformMenuActionGamestateWorldCreationMenu2")
 	if action == 1 then
 		SetCurrentGameState(GameStatePlayingGame2)
 	elseif action == 2 then
@@ -52,13 +52,16 @@ local function PerformMenuAction(action)
 	elseif action == 3 then
 		SetCurrentGameState(GamestateMainMenu2)
 	end
+	_JPROFILER.pop("PerformMenuActionGamestateWorldCreationMenu2")
 end
 function GamestateWorldCreationMenu2:resizeMenu()
 	SharedSettingsResizeMenu(MenuTable.choice)
 end
 function GamestateWorldCreationMenu2:mousepressed(x, y, b)
+	_JPROFILER.push("mousepressedGamestateWorldCreationMenu2")
 	MenuTable.choice, MenuTable.selection =
 		SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
+	_JPROFILER.pop("mousepressedGamestateWorldCreationMenu2")
 end
 function GamestateWorldCreationMenu2:keypressed(k)
 	MenuTable.choice, MenuTable.selection =

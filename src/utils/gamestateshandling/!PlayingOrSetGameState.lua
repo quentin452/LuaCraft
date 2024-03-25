@@ -3,8 +3,6 @@ function IsCurrentGameState(state)
 end
 
 function SetCurrentGameState(state)
-	_JPROFILER.push("SetCurrentGameState")
-
 	if LuaCraftCurrentGameState and LuaCraftCurrentGameState.resetMenuSelection then
 		LuaCraftCurrentGameState:resetMenuSelection()
 	end
@@ -22,5 +20,4 @@ function SetCurrentGameState(state)
 	end
 	LuaCraftCurrentGameState = state
 	LuaCraftCurrentGameState:resizeMenu()
-	_JPROFILER.pop("SetCurrentGameState")
 end
