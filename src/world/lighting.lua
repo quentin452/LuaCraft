@@ -201,4 +201,5 @@ function NewLightOperation(x, y, z, lightoperation, value)
 			"Invalid lightoperation: " .. lightoperation,
 		})
 	end
+	query = nil
 end

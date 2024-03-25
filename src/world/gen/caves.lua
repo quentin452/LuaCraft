@@ -89,6 +89,7 @@ function NewCave(x, y, z)
 		carve = caveCarve,
 	}
 	CaveList[#CaveList + 1] = cave
+	cave = nil
 	_JPROFILER.pop("NewCave")
 	return cave
 end
