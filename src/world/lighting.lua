@@ -127,11 +127,11 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		local val = GetVoxel(x, y, z)
 		if TileLightable(val, true) then
 			SetVoxelFirstData(x, y, z, Tiles.AIR_Block.id)
-			--TODO FIX this call make issues https://github.com/quentin452/LuaCraft/issues/72 + https://github.com/quentin452/LuaCraft/issues/84
-			--TODO FIX this call make large lags and increase world loading time
-			NewLightOperation(x, y - 1, z, LightOpe.SunDownSubtract.id)
 			for _, dir in ipairs(FOURDIRECTIONS) do
 				NewLightOperation(x + dir.x, y + dir.y, z + dir.z, LightOpe.SunSubtract.id, LightSources[15])
+			end
+			if GetVoxel(x, y - 1, z) == Tiles.AIR_Block.id then
+				NewLightOperation(x, y - 1, z, LightOpe.SunDownSubtract.id)
 			end
 			return true
 		end
