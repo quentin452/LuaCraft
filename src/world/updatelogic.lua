@@ -29,6 +29,7 @@ local function GetOrCreateChunk(chunkX, chunkZ)
 		else
 			chunk = NewChunk(chunkX, chunkZ)
 		end
+		GenerateTerrain(chunk, chunkX, chunkZ, GlobalWorldType)
 		ChunkSet[chunk] = true
 		ChunkHashTable[ChunkHash(chunkX)] = ChunkHashTable[ChunkHash(chunkX)] or {}
 		ChunkHashTable[ChunkHash(chunkX)][ChunkHash(chunkZ)] = chunk

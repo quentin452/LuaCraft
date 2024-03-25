@@ -21,7 +21,6 @@ function NewChunk(x, z)
 	for i = 1, ChunkSize do
 		chunk.heightMap[i] = {}
 	end
-	GenerateTerrain(chunk, x, z, GlobalWorldType)
 	local gx, gz = (chunk.x - 1) * ChunkSize + rand(0, 15), (chunk.z - 1) * ChunkSize + rand(0, 15)
 	if choose({ true, false }) then
 		for _, config in ipairs(caveConfigs) do
