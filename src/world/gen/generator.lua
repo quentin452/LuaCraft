@@ -12,19 +12,16 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
 	dirt = 4
 	grass = true
-	--local voxelCount = 0
-	--local totalStringLength = 0
-
 	for i = 1, ChunkSize do
+		_JPROFILER.push("ChunkSizeLoop")
 		chunk.voxels[i] = Set()
 		local xx = (x - 1) * ChunkSize + i
-
 		for k = 1, ChunkSize do
 			local zz = (z - 1) * ChunkSize + k
 			chunk.heightMap[i][k] = 0
 			local sunlight = true
-
 			for j = WorldHeight, 1, -1 do
+				_JPROFILER.push("WorldHeightLoop")
 				local yy = (j - 1) * TileDataSize + 1
 				local genFuncResult = generationFunction(chunk, xx, j, zz)
 				for a = 1, TileDataSize - 1 do
@@ -59,23 +56,13 @@ function GenerateTerrain(chunk, x, z, generationFunction)
 					tileID = Tiles.AIR_Block.id
 				end
 				temp[yy] = string.char(tileID)
-				--local voxelString = string.char(tileID)
-				--totalStringLength = totalStringLength + #voxelString
-				--voxelCount = voxelCount + 1
+				_JPROFILER.pop("WorldHeightLoop")
 			end
 			chunk.voxels[i][k] = table.concat(temp)
 		end
+		_JPROFILER.pop("ChunkSizeLoop")
 	end
 	temp = {}
-	--[[	LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Number of elements in chunk.voxels: " .. voxelCount)
-	LuaCraftLoggingFunc(LuaCraftLoggingLevel.NORMAL, "Total length of strings in chunk.voxels: " .. totalStringLength)
-	local memoryUsageInBytes = voxelCount * 1 -- Each character is encoded on 1 byte
-	local memoryUsageInKB = memoryUsageInBytes / 1024 -- Convert to kilobytes
-	local memoryUsageInMB = memoryUsageInKB / 1024 -- Convert to megabytes
-	LuaCraftLoggingFunc(
-		LuaCraftLoggingLevel.NORMAL,
-		"Estimated memory usage for chunk.voxels: " .. memoryUsageInMB .. " MB"
-	)]]
 	_JPROFILER.pop("GenerateTerrain")
 end
 
