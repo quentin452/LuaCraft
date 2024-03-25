@@ -50,26 +50,25 @@ local function caveQuery(cave)
 end
 
 local function caveCarve(cave)
-		local halfRandom = math.random() / 2
-		local squaredRadius = cave.radius * cave.radius
-
-		for i = -cave.radius, cave.radius do
-			for j = -cave.radius, cave.radius do
-				for k = -cave.radius, cave.radius do
-					local distanceSquared = i * i + j * j + k * k
-					if distanceSquared + halfRandom < squaredRadius then
-						local gx, gy, gz = cave.x + i, cave.y + j, cave.z + k
-						local chunk, cx, cy, cz = GetChunk(gx, gy, gz)
-						if chunk ~= nil then
-							chunk:setVoxelRawNotSupportLight(cx, cy, cz, Tiles.AIR_Block.id)
-							if cy == chunk.heightMap[cx][cz] then
-								NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[15])
-							end
+	local halfRandom = math.random() / 2
+	local squaredRadius = cave.radius * cave.radius
+	for i = -cave.radius, cave.radius do
+		for j = -cave.radius, cave.radius do
+			for k = -cave.radius, cave.radius do
+				local distanceSquared = i * i + j * j + k * k
+				if distanceSquared + halfRandom < squaredRadius then
+					local gx, gy, gz = cave.x + i, cave.y + j, cave.z + k
+					local chunk, cx, cy, cz = GetChunk(gx, gy, gz)
+					if chunk ~= nil then
+						chunk:setVoxelRawNotSupportLight(cx, cy, cz, Tiles.AIR_Block.id)
+						if cy == chunk.heightMap[cx][cz] then
+							NewLightOperation(gx, gy, gz, LightOpe.SunDownAdd.id, LightSources[15])
 						end
 					end
 				end
 			end
 		end
+	end
 end
 
 function NewCave(x, y, z)
