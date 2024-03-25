@@ -53,7 +53,7 @@ function SharedKeybindingSettingsDraw()
 	_JPROFILER.pop("drawMenuSettings")
 end
 
-local function SharedKeybindingSettingsPerformMenuAction(action)
+function SharedKeybindingSettingsPerformMenuAction(action)
 	if action == 1 then
 		ConfiguringMovementKey = true
 	elseif action == 2 then
@@ -68,46 +68,5 @@ local function SharedKeybindingSettingsPerformMenuAction(action)
 		elseif IsCurrentGameState(GamestateKeybindingPlayingGameSettings2) then
 			SetCurrentGameState(GamestatePlayingGameSettings2)
 		end
-	end
-end
-local menuWidth = 0
-
-function SharedKeybindingSettingsResizeMenu()
-	local newMenuWidth = 0
-	for _, choice in ipairs(_KeybindingMenuSettings.choice) do
-		local choiceWidth = LuaCraftCurrentGameState:setFont():getWidth(choice)
-		if choiceWidth > newMenuWidth then
-			newMenuWidth = choiceWidth
-		end
-	end
-	menuWidth = newMenuWidth
-end
-function SharedKeybindingSettingsMousePressed(x, y, b)
-	if b == 1 then
-		local w, h = Lovegraphics.getDimensions()
-		local posX = w * 0.4
-		local posY = h * 0.4
-		local lineHeight = GetSelectedFont():getHeight("X")
-		local choiceClicked = math.floor((y - posY) / lineHeight)
-		local minX = posX
-		local maxX = posX + menuWidth
-		if choiceClicked >= 1 and choiceClicked <= #_KeybindingMenuSettings.choice and x >= minX and x <= maxX then
-			_KeybindingMenuSettings.selection = choiceClicked
-			SharedKeybindingSettingsPerformMenuAction(choiceClicked)
-		end
-	end
-end
-
-function SharedKeybindingSettingsKeyPressed(k)
-	if k == BackWardKey and ConfiguringMovementKey == false then
-		if _KeybindingMenuSettings.selection < #_KeybindingMenuSettings.choice then
-			_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection + 1
-		end
-	elseif k == ForWardKey and ConfiguringMovementKey == false then
-		if _KeybindingMenuSettings.selection > 1 then
-			_KeybindingMenuSettings.selection = _KeybindingMenuSettings.selection - 1
-		end
-	elseif k == "return" then
-		SharedKeybindingSettingsPerformMenuAction(_KeybindingMenuSettings.selection)
 	end
 end

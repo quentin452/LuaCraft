@@ -4,21 +4,11 @@ local _Mainmenu = CreateLuaCraftMenu(0, 0, "LuaCraft", {
 	"Settings",
 	"Exit",
 })
+local MenuTable = _Mainmenu
 GamestateMainMenu2 = GameStateBase:new()
 
 function GamestateMainMenu2:resetMenuSelection()
 	_Mainmenu.selection = 1
-end
-local menuWidth = 0
-function GamestateMainMenu2:resizeMenu()
-	local newMenuWidth = 0
-	for _, choice in ipairs(_Mainmenu.choice) do
-		local choiceWidth = self:setFont():getWidth(choice)
-		if choiceWidth > newMenuWidth then
-			newMenuWidth = choiceWidth
-		end
-	end
-	menuWidth = newMenuWidth
 end
 
 local marque = ""
@@ -56,38 +46,16 @@ local function PerformMenuAction(action)
 	end
 end
 
+function GamestateMainMenu2:resizeMenu()
+	SharedSettingsResizeMenu(MenuTable.choice)
+end
 function GamestateMainMenu2:mousepressed(x, y, b)
-	if b == 1 then
-		local w, h = Lovegraphics.getDimensions()
-		local posX = w * 0.4
-		local posY = h * 0.4
-		local lineHeight = GetSelectedFont():getHeight("X")
-
-		local choiceClicked = math.floor((y - posY) / lineHeight)
-		local minX = posX
-		local maxX = posX + menuWidth
-
-		if choiceClicked >= 1 and choiceClicked <= #_Mainmenu.choice and x >= minX and x <= maxX then
-			_Mainmenu.selection = choiceClicked
-			PerformMenuAction(choiceClicked)
-		end
-	end
+	SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
-
 function GamestateMainMenu2:keypressed(k)
-	if k == BackWardKey then
-		if _Mainmenu.selection < #_Mainmenu.choice then
-			_Mainmenu.selection = _Mainmenu.selection + 1
-		end
-	elseif k == ForWardKey then
-		if _Mainmenu.selection > 1 then
-			_Mainmenu.selection = _Mainmenu.selection - 1
-		end
-	elseif k == "return" then
-		PerformMenuAction(_Mainmenu.selection)
-	end
+	MenuTable.choice, MenuTable.selection =
+		SharedSelectionKeyPressedBetweenGameState(k, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
-
 function GamestateMainMenu2:setFont()
 	return Font25
 end

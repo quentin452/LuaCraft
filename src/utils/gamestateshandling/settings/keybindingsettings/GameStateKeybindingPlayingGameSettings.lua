@@ -1,4 +1,6 @@
 GamestateKeybindingPlayingGameSettings2 = GameStateBase:new()
+local MenuTable = _KeybindingMenuSettings
+
 function GamestateKeybindingPlayingGameSettings2:resetMenuSelection()
 	_KeybindingMenuSettings.selection = 1
 end
@@ -7,11 +9,23 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 end
 
 function GamestateKeybindingPlayingGameSettings2:mousepressed(x, y, b)
-	SharedKeybindingSettingsMousePressed(x, y, b)
+	SharedSelectionMenuBetweenGameState(
+		x,
+		y,
+		b,
+		MenuTable.choice,
+		MenuTable.selection,
+		SharedKeybindingSettingsPerformMenuAction
+	)
 end
 
 function GamestateKeybindingPlayingGameSettings2:keypressed(k)
-	SharedKeybindingSettingsKeyPressed(k)
+	MenuTable.choice, MenuTable.selection = SharedSelectionKeyPressedBetweenGameState(
+		k,
+		MenuTable.choice,
+		MenuTable.selection,
+		SharedKeybindingSettingsPerformMenuAction
+	)
 end
 
 function GamestateKeybindingPlayingGameSettings2:setFont()
@@ -19,5 +33,5 @@ function GamestateKeybindingPlayingGameSettings2:setFont()
 end
 
 function GamestateKeybindingPlayingGameSettings2:resizeMenu()
-	SharedKeybindingSettingsResizeMenu()
+	SharedSettingsResizeMenu(MenuTable.choice)
 end

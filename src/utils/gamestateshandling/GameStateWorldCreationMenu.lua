@@ -3,7 +3,7 @@ local _WorldCreationMenu = CreateLuaCraftMenu(0, 0, "World Creation Menu", {
 	"WorldType",
 	"Exiting to main menu",
 })
-
+local MenuTable = _WorldCreationMenu
 GamestateWorldCreationMenu2 = GameStateBase:new()
 function GamestateWorldCreationMenu2:resetMenuSelection()
 	_WorldCreationMenu.selection = 1
@@ -55,46 +55,17 @@ local function PerformMenuAction(action)
 		SetCurrentGameState(GamestateMainMenu2)
 	end
 end
-local menuWidth = 0
 function GamestateWorldCreationMenu2:resizeMenu()
-	local newMenuWidth = 0
-	for _, choice in ipairs(_WorldCreationMenu.choice) do
-		local choiceWidth = self:setFont():getWidth(choice)
-		if choiceWidth > newMenuWidth then
-			newMenuWidth = choiceWidth
-		end
-	end
-	menuWidth = newMenuWidth
+	SharedSettingsResizeMenu(MenuTable.choice)
 end
 function GamestateWorldCreationMenu2:mousepressed(x, y, b)
-	if b == 1 then
-		local w, h = Lovegraphics.getDimensions()
-		local posX = w * 0.4
-		local posY = h * 0.4
-		local lineHeight = GetSelectedFont():getHeight("X")
-		local choiceClicked = math.floor((y - posY) / lineHeight)
-		local minX = posX
-		local maxX = posX + menuWidth
-		if choiceClicked >= 1 and choiceClicked <= #_WorldCreationMenu.choice and x >= minX and x <= maxX then
-			_WorldCreationMenu.selection = choiceClicked
-			PerformMenuAction(choiceClicked)
-		end
-	end
+	SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
+end
+function GamestateWorldCreationMenu2:keypressed(k)
+	MenuTable.choice, MenuTable.selection =
+		SharedSelectionKeyPressedBetweenGameState(k, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
 
-function GamestateWorldCreationMenu2:keypressed(k)
-	if k == BackWardKey then
-		if _WorldCreationMenu.selection < #_WorldCreationMenu.choice then
-			_WorldCreationMenu.selection = _WorldCreationMenu.selection + 1
-		end
-	elseif k == ForWardKey then
-		if _WorldCreationMenu.selection > 1 then
-			_WorldCreationMenu.selection = _WorldCreationMenu.selection - 1
-		end
-	elseif k == "return" then
-		PerformMenuAction(_WorldCreationMenu.selection)
-	end
-end
 
 function GamestateWorldCreationMenu2:setFont()
 	return Font15

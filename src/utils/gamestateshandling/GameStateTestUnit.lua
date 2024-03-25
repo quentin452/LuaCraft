@@ -4,7 +4,7 @@ local _GameStateTestUnitMenuSettings = CreateLuaCraftMenu(0, 0, "Test Unit Menu"
 	"Choose a Test Unit",
 	"Exiting to main menu",
 })
-
+local MenuTable = _GameStateTestUnitMenuSettings
 GameStateTestUnit = GameStateBase:new()
 function GameStateTestUnit:resetMenuSelection()
 	_GameStateTestUnitMenuSettings.selection = 1
@@ -113,52 +113,17 @@ local function PerformMenuAction(action)
 		end
 	end
 end
-local menuWidth = 0
+
 function GameStateTestUnit:resizeMenu()
-	local newMenuWidth = 0
-	for _, choice in ipairs(_GameStateTestUnitMenuSettings.choice) do
-		local choiceWidth = self:setFont():getWidth(choice)
-		if choiceWidth > newMenuWidth then
-			newMenuWidth = choiceWidth
-		end
-	end
-	menuWidth = newMenuWidth
+	SharedSettingsResizeMenu(MenuTable.choice)
 end
 function GameStateTestUnit:mousepressed(x, y, b)
-	if b == 1 then
-		local w, h = Lovegraphics.getDimensions()
-		local posX = w * 0.4
-		local posY = h * 0.4
-		local lineHeight = GetSelectedFont():getHeight("X")
-		local choiceClicked = math.floor((y - posY) / lineHeight)
-		local minX = posX
-		local maxX = posX + menuWidth
-		if
-			choiceClicked >= 1
-			and choiceClicked <= #_GameStateTestUnitMenuSettings.choice
-			and x >= minX
-			and x <= maxX
-		then
-			_GameStateTestUnitMenuSettings.selection = choiceClicked
-			PerformMenuAction(choiceClicked)
-		end
-	end
+	SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
-
 function GameStateTestUnit:keypressed(k)
-	if k == BackWardKey and ConfiguringMovementKey == false then
-		if _GameStateTestUnitMenuSettings.selection < #_GameStateTestUnitMenuSettings.choice then
-			_GameStateTestUnitMenuSettings.selection = _GameStateTestUnitMenuSettings.selection + 1
-		end
-	elseif k == ForWardKey and ConfiguringMovementKey == false then
-		if _GameStateTestUnitMenuSettings.selection > 1 then
-			_GameStateTestUnitMenuSettings.selection = _GameStateTestUnitMenuSettings.selection - 1
-		end
-	elseif k == "return" then
-		PerformMenuAction(_GameStateTestUnitMenuSettings.selection)
-	end
+	MenuTable.choice, MenuTable.selection =
+		SharedSelectionKeyPressedBetweenGameState(k, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
-
 function GameStateTestUnit:setFont()
 	return Font25
 end

@@ -3,10 +3,10 @@ local _GamePlayingPauseMenu = CreateLuaCraftMenu(0, 0, "Pause", {
 	"Settings",
 	"Exit to main menu",
 })
-
+local MenuTable = _GamePlayingPauseMenu
 GamestateGamePausing2 = GameStateBase:new()
 function GamestateGamePausing2:resetMenuSelection()
-	_GamePlayingPauseMenu.selection = 1
+	MenuTable.selection = 1
 end
 local marque = ""
 
@@ -20,15 +20,15 @@ function GamestateGamePausing2:draw()
 	local posX = w * 0.4
 	local posY = h * 0.4
 	local lineHeight = GetSelectedFont():getHeight("X")
-	DrawColorString(_GamePlayingPauseMenu.title, posX, posY)
+	DrawColorString(MenuTable.title, posX, posY)
 	posY = posY + lineHeight
-	for n = 1, #_GamePlayingPauseMenu.choice do
-		if _GamePlayingPauseMenu.selection == n then
+	for n = 1, #MenuTable.choice do
+		if MenuTable.selection == n then
 			marque = "%1*%0 "
 		else
 			marque = "   "
 		end
-		DrawColorString(marque .. "" .. _GamePlayingPauseMenu.choice[n], posX, posY)
+		DrawColorString(marque .. "" .. MenuTable.choice[n], posX, posY)
 		posY = posY + lineHeight
 	end
 end
@@ -61,48 +61,16 @@ local function PerformMenuAction(action)
 		ClearChunksAndGoToMainMenu()
 	end
 end
-local menuWidth = 0
 function GamestateGamePausing2:resizeMenu()
-	local newMenuWidth = 0
-	for _, choice in ipairs(_GamePlayingPauseMenu.choice) do
-		local choiceWidth = self:setFont():getWidth(choice)
-		if choiceWidth > newMenuWidth then
-			newMenuWidth = choiceWidth
-		end
-	end
-	menuWidth = newMenuWidth
+	SharedSettingsResizeMenu(MenuTable.choice)
 end
 function GamestateGamePausing2:mousepressed(x, y, b)
-	if b == 1 then
-		local w, h = Lovegraphics.getDimensions()
-		local posX = w * 0.4
-		local posY = h * 0.4
-		local lineHeight = GetSelectedFont():getHeight("X")
-		local choiceClicked = math.floor((y - posY) / lineHeight)
-		local minX = posX
-		local maxX = posX + menuWidth
-		if choiceClicked >= 1 and choiceClicked <= #_GamePlayingPauseMenu.choice and x >= minX and x <= maxX then
-			_GamePlayingPauseMenu.selection = choiceClicked
-			PerformMenuAction(choiceClicked)
-		end
-	end
+	SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
 function GamestateGamePausing2:keypressed(k)
-	_JPROFILER.push("keysinitGamePlayingPauseMenu")
-	if k == BackWardKey then
-		if _GamePlayingPauseMenu.selection < #_GamePlayingPauseMenu.choice then
-			_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection + 1
-		end
-	elseif k == ForWardKey then
-		if _GamePlayingPauseMenu.selection > 1 then
-			_GamePlayingPauseMenu.selection = _GamePlayingPauseMenu.selection - 1
-		end
-	elseif k == "return" then
-		PerformMenuAction(_GamePlayingPauseMenu.selection)
-	end
-	_JPROFILER.pop("keysinitGamePlayingPauseMenu")
+	MenuTable.choice, MenuTable.selection =
+		SharedSelectionKeyPressedBetweenGameState(k, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
-
 function GamestateGamePausing2:setFont()
 	return Font25
 end

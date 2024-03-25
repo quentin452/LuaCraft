@@ -61,7 +61,7 @@ function SharedSettingsDraw()
 	end
 end
 
-local function SharedSettingsPerformMenuAction(action)
+function SharedSettingsPerformMenuAction(action)
 	if action == 1 then
 		LuaCraftSettingsUpdater("toggleVSync")
 	elseif action == 2 then
@@ -90,46 +90,5 @@ local function SharedSettingsPerformMenuAction(action)
 		elseif IsCurrentGameState(GamestateMainMenuSettings2) then
 			SetCurrentGameState(GamestateMainMenu2)
 		end
-	end
-end
-local menuWidth = 0
-
-function SharedSettingsResizeMenu()
-	local newMenuWidth = 0
-	for _, choice in ipairs(_MainMenuSettings.choice) do
-		local choiceWidth = LuaCraftCurrentGameState:setFont():getWidth(choice)
-		if choiceWidth > newMenuWidth then
-			newMenuWidth = choiceWidth
-		end
-	end
-	menuWidth = newMenuWidth
-end
-function SharedSettingsMousePressed(x, y, b)
-	if b == 1 then
-		local w, h = Lovegraphics.getDimensions()
-		local posX = w * 0.4
-		local posY = h * 0.4
-		local lineHeight = GetSelectedFont():getHeight("X")
-		local choiceClicked = math.floor((y - posY) / lineHeight)
-		local minX = posX
-		local maxX = posX + menuWidth
-		if choiceClicked >= 1 and choiceClicked <= #_MainMenuSettings.choice and x >= minX and x <= maxX then
-			_MainMenuSettings.selection = choiceClicked
-			SharedSettingsPerformMenuAction(choiceClicked)
-		end
-	end
-end
-
-function SharedSettingsKeyPressed(k)
-	if k == BackWardKey then
-		if _MainMenuSettings.selection < #_MainMenuSettings.choice then
-			_MainMenuSettings.selection = _MainMenuSettings.selection + 1
-		end
-	elseif k == ForWardKey then
-		if _MainMenuSettings.selection > 1 then
-			_MainMenuSettings.selection = _MainMenuSettings.selection - 1
-		end
-	elseif k == "return" then
-		SharedSettingsPerformMenuAction(_MainMenuSettings.selection)
 	end
 end
