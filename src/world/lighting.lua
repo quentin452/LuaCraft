@@ -23,6 +23,11 @@ function LightingUpdate()
 	LightingQueue = {}
 end
 
+local function PerformLightLoop(x, y, z, tablechoosed, lightoperation, value)
+	for _, dir in ipairs(tablechoosed) do
+		NewLightOperation(x + dir.x, y + dir.y, z + dir.z, lightoperation, value)
+	end
+end
 --TODO REMOVE ANONYMES FUNCTION
 --TODO REMOVE RECURSIVE CALLS
 --TODO put lightning into another thread
@@ -31,10 +36,7 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		local val = cget:getVoxel(cx, cy, cz)
 		if value >= 0 and TileLightable(val, true) then
 			cget:setVoxelFirstData(cx, cy, cz, value)
-			for _, dir in ipairs(SIXDIRECTIONS) do
-				local nx, ny, nz = x + dir.x, y + dir.y, z + dir.z
-				NewLightOperation(nx, ny, nz, LightOpe.SunAdd.id, value - 1)
-			end
+			PerformLightLoop(x, y, z, SIXDIRECTIONS, LightOpe.SunAdd.id, value - 1)
 		end
 	elseif lightoperation == LightOpe.SunCreationAdd.id then
 		local val = cget:getVoxel(cx, cy, cz)
@@ -48,18 +50,13 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		if TileLightable(val) and (dat and dat <= value) then
 			cget:setVoxelFirstData(cx, cy, cz, value)
 			NewLightOperation(x, y - 1, z, LightOpe.SunDownAdd.id, value)
-			for _, dir in ipairs(FOURDIRECTIONS) do
-				local nx, ny, nz = x + dir.x, y + dir.y, z + dir.z
-				NewLightOperation(nx, ny, nz, LightOpe.SunAdd.id, value - 1)
-			end
+			PerformLightLoop(x, y, z, FOURDIRECTIONS, LightOpe.SunAdd.id, value - 1)
 		end
 	elseif lightoperation == LightOpe.LocalForceAdd.id then
 		local val, _, _ = cget:getVoxel(cx, cy, cz)
 		if value >= 0 and TileLightable(val, true) then
 			cget:setVoxelSecondData(cx, cy, cz, value)
-			for _, dir in ipairs(SIXDIRECTIONS) do
-				NewLightOperation(x + dir.x, y + dir.y, z + dir.z, LightOpe.LocalAdd.id, value - 1)
-			end
+			PerformLightLoop(x, y, z, SIXDIRECTIONS, LightOpe.LocalAdd.id, value - 1)
 		end
 	elseif lightoperation == LightOpe.LocalSubtract.id then
 		local val, _ = cget:getVoxel(cx, cy, cz)
@@ -67,10 +64,7 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		if fget > 0 and value >= 0 and TileLightable(val, true) then
 			if fget < value then
 				cget:setVoxelSecondData(cx, cy, cz, 0)
-				for _, dir in ipairs(SIXDIRECTIONS) do
-					local nx, ny, nz = x + dir.x, y + dir.y, z + dir.z
-					NewLightOperation(nx, ny, nz, LightOpe.LocalSubtract.id, fget)
-				end
+				PerformLightLoop(x, y, z, SIXDIRECTIONS, LightOpe.LocalSubtract.id, fget)
 			else
 				NewLightOperation(x, y, z, LightOpe.LocalForceAdd.id, fget)
 			end
@@ -86,9 +80,7 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		local dat = cget:getVoxelFirstData(cx, cy, cz)
 		if value >= 0 and TileLightable(val, true) and dat < value then
 			cget:setVoxelFirstData(cx, cy, cz, value)
-			for _, dir in ipairs(SIXDIRECTIONS) do
-				NewLightOperation(x + dir.x, y + dir.y, z + dir.z, LightOpe.SunAdd.id, value - 1)
-			end
+			PerformLightLoop(x, y, z, SIXDIRECTIONS, LightOpe.SunAdd.id, value - 1)
 		end
 	elseif lightoperation == LightOpe.LocalAdd.id then
 		local localcx, localcy, localcz = Localize(x, y, z)
@@ -96,9 +88,7 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		if TileLightable(val, true) and dat < value then
 			cget:setVoxelSecondData(localcx, localcy, localcz, value)
 			if value > 1 then
-				for _, dir in ipairs(SIXDIRECTIONS) do
-					NewLightOperation(x + dir.x, y + dir.y, z + dir.z, LightOpe.LocalAdd.id, value - 1)
-				end
+				PerformLightLoop(x, y, z, SIXDIRECTIONS, LightOpe.LocalAdd.id, value - 1)
 			end
 		end
 	elseif lightoperation == LightOpe.SunSubtract.id then
@@ -107,9 +97,7 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		if fget > 0 and value >= 0 and TileLightable(val, true) then
 			if fget < value then
 				cget:setVoxelFirstData(cx, cy, cz, Tiles.AIR_Block.id)
-				for _, dir in ipairs(SIXDIRECTIONS) do
-					NewLightOperation(x + dir.x, y + dir.y, z + dir.z, LightOpe.SunSubtract.id, fget)
-				end
+				PerformLightLoop(x, y, z, SIXDIRECTIONS, LightOpe.SunSubtract.id, fget)
 			else
 				NewLightOperation(x, y, z, LightOpe.SunForceAdd.id, fget)
 			end
@@ -119,9 +107,7 @@ function PerformLightOperation(cget, cx, cy, cz, lightoperation, value, x, y, z)
 		local val = GetVoxel(x, y, z)
 		if TileLightable(val, true) then
 			SetVoxelFirstData(x, y, z, Tiles.AIR_Block.id)
-			for _, dir in ipairs(FOURDIRECTIONS) do
-				NewLightOperation(x + dir.x, y + dir.y, z + dir.z, LightOpe.SunSubtract.id, LightSources[15])
-			end
+			PerformLightLoop(x, y, z, FOURDIRECTIONS, LightOpe.SunSubtract.id, LightSources[15])
 			if GetVoxel(x, y - 1, z) == Tiles.AIR_Block.id then
 				NewLightOperation(x, y - 1, z, LightOpe.SunDownSubtract.id)
 			end
