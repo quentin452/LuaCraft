@@ -6,7 +6,7 @@ local ExampleMod = {}
 
 function ExampleMod.initialize()
 	addFunctionToTag("chunkPopulateTag", function(self, i, height, j)
-		if math.random() < 0.2 then
+		if math.random() < 0.02 then
 			local min = math.min(Tiles.YELLO_FLOWER_Block.id, Tiles.ROSE_FLOWER_Block.id)
 			local max = math.max(Tiles.YELLO_FLOWER_Block.id, Tiles.ROSE_FLOWER_Block.id)
 			local flowerID = math.random(min, max)
