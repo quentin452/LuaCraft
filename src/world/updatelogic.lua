@@ -135,8 +135,8 @@ local function processChunkUpdates(chunk)
 		chunk.updatedSunLight = nil
 	elseif chunk.isPopulated == false then
 		_JPROFILER.push("populateChunk")
-		UpdateCaves()
 		PopulateChunk(chunk)
+		UpdateCaves()
 		InitProcessRequest(chunk)
 		_JPROFILER.pop("populateChunk")
 		chunk.isPopulated = nil
