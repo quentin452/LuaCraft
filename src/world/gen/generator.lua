@@ -28,6 +28,11 @@ end
 
 function GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
 	_JPROFILER.push("GenerateChunk")
+	if GlobalWorldType == FlatWorld then
+		chunkfloor = 120
+	else
+		chunkfloor = 48
+	end
 	for j = WorldHeight, 1, -1 do
 		local yy = (j - 1) * TileDataSize + 1
 		local genFuncResult = generationFunction(chunk, xx, j, zz)
@@ -66,6 +71,9 @@ function GenerateChunk(chunk, xx, zz, sunlight, i, k, generationFunction)
 	end
 	chunk.voxels[i][k] = table.concat(temp)
 	_JPROFILER.pop("GenerateChunk")
+end
+function FlatWorld(chunk, xx, j, zz)
+	return false
 end
 
 function StandardTerrain(chunk, xx, j, zz)
@@ -123,5 +131,6 @@ GlobalWorldType = StandardTerrain
 
 WorldTypeMap = {
 	[StandardTerrain] = { name = "Standard Terrain", nextType = ClassicTerrain },
-	[ClassicTerrain] = { name = "Classic Terrain", nextType = StandardTerrain },
+	[ClassicTerrain] = { name = "Classic Terrain", nextType = FlatWorld },
+	[FlatWorld] = { name = "Flat World", nextType = StandardTerrain },
 }
