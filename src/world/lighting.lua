@@ -42,14 +42,12 @@ end
 function SunDownAdd(cget, cx, cy, cz, value, x, y, z)
 	local val = cget:getVoxel(cx, cy, cz)
 	local dat = cget:getVoxelFirstData(cx, cy, cz)
-	if type(dat) == "number" then
-		if TileLightable(val) and dat <= value then
-			cget:setVoxelFirstData(cx, cy, cz, value)
-			NewLightOperation(x, y - 1, z, LightOpe.SunDownAdd.id, value)
-			for _, dir in ipairs(FOURDIRECTIONS) do
-				local nx, ny, nz = x + dir.x, y + dir.y, z + dir.z
-				NewLightOperation(nx, ny, nz, LightOpe.SunAdd.id, value - 1)
-			end
+	if TileLightable(val) and dat <= value then
+		cget:setVoxelFirstData(cx, cy, cz, value)
+		NewLightOperation(x, y - 1, z, LightOpe.SunDownAdd.id, value)
+		for _, dir in ipairs(FOURDIRECTIONS) do
+			local nx, ny, nz = x + dir.x, y + dir.y, z + dir.z
+			NewLightOperation(nx, ny, nz, LightOpe.SunAdd.id, value - 1)
 		end
 	end
 end
