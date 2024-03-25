@@ -65,15 +65,11 @@ function ClassicTerrain(chunk, xx, j, zz)
 	_JPROFILER.push("ClassicTerrain")
 
 	local scalar = 1.3
-	local heightLow = (OctaveNoise(xx * scalar, zz * scalar, 8, 2, 3) + OctaveNoise(xx * scalar, zz * scalar, 8, 4, 5))
-			/ 6
-		- 4
-	local heightHigh = (OctaveNoise(xx * scalar, zz * scalar, 8, 6, 7) + OctaveNoise(xx * scalar, zz * scalar, 8, 8, 9))
-			/ 5
-		- 6
+	local heightLow = (OctaveNoise(xx * scalar, zz * scalar, 8) + OctaveNoise(xx * scalar, zz * scalar, 8)) / 6 - 4
+	local heightHigh = (OctaveNoise(xx * scalar, zz * scalar, 8) + OctaveNoise(xx * scalar, zz * scalar, 8)) / 5 - 6
 	local heightResult = heightLow
 
-	if OctaveNoise(xx, zz, 6, 10, 11) / 8 <= 0 then
+	if OctaveNoise(xx, zz, 6) / 8 <= 0 then
 		heightResult = math.max(heightLow, heightHigh)
 	end
 
@@ -101,7 +97,7 @@ function Noise2D(x, z, freq)
 	return love.math.noise(x / freq, z / freq)
 end
 
-function OctaveNoise(x, y, octaves, seed1, seed2)
+function OctaveNoise(x, y, octaves)
 	local ret = 0
 	local freq = 1
 	local amp = 1
