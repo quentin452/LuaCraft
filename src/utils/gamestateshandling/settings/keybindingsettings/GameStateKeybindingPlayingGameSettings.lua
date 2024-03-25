@@ -7,7 +7,7 @@ function GamestateKeybindingPlayingGameSettings2:draw()
 end
 
 function GamestateKeybindingPlayingGameSettings2:mousepressed(x, y, b)
-	SharedKeybindingSettingsMousePressed(x, y, b) 
+	SharedKeybindingSettingsMousePressed(x, y, b)
 end
 
 function GamestateKeybindingPlayingGameSettings2:keypressed(k)
@@ -16,4 +16,8 @@ end
 
 function GamestateKeybindingPlayingGameSettings2:setFont()
 	return Font25
+end
+
+function GamestateKeybindingPlayingGameSettings2:resizeMenu()
+	SharedKeybindingSettingsResizeMenu()
 end

@@ -7,4 +7,5 @@ function SetCurrentGameState(state)
 		LuaCraftCurrentGameState:resetMenuSelection()
 	end
 	LuaCraftCurrentGameState = state
+	LuaCraftCurrentGameState:resizeMenu()
 end

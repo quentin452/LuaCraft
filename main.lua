@@ -66,6 +66,7 @@ function love.resize(w, h)
 	_JPROFILER.push("frame")
 	_JPROFILER.push("Mainresize")
 	LuaCraftCurrentGameState:resize(w, h)
+	LuaCraftCurrentGameState:resizeMenu()
 	local scaleCoefficient = 0.7
 	InterfaceWidth = w * scaleCoefficient
 	InterfaceHeight = h * scaleCoefficient

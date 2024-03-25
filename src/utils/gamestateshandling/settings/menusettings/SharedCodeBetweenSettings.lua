@@ -92,20 +92,24 @@ local function SharedSettingsPerformMenuAction(action)
 		end
 	end
 end
+local menuWidth = 0
 
+function SharedSettingsResizeMenu()
+	local newMenuWidth = 0
+	for _, choice in ipairs(_MainMenuSettings.choice) do
+		local choiceWidth = LuaCraftCurrentGameState:setFont():getWidth(choice)
+		if choiceWidth > newMenuWidth then
+			newMenuWidth = choiceWidth
+		end
+	end
+	menuWidth = newMenuWidth
+end
 function SharedSettingsMousePressed(x, y, b)
 	if b == 1 then
 		local w, h = Lovegraphics.getDimensions()
 		local posX = w * 0.4
 		local posY = h * 0.4
 		local lineHeight = GetSelectedFont():getHeight("X")
-		local menuWidth = 0
-		for _, choice in ipairs(_MainMenuSettings.choice) do
-			local choiceWidth = GetSelectedFont():getWidth(choice)
-			if choiceWidth > menuWidth then
-				menuWidth = choiceWidth
-			end
-		end
 		local choiceClicked = math.floor((y - posY) / lineHeight)
 		local minX = posX
 		local maxX = posX + menuWidth

@@ -15,3 +15,6 @@ end
 function GamestatePlayingGameSettings2:setFont()
 	return Font25
 end
+function GamestatePlayingGameSettings2:resizeMenu()
+	SharedSettingsResizeMenu()
+end

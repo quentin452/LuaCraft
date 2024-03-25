@@ -6,6 +6,8 @@ function GameStateBase:new(o)
 	self.__index = self
 	return o
 end
+function GameStateBase:resizeMenu() end
+
 function GameStateBase:resetMenuSelection() end
 function GameStateBase:update(dt) end
 
