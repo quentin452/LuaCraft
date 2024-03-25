@@ -55,13 +55,13 @@ end
 
 function SharedKeybindingSettingsPerformMenuAction(action)
 	if action == 1 then
-		ConfiguringMovementKey = true
+		ConfiguringMovementKey_KeyPressed = true
 	elseif action == 2 then
-		ConfiguringMovementKey = true
+		ConfiguringMovementKey_KeyPressed = true
 	elseif action == 3 then
-		ConfiguringMovementKey = true
+		ConfiguringMovementKey_KeyPressed = true
 	elseif action == 4 then
-		ConfiguringMovementKey = true
+		ConfiguringMovementKey_KeyPressed = true
 	elseif action == 5 then
 		if IsCurrentGameState(GamestateKeybindingMainSettings2) then
 			SetCurrentGameState(GamestateMainMenuSettings2)

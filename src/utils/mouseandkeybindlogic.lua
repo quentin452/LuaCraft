@@ -3,9 +3,9 @@ function KeyPressed(k)
 		LuaCraftSettingsUpdater("toggleFullScreen")
 	end
 	LuaCraftCurrentGameState:keypressed(k)
-	if ConfiguringMovementKey then
+	if ConfiguringMovementKey_KeyPressed then
 		if k == "escape" then
-			ConfiguringMovementKey = false
+			ConfiguringMovementKey_KeyPressed = false
 		else
 			if k ~= "return" then
 				local keyToUpdate
@@ -25,7 +25,7 @@ function KeyPressed(k)
 					updateConfigFile(keyToUpdate, forwardKey)
 					if forwardKey ~= previousKey then
 						ResetMovementKeys = true
-						ConfiguringMovementKey = false
+						ConfiguringMovementKey_KeyPressed = false
 					end
 				end
 			end

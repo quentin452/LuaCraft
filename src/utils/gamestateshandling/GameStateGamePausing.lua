@@ -64,7 +64,8 @@ function GamestateGamePausing2:resizeMenu()
 	SharedSettingsResizeMenu(MenuTable.choice)
 end
 function GamestateGamePausing2:mousepressed(x, y, b)
-	SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
+	MenuTable.choice, MenuTable.selection =
+		SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
 function GamestateGamePausing2:keypressed(k)
 	MenuTable.choice, MenuTable.selection =

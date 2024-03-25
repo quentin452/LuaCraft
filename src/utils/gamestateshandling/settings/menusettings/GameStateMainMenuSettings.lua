@@ -7,7 +7,14 @@ function GamestateMainMenuSettings2:draw()
 	SharedSettingsDraw()
 end
 function GamestateMainMenuSettings2:mousepressed(x, y, b)
-	SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, SharedSettingsPerformMenuAction)
+	MenuTable.choice, MenuTable.selection = SharedSelectionMenuBetweenGameState(
+		x,
+		y,
+		b,
+		MenuTable.choice,
+		MenuTable.selection,
+		SharedSettingsPerformMenuAction
+	)
 end
 
 function GamestateMainMenuSettings2:keypressed(k)

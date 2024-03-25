@@ -24,18 +24,21 @@ function SharedSelectionMenuBetweenGameState(x, y, b, choice, selection, menuact
 			menuactionfunc(selection)
 		end
 	end
+	return choice, selection
 end
 function SharedSelectionKeyPressedBetweenGameState(k, choice, selection, menuactionfunc)
-	if k == BackWardKey then
-		if selection < #choice then
-			selection = selection + 1
+	if ConfiguringMovementKey_KeyPressed == false then
+		if k == BackWardKey then
+			if selection < #choice then
+				selection = selection + 1
+			end
+		elseif k == ForWardKey then
+			if selection > 1 then
+				selection = selection - 1
+			end
+		elseif k == "return" then
+			menuactionfunc(selection)
 		end
-	elseif k == ForWardKey then
-		if selection > 1 then
-			selection = selection - 1
-		end
-	elseif k == "return" then
-		menuactionfunc(selection)
 	end
 	return choice, selection
 end

@@ -117,7 +117,8 @@ function GameStateTestUnit:resizeMenu()
 	SharedSettingsResizeMenu(MenuTable.choice)
 end
 function GameStateTestUnit:mousepressed(x, y, b)
-	SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
+	MenuTable.choice, MenuTable.selection =
+		SharedSelectionMenuBetweenGameState(x, y, b, MenuTable.choice, MenuTable.selection, PerformMenuAction)
 end
 function GameStateTestUnit:keypressed(k)
 	MenuTable.choice, MenuTable.selection =

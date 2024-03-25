@@ -9,7 +9,7 @@ function GamestateKeybindingMainSettings2:draw()
 end
 
 function GamestateKeybindingMainSettings2:mousepressed(x, y, b)
-	SharedSelectionMenuBetweenGameState(
+	MenuTable.choice, MenuTable.selection = SharedSelectionMenuBetweenGameState(
 		x,
 		y,
 		b,
