@@ -4,6 +4,7 @@ local grass = true
 local chunkfloor = 48
 local maxHeight = 120
 local scalar = 1.3
+local waterlevel = 64
 --TODO REMOVE string.char USAGE IF POSSIBLE
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
@@ -78,7 +79,7 @@ function ClassicTerrain(chunk, xx, j, zz)
 		heightResult = heightResult * 0.8
 	end
 
-	heightResult = heightResult + 64 -- water level
+	heightResult = heightResult + waterlevel
 	_JPROFILER.pop("ClassicTerrain")
 
 	return j <= heightResult --ChunkNoise(xx,j,zz) > (j-chunkfloor)/(maxHeight-chunkfloor)*(Noise2D(xx,zz, 128,5)*0.75 +0.75)
