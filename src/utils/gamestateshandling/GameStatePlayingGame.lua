@@ -60,6 +60,7 @@ function GameStatePlayingGame2:mousepressed(x, y, b)
 	local chunk = pos and pos.chunk
 	if chunk and ThePlayer and ThePlayer.cursorpos and ThePlayer.cursorHit and pos.y and pos.y < 128 then
 		chunk:setVoxel(pos.x, pos.y, pos.z, value, true)
+		LightingUpdate()
 	elseif pos and pos.x and pos.z and pos.y >= WorldHeight and ThePlayer.cursorpos and ThePlayer.cursorHit == true then
 		HudMessage = "you cannot place blocks at Y = " .. WorldHeight .. " or more"
 		HudTimeLeft = 3

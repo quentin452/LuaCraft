@@ -144,8 +144,12 @@ local function processChunkUpdates(chunk)
 		_JPROFILER.push("spawnPlayer")
 		ChooseSpawnLocation()
 		_JPROFILER.pop("spawnPlayer")
-	else
+	elseif chunk.updateLighting == false then
+		_JPROFILER.push("LightingUpdate_processChunkUpdates")
 		LightingUpdate()
+		_JPROFILER.pop("LightingUpdate_processChunkUpdates")
+		chunk.updateLighting = nil
+	else
 		addChunkToRenderQueue(chunk)
 		forceModelUpdatesForChunks(chunk)
 		processRenderChunks()

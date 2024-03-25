@@ -13,22 +13,14 @@ local FOURDIRECTIONS = {
 	{ x = 0, y = 0, z = -1 }, -- Backward
 }
 function LightingUpdate()
-	if next(LightingRemovalQueue) ~= nil then
-		for _, query in ipairs(LightingRemovalQueue) do
-			if query ~= nil then
-				query()
-			end
-		end
-		LightingRemovalQueue = {}
+	for _, query in ipairs(LightingRemovalQueue) do
+		query()
 	end
-	if next(LightingQueue) ~= nil then
-		for _, query in ipairs(LightingQueue) do
-			if query ~= nil then
-				query()
-			end
-		end
-		LightingQueue = {}
+	LightingRemovalQueue = {}
+	for _, query in ipairs(LightingQueue) do
+		query()
 	end
+	LightingQueue = {}
 end
 
 --TODO REMOVE ANONYMES FUNCTION

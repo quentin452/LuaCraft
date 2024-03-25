@@ -250,7 +250,6 @@ local function PreventBlockPlacementOnThePlayer(gx, gy, gz, leftMouseDown, right
 	local minX, maxX = playerXFloor - range, playerXFloor + range
 	local minY, maxY = playerYFloor, playerYFloor + 1
 	local minZ, maxZ = playerZFloor - range, playerZFloor + range
-
 	if gx >= minX and gx <= maxX and gy >= minY and gy <= maxY and gz >= minZ and gz <= maxZ then
 		if rightMouseDown then
 			return true
