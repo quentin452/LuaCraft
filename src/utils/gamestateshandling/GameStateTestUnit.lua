@@ -57,7 +57,6 @@ function GameStateTestUnit:draw()
 				else
 					DrawColorString(marque .. "" .. choiceText, posX, posY)
 				end
-				DrawColorString(marque .. "" .. choiceText, posX, posY)
 				posY = posY + lineHeight
 			end
 		end
