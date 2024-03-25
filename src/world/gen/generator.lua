@@ -71,22 +71,20 @@ end
 function StandardTerrain(chunk, xx, j, zz)
 	return ChunkNoise(xx, j, zz) > (j - chunkfloor) / (maxHeight - chunkfloor) * (Noise2D(xx, zz, 128) * 0.75 + 0.75)
 end
+
 function ClassicTerrain(chunk, xx, j, zz)
 	_JPROFILER.push("ClassicTerrain")
-
-	local heightLow = (OctaveNoise(xx * scalar, zz * scalar, 8) + OctaveNoise(xx * scalar, zz * scalar, 8)) / 6 - 4
-	local heightHigh = (OctaveNoise(xx * scalar, zz * scalar, 8) + OctaveNoise(xx * scalar, zz * scalar, 8)) / 5 - 6
+	local octaveNoiseResult = OctaveNoise(xx * scalar, zz * scalar, 8)
+	local heightLow = (octaveNoiseResult + octaveNoiseResult) / 6 - 4
+	local heightHigh = (octaveNoiseResult + octaveNoiseResult) / 5 - 6
 	local heightResult = heightLow
-
 	if OctaveNoise(xx, zz, 6) / 8 <= 0 then
 		heightResult = math.max(heightLow, heightHigh)
 	end
-
 	heightResult = heightResult * 0.5
 	if heightResult < 0 then
 		heightResult = heightResult * 0.8
 	end
-
 	heightResult = heightResult + waterlevel
 	_JPROFILER.pop("ClassicTerrain")
 
@@ -111,12 +109,16 @@ function OctaveNoise(x, y, octaves)
 	local freq = 1
 	local amp = 1
 	for _ = 1, octaves do
+		if amp < 0.01 then
+			break
+		end
 		ret = ret + love.math.noise(x * freq, y * freq) * amp - amp / 2
 		freq = freq * 0.5
 		amp = amp * 2
 	end
 	return ret
 end
+
 GlobalWorldType = StandardTerrain
 
 WorldTypeMap = {
