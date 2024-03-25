@@ -3,6 +3,7 @@ local dirt = 4
 local grass = true
 local chunkfloor = 48
 local maxHeight = 120
+local scalar = 1.3
 --TODO REMOVE string.char USAGE IF POSSIBLE
 function GenerateTerrain(chunk, x, z, generationFunction)
 	_JPROFILER.push("GenerateTerrain")
@@ -61,11 +62,9 @@ end
 function StandardTerrain(chunk, xx, j, zz)
 	return ChunkNoise(xx, j, zz) > (j - chunkfloor) / (maxHeight - chunkfloor) * (Noise2D(xx, zz, 128, 5) * 0.75 + 0.75)
 end
-
 function ClassicTerrain(chunk, xx, j, zz)
 	_JPROFILER.push("ClassicTerrain")
 
-	local scalar = 1.3
 	local heightLow = (OctaveNoise(xx * scalar, zz * scalar, 8) + OctaveNoise(xx * scalar, zz * scalar, 8)) / 6 - 4
 	local heightHigh = (OctaveNoise(xx * scalar, zz * scalar, 8) + OctaveNoise(xx * scalar, zz * scalar, 8)) / 5 - 6
 	local heightResult = heightLow
