@@ -107,7 +107,7 @@ extern "C" {
 #include <stdint.h>
 
 #if defined(GLFW_INCLUDE_VULKAN)
-#include <src/libs/Vulkan-Headers-main/include/vulkan/vulkan.h>
+#include <libs/Vulkan-Headers-main/include/vulkan/vulkan.h>
 #endif /* Vulkan header */
 
 /* The Vulkan header may have indirectly included windows.h (because of

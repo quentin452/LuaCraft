@@ -6740,30 +6740,30 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <member><type>uint32_t</type>                               <name>queryCount</name></member>
         </type>
             <comment>Video Decode Codec Standard specific structures</comment>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ProfileIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264LevelIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ChromaFormatIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PocType"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SpsFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ScalingLists"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SequenceParameterSetVui"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264AspectRatioIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264HrdParameters"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SpsVuiFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264WeightedBipredIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PpsFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SliceType"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264CabacInitIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264DisableDeblockingFilterIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PictureType"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ModificationOfPicNumsIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264MemMgmtControlOp"/>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264PictureInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264ReferenceInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264PictureInfoFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264ReferenceInfoFlags"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ProfileIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264LevelIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ChromaFormatIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PocType"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SpsFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ScalingLists"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SequenceParameterSetVui"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264AspectRatioIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264HrdParameters"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SpsVuiFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264WeightedBipredIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PpsFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SliceType"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264CabacInitIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264DisableDeblockingFilterIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PictureType"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264ModificationOfPicNumsIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264MemMgmtControlOp"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264PictureInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264ReferenceInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264PictureInfoFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_decode.h" name="StdVideoDecodeH264ReferenceInfoFlags"/>
         <type category="struct" name="VkVideoDecodeH264ProfileInfoKHR" structextends="VkVideoProfileInfoKHR,VkQueryPoolCreateInfo">
             <member values="VK_STRUCTURE_TYPE_VIDEO_DECODE_H264_PROFILE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member optional="true">const <type>void</type>*                                  <name>pNext</name></member>
@@ -6776,8 +6776,8 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <member><type>StdVideoH264LevelIdc</type>             <name>maxLevelIdc</name></member>
             <member><type>VkOffset2D</type>                       <name>fieldOffsetGranularity</name></member>
         </type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SequenceParameterSet"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PictureParameterSet"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264SequenceParameterSet"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h" name="StdVideoH264PictureParameterSet"/>
         <type category="struct" name="VkVideoDecodeH264SessionParametersAddInfoKHR" structextends="VkVideoSessionParametersUpdateInfoKHR">
             <member values="VK_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_ADD_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member optional="true">const <type>void</type>*                                    <name>pNext</name></member>
@@ -6805,30 +6805,30 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <member optional="true">const <type>void</type>*            <name>pNext</name></member>
             <member>const <type>StdVideoDecodeH264ReferenceInfo</type>* <name>pStdReferenceInfo</name></member>
         </type>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265ProfileIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265VideoParameterSet"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SequenceParameterSet"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PictureParameterSet"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265DecPicBufMgr"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265HrdParameters"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265VpsFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265LevelIdc"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SpsFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265ScalingLists"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SequenceParameterSetVui"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PredictorPaletteEntries"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PpsFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SubLayerHrdParameters"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265HrdFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SpsVuiFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SliceType"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PictureType"/>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265PictureInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265ReferenceInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265PictureInfoFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265ReferenceInfoFlags"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265ProfileIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265VideoParameterSet"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SequenceParameterSet"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PictureParameterSet"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265DecPicBufMgr"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265HrdParameters"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265VpsFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265LevelIdc"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SpsFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265ScalingLists"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SequenceParameterSetVui"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PredictorPaletteEntries"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PpsFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SubLayerHrdParameters"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265HrdFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SpsVuiFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265SliceType"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h" name="StdVideoH265PictureType"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265PictureInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265ReferenceInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265PictureInfoFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_decode.h" name="StdVideoDecodeH265ReferenceInfoFlags"/>
         <type category="struct" name="VkVideoDecodeH265ProfileInfoKHR" structextends="VkVideoProfileInfoKHR,VkQueryPoolCreateInfo">
             <member values="VK_STRUCTURE_TYPE_VIDEO_DECODE_H265_PROFILE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member optional="true">const <type>void</type>*                    <name>pNext</name></member>
@@ -6869,13 +6869,13 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <member optional="true">const <type>void</type>*             <name>pNext</name></member>
             <member>const <type>StdVideoDecodeH265ReferenceInfo</type>*  <name>pStdReferenceInfo</name></member>
         </type>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h" name="StdVideoAV1Profile"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h" name="StdVideoAV1Level"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h" name="StdVideoAV1SequenceHeader"/>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h" name="StdVideoDecodeAV1PictureInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h" name="StdVideoDecodeAV1ReferenceInfo"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h" name="StdVideoAV1Profile"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h" name="StdVideoAV1Level"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h" name="StdVideoAV1SequenceHeader"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h" name="StdVideoDecodeAV1PictureInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std_decode.h" name="StdVideoDecodeAV1ReferenceInfo"/>
         <type category="struct" name="VkVideoDecodeAV1ProfileInfoKHR" structextends="VkVideoProfileInfoKHR,VkQueryPoolCreateInfo">
             <member values="VK_STRUCTURE_TYPE_VIDEO_DECODE_AV1_PROFILE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member optional="true">const <type>void</type>*            <name>pNext</name></member>
@@ -7062,17 +7062,17 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <member><type>uint32_t</type>                               <name>preferredMaxL1ReferenceCount</name></member>
             <member><type>VkBool32</type>                               <name>preferredStdEntropyCodingModeFlag</name></member>
         </type>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264SliceHeader"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264PictureInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264ReferenceInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264SliceHeaderFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264ReferenceListsInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264PictureInfoFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264ReferenceInfoFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264RefMgmtFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264RefListModEntry"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264RefPicMarkingEntry"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264SliceHeader"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264PictureInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264ReferenceInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264SliceHeaderFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264ReferenceListsInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264PictureInfoFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264ReferenceInfoFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264RefMgmtFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264RefListModEntry"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std_encode.h" name="StdVideoEncodeH264RefPicMarkingEntry"/>
         <type category="struct" name="VkVideoEncodeH264SessionCreateInfoKHR" structextends="VkVideoSessionCreateInfoKHR">
             <member values="VK_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_CREATE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member optional="true">const <type>void</type>*            <name>pNext</name></member>
@@ -7201,15 +7201,15 @@ typedef void* <name>MTLSharedEvent_id</name>;
             <member><type>uint32_t</type>                               <name>preferredMaxL0ReferenceCount</name></member>
             <member><type>uint32_t</type>                               <name>preferredMaxL1ReferenceCount</name></member>
         </type>
-        <type category="include" name="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h">#include "src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h"</type>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265PictureInfoFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265PictureInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265SliceSegmentHeader"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceListsInfo"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265SliceSegmentHeaderFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceInfoFlags"/>
-        <type requires="src/libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceModificationFlags"/>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h">#include "libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h"</type>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265PictureInfoFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265PictureInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265SliceSegmentHeader"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceListsInfo"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265SliceSegmentHeaderFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceInfoFlags"/>
+        <type requires="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std_encode.h" name="StdVideoEncodeH265ReferenceModificationFlags"/>
         <type category="struct" name="VkVideoEncodeH265SessionCreateInfoKHR" structextends="VkVideoSessionCreateInfoKHR">
             <member values="VK_STRUCTURE_TYPE_VIDEO_ENCODE_H265_SESSION_CREATE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member optional="true">const <type>void</type>*            <name>pNext</name></member>

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 project(cpp_rewrite)
 
 # Définir le répertoire SFML
-set(SFML_DIR "${CMAKE_SOURCE_DIR}/src/libs/SFML-2.6.1/lib/cmake/SFML")
+set(SFML_DIR "${CMAKE_SOURCE_DIR}/libs/SFML-2.6.1/lib/cmake/SFML")
 
 # Trouver et inclure SFML
 find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
@@ -28,37 +28,37 @@ set(SOURCES
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC "${SFML_INCLUDE_DIRS}")
 
-set(OPENGL32_LIBRARY "${CMAKE_SOURCE_DIR}/src/libs/opengl/OpenGL32.lib")
+set(OPENGL32_LIBRARY "${CMAKE_SOURCE_DIR}/libs/opengl/OpenGL32.lib")
 
 # Spécifier le chemin d'accès aux en-têtes de FreeType
-set(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/src/libs/freetype-2.8.1/include")
+set(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/libs/freetype-2.8.1/include")
 
 # Inclure les en-têtes de FreeType dans la cible exécutable
 include_directories(${FREETYPE_INCLUDE_DIRS})
 
 # Spécifier le chemin d'accès à la bibliothèque FreeType
-set(FREETYPE_LIBRARY "${CMAKE_SOURCE_DIR}/src/libs/freetype-2.8.1/freetypelib/freetype.lib")
+set(FREETYPE_LIBRARY "${CMAKE_SOURCE_DIR}/libs/freetype-2.8.1/freetypelib/freetype.lib")
 
 # Lier la bibliothèque FreeType à la cible exécutable
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARY})
 
 # Spécifier le chemin d'accès aux fichiers d'en-tête GLFW
-set(GLFW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/src/libs/glfw-3.4/include")
+set(GLFW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/glfw-3.4/include")
 
 # Inclure les fichiers d'en-tête GLFW dans la cible exécutable
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR})
 
 # Spécifier le chemin d'accès aux bibliothèques GLFW
-# set(GLFW_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/src/libs/glfw-3.4.bin.WIN64/lib-vc2022")
+# set(GLFW_LIBRARY_DIR "${CMAKE_SOURCE_DIR}/libs/glfw-3.4.bin.WIN64/lib-vc2022")
 
 
 # Spécifier le chemin d'accès aux bibliothèques GLFW
-set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/src/libs/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
+set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
 
 # Lier les bibliothèques GLFW à la cible exécutable
 target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY})
 
-set(glfw3_DIR "${CMAKE_SOURCE_DIR}/src/libs/glfw-3.4/CMake")
+set(glfw3_DIR "${CMAKE_SOURCE_DIR}/libs/glfw-3.4/CMake")
 
 # Lier les bibliothèques GLFW à la cible exécutable
 # target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY_DIR})
@@ -68,7 +68,7 @@ target_link_libraries(${PROJECT_NAME} ${OPENGL32_LIBRARY})
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
 
 # Copier les fichiers DLL de SFML dans le répertoire de sortie de l'exécutable
-set(SFML_DLL_DIR "${CMAKE_SOURCE_DIR}/src/libs/SFML-2.6.1/bin")
+set(SFML_DLL_DIR "${CMAKE_SOURCE_DIR}/libs/SFML-2.6.1/bin")
 file(GLOB SFML_DLLS "${SFML_DLL_DIR}/*.dll")
 foreach(DLL ${SFML_DLLS})
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
