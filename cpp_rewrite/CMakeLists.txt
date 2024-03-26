@@ -7,22 +7,12 @@ set(SFML_DIR "${CMAKE_SOURCE_DIR}/libs/SFML-2.6.1/lib/cmake/SFML")
 # Trouver et inclure SFML
 find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
 
-# Définir les sources de l'exécutable
-set(SOURCES 
-    "src/main.cpp"
-    "src/VulkanRenderer.cpp"
-    "src/VulkanRenderer.h"
-    "src/gamestatehandling/core/GameState.h"
-    "src/gamestatehandling/core/GameStateManager.h"
-    "src/gamestatehandling/states/MainMenuState.h"
-    "src/gamestatehandling/states/MainMenuState.cpp"
-    "src/gamestatehandling/states/SettingsState.cpp"
-    "src/gamestatehandling/states/SettingsState.h"
-    "src/gamestatehandling/states/VulkanGameState.cpp"
-    "src/gamestatehandling/states/VulkanGameState.h"
-    "src/gamescene/3DGameScene.cpp"
-    "src/gamescene/3DGameScene.h"
-)
+# Définir le répertoire source
+set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
+
+# Trouver tous les fichiers source dans le répertoire source
+file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.h")
+
 
 # Créer l'exécutable
 add_executable(${PROJECT_NAME} ${SOURCES})
