@@ -1,10 +1,9 @@
 #pragma once
-#include "src/gamestatehandling/GameState.h"
-#include "src/gamestatehandling/GameStateManager.h"
+#include "src/gamestatehandling/core/GameStateManager.h"
 
-class SettingsState : public GameState {
+class MainMenuState : public GameState {
 public:
-  SettingsState(sf::Font &font, GameStateManager &manager);
+  MainMenuState(sf::Font &font, GameStateManager &manager);
 
   void handleInput(sf::RenderWindow &window) override;
   void update() override;

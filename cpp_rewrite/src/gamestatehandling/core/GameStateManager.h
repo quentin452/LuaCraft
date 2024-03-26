@@ -1,5 +1,5 @@
 #pragma once
-#include "src/gamestatehandling/GameState.h"
+#include "src/gamestatehandling/core/GameState.h"
 #include <memory>
 
 class GameStateManager {

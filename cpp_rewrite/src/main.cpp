@@ -1,6 +1,6 @@
-#include "src/gamestatehandling/GameStateManager.h"
-#include "src/gamestatehandling/MainMenuState.h"
-#include "src/gamestatehandling/SettingsState.h"
+#include "src/gamestatehandling/core/GameStateManager.h"
+#include "src/gamestatehandling/states/MainMenuState.h"
+#include "src/gamestatehandling/states/SettingsState.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 

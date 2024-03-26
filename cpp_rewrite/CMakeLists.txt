@@ -11,14 +11,13 @@ message(SFML INCLUDE DIR ${SFML_INCLUDE_DIRS})
 # Définir les sources de l'exécutable
 set(SOURCES 
 "src/main.cpp"
-"src/gamestatehandling/GameState.h"
-"src/gamestatehandling/GameStateManager.h"
-"src/gamestatehandling/MainMenuState.h"
-"src/gamestatehandling/MainMenuState.cpp"
-"src/gamestatehandling/SettingsState.cpp"
-"src/gamestatehandling/SettingsState.h"
+"src/gamestatehandling/core/GameState.h"
+"src/gamestatehandling/core/GameStateManager.h"
+"src/gamestatehandling/states/MainMenuState.h"
+"src/gamestatehandling/states/MainMenuState.cpp"
+"src/gamestatehandling/states/SettingsState.cpp"
+"src/gamestatehandling/states/SettingsState.h"
 )
-
 # Créer l'exécutable
 add_executable(${PROJECT_NAME} ${SOURCES})
 

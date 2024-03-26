@@ -1,11 +1,11 @@
-#include "src/gamestatehandling/MainMenuState.h"
-#include "src/gamestatehandling/SettingsState.h"
+#include "src/gamestatehandling/states/SettingsState.h"
+#include "src/gamestatehandling/states/MainMenuState.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-MainMenuState::MainMenuState(sf::Font &font, GameStateManager &manager)
+SettingsState::SettingsState(sf::Font &font, GameStateManager &manager)
     : font(font), manager(manager) {
-  title.setString("Menu Principal");
+  title.setString("Paramètres");
   title.setFont(font);
   title.setCharacterSize(50);
   title.setPosition(250, 50);
@@ -16,7 +16,7 @@ MainMenuState::MainMenuState(sf::Font &font, GameStateManager &manager)
   option1.setPosition(300, 200);
 }
 
-void MainMenuState::handleInput(sf::RenderWindow &window) {
+void SettingsState::handleInput(sf::RenderWindow &window) {
   sf::Event event;
   while (window.pollEvent(event)) {
     if (event.type == sf::Event::Closed)
@@ -26,20 +26,20 @@ void MainMenuState::handleInput(sf::RenderWindow &window) {
         if (option1.getGlobalBounds().contains(
                 static_cast<float>(event.mouseButton.x),
                 static_cast<float>(event.mouseButton.y))) {
-          std::cout << "Transition vers le menu des paramètres..." << std::endl;
-          manager.set(std::make_unique<SettingsState>(font, manager));
+          std::cout << "Transition vers le main menu..." << std::endl;
+          manager.set(std::make_unique<MainMenuState>(font, manager));
         }
       }
     }
   }
 }
 
-void MainMenuState::update() {
-  // Mettre à jour l'état du menu principal
+void SettingsState::update() {
+  // Mettre à jour l'état des paramètres
 }
 
-void MainMenuState::draw(sf::RenderWindow &window) {
+void SettingsState::draw(sf::RenderWindow &window) {
   window.draw(title);
   window.draw(option1);
-  // Dessiner d'autres éléments du menu principal si nécessaire
+  // Dessiner d'autres éléments des paramètres si nécessaire
 }
