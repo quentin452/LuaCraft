@@ -2,50 +2,16 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "mkdir",
+            "label": "build",
             "type": "shell",
             "command": "powershell.exe",
             "args": [
                 "-Command",
-                "if (!(Test-Path \"${workspaceFolder}/build\")) { mkdir \"${workspaceFolder}/build\" }"
-            ],
-            "presentation": {
-                "reveal": "silent",
-                "panel": "new"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "configure",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "-S",
-                "${workspaceFolder}",
-                "-B",
-                "${workspaceFolder}/build",
-                "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                "if (!(Test-Path \"${workspaceFolder}/build\")) { mkdir \"${workspaceFolder}/build\" }; ",
+                "cmake -S \"${workspaceFolder}\" -B \"${workspaceFolder}/build\" -DCMAKE_EXPORT_COMPILE_COMMANDS=ON; ",
+                "cmake --build \"${workspaceFolder}/build\" --config Release"
             ],
             "group": "build",
-            "dependsOn": "mkdir",
-            "presentation": {
-                "reveal": "silent",
-                "panel": "new"
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "build",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "${workspaceFolder}/build",
-                "--config",
-                "Release"
-            ],
-            "group": "build",
-            "dependsOn": "configure",
             "presentation": {
                 "reveal": "silent",
                 "panel": "new"
