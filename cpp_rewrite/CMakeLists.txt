@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(cpp_rewrite)
 
 # Définir le répertoire SFML
-set(SFML_DIR "${CMAKE_SOURCE_DIR}/libs/SFML-2.6.1/lib/cmake/SFML")
+set(SFML_DIR "${CMAKE_SOURCE_DIR}/src/libs/SFML-2.6.1/lib/cmake/SFML")
 
 # Trouver et inclure SFML
 find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
@@ -10,13 +10,13 @@ message(SFML INCLUDE DIR ${SFML_INCLUDE_DIRS})
 
 # Définir les sources de l'exécutable
 set(SOURCES 
-main.cpp
-"gamestatehandling/GameState.h"
-"gamestatehandling/GameStateManager.h"
-"gamestatehandling/MainMenuState.h"
-"gamestatehandling/MainMenuState.cpp"
-"gamestatehandling/SettingsState.cpp"
-"gamestatehandling/SettingsState.h"
+"src/main.cpp"
+"src/gamestatehandling/GameState.h"
+"src/gamestatehandling/GameStateManager.h"
+"src/gamestatehandling/MainMenuState.h"
+"src/gamestatehandling/MainMenuState.cpp"
+"src/gamestatehandling/SettingsState.cpp"
+"src/gamestatehandling/SettingsState.h"
 )
 
 # Créer l'exécutable
@@ -29,7 +29,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "${SFML_INCLUDE_DIRS}")
 target_link_libraries(${PROJECT_NAME} sfml-graphics sfml-window sfml-system)
 
 # Copier les fichiers DLL de SFML dans le répertoire de sortie de l'exécutable
-set(SFML_DLL_DIR "${CMAKE_SOURCE_DIR}/libs/SFML-2.6.1/bin")
+set(SFML_DLL_DIR "${CMAKE_SOURCE_DIR}/src/libs/SFML-2.6.1/bin")
 file(GLOB SFML_DLLS "${SFML_DLL_DIR}/*.dll")
 foreach(DLL ${SFML_DLLS})
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
@@ -39,7 +39,7 @@ foreach(DLL ${SFML_DLLS})
 endforeach()
 
 # Chemin d'accès au fichier Arial.ttf
-set(ARIAL_FONT_PATH "${CMAKE_SOURCE_DIR}/arial.ttf")
+set(ARIAL_FONT_PATH "${CMAKE_SOURCE_DIR}/Arial.ttf")
 
 # Copier Arial.ttf dans le répertoire de sortie de l'exécutable
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
