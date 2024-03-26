@@ -5,3 +5,4 @@ docs/*
 Thumbs.db
 report.txt
 /cpp_rewrite/build/
+/cpp_rewrite/.vscode/settings.json/
