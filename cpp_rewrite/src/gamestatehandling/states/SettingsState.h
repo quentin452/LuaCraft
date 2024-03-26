@@ -1,17 +1,43 @@
 #pragma once
 #include "src/gamestatehandling/core/GameStateManager.h"
-
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include <string>
 class SettingsState : public GameState {
 public:
-  SettingsState(sf::Font &font, GameStateManager &manager);
+  SettingsState(FT_Face face, GLFWwindow *window, GameStateManager &manager);
 
-  void handleInput(sf::RenderWindow &window) override;
+  bool isInsideForSettings(double x, double y, double rectX, double rectY,
+                           double rectWidth, double rectHeight);
+  void drawTextSettings(FT_Face face, const std::string &text, float x, float y,
+                        int fontSize);
+
+  void handleInput(GLFWwindow *window) override;
   void update() override;
-  void draw(sf::RenderWindow &window) override;
+  void draw(GLFWwindow *window) override;
 
 private:
-  sf::Font &font;
-  sf::Text title;
-  sf::Text option1;
-  GameStateManager &manager;
+  FT_Face font;
+  FT_Face fontFace;
+  GLFWwindow *m_window;
+  GameStateManager &m_manager;
+
+  std::string titleText;
+  std::string option1Text;
+  std::string option2Text;
+
+  float titlePositionX;
+  float titlePositionY;
+  float option1PositionX;
+  float option1PositionY;
+  float option2PositionX;
+  float option2PositionY;
+
+  float optionWidth;
+  float optionHeight;
+
+  int titleFontSize;
+  int optionFontSize;
+
+  // Déclaration de vos autres variables membres
 };

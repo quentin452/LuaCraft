@@ -1,45 +1,91 @@
 #include "src/gamestatehandling/states/SettingsState.h"
 #include "src/gamestatehandling/states/MainMenuState.h"
-#include <SFML/Graphics.hpp>
+#include <GLFW/glfw3.h>
+#include <ft2build.h>
 #include <iostream>
 
-SettingsState::SettingsState(sf::Font &font, GameStateManager &manager)
-    : font(font), manager(manager) {
-  title.setString("Paramètres");
-  title.setFont(font);
-  title.setCharacterSize(50);
-  title.setPosition(250, 50);
+#include FT_FREETYPE_H
 
-  option1.setString("Option 1");
-  option1.setFont(font);
-  option1.setCharacterSize(30);
-  option1.setPosition(300, 200);
+SettingsState::SettingsState(FT_Face face, GLFWwindow *window,
+                             GameStateManager &manager)
+    : fontFace(face), m_window(window), m_manager(manager) {
+  titleText = "Paramètres";
+  option1Text = "Option 1";
+
+  titlePositionX = 250;
+  titlePositionY = 50;
+  option1PositionX = 300;
+  option1PositionY = 200;
+
+  titleFontSize = 50;
+  optionFontSize = 30;
 }
 
-void SettingsState::handleInput(sf::RenderWindow &window) {
-  sf::Event event;
-  while (window.pollEvent(event)) {
-    if (event.type == sf::Event::Closed)
-      window.close();
-    if (event.type == sf::Event::MouseButtonPressed) {
-      if (event.mouseButton.button == sf::Mouse::Left) {
-        if (option1.getGlobalBounds().contains(
-                static_cast<float>(event.mouseButton.x),
-                static_cast<float>(event.mouseButton.y))) {
-          std::cout << "Transition vers le main menu..." << std::endl;
-          manager.set(std::make_unique<MainMenuState>(font, manager));
-        }
-      }
+void SettingsState::handleInput(GLFWwindow *window) {
+  int width, height;
+  glfwGetWindowSize(window, &width, &height);
+  double xpos, ypos;
+  glfwGetCursorPos(window, &xpos, &ypos);
+
+  // Gestion des événements de la souris
+  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    if (isInsideForSettings(xpos, ypos, option1PositionX, option1PositionY,
+                            optionWidth, optionHeight)) {
+      std::cout << "Transition vers le menu principal..." << std::endl;
+      m_manager.set(std::make_unique<MainMenuState>(font, window, m_manager));
     }
   }
 }
 
 void SettingsState::update() {
-  // Mettre à jour l'état des paramètres
+  // Mettre à jour l'état des paramètres si nécessaire
 }
 
-void SettingsState::draw(sf::RenderWindow &window) {
-  window.draw(title);
-  window.draw(option1);
+void SettingsState::draw(GLFWwindow *window) {
+  // Dessiner le titre
+  drawTextSettings(fontFace, titleText, titlePositionX, titlePositionY,
+                   titleFontSize);
+  // Dessiner l'option 1
+  drawTextSettings(fontFace, option1Text, option1PositionX, option1PositionY,
+                   optionFontSize);
+
   // Dessiner d'autres éléments des paramètres si nécessaire
+}
+
+// Fonction utilitaire pour vérifier si un point est à l'intérieur d'un
+// rectangle
+bool SettingsState::isInsideForSettings(double x, double y, double rectX,
+                                        double rectY, double rectWidth,
+                                        double rectHeight) {
+  return x >= rectX && x <= rectX + rectWidth && y >= rectY &&
+         y <= rectY + rectHeight;
+}
+
+// Fonction utilitaire pour dessiner du texte
+void SettingsState::drawTextSettings(FT_Face face, const std::string &text, float x, float y,
+                      int fontSize) {
+  // Configuration de la taille de police
+  FT_Set_Pixel_Sizes(face, 0, fontSize);
+
+  // Positionner le texte
+  glLoadIdentity();
+  glTranslatef(x, y, 0.0f);
+
+  // Dessiner chaque caractère du texte
+  for (const char &c : text) {
+    // Charger le glyphe correspondant
+    if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+      continue; // Ignorer les caractères non chargés
+
+    // Récupérer la métrique du glyphe
+    FT_GlyphSlot glyph = face->glyph;
+
+    // Dessiner le glyphe
+    glRasterPos2i(glyph->bitmap_left, -glyph->bitmap_top);
+    glDrawPixels(glyph->bitmap.width, glyph->bitmap.rows, GL_RED,
+                 GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
+
+    // Déplacer le curseur de dessin pour le prochain glyphe
+    glBitmap(0, 0, 0, 0, glyph->advance.x >> 6, 0, nullptr);
+  }
 }

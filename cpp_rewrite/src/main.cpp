@@ -1,29 +1,77 @@
+#include <ft2build.h>
+#include FT_FREETYPE_H
 #include "src/gamestatehandling/core/GameStateManager.h"
 #include "src/gamestatehandling/states/MainMenuState.h"
 #include "src/gamestatehandling/states/SettingsState.h"
-#include <SFML/Graphics.hpp>
+#include "src/gamestatehandling/states/VulkanGameState.h"
+#include <GLFW/glfw3.h>
 #include <iostream>
 
 int main() {
-  sf::RenderWindow window(sf::VideoMode(1280, 720), "Menu Principal");
-
-  sf::Font font;
-  if (!font.loadFromFile("Arial.ttf")) {
-    std::cerr << "Erreur lors du chargement de la police de caractères."
-              << std::endl;
+  // Initialiser GLFW
+  if (!glfwInit()) {
+    std::cerr << "Erreur lors de l'initialisation de GLFW." << std::endl;
     return 1;
   }
 
-  GameStateManager manager;
-  manager.set(std::make_unique<MainMenuState>(font, manager));
+  // Créer une fenêtre GLFW
+  GLFWwindow *window =
+      glfwCreateWindow(1280, 720, "Menu Principal", NULL, NULL);
+  if (!window) {
+    std::cerr << "Erreur lors de la création de la fenêtre GLFW." << std::endl;
+    glfwTerminate();
+    return 1;
+  }
 
-  while (window.isOpen()) {
-    window.clear();
+  // Initialiser FreeType
+  FT_Library ft;
+  if (FT_Init_FreeType(&ft)) {
+    std::cerr << "Erreur lors de l'initialisation de FreeType." << std::endl;
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return 1;
+  }
+
+  // Charger la police de caractères
+  FT_Face face;
+  if (FT_New_Face(ft, "Arial.ttf", 0, &face)) {
+    std::cerr << "Impossible de charger la police de caractères." << std::endl;
+    glfwDestroyWindow(window);
+    glfwTerminate();
+    return 1;
+  }
+
+  // Initialiser le gestionnaire d'état du jeu
+  GameStateManager manager;
+  // Passer la police chargée à MainMenuState
+  manager.set(std::make_unique<MainMenuState>(face, window, manager));
+
+  // Boucle principale du jeu
+  while (!glfwWindowShouldClose(window)) {
+    // Effacer la fenêtre
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Gérer les événements et mettre à jour l'état du jeu
     manager.get().handleInput(window);
     manager.get().update();
+
+    // Dessiner l'état du jeu
     manager.get().draw(window);
-    window.display();
+
+    // Mettre à jour le contenu de la fenêtre
+    glfwSwapBuffers(window);
+
+    // Vérifier les événements
+    glfwPollEvents();
   }
+
+  // Nettoyer et fermer GLFW
+  glfwDestroyWindow(window);
+  glfwTerminate();
+
+  // Nettoyer les ressources de FreeType
+  FT_Done_Face(face);
+  FT_Done_FreeType(ft);
 
   return 0;
 }

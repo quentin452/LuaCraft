@@ -1,10 +1,10 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <GLFW/glfw3.h>
 
 class GameState {
 public:
-  virtual void handleInput(sf::RenderWindow &window) = 0;
+  virtual void handleInput(GLFWwindow *window) = 0;
   virtual void update() = 0;
-  virtual void draw(sf::RenderWindow &window) = 0;
+  virtual void draw(GLFWwindow *window) = 0;
   virtual ~GameState() {}
 };
