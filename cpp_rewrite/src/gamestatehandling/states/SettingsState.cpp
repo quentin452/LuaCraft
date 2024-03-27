@@ -1,3 +1,4 @@
+#include <glew.h>
 #include "SettingsState.h"
 #include "MainMenuState.h"
 #include <GLFW/glfw3.h>

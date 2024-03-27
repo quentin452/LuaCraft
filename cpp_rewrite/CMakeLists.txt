@@ -47,11 +47,52 @@ include_directories(${VULKAN_INCLUDE_DIR})
 
 target_link_libraries(${PROJECT_NAME} ${OPENGL32_LIBRARY}) 
 # Spécifier le chemin d'accès à la bibliothèque Vulkan
-# TODO FIX 
-#set(VULKAN_LIBRARY "C:/Windows/System32/vulkan-1.dll")
+set(VULKAN_LIBRARY "${CMAKE_SOURCE_DIR}/libs/vulkanlib/vulkan-1.lib")
 
 # Lier la bibliothèque Vulkan à la cible exécutable
 target_link_libraries(${PROJECT_NAME} ${VULKAN_LIBRARY})
+
+# Spécifier le chemin d'accès aux en-têtes Glad
+set(GLAD_INCLUDE_DIR 
+   "${CMAKE_SOURCE_DIR}/libs/glad/include/glad"
+)
+
+# Inclure les fichiers d'en-tête Glad dans la cible exécutable
+include_directories(${GLAD_INCLUDE_DIR})
+
+# Spécifier le chemin d'accès aux en-têtes Noise
+set(NOISE_INCLUDE_DIR 
+   "${CMAKE_SOURCE_DIR}/libs/noise"
+)
+
+# Inclure les fichiers d'en-tête Noise dans la cible exécutable
+include_directories(${NOISE_INCLUDE_DIR})
+
+# Spécifier le chemin d'accès aux en-têtes STB
+set(STB_INCLUDE_DIR 
+   "${CMAKE_SOURCE_DIR}/libs/stb"
+)
+
+# Inclure les fichiers d'en-tête STB dans la cible exécutable
+include_directories(${STB_INCLUDE_DIR})
+
+# Spécifier le chemin d'accès aux fichiers d'en-tête GLEW
+set(GLEW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/glew-2.1.0/include/GL")
+
+# Inclure les fichiers d'en-tête GLEW dans la cible exécutable
+include_directories(${GLEW_INCLUDE_DIR})
+
+# Spécifier le chemin d'accès à la bibliothèque GLEW
+set(GLEW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/glew-2.1.0/lib/Release/x64/glew32.lib")
+
+# Lier la bibliothèque GLEW à la cible exécutable
+target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARY})
+
+# Spécifier le chemin d'accès aux fichiers d'en-tête GLEW
+set(GLTEXT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/gltext")
+
+# Inclure les fichiers d'en-tête GLEW dans la cible exécutable
+include_directories(${GLTEXT_INCLUDE_DIR})
 
 # Chemin d'accès au fichier Arial.ttf
 set(ARIAL_FONT_PATH "${CMAKE_SOURCE_DIR}/Arial.ttf")
@@ -60,5 +101,10 @@ set(ARIAL_FONT_PATH "${CMAKE_SOURCE_DIR}/Arial.ttf")
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "${ARIAL_FONT_PATH}"
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>
+)
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${CMAKE_SOURCE_DIR}/libs/glew-2.1.0/lib/Release/x64/glew32.dll"
     $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )

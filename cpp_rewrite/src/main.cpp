@@ -1,10 +1,16 @@
 #include <ft2build.h>
+#include <glew.h>
+
 #include FT_FREETYPE_H
 #include "gamestatehandling/core/GameStateManager.h"
 #include "gamestatehandling/states/MainMenuState.h"
 #include "gamestatehandling/states/SettingsState.h"
 #include "gamestatehandling/states/VulkanGameState.h"
+#define GLT_IMPLEMENTATION
+
+#include "gltext.h"
 #include <GLFW/glfw3.h>
+
 #include <iostream>
 
 int main() {
@@ -42,12 +48,21 @@ int main() {
     glfwTerminate();
     return 1;
   }
-glfwMakeContextCurrent(window);
+  glfwMakeContextCurrent(window);
+  // GLTtext *text = gltCreateText2D(face, 512, 512);
+  // Initialiser le texte glText
+
+
   // Initialiser le gestionnaire d'état du jeu
   GameStateManager manager;
   // Passer la police chargée à MainMenuState
   manager.set(std::make_unique<MainMenuState>(face, window, manager));
+  // Activer la Vsync (limiter le taux de rafraîchissement au taux de
+  // rafraîchissement de l'écran)
+  // glfwSwapInterval(1);
 
+  // Désactiver la Vsync (permettre le taux de rafraîchissement maximum)
+  glfwSwapInterval(0);
   // Boucle principale du jeu
   while (!glfwWindowShouldClose(window)) {
     // Effacer la fenêtre

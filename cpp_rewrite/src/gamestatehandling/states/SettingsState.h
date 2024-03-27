@@ -1,4 +1,5 @@
 #pragma once
+#include <glew.h>
 #include "../core/GameStateManager.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H

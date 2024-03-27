@@ -1,16 +1,42 @@
+
+#include <glew.h>
+
+#include <GLFW/glfw3.h>
+#include <ft2build.h>
+#define GLT_IMPLEMENTATION
+
+#include <gltext.h>
+#include <iostream>
+#include <vector>
+#include FT_FREETYPE_H
+#define GL_CLAMP_TO_EDGE 0x812F
 #include "MainMenuState.h"
 #include "SettingsState.h"
 #include "VulkanGameState.h"
-#include <GLFW/glfw3.h>
-#include <ft2build.h>
-#include <iostream>
-#include <vector>
 
-#include FT_FREETYPE_H
+void MainMenuState::initializeGLText() {
+  if (glewInit() != GLEW_OK) {
+    std::cerr << "GLEW is not initialized" << std::endl;
+  }
+  // Créer l'objet glText une seule fois lors de l'initialisation
+  if (!text1) {
+    text1 = gltCreateText();
+    if (!text1) {
+      std::cerr << "Erreur lors de la création du texte text1." << std::endl;
+      // Gérer l'erreur appropriée
+    }
+    // Définir le texte à afficher
+    gltSetText(text1, "Hello World!");
+  }
+}
 
 MainMenuState::MainMenuState(FT_Face face, GLFWwindow *window,
                              GameStateManager &manager)
-    : fontFace(face), m_window(window), m_manager(manager) {
+    : fontFace(face), m_window(window), m_manager(manager), titleFontSize(24),
+      optionFontSize(18) {
+  // Initialiser glText
+  initializeGLText();
+
   titlePositionX = 100.0f;
   titlePositionY = 100.0f;
   option1PositionX = 150.0f;
@@ -21,7 +47,6 @@ MainMenuState::MainMenuState(FT_Face face, GLFWwindow *window,
   option1Text = "Option 1";
   option2Text = "Play Game";
 }
-
 void MainMenuState::handleInput(GLFWwindow *window) {
   double xpos, ypos;
   glfwGetCursorPos(window, &xpos, &ypos);
@@ -52,33 +77,18 @@ void MainMenuState::handleInput(GLFWwindow *window) {
 void MainMenuState::update() {
   // Mettre à jour l'état du menu principal si nécessaire
 }
-void MainMenuState::drawBackground() {
-  // Dessiner un rectangle pour l'arrière-plan
-  glBegin(GL_QUADS);
-  glColor3f(0.5f, 0.5f, 0.5f); // Couleur grise (par exemple)
-  glVertex2f(-1.0f, -1.0f);    // Coin inférieur gauche
-  glVertex2f(1.0f, -1.0f);     // Coin inférieur droit
-  glVertex2f(1.0f, 1.0f);      // Coin supérieur droit
-  glVertex2f(-1.0f, 1.0f);     // Coin supérieur gauche
-  glEnd();
-}
-
 void MainMenuState::draw(GLFWwindow *window) {
   // Définir la couleur de fond
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f); // Couleur grise (par exemple)
   // Effacer l'écran avec la couleur de fond définie
   glClear(GL_COLOR_BUFFER_BIT);
 
-  // Dessiner l'arrière-plan
-  drawBackground();
+  // Dessiner le texte à l'aide de glText
+  // Définir la couleur du texte en blanc
+  gltColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-  // Dessiner le reste de l'état du jeu
-  drawTextMainMenu(fontFace, titleText, titlePositionX, titlePositionY,
-                   titleFontSize);
-  drawTextMainMenu(fontFace, option1Text, option1PositionX, option1PositionY,
-                   optionFontSize);
-  drawTextMainMenu(fontFace, option2Text, option2PositionX, option2PositionY,
-                   optionFontSize);
+  // Dessiner le texte
+  gltDrawText2D(text1, 0.0f, 0.0f, 100000.0f); // x=0.0, y=0.0, scale=1.0
 
   // Mettre à jour l'affichage
   glfwSwapBuffers(window);
@@ -91,32 +101,18 @@ bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,
   return x >= rectX && x <= rectX + rectWidth && y >= rectY &&
          y <= rectY + rectHeight;
 }
-
 // Fonction utilitaire pour dessiner du texte
 void MainMenuState::drawTextMainMenu(FT_Face face, const std::string &text,
                                      float x, float y, int fontSize) {
-  // Configuration de la taille de police
-  FT_Set_Pixel_Sizes(face, 0, fontSize);
+  // Définir la position et la taille du texte
+  // gltSetTextPos(glText, x, y);
+  //  gltSetTextSize(glText, fontSize); // Utilisez la taille de police
+  //  spécifiée
 
-  // Positionner le texte
-  glLoadIdentity();
-  glTranslatef(x, y, 0.0f);
+  // Définir le texte à afficher
+  gltSetText(glText, text.c_str());
 
-  // Dessiner chaque caractère du texte
-  for (const char &c : text) {
-    // Charger le glyphe correspondant
-    if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-      continue; // Ignorer les caractères non chargés
-
-    // Récupérer la métrique du glyphe
-    FT_GlyphSlot glyph = face->glyph;
-
-    // Dessiner le glyphe
-    glRasterPos2i(glyph->bitmap_left, -glyph->bitmap_top);
-    glDrawPixels(glyph->bitmap.width, glyph->bitmap.rows, GL_RED,
-                 GL_UNSIGNED_BYTE, glyph->bitmap.buffer);
-
-    // Déplacer le curseur de dessin pour le prochain glyphe
-    glBitmap(0, 0, 0, 0, glyph->advance.x >> 6, 0, nullptr);
-  }
+  // Dessiner le texte avec glText
+  GLfloat mvp[16];          // Définir une matrice MVP factice pour le moment
+  gltDrawText(glText, mvp); // Appeler gltDrawText avec un seul argument
 }
