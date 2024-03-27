@@ -74,6 +74,7 @@ void MainMenuState::handleInput(GLFWwindow *window) {
 void MainMenuState::update() {
   // Mettre à jour l'état du menu principal si nécessaire
 }
+
 void MainMenuState::draw(GLFWwindow *window) {
   // Définir la couleur de fond
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f); // Couleur grise (par exemple)
@@ -84,12 +85,23 @@ void MainMenuState::draw(GLFWwindow *window) {
   // Définir la couleur du texte en blanc
   gltColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-  // Dessiner le texte
-  gltDrawText2D(text1, 0.0f, 0.0f, 1.0f); // x=0.0, y=0.0, scale=1.0
+  // Obtenir les dimensions de la fenêtre de rendu
+  int screenWidth, screenHeight;
+  glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+
+  // Calculer les positions pour centrer le texte
+  GLfloat textWidth = gltGetTextWidth(text1, buttonScale);
+  GLfloat textHeight = gltGetTextHeight(text1, buttonScale);
+  GLfloat textPosX = (screenWidth - textWidth) / 2;
+  GLfloat textPosY = (screenHeight - textHeight) / 2;
+
+  // Dessiner le texte centré
+  gltDrawText2D(text1, textPosX, textPosY, buttonScale);
 
   // Mettre à jour l'affichage
   glfwSwapBuffers(window);
 }
+
 // Fonction utilitaire pour vérifier si un point est à l'intérieur d'un
 // rectangle
 bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,

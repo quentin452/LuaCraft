@@ -4,7 +4,6 @@
 #include <glew.h>
 #include <iostream>
 
-
 SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager), titleFontSize(24),
       optionFontSize(18) {

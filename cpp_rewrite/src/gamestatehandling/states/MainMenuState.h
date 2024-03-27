@@ -6,12 +6,12 @@
 #include <GLFW/glfw3.h>
 #define GLT_IMPLEMENTATION
 
-#include <gltext.h>
-#include <iostream>
-#include <vector>
 #include "MainMenuState.h"
 #include "SettingsState.h"
 #include "VulkanGameState.h"
+#include <gltext.h>
+#include <iostream>
+#include <vector>
 
 class MainMenuState : public GameState {
 public:
@@ -35,6 +35,7 @@ private:
   std::string titleText;
   std::string option1Text;
   std::string option2Text;
+  float buttonScale = 1.0f;
 
   float titlePositionX;
   float titlePositionY;
