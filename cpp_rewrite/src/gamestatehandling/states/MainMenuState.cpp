@@ -14,6 +14,15 @@
 
 void MainMenuState::initializeGLText() {
   gltInit();
+  if (!titlescreen) {
+    titlescreen = gltCreateText();
+    if (!titlescreen) {
+      std::cerr << "Erreur lors de la création du texte titlescreen."
+                << std::endl;
+      return;
+    }
+    gltSetText(titlescreen, "Main Menu");
+  }
   if (!text1) {
     text1 = gltCreateText();
     if (!text1) {
@@ -35,7 +44,23 @@ void MainMenuState::initializeGLText() {
 MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  titleText = "Menu Principal";
+  int screenWidth, screenHeight;
+  glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+
+  textWidth1 = gltGetTextWidth(text1, buttonScale);
+  textHeight1 = gltGetTextHeight(text1, buttonScale);
+  textPosX1 = (screenWidth - textWidth1) / 2;
+  textPosY1 = (screenHeight - textHeight1) / 2;
+
+  GLfloat textWidth2 = gltGetTextWidth(text2, buttonScale);
+  GLfloat textHeight2 = gltGetTextHeight(text2, buttonScale);
+  textPosX2 = (screenWidth - textWidth2) / 2;
+  textPosY2 = textPosY1 - textHeight2 - 10.0f;
+
+  textWidthForTitle = gltGetTextWidth(titlescreen, buttonScale);
+  textHeighForTitle = gltGetTextHeight(titlescreen, buttonScale);
+  textPosXForTitle = (screenWidth - textWidthForTitle) / 2;
+  textPosYForTitle = (screenHeight - textHeighForTitle) / 4;
 }
 void MainMenuState::handleInput(GLFWwindow *window) {
   double xpos, ypos;
@@ -43,15 +68,31 @@ void MainMenuState::handleInput(GLFWwindow *window) {
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
     mouseButtonPressed = true;
-    int width, height;
-    glfwGetWindowSize(window, &width, &height);
-    double normalizedX = 2.0f * xpos / width - 1.0f;
-    double normalizedY = 1.0f - 2.0f * ypos / height;
-    if (isInsideForMainMenu(normalizedX, normalizedY, option1PositionX,
+    int screenWidth, screenHeight;
+    glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+
+    // Coordonnées normalisées du curseur
+    double normalizedX = 2.0 * xpos / screenWidth - 1.0;
+    double normalizedY = 1.0 - 2.0 * ypos / screenHeight;
+
+    // Convertir les coordonnées normalisées en coordonnées de fenêtre
+    int windowX = (int)((normalizedX + 1.0) * screenWidth / 2.0);
+    int windowY = (int)((1.0 - normalizedY) * screenHeight / 2.0);
+
+    // Conversion des positions et dimensions de texte en coordonnées de fenêtre
+    int option1PositionX = textPosX1;
+    int option1PositionY = textPosY1;
+    int optionWidth = textWidth1;
+    int optionHeight = textHeight1;
+
+    int option2PositionX = textPosX2;
+    int option2PositionY = textPosY2;
+
+    if (isInsideForMainMenu(windowX, windowY, option1PositionX,
                             option1PositionY, optionWidth, optionHeight)) {
       std::cout << "Transition vers le menu des paramètres..." << std::endl;
       m_manager.set(std::make_unique<SettingsState>(window, m_manager));
-    } else if (isInsideForMainMenu(normalizedX, normalizedY, option2PositionX,
+    } else if (isInsideForMainMenu(windowX, windowY, option2PositionX,
                                    option2PositionY, optionWidth,
                                    optionHeight)) {
       std::cout << "Transition vers la scène 3D avec Vulkan..." << std::endl;
@@ -63,37 +104,17 @@ void MainMenuState::handleInput(GLFWwindow *window) {
 }
 
 void MainMenuState::update() {}
-
 void MainMenuState::draw(GLFWwindow *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
-
-  gltBeginDraw(); // Début du rendu de texte
-
+  gltBeginDraw();
   gltColor(1.0f, 1.0f, 1.0f, 1.0f);
-
-  int screenWidth, screenHeight;
-  glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
-
-  GLfloat textWidth1 = gltGetTextWidth(text1, buttonScale);
-  GLfloat textHeight1 = gltGetTextHeight(text1, buttonScale);
-  GLfloat textPosX1 = (screenWidth - textWidth1) / 2;
-  GLfloat textPosY1 = (screenHeight - textHeight1) / 2;
-
-  GLfloat textWidth2 = gltGetTextWidth(text2, buttonScale);
-  GLfloat textHeight2 = gltGetTextHeight(text2, buttonScale);
-  GLfloat textPosX2 = (screenWidth - textWidth2) / 2;
-  GLfloat textPosY2 = textPosY1 - textHeight2 - 10.0f; // Espace entre les textes
-
+  gltDrawText2D(titlescreen, textPosXForTitle, textPosYForTitle, buttonScale);
   gltDrawText2D(text1, textPosX1, textPosY1, buttonScale);
   gltDrawText2D(text2, textPosX2, textPosY2, buttonScale);
-
-  gltEndDraw(); // Fin du rendu de texte
-
+  gltEndDraw();
   glfwSwapBuffers(window);
 }
-
-
 bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,
                                         double rectY, double rectWidth,
                                         double rectHeight) {

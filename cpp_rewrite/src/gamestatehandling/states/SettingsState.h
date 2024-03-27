@@ -1,7 +1,18 @@
 #pragma once
-#include <glew.h>
 #include "../core/GameStateManager.h"
-#include <string>
+
+#include <glew.h>
+
+#include <GLFW/glfw3.h>
+#define GLT_IMPLEMENTATION
+
+#include "MainMenuState.h"
+#include "SettingsState.h"
+#include "VulkanGameState.h"
+#include <gltext.h>
+#include <iostream>
+#include <vector>
+
 class SettingsState : public GameState {
 public:
   SettingsState(GLFWwindow *window, GameStateManager &manager);
@@ -12,15 +23,16 @@ public:
   void handleInput(GLFWwindow *window) override;
   void update() override;
   void draw(GLFWwindow *window) override;
+  void initializeGLText();
 
 private:
+  GLfloat textPosX1, textPosY1, textPosX2, textPosY2, textWidth1, textHeight1;
+  GLTtext *titleText = nullptr;
+  GLTtext *option1Text = nullptr;
   GLFWwindow *m_window;
+
   GameStateManager &m_manager;
-
-  std::string titleText;
-  std::string option1Text;
-  std::string option2Text;
-
+  float buttonScale = 1.0f;
   float titlePositionX;
   float titlePositionY;
   float option1PositionX;
@@ -30,10 +42,6 @@ private:
 
   float optionWidth;
   float optionHeight;
-
-  int titleFontSize;
-  int optionFontSize;
-
   bool mouseButtonPressed = false;
 
   // Déclaration de vos autres variables membres

@@ -28,15 +28,15 @@ public:
   void initializeGLText();
 
 private:
+  GLfloat textPosX1, textPosY1, textPosX2, textPosY2, textWidth1, textHeight1,
+      textHeighForTitle, textWidthForTitle, textPosXForTitle, textPosYForTitle;
   GLTtext *text1 = nullptr;
   GLTtext *text2 = nullptr;
+  GLTtext *titlescreen = nullptr;
 
   GLFWwindow *m_window;
   GameStateManager &m_manager;
   GLTtext *glText = nullptr;
-  std::string titleText;
-  std::string option1Text;
-  std::string option2Text;
   float buttonScale = 1.0f;
 
   float titlePositionX;
