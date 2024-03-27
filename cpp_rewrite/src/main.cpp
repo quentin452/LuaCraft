@@ -15,13 +15,15 @@ int main() {
   }
 
   // Créer une fenêtre GLFW
-  GLFWwindow *window =
-      glfwCreateWindow(1280, 720, "LuaCraft", NULL, NULL);
+  GLFWwindow *window = glfwCreateWindow(1280, 720, "LuaCraft", NULL, NULL);
   if (!window) {
     std::cerr << "Erreur lors de la création de la fenêtre GLFW." << std::endl;
     glfwTerminate();
     return 1;
   }
+  int api = glfwGetWindowAttrib(window, GLFW_CLIENT_API);
+  const char *apiName = (api == GLFW_OPENGL_API) ? "OpenGL" : "Vulkan";
+  std::cout << "API graphique utilisée : " << apiName << std::endl;
 
   // Initialiser FreeType
   FT_Library ft;
