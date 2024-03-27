@@ -60,6 +60,7 @@ int main() {
     glfwSwapBuffers(window);
 
     // Vérifier les événements
+    // TODO FIX glfwPollEvents causing lags when moving mouse
     glfwPollEvents();
   }
 
