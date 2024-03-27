@@ -1,5 +1,5 @@
 #pragma once
-#include "src/gamestatehandling/core/GameStateManager.h"
+#include "../core/GameStateManager.h"
 #include <ft2build.h>
 #include <string>
 #include FT_FREETYPE_H

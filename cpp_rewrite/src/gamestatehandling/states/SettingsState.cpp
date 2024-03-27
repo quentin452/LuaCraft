@@ -1,5 +1,5 @@
-#include "src/gamestatehandling/states/SettingsState.h"
-#include "src/gamestatehandling/states/MainMenuState.h"
+#include "SettingsState.h"
+#include "MainMenuState.h"
 #include <GLFW/glfw3.h>
 #include <ft2build.h>
 #include <iostream>

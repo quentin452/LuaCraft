@@ -1,9 +1,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include "src/gamestatehandling/core/GameStateManager.h"
-#include "src/gamestatehandling/states/MainMenuState.h"
-#include "src/gamestatehandling/states/SettingsState.h"
-#include "src/gamestatehandling/states/VulkanGameState.h"
+#include "gamestatehandling/core/GameStateManager.h"
+#include "gamestatehandling/states/MainMenuState.h"
+#include "gamestatehandling/states/SettingsState.h"
+#include "gamestatehandling/states/VulkanGameState.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
 

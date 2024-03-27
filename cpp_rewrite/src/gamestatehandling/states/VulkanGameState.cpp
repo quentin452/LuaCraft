@@ -1,4 +1,4 @@
-#include "src/gamestatehandling/states/VulkanGameState.h"
+#include "VulkanGameState.h"
 #include <GLFW/glfw3.h>
 #include <ft2build.h>
 #include <iostream>
