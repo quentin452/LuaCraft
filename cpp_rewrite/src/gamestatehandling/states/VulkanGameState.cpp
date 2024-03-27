@@ -1,12 +1,10 @@
 #include "VulkanGameState.h"
 #include <GLFW/glfw3.h>
-#include <ft2build.h>
 #include <iostream>
 
-#include FT_FREETYPE_H
-VulkanGameState::VulkanGameState(FT_Face face, GLFWwindow *window,
+VulkanGameState::VulkanGameState(GLFWwindow *window,
                                  GameStateManager &manager)
-    : fontFace(face), m_window(window), manager(manager) {
+    : m_window(window), manager(manager) {
   // Initialiser Vulkan et d'autres choses spécifiques à VulkanGameState
 }
 

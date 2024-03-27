@@ -1,7 +1,6 @@
-#include <ft2build.h>
+
 #include <glew.h>
 
-#include FT_FREETYPE_H
 #include "gamestatehandling/core/GameStateManager.h"
 #include "gamestatehandling/states/MainMenuState.h"
 #include "gamestatehandling/states/SettingsState.h"
@@ -31,32 +30,14 @@ int main() {
   const char *apiName = (api == GLFW_OPENGL_API) ? "OpenGL" : "Vulkan";
   std::cout << "API graphique utilisée : " << apiName << std::endl;
 
-  // Initialiser FreeType
-  FT_Library ft;
-  if (FT_Init_FreeType(&ft)) {
-    std::cerr << "Erreur lors de l'initialisation de FreeType." << std::endl;
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    return 1;
-  }
-
-  // Charger la police de caractères
-  FT_Face face;
-  if (FT_New_Face(ft, "Arial.ttf", 0, &face)) {
-    std::cerr << "Impossible de charger la police de caractères." << std::endl;
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    return 1;
-  }
   glfwMakeContextCurrent(window);
   // GLTtext *text = gltCreateText2D(face, 512, 512);
   // Initialiser le texte glText
 
-
   // Initialiser le gestionnaire d'état du jeu
   GameStateManager manager;
   // Passer la police chargée à MainMenuState
-  manager.set(std::make_unique<MainMenuState>(face, window, manager));
+  manager.set(std::make_unique<MainMenuState>(window, manager));
   // Activer la Vsync (limiter le taux de rafraîchissement au taux de
   // rafraîchissement de l'écran)
   // glfwSwapInterval(1);
@@ -85,10 +66,6 @@ int main() {
   // Nettoyer et fermer GLFW
   glfwDestroyWindow(window);
   glfwTerminate();
-
-  // Nettoyer les ressources de FreeType
-  FT_Done_Face(face);
-  FT_Done_FreeType(ft);
 
   return 0;
 }

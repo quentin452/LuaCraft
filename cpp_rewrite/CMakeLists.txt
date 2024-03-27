@@ -92,17 +92,8 @@ target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARY})
 set(GLTEXT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/gltext")
 
 # Inclure les fichiers d'en-tête GLEW dans la cible exécutable
+
 include_directories(${GLTEXT_INCLUDE_DIR})
-
-# Chemin d'accès au fichier Arial.ttf
-set(ARIAL_FONT_PATH "${CMAKE_SOURCE_DIR}/Arial.ttf")
-
-# Copier Arial.ttf dans le répertoire de sortie de l'exécutable
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    "${ARIAL_FONT_PATH}"
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
     "${CMAKE_SOURCE_DIR}/libs/glew-2.1.0/lib/Release/x64/glew32.dll"
