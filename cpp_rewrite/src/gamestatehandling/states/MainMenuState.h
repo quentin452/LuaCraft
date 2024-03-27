@@ -29,6 +29,8 @@ public:
 
 private:
   GLTtext *text1 = nullptr;
+  GLTtext *text2 = nullptr;
+
   GLFWwindow *m_window;
   GameStateManager &m_manager;
   GLTtext *glText = nullptr;

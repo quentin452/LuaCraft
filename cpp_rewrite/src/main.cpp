@@ -41,6 +41,12 @@ int main() {
   // Définir la fonction de rappel de redimensionnement de la fenêtre
   glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
 
+  glewExperimental = GL_TRUE;
+  if (glewInit() != GLEW_OK) {
+    std::cerr << "Erreur lors de l'initialisation de GLEW." << std::endl;
+    glfwTerminate();
+    return 1;
+  }
   // Obtenir les dimensions initiales de la fenêtre
   int prevWidth = WINDOW_WIDTH, prevHeight = WINDOW_HEIGHT;
 
