@@ -28,26 +28,25 @@ void MainMenuState::handleInput(GLFWwindow *window) {
   glfwGetCursorPos(window, &xpos, &ypos);
 
   // Gestion des événements de la souris
-  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+  int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+  if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
+    mouseButtonPressed = true;
     int width, height;
     glfwGetWindowSize(window, &width, &height);
     double normalizedX = 2.0f * xpos / width - 1.0f;
     double normalizedY = 1.0f - 2.0f * ypos / height;
-
-    // Vérifier si les coordonnées du clic se trouvent dans la zone de l'option
-    // 1
     if (isInsideForMainMenu(normalizedX, normalizedY, option1PositionX,
                             option1PositionY, optionWidth, optionHeight)) {
       std::cout << "Transition vers le menu des paramètres..." << std::endl;
       m_manager.set(std::make_unique<SettingsState>(font, window, m_manager));
-    }
-    // Vérifier si les coordonnées du clic se trouvent dans la zone de l'option
-    // 2
-    else if (isInsideForMainMenu(normalizedX, normalizedY, option2PositionX,
-                                 option2PositionY, optionWidth, optionHeight)) {
+    } else if (isInsideForMainMenu(normalizedX, normalizedY, option2PositionX,
+                                   option2PositionY, optionWidth,
+                                   optionHeight)) {
       std::cout << "Transition vers la scène 3D avec Vulkan..." << std::endl;
       m_manager.set(std::make_unique<VulkanGameState>(font, window, m_manager));
     }
+  } else if (mouseState == GLFW_RELEASE) {
+    mouseButtonPressed = false;
   }
 }
 

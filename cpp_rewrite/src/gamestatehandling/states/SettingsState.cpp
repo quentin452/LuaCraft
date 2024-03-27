@@ -26,17 +26,20 @@ void SettingsState::handleInput(GLFWwindow *window) {
   glfwGetWindowSize(window, &width, &height);
   double xpos, ypos;
   glfwGetCursorPos(window, &xpos, &ypos);
+  int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+  if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
+    std::cout << "Transition vers le menu des paramètres..." << std::endl;
 
-  // Gestion des événements de la souris
-  if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+    mouseButtonPressed = true;
     if (isInsideForSettings(xpos, ypos, option1PositionX, option1PositionY,
                             optionWidth, optionHeight)) {
       std::cout << "Transition vers le menu principal..." << std::endl;
       m_manager.set(std::make_unique<MainMenuState>(font, window, m_manager));
     }
+  } else if (mouseState == GLFW_RELEASE) {
+    mouseButtonPressed = false;
   }
 }
-
 void SettingsState::update() {
   // Mettre à jour l'état des paramètres si nécessaire
 }
@@ -62,8 +65,8 @@ bool SettingsState::isInsideForSettings(double x, double y, double rectX,
 }
 
 // Fonction utilitaire pour dessiner du texte
-void SettingsState::drawTextSettings(FT_Face face, const std::string &text, float x, float y,
-                      int fontSize) {
+void SettingsState::drawTextSettings(FT_Face face, const std::string &text,
+                                     float x, float y, int fontSize) {
   // Configuration de la taille de police
   FT_Set_Pixel_Sizes(face, 0, fontSize);
 

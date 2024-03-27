@@ -42,5 +42,7 @@ private:
   int titleFontSize;
   int optionFontSize;
 
+  bool mouseButtonPressed = false;
+
   // Déclaration de vos autres variables membres
 };
