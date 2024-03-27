@@ -129,8 +129,8 @@ class DispatchTableHelperOutputGenerator(OutputGenerator):
         copyright += ' */\n'
 
         preamble = ''
-        preamble += '#include <vulkan/vulkan.h>\n'
-        preamble += '#include <vulkan/vk_layer.h>\n'
+        preamble += '#include <vulkan.h>\n'
+        preamble += '#include <vk_layer.h>\n'
         preamble += '#include <string.h>\n'
         preamble += '#include "loader/generated/vk_layer_dispatch_table.h"\n'
 

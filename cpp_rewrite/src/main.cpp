@@ -16,7 +16,7 @@ int main() {
 
   // Créer une fenêtre GLFW
   GLFWwindow *window =
-      glfwCreateWindow(1280, 720, "Menu Principal", NULL, NULL);
+      glfwCreateWindow(1280, 720, "LuaCraft", NULL, NULL);
   if (!window) {
     std::cerr << "Erreur lors de la création de la fenêtre GLFW." << std::endl;
     glfwTerminate();

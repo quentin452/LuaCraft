@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <vulkan/vk_icd.h>
+#include <vk_icd.h>
 
 #include "allocation.h"
 #include "loader.h"

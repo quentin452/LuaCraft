@@ -10,7 +10,7 @@
 
 */
 
-#include <vulkan/vulkan.h>
+#include <vulkan.h>
 
 #if defined(__cplusplus)
 extern "C" {

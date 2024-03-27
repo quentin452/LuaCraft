@@ -378,7 +378,7 @@ class HelperFileOutputGenerator(OutputGenerator):
         object_types_helper_header = '\n'
         object_types_helper_header += '#pragma once\n'
         object_types_helper_header += '\n'
-        object_types_helper_header += '#include <vulkan/vulkan.h>\n\n'
+        object_types_helper_header += '#include <vulkan.h>\n\n'
         object_types_helper_header += self.GenerateObjectTypesHeader()
         return object_types_helper_header
     #

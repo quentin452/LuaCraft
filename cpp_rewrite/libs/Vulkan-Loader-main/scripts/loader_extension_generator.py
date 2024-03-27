@@ -239,7 +239,7 @@ class LoaderExtensionOutputGenerator(OutputGenerator):
             preamble += '#include "vk_loader_platform.h"\n'
             preamble += '#include "loader.h"\n'
             preamble += '#include "vk_loader_extensions.h"\n'
-            preamble += '#include <vulkan/vk_icd.h>\n'
+            preamble += '#include <vk_icd.h>\n'
             preamble += '#include "wsi.h"\n'
             preamble += '#include "debug_utils.h"\n'
             preamble += '#include "extension_manual.h"\n'

@@ -33,7 +33,7 @@
 
 #pragma once
 
-#include <vulkan/vulkan.h>
+#include <vulkan.h>
 
 // Object Type enum for validation layer internal object handling
 typedef enum VulkanObjectType {

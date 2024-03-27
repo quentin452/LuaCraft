@@ -15,14 +15,13 @@
 #endif
 
 #ifdef VK_USE_PLATFORM_FUCHSIA
-#include <zircon/types.h>
 #include "vulkan_fuchsia.h"
+#include <zircon/types.h>
 #endif
 
 #ifdef VK_USE_PLATFORM_IOS_MVK
 #include "vulkan_ios.h"
 #endif
-
 
 #ifdef VK_USE_PLATFORM_MACOS_MVK
 #include "vulkan_macos.h"
@@ -36,61 +35,51 @@
 #include "vulkan_vi.h"
 #endif
 
-
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
 #include "vulkan_wayland.h"
 #endif
 
-
 #ifdef VK_USE_PLATFORM_WIN32_KHR
-#include <windows.h>
 #include "vulkan_win32.h"
+#include <windows.h>
 #endif
-
 
 #ifdef VK_USE_PLATFORM_XCB_KHR
-#include <xcb/xcb.h>
 #include "vulkan_xcb.h"
+#include <xcb/xcb.h>
 #endif
-
 
 #ifdef VK_USE_PLATFORM_XLIB_KHR
-#include <X11/Xlib.h>
 #include "vulkan_xlib.h"
+#include <X11/Xlib.h>
 #endif
-
 
 #ifdef VK_USE_PLATFORM_DIRECTFB_EXT
-#include <directfb.h>
 #include "vulkan_directfb.h"
+#include <directfb.h>
 #endif
-
 
 #ifdef VK_USE_PLATFORM_XLIB_XRANDR_EXT
+#include "vulkan_xlib_xrandr.h"
 #include <X11/Xlib.h>
 #include <X11/extensions/Xrandr.h>
-#include "vulkan_xlib_xrandr.h"
 #endif
-
 
 #ifdef VK_USE_PLATFORM_GGP
-#include <ggp_c/vulkan_types.h>
 #include "vulkan_ggp.h"
+#include <ggp_c/vulkan_types.h>
 #endif
-
 
 #ifdef VK_USE_PLATFORM_SCREEN_QNX
-#include <screen/screen.h>
 #include "vulkan_screen.h"
+#include <screen/screen.h>
 #endif
-
 
 #ifdef VK_USE_PLATFORM_SCI
-#include <nvscisync.h>
-#include <nvscibuf.h>
 #include "vulkan_sci.h"
+#include <nvscibuf.h>
+#include <nvscisync.h>
 #endif
-
 
 #ifdef VK_ENABLE_BETA_EXTENSIONS
 #include "vulkan_beta.h"

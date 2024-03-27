@@ -77,15 +77,16 @@ void MainMenuState::draw(GLFWwindow *window) {
 
 // Fonction utilitaire pour vérifier si un point est à l'intérieur d'un
 // rectangle
-bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX, double rectY,
-                         double rectWidth, double rectHeight) {
+bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,
+                                        double rectY, double rectWidth,
+                                        double rectHeight) {
   return x >= rectX && x <= rectX + rectWidth && y >= rectY &&
          y <= rectY + rectHeight;
 }
 
 // Fonction utilitaire pour dessiner du texte
-void MainMenuState::drawTextMainMenu(FT_Face face, const std::string &text, float x, float y,
-                      int fontSize) {
+void MainMenuState::drawTextMainMenu(FT_Face face, const std::string &text,
+                                     float x, float y, int fontSize) {
   // Configuration de la taille de police
   FT_Set_Pixel_Sizes(face, 0, fontSize);
 

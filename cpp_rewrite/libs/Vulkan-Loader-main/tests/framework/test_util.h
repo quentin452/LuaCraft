@@ -86,9 +86,9 @@
 
 #endif
 
-#include <vulkan/vulkan.h>
-#include <vulkan/vk_icd.h>
-#include <vulkan/vk_layer.h>
+#include <vulkan.h>
+#include <vk_icd.h>
+#include <vk_layer.h>
 
 #include "framework_config.h"
 

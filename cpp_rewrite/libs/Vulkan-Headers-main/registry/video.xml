@@ -26,10 +26,10 @@ The current public version of video.xml is maintained in the default branch
         <type name="int16_t" requires="stdint"/>
         <type name="int8_t" requires="stdint"/>
 
-        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codecs_common.h">#include "vulkan_video_codecs_common.h"</type>
-        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h">#include "vulkan_video_codec_h264std.h"</type>
-        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h">#include "vulkan_video_codec_h265std.h"</type>
-        <type category="include" name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h">#include "vulkan_video_codec_av1std.h"</type>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vulkan_video_codecs_common.h">#include "vulkan_video_codecs_common.h"</type>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vulkan_video_codec_h264std.h">#include "vulkan_video_codec_h264std.h"</type>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vulkan_video_codec_h265std.h">#include "vulkan_video_codec_h265std.h"</type>
+        <type category="include" name="libs/Vulkan-Headers-main/include/vulkan_video_codec_av1std.h">#include "vulkan_video_codec_av1std.h"</type>
 
             <!-- vulkan_video_codecs_common macros -->
         <type category="define">#define <name>VK_MAKE_VIDEO_STD_VERSION</name>(major, minor, patch) \
@@ -1461,7 +1461,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_h264std" comment="protect with VULKAN_VIDEO_CODEC_H264STD_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codecs_common.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codecs_common.h"/>
 
                 <enum name="STD_VIDEO_H264_CPB_CNT_LIST_SIZE"               value="32"/>
                 <enum name="STD_VIDEO_H264_SCALING_LIST_4X4_NUM_LISTS"      value="6"/>
@@ -1498,7 +1498,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_h264std_decode" comment="protect with VULKAN_VIDEO_CODEC_H264STD_DECODE_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codec_h264std.h"/>
 
                 <type name="VK_STD_VULKAN_VIDEO_CODEC_H264_DECODE_API_VERSION_1_0_0"/>
                 <enum name="VK_STD_VULKAN_VIDEO_CODEC_H264_DECODE_SPEC_VERSION"    value="VK_STD_VULKAN_VIDEO_CODEC_H264_DECODE_API_VERSION_1_0_0"/>
@@ -1515,7 +1515,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_h264std_encode" comment="protect with VULKAN_VIDEO_CODEC_H264STD_ENCODE_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h264std.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codec_h264std.h"/>
 
                 <type name="VK_STD_VULKAN_VIDEO_CODEC_H264_ENCODE_API_VERSION_1_0_0"/>
                 <enum name="VK_STD_VULKAN_VIDEO_CODEC_H264_ENCODE_SPEC_VERSION"    value="VK_STD_VULKAN_VIDEO_CODEC_H264_ENCODE_API_VERSION_1_0_0"/>
@@ -1537,7 +1537,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_h265std" comment="protect with VULKAN_VIDEO_CODEC_H265STD_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codecs_common.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codecs_common.h"/>
 
                 <enum name="STD_VIDEO_H265_CPB_CNT_LIST_SIZE"                           value="32"/>
                 <enum name="STD_VIDEO_H265_SUBLAYERS_LIST_SIZE"                         value="7"/>
@@ -1592,7 +1592,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_h265std_decode" comment="protect with VULKAN_VIDEO_CODEC_H265STD_DECODE_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codec_h265std.h"/>
 
                 <type name="VK_STD_VULKAN_VIDEO_CODEC_H265_DECODE_API_VERSION_1_0_0"/>
                 <enum name="VK_STD_VULKAN_VIDEO_CODEC_H265_DECODE_SPEC_VERSION"    value="VK_STD_VULKAN_VIDEO_CODEC_H265_DECODE_API_VERSION_1_0_0"/>
@@ -1608,7 +1608,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_h265std_encode" comment="protect with VULKAN_VIDEO_CODEC_H265STD_ENCODE_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_h265std.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codec_h265std.h"/>
 
                 <type name="VK_STD_VULKAN_VIDEO_CODEC_H265_ENCODE_API_VERSION_1_0_0"/>
                 <enum name="VK_STD_VULKAN_VIDEO_CODEC_H265_ENCODE_SPEC_VERSION"    value="VK_STD_VULKAN_VIDEO_CODEC_H265_ENCODE_API_VERSION_1_0_0"/>
@@ -1629,7 +1629,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_av1std" comment="protect with VULKAN_VIDEO_CODEC_AV1STD_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codecs_common.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codecs_common.h"/>
 
                 <enum name="STD_VIDEO_AV1_NUM_REF_FRAMES"                           value="8"/>
                 <enum name="STD_VIDEO_AV1_REFS_PER_FRAME"                           value="7"/>
@@ -1687,7 +1687,7 @@ The current public version of video.xml is maintained in the default branch
         </extension>
         <extension name="vulkan_video_codec_av1std_decode" comment="protect with VULKAN_VIDEO_CODEC_AV1STD_DECODE_H_" supported="vulkan">
             <require>
-                <type name="libs/Vulkan-Headers-main/include/vk_video/vulkan_video_codec_av1std.h"/>
+                <type name="libs/Vulkan-Headers-main/include/vulkan_video_codec_av1std.h"/>
 
                 <type name="VK_STD_VULKAN_VIDEO_CODEC_AV1_DECODE_API_VERSION_1_0_0"/>
                 <enum name="VK_STD_VULKAN_VIDEO_CODEC_AV1_DECODE_SPEC_VERSION"      value="VK_STD_VULKAN_VIDEO_CODEC_AV1_DECODE_API_VERSION_1_0_0"/>

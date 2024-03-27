@@ -23,7 +23,7 @@
 #pragma once
 
 #include <stdbool.h>
-#include <vulkan/vulkan.h>
+#include <vulkan.h>
 
 // Linked list node for tree of debug callbacks
 typedef struct VkDebugReportContent {
