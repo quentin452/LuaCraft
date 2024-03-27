@@ -42,7 +42,7 @@ int main() {
     glfwTerminate();
     return 1;
   }
-
+glfwMakeContextCurrent(window);
   // Initialiser le gestionnaire d'état du jeu
   GameStateManager manager;
   // Passer la police chargée à MainMenuState

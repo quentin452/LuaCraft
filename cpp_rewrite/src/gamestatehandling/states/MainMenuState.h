@@ -16,6 +16,7 @@ public:
 
   void handleInput(GLFWwindow *window) override;
   void update() override;
+  void drawBackground();
   void draw(GLFWwindow *window) override;
 
 private:

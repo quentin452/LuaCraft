@@ -17,7 +17,6 @@ MainMenuState::MainMenuState(FT_Face face, GLFWwindow *window,
   option1PositionY = 200.0f;
   option2PositionX = 150.0f;
   option2PositionY = 250.0f;
-
   titleText = "Menu Principal";
   option1Text = "Option 1";
   option2Text = "Play Game";
@@ -53,27 +52,37 @@ void MainMenuState::handleInput(GLFWwindow *window) {
 void MainMenuState::update() {
   // Mettre à jour l'état du menu principal si nécessaire
 }
+void MainMenuState::drawBackground() {
+  // Dessiner un rectangle pour l'arrière-plan
+  glBegin(GL_QUADS);
+  glColor3f(0.5f, 0.5f, 0.5f); // Couleur grise (par exemple)
+  glVertex2f(-1.0f, -1.0f);    // Coin inférieur gauche
+  glVertex2f(1.0f, -1.0f);     // Coin inférieur droit
+  glVertex2f(1.0f, 1.0f);      // Coin supérieur droit
+  glVertex2f(-1.0f, 1.0f);     // Coin supérieur gauche
+  glEnd();
+}
 
 void MainMenuState::draw(GLFWwindow *window) {
-  // Effacer l'écran
+  // Définir la couleur de fond
+  glClearColor(0.5f, 0.5f, 0.5f, 1.0f); // Couleur grise (par exemple)
+  // Effacer l'écran avec la couleur de fond définie
   glClear(GL_COLOR_BUFFER_BIT);
 
-  // Dessiner le titre
+  // Dessiner l'arrière-plan
+  drawBackground();
+
+  // Dessiner le reste de l'état du jeu
   drawTextMainMenu(fontFace, titleText, titlePositionX, titlePositionY,
                    titleFontSize);
-
-  // Dessiner l'option 1
   drawTextMainMenu(fontFace, option1Text, option1PositionX, option1PositionY,
                    optionFontSize);
-
-  // Dessiner l'option 2
   drawTextMainMenu(fontFace, option2Text, option2PositionX, option2PositionY,
                    optionFontSize);
 
   // Mettre à jour l'affichage
   glfwSwapBuffers(window);
 }
-
 // Fonction utilitaire pour vérifier si un point est à l'intérieur d'un
 // rectangle
 bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,
