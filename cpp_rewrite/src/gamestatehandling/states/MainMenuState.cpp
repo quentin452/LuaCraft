@@ -30,7 +30,7 @@ void MainMenuState::initializeGLText() {
 }
 
 MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
-    : m_window(window), m_manager(manager){
+    : m_window(window), m_manager(manager) {
   // Initialiser glText
   initializeGLText();
 
@@ -51,7 +51,6 @@ void MainMenuState::handleInput(GLFWwindow *window) {
   // Gestion des événements de la souris
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
-          std::cout << "Transition vers le menu des paramètres..." << std::endl;
     mouseButtonPressed = true;
     int width, height;
     glfwGetWindowSize(window, &width, &height);
