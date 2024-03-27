@@ -17,13 +17,14 @@
 void MainMenuState::initializeGLText() {
   if (glewInit() != GLEW_OK) {
     std::cerr << "GLEW is not initialized" << std::endl;
+    return;
   }
   // Créer l'objet glText une seule fois lors de l'initialisation
   if (!text1) {
     text1 = gltCreateText();
     if (!text1) {
       std::cerr << "Erreur lors de la création du texte text1." << std::endl;
-      // Gérer l'erreur appropriée
+      return;
     }
     // Définir le texte à afficher
     gltSetText(text1, "Hello World!");
