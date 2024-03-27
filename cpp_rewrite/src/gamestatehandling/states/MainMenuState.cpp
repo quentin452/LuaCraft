@@ -13,7 +13,7 @@
 #include "VulkanGameState.h"
 
 void MainMenuState::initializeGLText() {
-
+  gltInit();
   if (!text1) {
     text1 = gltCreateText();
     if (!text1) {
@@ -67,6 +67,9 @@ void MainMenuState::update() {}
 void MainMenuState::draw(GLFWwindow *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
+
+  gltBeginDraw(); // Début du rendu de texte
+
   gltColor(1.0f, 1.0f, 1.0f, 1.0f);
 
   int screenWidth, screenHeight;
@@ -80,14 +83,16 @@ void MainMenuState::draw(GLFWwindow *window) {
   GLfloat textWidth2 = gltGetTextWidth(text2, buttonScale);
   GLfloat textHeight2 = gltGetTextHeight(text2, buttonScale);
   GLfloat textPosX2 = (screenWidth - textWidth2) / 2;
-  GLfloat textPosY2 =
-      textPosY1 - textHeight2 - 10.0f; // Espace entre les textes
+  GLfloat textPosY2 = textPosY1 - textHeight2 - 10.0f; // Espace entre les textes
 
   gltDrawText2D(text1, textPosX1, textPosY1, buttonScale);
   gltDrawText2D(text2, textPosX2, textPosY2, buttonScale);
 
+  gltEndDraw(); // Fin du rendu de texte
+
   glfwSwapBuffers(window);
 }
+
 
 bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,
                                         double rectY, double rectWidth,
