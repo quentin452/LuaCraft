@@ -66,7 +66,7 @@ MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
 
 void MainMenuState::handleInput(GLFWwindow *window) {
     double xpos, ypos;
-    // logMessage(LogLevel::INFO, "textHeight1: ", textHeight1);
+    // logMessageAsync(LogLevel::INFO, "textHeight1: "+ textHeight1);
 
     glfwGetCursorPos(window, &xpos, &ypos);
     int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
@@ -77,11 +77,11 @@ void MainMenuState::handleInput(GLFWwindow *window) {
         if (isInsideForMainMenu(windowX, windowY, textPosX1, textPosY1, textWidth1,
                                 textHeight1)) {
             m_manager.set(std::make_unique<SettingsState>(window, m_manager));
-            logMessage(LogLevel::INFO, "Go To SettingsState...");
+            logMessageAsync(LogLevel::INFO, "Go To SettingsState...");
         } else if (isInsideForMainMenu(windowX, windowY, textPosX2, textPosY2,
                                        textWidth2, textHeight2)) {
             m_manager.set(std::make_unique<VulkanGameState>(window, m_manager));
-            logMessage(LogLevel::INFO, "Go To 3D Scene USing Vulkan...");
+            logMessageAsync(LogLevel::INFO, "Go To 3D Scene USing Vulkan...");
         }
     } else if (mouseState == GLFW_RELEASE) {
         mouseButtonPressed = false;

@@ -74,7 +74,7 @@ void SettingsState::handleInput(GLFWwindow *window) {
         int windowY = (int)((1.0 - normalizedY) * screenHeight / 2.0);
         if (isInsideForSettings(windowX, windowY, option1PositionX,
                                 option1PositionY, textWidth1, textHeight1)) {
-            logMessage(LogLevel::INFO, "Go To MainMenuState...");
+            logMessageAsync(LogLevel::INFO, "Go To MainMenuState...");
             m_manager.set(std::make_unique<MainMenuState>(window, m_manager));
         }
     } else if (mouseState == GLFW_RELEASE) {

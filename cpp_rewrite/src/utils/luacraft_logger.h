@@ -1,40 +1,33 @@
+#ifndef LUACRAFT_LOGGER_H
+#define LUACRAFT_LOGGER_H
+
+#include <condition_variable>
+#include <functional>
 #include <iostream>
+#include <mutex>
+#include <queue>
 #include <sstream>
 #include <string>
+#include <thread>
+#include <vector>
 
-enum class LogLevel {
-    INFO,
-    WARNING,
-    ERROR
-};
+enum class LogLevel { INFO, WARNING, ERROR };
 
-// Fonction récursive pour concaténer les arguments
-template <typename T>
-void append(std::ostringstream &oss, const T &arg) {
-    oss << arg;
-}
+extern std::queue<std::function<void()>> tasks;
+extern std::mutex mtx;
+extern std::condition_variable cv;
+extern bool done;
+
+void logWorker();
+
+void logMessageAsync(LogLevel level, const std::string &message);
+
+template <typename... Args>
+void logMessage(LogLevel level, const Args &...args);
+
+template <typename T> void append(std::ostringstream &oss, const T &arg);
 
 template <typename T, typename... Args>
-void append(std::ostringstream &oss, const T &first, const Args &...args) {
-    oss << first;
-    append(oss, args...);
-}
+void append(std::ostringstream &oss, const T &first, const Args &...args);
 
-// Fonction template variadique pour accepter un nombre variable d'arguments
-template <typename... Args>
-void logMessage(LogLevel level, const Args &...args) {
-    std::ostringstream oss;
-    switch (level) {
-    case LogLevel::INFO:
-        oss << "[INFO] ";
-        break;
-    case LogLevel::WARNING:
-        oss << "[WARNING] ";
-        break;
-    case LogLevel::ERROR:
-        oss << "[ERROR] ";
-        break;
-    }
-    append(oss, args...); // Concaténer tous les arguments à oss
-    std::cout << oss.str() << std::endl;
-}
+#endif // LUACRAFT_LOGGER_H
