@@ -24,6 +24,14 @@ public:
   void update() override;
   void draw(GLFWwindow *window) override;
   void initializeGLText();
+    void calculateButtonPositionsAndSizes(GLFWwindow *window) override;
+  void framebufferSizeCallbackGameState(GLFWwindow *window, int width,
+                                        int height) override;
+  void cleanup() override {
+    gltDeleteText(titleText), gltDeleteText(option1Text);
+  }
+  static void framebufferSizeCallbackWrapper(GLFWwindow *window, int width,
+                                             int height);
 
 private:
   GLfloat textPosX1, textPosY1, textPosX2, textPosY2, textWidth1, textHeight1;
@@ -43,6 +51,6 @@ private:
   float optionWidth;
   float optionHeight;
   bool mouseButtonPressed = false;
-
-  // Déclaration de vos autres variables membres
+    int screenWidth;
+  int screenHeight;
 };

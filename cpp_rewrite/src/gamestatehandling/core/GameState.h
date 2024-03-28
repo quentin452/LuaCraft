@@ -8,4 +8,7 @@ public:
   virtual void draw(GLFWwindow *window) = 0;
   virtual ~GameState() {}
   virtual void cleanup() {}
+  virtual void framebufferSizeCallbackGameState(GLFWwindow *window, int width,
+                                                int height) {}
+  virtual void calculateButtonPositionsAndSizes(GLFWwindow *window) {}
 };

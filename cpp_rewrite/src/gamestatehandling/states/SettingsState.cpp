@@ -14,18 +14,28 @@
 
 void SettingsState::initializeGLText() {
   gltInit();
-  if (!titleText)
-    titleText = gltCreateText();
-  if (!option1Text)
-    option1Text = gltCreateText();
-
+  titleText = gltCreateText();
   gltSetText(titleText, "Paramètres");
+  option1Text = gltCreateText();
   gltSetText(option1Text, "Go To Main Menu");
 }
 
-SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
-    : m_window(window), m_manager(manager) {
-  initializeGLText();
+void SettingsState::framebufferSizeCallbackGameState(GLFWwindow *window,
+                                                     int width, int height) {
+  // Recalculate button positions and sizes
+  calculateButtonPositionsAndSizes(window);
+}
+
+void SettingsState::framebufferSizeCallbackWrapper(GLFWwindow *window,
+                                                   int width, int height) {
+  SettingsState *state =
+      reinterpret_cast<SettingsState *>(glfwGetWindowUserPointer(window));
+  if (state != nullptr) {
+    state->framebufferSizeCallbackGameState(window, width, height);
+  }
+}
+
+void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
 
   int screenWidth, screenHeight;
   glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
@@ -38,7 +48,17 @@ SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
   GLfloat textWidth2 = gltGetTextWidth(option1Text, buttonScale);
   GLfloat textHeight2 = gltGetTextHeight(option1Text, buttonScale);
   option1PositionX = (screenWidth - textWidth2) / 2;
-  option1PositionY = (screenHeight - textHeight2) / 2+ 50.0f;
+  option1PositionY = (screenHeight - textHeight2) / 2 + 50.0f;
+}
+
+SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
+    : m_window(window), m_manager(manager) {
+  initializeGLText();
+  glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+  calculateButtonPositionsAndSizes(window);
+  glfwSetWindowUserPointer(window, this);
+  glfwSetFramebufferSizeCallback(
+      window, &SettingsState::framebufferSizeCallbackWrapper);
 }
 void SettingsState::handleInput(GLFWwindow *window) {
   double xpos, ypos;
@@ -48,20 +68,12 @@ void SettingsState::handleInput(GLFWwindow *window) {
     mouseButtonPressed = true;
     int screenWidth, screenHeight;
     glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
-
-    // Coordonnées normalisées du curseur
     double normalizedX = 2.0 * xpos / screenWidth - 1.0;
     double normalizedY = 1.0 - 2.0 * ypos / screenHeight;
-
-    // Convertir les coordonnées normalisées en coordonnées de fenêtre
     int windowX = (int)((normalizedX + 1.0) * screenWidth / 2.0);
     int windowY = (int)((1.0 - normalizedY) * screenHeight / 2.0);
-
-    int option1Width = textWidth1;
-    int option1Height = textHeight1;
-
     if (isInsideForSettings(windowX, windowY, option1PositionX,
-                            option1PositionY, option1Width, option1Height)) {
+                            option1PositionY, textWidth1, textHeight1)) {
       std::cout << "Transition vers le menu principal..." << std::endl;
       m_manager.set(std::make_unique<MainMenuState>(window, m_manager));
     }
@@ -70,9 +82,7 @@ void SettingsState::handleInput(GLFWwindow *window) {
   }
 }
 
-void SettingsState::update() {
-  // Mettre à jour l'état des paramètres si nécessaire
-}
+void SettingsState::update() {}
 
 void SettingsState::draw(GLFWwindow *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
@@ -87,8 +97,6 @@ void SettingsState::draw(GLFWwindow *window) {
   glfwSwapBuffers(window);
 }
 
-// Fonction utilitaire pour vérifier si un point est à l'intérieur d'un
-// rectangle
 bool SettingsState::isInsideForSettings(double x, double y, double rectX,
                                         double rectY, double rectWidth,
                                         double rectHeight) {

@@ -1,9 +1,8 @@
-
 #include <glew.h>
 
 #include <GLFW/glfw3.h>
-#define GLT_IMPLEMENTATION
 
+#define GLT_IMPLEMENTATION
 #include <gltext.h>
 #include <iostream>
 #include <vector>
@@ -14,89 +13,79 @@
 
 void MainMenuState::initializeGLText() {
   gltInit();
-  if (!titlescreen) {
-    titlescreen = gltCreateText();
-    if (!titlescreen) {
-      std::cerr << "Erreur lors de la création du texte titlescreen."
-                << std::endl;
-      return;
-    }
-    gltSetText(titlescreen, "Main Menu");
+  titlescreen = gltCreateText();
+  gltSetText(titlescreen, "Main Menu");
+  text1 = gltCreateText();
+  gltSetText(text1, "Option 1");
+  text2 = gltCreateText();
+  gltSetText(text2, "Play Game!");
+}
+void MainMenuState::framebufferSizeCallbackGameState(GLFWwindow *window,
+                                                     int width, int height) {
+  // Recalculate button positions and sizes
+  calculateButtonPositionsAndSizes(window);
+}
+
+void MainMenuState::framebufferSizeCallbackWrapper(GLFWwindow *window,
+                                                   int width, int height) {
+  MainMenuState *state =
+      reinterpret_cast<MainMenuState *>(glfwGetWindowUserPointer(window));
+  if (state != nullptr) {
+    state->framebufferSizeCallbackGameState(window, width, height);
   }
-  if (!text1) {
-    text1 = gltCreateText();
-    if (!text1) {
-      std::cerr << "Erreur lors de la création du texte text1." << std::endl;
-      return;
-    }
-    gltSetText(text1, "Option 1");
-  }
-  if (!text2) {
-    text2 = gltCreateText();
-    if (!text2) {
-      std::cerr << "Erreur lors de la création du texte text2." << std::endl;
-      return;
-    }
-    gltSetText(text2, "Play Game!");
-  }
+}
+
+void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
+  int windowWidth, windowHeight;
+  glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
+
+  // Utiliser les dimensions de la framebuffer pour les calculs
+  textWidth1 = gltGetTextWidth(text1, buttonScale);
+  textHeight1 = gltGetTextHeight(text1, buttonScale);
+  textPosX1 = (windowWidth - textWidth1) / 2;
+  textPosY1 = (windowHeight - textHeight1) / 2;
+
+  textWidth2 = gltGetTextWidth(text2, buttonScale);
+  textHeight2 = gltGetTextHeight(text2, buttonScale);
+  textPosX2 = (windowWidth - textWidth2) / 2;
+  textPosY2 = textPosY1 - textHeight2 - 10.0f;
+
+  // Calculer les dimensions et positions du titre
+  textWidthForTitle = gltGetTextWidth(titlescreen, buttonScale);
+  textHeightForTitle = gltGetTextHeight(titlescreen, buttonScale);
+  textPosXForTitle = (windowWidth - textWidthForTitle) / 2;
+  textPosYForTitle = (windowHeight - textHeightForTitle) / 4;
 }
 
 MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  int screenWidth, screenHeight;
   glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
-
-  textWidth1 = gltGetTextWidth(text1, buttonScale);
-  textHeight1 = gltGetTextHeight(text1, buttonScale);
-  textPosX1 = (screenWidth - textWidth1) / 2;
-  textPosY1 = (screenHeight - textHeight1) / 2;
-
-  GLfloat textWidth2 = gltGetTextWidth(text2, buttonScale);
-  GLfloat textHeight2 = gltGetTextHeight(text2, buttonScale);
-  textPosX2 = (screenWidth - textWidth2) / 2;
-  textPosY2 = textPosY1 - textHeight2 - 10.0f;
-
-  textWidthForTitle = gltGetTextWidth(titlescreen, buttonScale);
-  textHeighForTitle = gltGetTextHeight(titlescreen, buttonScale);
-  textPosXForTitle = (screenWidth - textWidthForTitle) / 2;
-  textPosYForTitle = (screenHeight - textHeighForTitle) / 4;
+  calculateButtonPositionsAndSizes(window);
+  glfwSetWindowUserPointer(window, this);
+  glfwSetFramebufferSizeCallback(
+      window, &MainMenuState::framebufferSizeCallbackWrapper);
 }
+
 void MainMenuState::handleInput(GLFWwindow *window) {
   double xpos, ypos;
   glfwGetCursorPos(window, &xpos, &ypos);
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
     mouseButtonPressed = true;
-    int screenWidth, screenHeight;
-    glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
-
-    // Coordonnées normalisées du curseur
-    double normalizedX = 2.0 * xpos / screenWidth - 1.0;
-    double normalizedY = 1.0 - 2.0 * ypos / screenHeight;
-
-    // Convertir les coordonnées normalisées en coordonnées de fenêtre
-    int windowX = (int)((normalizedX + 1.0) * screenWidth / 2.0);
-    int windowY = (int)((1.0 - normalizedY) * screenHeight / 2.0);
-
-    // Conversion des positions et dimensions de texte en coordonnées de fenêtre
-    int option1PositionX = textPosX1;
-    int option1PositionY = textPosY1;
-    int optionWidth = textWidth1;
-    int optionHeight = textHeight1;
-
-    int option2PositionX = textPosX2;
-    int option2PositionY = textPosY2;
-
-    if (isInsideForMainMenu(windowX, windowY, option1PositionX,
-                            option1PositionY, optionWidth, optionHeight)) {
-      std::cout << "Transition vers le menu des paramètres..." << std::endl;
+    // Convertir les coordonnées de la souris en coordonnées de la framebuffer
+    int windowX = static_cast<int>(xpos);
+    int windowY = static_cast<int>(ypos);
+    // Vérifier si les coordonnées de la souris se trouvent à l'intérieur des
+    // boutons
+    if (isInsideForMainMenu(windowX, windowY, textPosX1, textPosY1, textWidth1,
+                            textHeight1)) {
       m_manager.set(std::make_unique<SettingsState>(window, m_manager));
-    } else if (isInsideForMainMenu(windowX, windowY, option2PositionX,
-                                   option2PositionY, optionWidth,
-                                   optionHeight)) {
-      std::cout << "Transition vers la scène 3D avec Vulkan..." << std::endl;
+      std::cout << "Transition vers la scène SettingsState..." << std::endl;
+    } else if (isInsideForMainMenu(windowX, windowY, textPosX2, textPosY2,
+                                   textWidth2, textHeight2)) {
       m_manager.set(std::make_unique<VulkanGameState>(window, m_manager));
+      std::cout << "Transition vers la scène 3D avec Vulkan..." << std::endl;
     }
   } else if (mouseState == GLFW_RELEASE) {
     mouseButtonPressed = false;
@@ -104,6 +93,7 @@ void MainMenuState::handleInput(GLFWwindow *window) {
 }
 
 void MainMenuState::update() {}
+
 void MainMenuState::draw(GLFWwindow *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
@@ -115,9 +105,12 @@ void MainMenuState::draw(GLFWwindow *window) {
   gltEndDraw();
   glfwSwapBuffers(window);
 }
+
 bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,
                                         double rectY, double rectWidth,
                                         double rectHeight) {
+  // Vérifier si les coordonnées de la souris se trouvent à l'intérieur du
+  // rectangle défini
   return x >= rectX && x <= rectX + rectWidth && y >= rectY &&
          y <= rectY + rectHeight;
 }
