@@ -3,19 +3,21 @@
 #include <iostream>
 #include <memory>
 
-
 class GameStateManager {
+private:
+  double lastStateChangeTime = 0.0;
+
 public:
   void set(std::unique_ptr<GameState> state) {
     if (currentState) {
       currentState->cleanup();
     }
-    // Définir le nouvel état
     currentState = std::move(state);
+    lastStateChangeTime =
+        glfwGetTime();
   }
 
   GameState &get() { return *currentState; }
-
-private:
   std::unique_ptr<GameState> currentState;
+  double getLastStateChangeTime() const { return lastStateChangeTime; }
 };

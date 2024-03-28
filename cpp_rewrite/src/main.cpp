@@ -22,6 +22,8 @@ void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 }
 
 int main() {
+  double elapsedTime = 0.0;
+  const double inputDelay = 0.1;
   if (!glfwInit()) {
     std::cerr << "Erreur lors de l'initialisation de GLFW." << std::endl;
     return 1;
@@ -50,14 +52,17 @@ int main() {
   while (!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    manager.get().handleInput(window);
+    elapsedTime = glfwGetTime() - manager.getLastStateChangeTime();
+    if (elapsedTime >= inputDelay) {
+      manager.get().handleInput(window);
+    }
     manager.get().update();
     manager.get().draw(window);
     glfwSwapBuffers(window);
+    // TODO FIX glfwPollEvents causing lags when moving mouse
     glfwPollEvents();
   }
   glfwDestroyWindow(window);
-  // TODO FIX glfwPollEvents causing lags when moving mouse
   glfwTerminate();
   return 0;
 }

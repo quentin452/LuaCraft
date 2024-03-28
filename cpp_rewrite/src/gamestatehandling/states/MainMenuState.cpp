@@ -22,7 +22,6 @@ void MainMenuState::initializeGLText() {
 }
 void MainMenuState::framebufferSizeCallbackGameState(GLFWwindow *window,
                                                      int width, int height) {
-  // Recalculate button positions and sizes
   calculateButtonPositionsAndSizes(window);
 }
 
@@ -38,8 +37,6 @@ void MainMenuState::framebufferSizeCallbackWrapper(GLFWwindow *window,
 void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
   int windowWidth, windowHeight;
   glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
-
-  // Utiliser les dimensions de la framebuffer pour les calculs
   textWidth1 = gltGetTextWidth(text1, buttonScale);
   textHeight1 = gltGetTextHeight(text1, buttonScale);
   textPosX1 = (windowWidth - textWidth1) / 2;
@@ -50,7 +47,6 @@ void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
   textPosX2 = (windowWidth - textWidth2) / 2;
   textPosY2 = textPosY1 - textHeight2 - 10.0f;
 
-  // Calculer les dimensions et positions du titre
   textWidthForTitle = gltGetTextWidth(titlescreen, buttonScale);
   textHeightForTitle = gltGetTextHeight(titlescreen, buttonScale);
   textPosXForTitle = (windowWidth - textWidthForTitle) / 2;
@@ -73,11 +69,8 @@ void MainMenuState::handleInput(GLFWwindow *window) {
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
     mouseButtonPressed = true;
-    // Convertir les coordonnées de la souris en coordonnées de la framebuffer
     int windowX = static_cast<int>(xpos);
     int windowY = static_cast<int>(ypos);
-    // Vérifier si les coordonnées de la souris se trouvent à l'intérieur des
-    // boutons
     if (isInsideForMainMenu(windowX, windowY, textPosX1, textPosY1, textWidth1,
                             textHeight1)) {
       m_manager.set(std::make_unique<SettingsState>(window, m_manager));
@@ -109,8 +102,6 @@ void MainMenuState::draw(GLFWwindow *window) {
 bool MainMenuState::isInsideForMainMenu(double x, double y, double rectX,
                                         double rectY, double rectWidth,
                                         double rectHeight) {
-  // Vérifier si les coordonnées de la souris se trouvent à l'intérieur du
-  // rectangle défini
   return x >= rectX && x <= rectX + rectWidth && y >= rectY &&
          y <= rectY + rectHeight;
 }

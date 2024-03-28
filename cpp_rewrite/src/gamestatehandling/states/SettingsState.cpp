@@ -22,7 +22,6 @@ void SettingsState::initializeGLText() {
 
 void SettingsState::framebufferSizeCallbackGameState(GLFWwindow *window,
                                                      int width, int height) {
-  // Recalculate button positions and sizes
   calculateButtonPositionsAndSizes(window);
 }
 
