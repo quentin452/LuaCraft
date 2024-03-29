@@ -59,6 +59,7 @@ set(common_compile_options
    -I\\\"${LIB_DIR}/stb\\\"
    -I\\\"${LIB_DIR}/glew-2.1.0/include/GL\\\"
    -I\\\"${LIB_DIR}/gltext\\\"\"
+   ignore\"
 )
 
 # Add executable
@@ -92,8 +93,10 @@ foreach(SOURCE_FILE ${SOURCES})
 
     # Ajouter les options de compilation communes
     foreach(OPTION ${common_compile_options})
-        string(APPEND compile_commands " ${OPTION}")
-    endforeach()
+    if(NOT OPTION STREQUAL "ignore\"")
+      string(APPEND compile_commands " ${OPTION}") 
+    endif()
+  endforeach()
 
     # Ajouter le reste de la commande et les métadonnées JSON
     string(APPEND compile_commands
