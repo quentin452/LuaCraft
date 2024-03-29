@@ -7,7 +7,6 @@ none
 libs :
 
 gltext : https://github.com/vallentin/glText
-freetype : https://github.com/ImageMagick/freetype
 glad : idk
 glew : https://github.com/nigels-com/glew
 glfw : https://github.com/glfw/glfw

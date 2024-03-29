@@ -29,7 +29,6 @@ set(SOURCES_FILES ${SOURCES})
 set(build_directory "${CMAKE_CURRENT_BINARY_DIR}/")
 
 # External libraries
-set(FREETYPE_INCLUDE_DIR "${LIB_DIR}/freetype-2.8.1/include")
 set(GLFW_INCLUDE_DIR "${LIB_DIR}/glfw-3.4/include")
 set(VULKAN_INCLUDE_DIRS "${LIB_DIR}/Vulkan-Headers-main/include/vulkan")
 set(VULKAN_INCLUDE_DIRSVKVideo "${LIB_DIR}/Vulkan-Headers-main/include/vk_video")
@@ -39,7 +38,6 @@ set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include/GL")
 set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
 
 set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
-set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
 set(GLFW_LIBRARY "${LIB_DIR}/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
 set(VULKAN_LIBRARY "${LIB_DIR}/vulkanlib/vulkan-1.lib")
 set(GLEW_LIBRARY "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.lib")
@@ -76,7 +74,6 @@ set(common_compile_options
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//shared\\\""
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//winrt\\\""
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//cppwinrt\\\""
-   -I\\\"${FREETYPE_INCLUDE_DIR}\\\"
    -I\\\"${GLFW_INCLUDE_DIR}\\\"
    -I\\\"${VULKAN_INCLUDE_DIRS}\\\"
    -I\\\"${VULKAN_INCLUDE_DIRSVKVideo}\\\"
@@ -91,10 +88,10 @@ set(common_compile_options
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Target include directories
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS}  ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS}  ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARY} ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY})
+target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY})
 
 # Copy glew32.dll after build
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

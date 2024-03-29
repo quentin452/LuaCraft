@@ -118,7 +118,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=cpp_rewrite
+CMAKE_PROJECT_NAME:STATIC=LUACRAFT
 
 //RC compiler
 CMAKE_RC_COMPILER:FILEPATH=rc
@@ -193,6 +193,15 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Enable Link-Time Optimization
 ENABLE_LTO:BOOL=ON
+
+//Value Computed by CMake
+LUACRAFT_BINARY_DIR:STATIC=C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build
+
+//Value Computed by CMake
+LUACRAFT_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+LUACRAFT_SOURCE_DIR:STATIC=C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft
 
 //Value Computed by CMake
 cpp_rewrite_BINARY_DIR:STATIC=C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build
