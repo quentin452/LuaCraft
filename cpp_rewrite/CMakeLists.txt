@@ -14,17 +14,19 @@ set(build_directory "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/cpp_r
 
 # External libraries
 set(FREETYPE_INCLUDE_DIR "${LIB_DIR}/freetype-2.8.1/include")
-set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
-set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
 set(GLFW_INCLUDE_DIR "${LIB_DIR}/glfw-3.4/include")
-set(GLFW_LIBRARY "${LIB_DIR}/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
-set(VULKAN_INCLUDE_DIRS "${LIB_DIR}/Vulkan-Headers-main/include/vulkan" "${LIB_DIR}/Vulkan-Headers-main/include/vk_video")
-set(NOISE_INCLUDE_DIR "${LIB_DIR}/noise")
-set(VULKAN_LIBRARY "${LIB_DIR}/vulkanlib/vulkan-1.lib")
+set(VULKAN_INCLUDE_DIRS "${LIB_DIR}/Vulkan-Headers-main/include/vulkan")
+set(VULKAN_INCLUDE_DIRSVKVideo "${LIB_DIR}/Vulkan-Headers-main/include/vk_video")
 set(GLAD_INCLUDE_DIR "${LIB_DIR}/glad/include/glad")
 set(STB_INCLUDE_DIR "${LIB_DIR}/stb")
 set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include/GL")
 set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
+set(NOISE_INCLUDE_DIR "${LIB_DIR}/noise")
+
+set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
+set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
+set(GLFW_LIBRARY "${LIB_DIR}/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
+set(VULKAN_LIBRARY "${LIB_DIR}/vulkanlib/vulkan-1.lib")
 set(GLEW_LIBRARY "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.lib")
 
 get_directory_property(VS_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES) 
@@ -59,15 +61,15 @@ set(common_compile_options
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//shared\\\""
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//winrt\\\""
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//cppwinrt\\\""
-   -I\\\"${LIB_DIR}/freetype-2.8.1/include\\\"
-   -I\\\"${LIB_DIR}/glfw-3.4/include\\\"
-   -I\\\"${LIB_DIR}/Vulkan-Headers-main/include/vulkan\\\"
-   -I\\\"${LIB_DIR}/Vulkan-Headers-main/include/vk_video\\\"
-   -I\\\"${LIB_DIR}/glad/include/glad\\\"
-   -I\\\"${LIB_DIR}/noise\\\"
-   -I\\\"${LIB_DIR}/stb\\\"
-   -I\\\"${LIB_DIR}/glew-2.1.0/include/GL\\\"
-   -I\\\"${LIB_DIR}/gltext\\\"\"
+   -I\\\"${FREETYPE_INCLUDE_DIR}\\\"
+   -I\\\"${GLFW_INCLUDE_DIR}\\\"
+   -I\\\"${VULKAN_INCLUDE_DIRS}\\\"
+   -I\\\"${VULKAN_INCLUDE_DIRSVKVideo}\\\"
+   -I\\\"${GLAD_INCLUDE_DIR}\\\"
+   -I\\\"${NOISE_INCLUDE_DIR}\\\"
+   -I\\\"${STB_INCLUDE_DIR}\\\"
+   -I\\\"${GLEW_INCLUDE_DIR}\\\"
+   -I\\\"${GLTEXT_INCLUDE_DIR}\\\"\"
    ignore\"
 )
 
