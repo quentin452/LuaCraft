@@ -27,6 +27,15 @@ set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include/GL")
 set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
 set(GLEW_LIBRARY "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.lib")
 
+get_directory_property(VS_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES) 
+get_directory_property(WIN_SDK_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES)
+if(NOT DEFINED VS_INCLUDE_DIRECTORIES)
+  get_directory_property(...)
+endif()
+
+if(NOT DEFINED WIN_SDK_INCLUDE_DIRECTORIES)
+  get_directory_property(...)  
+endif()
 # Common compilation options
 set(common_compile_options
    -std=c++14 
@@ -43,13 +52,13 @@ set(common_compile_options
    "\\\"-D_WINDOWS\\\"" 
    "\\\"-DCMAKE_INTDIR=/\\\"Debug/\\\"\\\"" 
    "\\\"-D_DEBUG_FUNCTIONAL_MACHINERY\\\""   
-   -isystem "\\\"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/include\\\""
-   -isystem "\\\"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/atlmfc/include\\\""
-   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/ucrt\\\""
-   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/um\\\""
-   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/shared\\\""
-   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/winrt\\\""
-   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/cppwinrt\\\""
+   -isystem "\\\"${VS_INCLUDE_DIRECTORIES}/include\\\""
+   -isystem "\\\"${VS_INCLUDE_DIRECTORIES}/atlmfc/include\\\""
+   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//ucrt\\\""
+   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//um\\\""
+   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//shared\\\""
+   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//winrt\\\""
+   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//cppwinrt\\\""
    -I\\\"${LIB_DIR}/freetype-2.8.1/include\\\"
    -I\\\"${LIB_DIR}/glfw-3.4/include\\\"
    -I\\\"${LIB_DIR}/Vulkan-Headers-main/include/vulkan\\\"
