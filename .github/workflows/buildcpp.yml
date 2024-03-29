@@ -1,0 +1,27 @@
+name: Build executable file
+
+on:
+  push:
+    branches: [ "cPlusPlus-rewriteWorkFlowTestings" ]
+  pull_request:
+    branches: [ "cPlusPlus-rewriteWorkFlowTestings" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install CMake
+        run: sudo apt-get install cmake
+      - name: Build project
+        run: |
+          if [ ! -d "${{ github.workspace }}/build" ]; then mkdir "${{ github.workspace }}/build"; fi
+          cd "${{ github.workspace }}/build"
+          cmake ..
+          cmake --build . --config Release
+      - name: Upload executable artifact
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: myExecutable
+          path: ${{ github.workspace }}/build/cpp_rewrite.exe
