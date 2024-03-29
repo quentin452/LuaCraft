@@ -8,7 +8,7 @@
 #include "../core/GameStatesUtils.h"
 #include "MainMenuState.h"
 #include "SettingsState.h"
-#include "VulkanGameState.h"
+#include "gameplaying/VulkanGameState.h"
 #include <gltext.h>
 #include <iostream>
 #include <vector>

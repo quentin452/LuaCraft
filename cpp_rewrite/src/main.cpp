@@ -4,7 +4,7 @@
 #include "gamestatehandling/core/GameStateManager.h"
 #include "gamestatehandling/states/MainMenuState.h"
 #include "gamestatehandling/states/SettingsState.h"
-#include "gamestatehandling/states/VulkanGameState.h"
+#include "gamestatehandling/states/gameplaying/VulkanGameState.h"
 #include "gltext.h"
 #include "utils/luacraft_filesystem.h"
 #include "utils/luacraft_logger.h"

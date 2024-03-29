@@ -13,7 +13,7 @@
 #include "../core/GameStatesUtils.h"
 #include "MainMenuState.h"
 #include "SettingsState.h"
-#include "VulkanGameState.h"
+#include "gameplaying/VulkanGameState.h"
 
 SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {

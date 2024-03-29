@@ -1,9 +1,9 @@
 #pragma once
-#include "../core/GameStateManager.h"
+#include "../../core/GameStateManager.h"
 #include <string>
-class VulkanGameState : public GameState {
+class OpenGLGameState : public GameState {
 public:
-  VulkanGameState(GLFWwindow *window, GameStateManager &manager);
+  OpenGLGameState(GLFWwindow *window, GameStateManager &manager);
 
   void handleInput(GLFWwindow *window) override;
   void update() override;
@@ -12,5 +12,4 @@ public:
 private:
   GLFWwindow *m_window;
   GameStateManager &manager;
-  // Autres attributs et méthodes spécifiques à VulkanGameState
 };

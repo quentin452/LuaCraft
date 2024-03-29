@@ -6,7 +6,7 @@
 #define GLT_IMPLEMENTATION
 #include "MainMenuState.h"
 #include "SettingsState.h"
-#include "VulkanGameState.h"
+#include "gameplaying/VulkanGameState.h"
 #include <gltext.h>
 #include <iostream>
 #include <vector>
