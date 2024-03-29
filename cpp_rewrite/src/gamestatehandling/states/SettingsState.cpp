@@ -22,8 +22,6 @@ SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
                          &LuaCraftGlobals::WindowHeight);
   calculateButtonPositionsAndSizes(window);
   glfwSetWindowUserPointer(window, this);
-  glfwSetFramebufferSizeCallback(
-      window, &SettingsState::framebufferSizeCallbackWrapper);
 }
 
 void SettingsState::initializeGLText() {
@@ -43,14 +41,6 @@ void SettingsState::initializeGLText() {
 void SettingsState::framebufferSizeCallbackGameState(GLFWwindow *window,
                                                      int width, int height) {
   calculateButtonPositionsAndSizes(window);
-}
-
-void SettingsState::framebufferSizeCallbackWrapper(GLFWwindow *window,
-                                                   int width, int height) {
-  auto *state = static_cast<SettingsState *>(glfwGetWindowUserPointer(window));
-  if (state != nullptr) {
-    state->framebufferSizeCallbackGameState(window, width, height);
-  }
 }
 
 void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
