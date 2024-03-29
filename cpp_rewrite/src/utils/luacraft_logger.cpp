@@ -51,18 +51,18 @@ template <typename... Args>
 void LuaCraftLogger::logMessage(LogLevel level, const Args &...args) {
   std::ostringstream oss;
   switch (level) {
-    case LogLevel::INFO:
-      oss << "[INFO] ";
-      break;
-    case LogLevel::WARNING:
-      oss << "[WARNING] ";
-      break;
-    case LogLevel::ERROR:
-      oss << "[ERROR] ";
-      break;
-    case LogLevel::LOGICERROR:
-      oss << "[LOGIC ERROR] ";
-      break;
+  case LogLevel::INFO:
+    oss << "[INFO] ";
+    break;
+  case LogLevel::WARNING:
+    oss << "[WARNING] ";
+    break;
+  case LogLevel::ERROR:
+    oss << "[ERROR] ";
+    break;
+  case LogLevel::LOGICERROR:
+    oss << "[LOGIC ERROR] ";
+    break;
   }
   append(oss, args...);
   std::string message = oss.str();
