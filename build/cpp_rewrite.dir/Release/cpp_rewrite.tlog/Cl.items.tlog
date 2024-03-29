@@ -1,0 +1,14 @@
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\LuaCraftGlobals.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\LuaCraftGlobals.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\VulkanRenderer.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\VulkanRenderer.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamescene\3DGameSceneOpenGl.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\3DGameSceneOpenGl.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamescene\3DGameSceneVulkan.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\3DGameSceneVulkan.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamestatehandling\core\GameStateManager.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\GameStateManager.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamestatehandling\core\GameStatesUtils.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\GameStatesUtils.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamestatehandling\states\MainMenuState.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\MainMenuState.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamestatehandling\states\SettingsState.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\SettingsState.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamestatehandling\states\gameplaying\OpenGLGameState.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\OpenGLGameState.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\gamestatehandling\states\gameplaying\VulkanGameState.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\VulkanGameState.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\main.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\main.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\utils\luacraft_filesystem.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\luacraft_filesystem.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\utils\luacraft_logger.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\luacraft_logger.obj
+C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\src\utils\threads_starter.cpp;C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\cpp_rewrite.dir\Release\threads_starter.obj

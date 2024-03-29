@@ -1,18 +1,17 @@
-# LuaCraft
-Minecraft Like written in Lua using Love2D
+CPP_REWRITE is a try to rewrite LuaCraft in c++
 
-# libraries
+Voxel Engine Base :
 
-Penlight : https://github.com/lunarmodules/Penlight
+none
 
-cpml : https://github.com/quentin452/cpml
+libs :
 
-jprof : https://github.com/pfirsich/jprof
-
-# Voxel engine base
-
-lovecraft : https://github.com/groverburger/lovecraft
-
-# TexturePack Creadit : 
-
-Minetest Game : https://www.google.com/search?client=firefox-b-d&q=Minetest+game
+gltext : https://github.com/vallentin/glText
+freetype : https://github.com/ImageMagick/freetype
+glad : idk
+glew : https://github.com/nigels-com/glew
+glfw : https://github.com/glfw/glfw
+noise : idk
+openGL : OpenGL32.Lib
+stb : idk
+Vulkan : https://github.com/KhronosGroup/Vulkan-Headers and https://github.com/KhronosGroup/Vulkan-Loader

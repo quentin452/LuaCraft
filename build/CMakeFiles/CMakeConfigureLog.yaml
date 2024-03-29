@@ -1,0 +1,441 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake:233 (message)"
+      - "CMakeLists.txt:4 (project)"
+    message: |
+      The system is: Windows - 10.0.19045 - AMD64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:4 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      Version MSBuild 17.9.5+33de0b227 pour .NET Framework
+      La génération a démarré 29/03/2024 18:30:52.
+      
+      Projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\3.28.0-msvc1\\CompilerIdC\\CompilerIdC.vcxproj" sur le noud 1 (cibles par défaut).
+      PrepareForBuild:
+        Création du répertoire "Debug\\".
+        La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+        Création du répertoire "Debug\\CompilerIdC.tlog\\".
+      InitializeBuildStatus:
+        Création de "Debug\\CompilerIdC.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+        Mise à jour de l'horodatage "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TC /FC /errorReport:queue CMakeCCompilerId.c
+        CMakeCCompilerId.c
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
+        CompilerIdC.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\3.28.0-msvc1\\CompilerIdC\\CompilerIdC.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_C_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Suppression du fichier "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
+        Mise à jour de l'horodatage "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
+      Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\3.28.0-msvc1\\CompilerIdC\\CompilerIdC.vcxproj" terminée (cibles par défaut).
+      
+      La génération a réussi.
+          0 Avertissement(s)
+          0 Erreur(s)
+      
+      Temps écoulé 00:00:00.66
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
+      
+      The C compiler identification is MSVC, found in:
+        C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/3.28.0-msvc1/CompilerIdC/CompilerIdC.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:4 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler:  
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      Version MSBuild 17.9.5+33de0b227 pour .NET Framework
+      La génération a démarré 29/03/2024 18:30:53.
+      
+      Projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\3.28.0-msvc1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" sur le noud 1 (cibles par défaut).
+      PrepareForBuild:
+        Création du répertoire "Debug\\".
+        La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+        Création du répertoire "Debug\\CompilerIdCXX.tlog\\".
+      InitializeBuildStatus:
+        Création de "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+        Mise à jour de l'horodatage "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
+      ClCompile:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /nologo /W0 /WX- /diagnostics:column /Od /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\\\" /Fd"Debug\\vc143.pdb" /external:W0 /Gd /TP /FC /errorReport:queue CMakeCXXCompilerId.cpp
+        CMakeCXXCompilerId.cpp
+      Link:
+        C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
+        CompilerIdCXX.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\3.28.0-msvc1\\CompilerIdCXX\\CompilerIdCXX.exe
+      PostBuildEvent:
+        for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
+        :VCEnd
+        CMAKE_CXX_COMPILER=C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\Hostx64\\x64\\cl.exe
+      FinalizeBuildStatus:
+        Suppression du fichier "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
+        Mise à jour de l'horodatage "Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate".
+      Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\3.28.0-msvc1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" terminée (cibles par défaut).
+      
+      La génération a réussi.
+          0 Avertissement(s)
+          0 Erreur(s)
+      
+      Temps écoulé 00:00:00.57
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
+      
+      The CXX compiler identification is MSVC, found in:
+        C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/3.28.0-msvc1/CompilerIdCXX/CompilerIdCXX.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:4 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-0ajzak"
+      binary: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-0ajzak"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
+      CMAKE_C_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-0ajzak'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_64912.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Version MSBuild 17.9.5+33de0b227 pour .NET Framework
+        La génération a démarré 29/03/2024 18:30:53.
+        
+        Projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0ajzak\\cmTC_64912.vcxproj" sur le noud 1 (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "cmTC_64912.dir\\Debug\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0ajzak\\Debug\\".
+          Création du répertoire "cmTC_64912.dir\\Debug\\cmTC_64912.tlog\\".
+        InitializeBuildStatus:
+          Création de "cmTC_64912.dir\\Debug\\cmTC_64912.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "cmTC_64912.dir\\Debug\\cmTC_64912.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_64912.dir\\Debug\\\\" /Fd"cmTC_64912.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.28\\Modules\\CMakeCCompilerABI.c"
+          Compilateur d'optimisation Microsoft (R) C/C++ version 19.39.33520 pour x64
+          Copyright (C) Microsoft Corporation. Tous droits réservés.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_64912.dir\\Debug\\\\" /Fd"cmTC_64912.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.28\\Modules\\CMakeCCompilerABI.c"
+          CMakeCCompilerABI.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0ajzak\\Debug\\cmTC_64912.exe" /INCREMENTAL /ILK:"cmTC_64912.dir\\Debug\\cmTC_64912.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-0ajzak/Debug/cmTC_64912.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-0ajzak/Debug/cmTC_64912.lib" /MACHINE:X64  /machine:x64 cmTC_64912.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_64912.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0ajzak\\Debug\\cmTC_64912.exe
+        FinalizeBuildStatus:
+          Suppression du fichier "cmTC_64912.dir\\Debug\\cmTC_64912.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "cmTC_64912.dir\\Debug\\cmTC_64912.tlog\\cmTC_64912.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-0ajzak\\cmTC_64912.vcxproj" terminée (cibles par défaut).
+        
+        La génération a réussi.
+            0 Avertissement(s)
+            0 Erreur(s)
+        
+        Temps écoulé 00:00:00.55
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:4 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-o4jd3v"
+      binary: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-o4jd3v"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-o4jd3v'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_464a6.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Version MSBuild 17.9.5+33de0b227 pour .NET Framework
+        La génération a démarré 29/03/2024 18:30:54.
+        
+        Projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o4jd3v\\cmTC_464a6.vcxproj" sur le noud 1 (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "cmTC_464a6.dir\\Debug\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o4jd3v\\Debug\\".
+          Création du répertoire "cmTC_464a6.dir\\Debug\\cmTC_464a6.tlog\\".
+        InitializeBuildStatus:
+          Création de "cmTC_464a6.dir\\Debug\\cmTC_464a6.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "cmTC_464a6.dir\\Debug\\cmTC_464a6.tlog\\unsuccessfulbuild".
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++17 /Fo"cmTC_464a6.dir\\Debug\\\\" /Fd"cmTC_464a6.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
+          Compilateur d'optimisation Microsoft (R) C/C++ version 19.39.33520 pour x64
+          Copyright (C) Microsoft Corporation. Tous droits réservés.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /std:c++17 /Fo"cmTC_464a6.dir\\Debug\\\\" /Fd"cmTC_464a6.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
+          CMakeCXXCompilerABI.cpp
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o4jd3v\\Debug\\cmTC_464a6.exe" /INCREMENTAL /ILK:"cmTC_464a6.dir\\Debug\\cmTC_464a6.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-o4jd3v/Debug/cmTC_464a6.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/CMakeScratch/TryCompile-o4jd3v/Debug/cmTC_464a6.lib" /MACHINE:X64  /machine:x64 cmTC_464a6.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_464a6.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o4jd3v\\Debug\\cmTC_464a6.exe
+        FinalizeBuildStatus:
+          Suppression du fichier "cmTC_464a6.dir\\Debug\\cmTC_464a6.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "cmTC_464a6.dir\\Debug\\cmTC_464a6.tlog\\cmTC_464a6.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\CMakeScratch\\TryCompile-o4jd3v\\cmTC_464a6.vcxproj" terminée (cibles par défaut).
+        
+        La génération a réussi.
+            0 Avertissement(s)
+            0 Erreur(s)
+        
+        Temps écoulé 00:00:00.56
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CheckIPOSupported.cmake:138 (try_compile)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CheckIPOSupported.cmake:266 (_ipo_run_language_check)"
+      - "CMakeLists.txt:11 (check_ipo_supported)"
+    directories:
+      source: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/src"
+      binary: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/bin"
+    buildResult:
+      variable: "_IPO_LANGUAGE_CHECK_RESULT"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/bin'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" ALL_BUILD.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Version MSBuild 17.9.5+33de0b227 pour .NET Framework
+        La génération a démarré 29/03/2024 18:30:55.
+        
+        Projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\ALL_BUILD.vcxproj" sur le noud 1 (cibles par défaut).
+        Le projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\ALL_BUILD.vcxproj" (1) génère "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\ZERO_CHECK.vcxproj" (2) sur le noud 1 (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "x64\\Debug\\ZERO_CHECK\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\".
+        InitializeBuildStatus:
+          Création de "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          1>Checking Build System
+        FinalizeBuildStatus:
+          Suppression du fichier "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\ZERO_CHECK.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\ZERO_CHECK.vcxproj" terminée (cibles par défaut).
+        Le projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\ALL_BUILD.vcxproj" (1) génère "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\boo.vcxproj" (3) sur le noud 1 (cibles par défaut).
+        Le projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\boo.vcxproj" (3) génère "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\foo.vcxproj" (4) sur le noud 1 (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "foo.dir\\Debug\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\Debug\\".
+          Création du répertoire "foo.dir\\Debug\\foo.tlog\\".
+        InitializeBuildStatus:
+          Création de "foo.dir\\Debug\\foo.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "foo.dir\\Debug\\foo.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          Building Custom Rule C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"foo.dir\\Debug\\\\" /Fd"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\Debug\\foo.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\src\\foo.cpp"
+          Compilateur d'optimisation Microsoft (R) C/C++ version 19.39.33520 pour x64
+          Copyright (C) Microsoft Corporation. Tous droits réservés.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"foo.dir\\Debug\\\\" /Fd"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\Debug\\foo.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\src\\foo.cpp"
+          foo.cpp
+        Lib:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\Lib.exe /OUT:"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\Debug\\foo.lib" /NOLOGO /MACHINE:X64 /LTCG  /machine:x64 foo.dir\\Debug\\foo.obj
+          foo.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\Debug\\foo.lib
+        FinalizeBuildStatus:
+          Suppression du fichier "foo.dir\\Debug\\foo.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "foo.dir\\Debug\\foo.tlog\\foo.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\foo.vcxproj" terminée (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "boo.dir\\Debug\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "boo.dir\\Debug\\boo.tlog\\".
+        InitializeBuildStatus:
+          Création de "boo.dir\\Debug\\boo.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "boo.dir\\Debug\\boo.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          Building Custom Rule C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"boo.dir\\Debug\\\\" /Fd"boo.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\src\\main.cpp"
+          Compilateur d'optimisation Microsoft (R) C/C++ version 19.39.33520 pour x64
+          Copyright (C) Microsoft Corporation. Tous droits réservés.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"boo.dir\\Debug\\\\" /Fd"boo.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TP /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\src\\main.cpp"
+          main.cpp
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\Debug\\boo.exe" /NOLOGO Debug\\foo.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Debug/boo.pdb" /SUBSYSTEM:CONSOLE /LTCG:incremental /LTCGOUT:"boo.dir\\Debug\\boo.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/bin/Debug/boo.lib" /MACHINE:X64  /machine:x64 boo.dir\\Debug\\main.obj
+          Génération de code en cours
+          Not all modules are compiled with -Gy (function comdat), build without incremental LTCG.
+          Fin de la génération du code
+          boo.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\Debug\\boo.exe
+        FinalizeBuildStatus:
+          Suppression du fichier "boo.dir\\Debug\\boo.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "boo.dir\\Debug\\boo.tlog\\boo.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\boo.vcxproj" terminée (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "x64\\Debug\\ALL_BUILD\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\".
+        InitializeBuildStatus:
+          Création de "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          Building Custom Rule C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-CXX/src/CMakeLists.txt
+        FinalizeBuildStatus:
+          Suppression du fichier "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\ALL_BUILD.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-CXX\\bin\\ALL_BUILD.vcxproj" terminée (cibles par défaut).
+        
+        La génération a réussi.
+            0 Avertissement(s)
+            0 Erreur(s)
+        
+        Temps écoulé 00:00:01.16
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CheckIPOSupported.cmake:138 (try_compile)"
+      - "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/share/cmake-3.28/Modules/CheckIPOSupported.cmake:266 (_ipo_run_language_check)"
+      - "CMakeLists.txt:11 (check_ipo_supported)"
+    directories:
+      source: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/src"
+      binary: "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/bin"
+    buildResult:
+      variable: "_IPO_LANGUAGE_CHECK_RESULT"
+      cached: true
+      stdout: |
+        Change Dir: 'C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/bin'
+        
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" ALL_BUILD.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Version MSBuild 17.9.5+33de0b227 pour .NET Framework
+        La génération a démarré 29/03/2024 18:30:56.
+        
+        Projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\ALL_BUILD.vcxproj" sur le noud 1 (cibles par défaut).
+        Le projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\ALL_BUILD.vcxproj" (1) génère "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\ZERO_CHECK.vcxproj" (2) sur le noud 1 (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "x64\\Debug\\ZERO_CHECK\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\".
+        InitializeBuildStatus:
+          Création de "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          1>Checking Build System
+        FinalizeBuildStatus:
+          Suppression du fichier "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "x64\\Debug\\ZERO_CHECK\\ZERO_CHECK.tlog\\ZERO_CHECK.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\ZERO_CHECK.vcxproj" terminée (cibles par défaut).
+        Le projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\ALL_BUILD.vcxproj" (1) génère "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\boo.vcxproj" (3) sur le noud 1 (cibles par défaut).
+        Le projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\boo.vcxproj" (3) génère "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\foo.vcxproj" (4) sur le noud 1 (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "foo.dir\\Debug\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\Debug\\".
+          Création du répertoire "foo.dir\\Debug\\foo.tlog\\".
+        InitializeBuildStatus:
+          Création de "foo.dir\\Debug\\foo.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "foo.dir\\Debug\\foo.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          Building Custom Rule C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/src/CMakeLists.txt
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"foo.dir\\Debug\\\\" /Fd"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\Debug\\foo.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\src\\foo.c"
+          Compilateur d'optimisation Microsoft (R) C/C++ version 19.39.33520 pour x64
+          Copyright (C) Microsoft Corporation. Tous droits réservés.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"foo.dir\\Debug\\\\" /Fd"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\Debug\\foo.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\src\\foo.c"
+          foo.c
+        Lib:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\Lib.exe /OUT:"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\Debug\\foo.lib" /NOLOGO /MACHINE:X64 /LTCG  /machine:x64 foo.dir\\Debug\\foo.obj
+          foo.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\Debug\\foo.lib
+        FinalizeBuildStatus:
+          Suppression du fichier "foo.dir\\Debug\\foo.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "foo.dir\\Debug\\foo.tlog\\foo.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\foo.vcxproj" terminée (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "boo.dir\\Debug\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "boo.dir\\Debug\\boo.tlog\\".
+        InitializeBuildStatus:
+          Création de "boo.dir\\Debug\\boo.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "boo.dir\\Debug\\boo.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          Building Custom Rule C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/src/CMakeLists.txt
+        ClCompile:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\CL.exe /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"boo.dir\\Debug\\\\" /Fd"boo.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\src\\main.c"
+          Compilateur d'optimisation Microsoft (R) C/C++ version 19.39.33520 pour x64
+          Copyright (C) Microsoft Corporation. Tous droits réservés.
+          cl /c /Zi /W1 /WX- /diagnostics:column /Od /Ob0 /GL /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"boo.dir\\Debug\\\\" /Fd"boo.dir\\Debug\\vc143.pdb" /external:W1 /Gd /TC /errorReport:queue "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\src\\main.c"
+          main.c
+        Link:
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\Debug\\boo.exe" /NOLOGO Debug\\foo.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/bin/Debug/boo.pdb" /SUBSYSTEM:CONSOLE /LTCG:incremental /LTCGOUT:"boo.dir\\Debug\\boo.iobj" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/bin/Debug/boo.lib" /MACHINE:X64  /machine:x64 boo.dir\\Debug\\main.obj
+          Génération de code en cours
+          Not all modules are compiled with -Gy (function comdat), build without incremental LTCG.
+          Fin de la génération du code
+          boo.vcxproj -> C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\Debug\\boo.exe
+        FinalizeBuildStatus:
+          Suppression du fichier "boo.dir\\Debug\\boo.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "boo.dir\\Debug\\boo.tlog\\boo.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\boo.vcxproj" terminée (cibles par défaut).
+        PrepareForBuild:
+          Création du répertoire "x64\\Debug\\ALL_BUILD\\".
+          La sortie structurée est activée. La mise en forme du compilateur diagnostics reflète la hiérarchie des erreurs. Pour plus d'informations, consultez https://aka.ms/cpp/structured-output.
+          Création du répertoire "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\".
+        InitializeBuildStatus:
+          Création de "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\unsuccessfulbuild", car "AlwaysCreate" a été spécifié.
+          Mise à jour de l'horodatage "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\unsuccessfulbuild".
+        CustomBuild:
+          Building Custom Rule C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/_CMakeLTOTest-C/src/CMakeLists.txt
+        FinalizeBuildStatus:
+          Suppression du fichier "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\unsuccessfulbuild".
+          Mise à jour de l'horodatage "x64\\Debug\\ALL_BUILD\\ALL_BUILD.tlog\\ALL_BUILD.lastbuildstate".
+        Génération du projet "C:\\Users\\iamacatfr\\Desktop\\github-intellidea\\LuaCraft\\build\\CMakeFiles\\_CMakeLTOTest-C\\bin\\ALL_BUILD.vcxproj" terminée (cibles par défaut).
+        
+        La génération a réussi.
+            0 Avertissement(s)
+            0 Erreur(s)
+        
+        Temps écoulé 00:00:01.18
+        
+      exitCode: 0
+...

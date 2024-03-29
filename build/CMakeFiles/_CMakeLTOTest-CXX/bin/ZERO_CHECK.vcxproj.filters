@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\iamacatfr\Desktop\github-intellidea\LuaCraft\build\CMakeFiles\_CMakeLTOTest-CXX\bin\CMakeFiles\601955104b5ccd4f440f5435c04c15ef\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{5DE56952-72AA-30FA-862B-1487AB4F09EB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
