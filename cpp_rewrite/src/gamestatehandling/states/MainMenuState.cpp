@@ -9,6 +9,7 @@
 #include "MainMenuState.h"
 #include "SettingsState.h"
 #include "gameplaying/VulkanGameState.h"
+#include "gameplaying/OpenGLGameState.h"
 #include <gltext.h>
 #include <iostream>
 #include <vector>
@@ -76,9 +77,9 @@ void MainMenuState::handleInput(GLFWwindow *window) {
                    windowX, windowY, textPosX2, textPosY2, textWidth2,
                    textHeight2)) {
       m_manager.SetGameState(
-          std::make_unique<VulkanGameState>(window, m_manager), window);
+          std::make_unique<OpenGLGameState>(window, m_manager), window);
       LuaCraftGlobals::LoggerInstance.logMessageAsync(
-          LogLevel::INFO, "Go To 3D Scene Using Vulkan...");
+          LogLevel::INFO, "Go To 3D Scene Using OpenGLOpenGLGameState...");
     }
   }
 }
