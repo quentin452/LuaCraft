@@ -16,10 +16,11 @@ jobs:
         run: sudo apt-get install cmake
       - name: Build project
         run: |
-          if [ ! -d "${{ github.workspace }}/build" ]; then mkdir "${{ github.workspace }}/build"; fi
-          cd "${{ github.workspace }}/build"
-          cmake ..
-          cmake --build . --config Release
+            if [ ! -d "${{ github.workspace }}/build" ]; then mkdir "${{ github.workspace }}/build"; fi
+            cd "${{ github.workspace }}/build"
+            rm -rf *  # Add this line to clean the build directory
+            cmake ..
+            cmake --build . --config Release
       - name: Upload executable artifact
         uses: actions/upload-artifact@v4.3.1
         with:
