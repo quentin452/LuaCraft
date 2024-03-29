@@ -1,10 +1,10 @@
-name: Build love file
+name: Build executable file
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "cPlusPlus-rewriteWorkFlowTestings" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "cPlusPlus-rewriteWorkFlowTestings" ]
   workflow_dispatch:
 
 jobs:
@@ -12,10 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Compress Directory
-        run: zip -r LuaCraft.love ./*
-      - name: Upload a Build Artifact
+      - name: Install CMake
+        run: sudo apt-get install cmake
+      - name: Build project
+        run: |
+          if [ ! -d "${{ github.workspace }}/build" ]; then mkdir "${{ github.workspace }}/build"; fi
+          cd "${{ github.workspace }}/build"
+          cmake ..
+          cmake --build . --config Release
+      - name: Upload executable artifact
         uses: actions/upload-artifact@v4.3.1
         with:
-          name: LuaCraft.love
-          path: ./LuaCraft.love
+          name: myExecutable
+          path: ${{ github.workspace }}/build/cpp_rewrite.exe
