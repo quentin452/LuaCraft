@@ -39,12 +39,10 @@ void logMessage(LogLevel level, const Args &...args) {
   std::cout << oss.str() << std::endl;
 }
 
-void logMessageAsync(LogLevel level, const std::string& message) {
-    std::unique_lock<std::mutex> lock(mtx);
-    tasks.push([=] {
-        logMessage(level, message);
-    });
-    cv.notify_one();
+void logMessageAsync(LogLevel level, const std::string &message) {
+  std::unique_lock<std::mutex> lock(mtx);
+  tasks.push([=] { logMessage(level, message); });
+  cv.notify_one();
 }
 template <typename T> void append(std::ostringstream &oss, const T &arg) {
   oss << arg;

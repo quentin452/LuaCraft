@@ -2,8 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-VulkanGameState::VulkanGameState(GLFWwindow *window,
-                                 GameStateManager &manager)
+VulkanGameState::VulkanGameState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), manager(manager) {
   // Initialiser Vulkan et d'autres choses spécifiques à VulkanGameState
 }
