@@ -1,6 +1,6 @@
 #include <glew.h>
 
-#include "Globals.h"
+#include "LuaCraftGlobals.h"
 #include "gamestatehandling/core/GameStateManager.h"
 #include "gamestatehandling/states/MainMenuState.h"
 #include "gamestatehandling/states/SettingsState.h"
@@ -15,46 +15,46 @@ constexpr int WINDOW_HEIGHT = 720;
 
 void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
-  if (Globals::_Global_GameState_Manager) {
-    Globals::_Global_GameState_Manager->get().framebufferSizeCallbackGameState(
+  if (LuaCraftGlobals::GameState_Manager) {
+    LuaCraftGlobals::GameState_Manager->get().framebufferSizeCallbackGameState(
         window, width, height);
-    Globals::_Global_GameState_Manager->get().calculateButtonPositionsAndSizes(
+    LuaCraftGlobals::GameState_Manager->get().calculateButtonPositionsAndSizes(
         window);
   }
 }
 
 int main() {
-  Globals::_Global_LoggerInstance.StartLoggerThread();
+  LuaCraftGlobals::LoggerInstance.StartLoggerThread();
   double elapsedTime = 0.0;
   const double inputDelay = 0.1;
   if (!glfwInit()) {
-    Globals::_Global_LoggerInstance.logMessageAsync(
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
         LogLevel::ERROR, "Error during GLFW Initializations");
     return 1;
   }
   GLFWwindow *window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "LuaCraft",
                                         nullptr, nullptr);
   if (!window) {
-    Globals::_Global_LoggerInstance.logMessageAsync(
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
         LogLevel::ERROR, "Error during creating GLFW Windows");
     glfwTerminate();
     return 1;
   }
   int api = glfwGetWindowAttrib(window, GLFW_CLIENT_API);
   std::string apiNameString = (api == GLFW_OPENGL_API) ? "OpenGL" : "Vulkan";
-  Globals::_Global_LoggerInstance.logMessageAsync(
+  LuaCraftGlobals::LoggerInstance.logMessageAsync(
       LogLevel::INFO, "Graphical API Used : " + apiNameString);
   glfwMakeContextCurrent(window);
   glewExperimental = GL_TRUE;
   if (glewInit() != GLEW_OK) {
-    Globals::_Global_LoggerInstance.logMessageAsync(
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
         LogLevel::ERROR, "Error during GLEW Initializations");
     glfwTerminate();
     return 1;
   }
   GameStateManager manager;
   manager.set(std::make_unique<MainMenuState>(window, manager));
-  Globals::_Global_GameState_Manager = &manager;
+  LuaCraftGlobals::GameState_Manager = &manager;
   glfwSwapInterval(0); // disable Vsync
 
   while (!glfwWindowShouldClose(window)) {
@@ -68,7 +68,7 @@ int main() {
     manager.get().draw(window);
     glfwPollEvents();
   }
-  Globals::_Global_LoggerInstance.ExitLoggerThread();
+  LuaCraftGlobals::LoggerInstance.ExitLoggerThread();
   glfwDestroyWindow(window);
   glfwTerminate();
   return 0;

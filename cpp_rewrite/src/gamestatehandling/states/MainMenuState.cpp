@@ -7,11 +7,11 @@
 #include <iostream>
 #include <vector>
 
+#include "../../LuaCraftGlobals.h"
 #include "../../utils/luacraft_logger.h"
 #include "MainMenuState.h"
 #include "SettingsState.h"
 #include "VulkanGameState.h"
-#include "../../Globals.h"
 
 void MainMenuState::initializeGLText() {
   gltInit();
@@ -44,21 +44,21 @@ void MainMenuState::framebufferSizeCallbackWrapper(GLFWwindow *window,
 }
 
 void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
-  glfwGetFramebufferSize(window, &Globals::_Global_WindowWidth,
-                         &Globals::_Global_WindowHeight);
-  textPosX1 = (Globals::_Global_WindowWidth - textWidth1) / 2;
-  textPosY1 = (Globals::_Global_WindowHeight - textHeight1) / 2;
-  textPosX2 = (Globals::_Global_WindowWidth - textWidth2) / 2;
+  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
+                         &LuaCraftGlobals::WindowHeight);
+  textPosX1 = (LuaCraftGlobals::WindowWidth - textWidth1) / 2;
+  textPosY1 = (LuaCraftGlobals::WindowHeight - textHeight1) / 2;
+  textPosX2 = (LuaCraftGlobals::WindowWidth - textWidth2) / 2;
   textPosY2 = textPosY1 - textHeight2 - 10.0f;
-  textPosXForTitle = (Globals::_Global_WindowWidth - textWidthForTitle) / 2;
-  textPosYForTitle = (Globals::_Global_WindowHeight - textHeightForTitle) / 4;
+  textPosXForTitle = (LuaCraftGlobals::WindowWidth - textWidthForTitle) / 2;
+  textPosYForTitle = (LuaCraftGlobals::WindowHeight - textHeightForTitle) / 4;
 }
 
 MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  glfwGetFramebufferSize(window, &Globals::_Global_WindowWidth,
-                         &Globals::_Global_WindowHeight);
+  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
+                         &LuaCraftGlobals::WindowHeight);
   calculateButtonPositionsAndSizes(window);
   glfwSetWindowUserPointer(window, this);
   glfwSetFramebufferSizeCallback(
@@ -67,7 +67,8 @@ MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
 
 void MainMenuState::handleInput(GLFWwindow *window) {
   double xpos, ypos;
-  //  Globals::_Global_LoggerInstance.logMessageAsync(LogLevel::INFO, "textHeight1: "+ textHeight1);
+  //  LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO,
+  //  "textHeight1: "+ textHeight1);
 
   glfwGetCursorPos(window, &xpos, &ypos);
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
@@ -78,11 +79,13 @@ void MainMenuState::handleInput(GLFWwindow *window) {
     if (isInsideForMainMenu(windowX, windowY, textPosX1, textPosY1, textWidth1,
                             textHeight1)) {
       m_manager.set(std::make_unique<SettingsState>(window, m_manager));
-      Globals::_Global_LoggerInstance.logMessageAsync(LogLevel::INFO, "Go To SettingsState...");
+      LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO,
+                                                      "Go To SettingsState...");
     } else if (isInsideForMainMenu(windowX, windowY, textPosX2, textPosY2,
                                    textWidth2, textHeight2)) {
       m_manager.set(std::make_unique<VulkanGameState>(window, m_manager));
-      Globals::_Global_LoggerInstance.logMessageAsync(LogLevel::INFO, "Go To 3D Scene USing Vulkan...");
+      LuaCraftGlobals::LoggerInstance.logMessageAsync(
+          LogLevel::INFO, "Go To 3D Scene USing Vulkan...");
     }
   } else if (mouseState == GLFW_RELEASE) {
     mouseButtonPressed = false;

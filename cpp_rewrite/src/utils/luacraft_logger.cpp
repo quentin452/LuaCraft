@@ -1,5 +1,5 @@
 #include "luacraft_logger.h"
-#include "../Globals.h"
+#include "../LuaCraftGlobals.h"
 LuaCraftLogger::LuaCraftLogger() : Done_Logger_Thread(false) {
   std::thread workerThread(&LuaCraftLogger::logWorker, this);
   workerThread.detach();
@@ -73,5 +73,5 @@ void LuaCraftLogger::ExitLoggerThread() {
 }
 
 void LuaCraftLogger::StartLoggerThread() {
-    Globals::_Global_LogThread = std::thread(&LuaCraftLogger::logWorker, this);
+  LuaCraftGlobals::LogThread = std::thread(&LuaCraftLogger::logWorker, this);
 }
