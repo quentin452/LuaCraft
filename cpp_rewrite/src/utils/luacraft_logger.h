@@ -13,21 +13,28 @@
 
 enum class LogLevel { INFO, WARNING, ERROR };
 
-extern std::queue<std::function<void()>> tasks;
-extern std::mutex mtx;
-extern std::condition_variable cv;
-extern bool done;
+class LuaCraftLogger {
+public:
+  LuaCraftLogger();
+  ~LuaCraftLogger();
 
-void logWorker();
+  void logMessageAsync(LogLevel level, const std::string &message);
+  void ExitLoggerThread();
+  void StartLoggerThread();
 
-void logMessageAsync(LogLevel level, const std::string &message);
+  template <typename... Args>
+  void logMessage(LogLevel level, const Args &...args);
+  void logWorker();
 
-template <typename... Args>
-void logMessage(LogLevel level, const Args &...args);
+private:
+  std::queue<std::function<void()>> tasks;
+  std::mutex mtx;
+  std::condition_variable Unlock_Logger_Thread;
+  bool Done_Logger_Thread;
 
-template <typename T> void append(std::ostringstream &oss, const T &arg);
-
-template <typename T, typename... Args>
-void append(std::ostringstream &oss, const T &first, const Args &...args);
+  template <typename T> void append(std::ostringstream &oss, const T &arg);
+  template <typename T, typename... Args>
+  void append(std::ostringstream &oss, const T &first, const Args &...args);
+};
 
 #endif // LUACRAFT_LOGGER_H

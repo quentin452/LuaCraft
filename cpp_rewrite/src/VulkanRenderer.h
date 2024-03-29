@@ -10,8 +10,8 @@ public:
   VulkanRenderer();
   ~VulkanRenderer();
 
-  bool init(GLFWwindow *window);
   void draw();
+  bool init(GLFWwindow *window);
 
 private:
   GLFWwindow *m_window;

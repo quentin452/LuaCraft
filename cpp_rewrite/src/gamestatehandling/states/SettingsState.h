@@ -34,11 +34,17 @@ public:
                                              int height);
 
 private:
-  GLfloat textPosX1, textPosY1, textPosX2, textPosY2, textWidth1, textHeight1,textWidth2,textHeight2;
+  GLfloat textPosX1;
+  GLfloat textPosY1;
+  GLfloat textPosX2;
+  GLfloat textPosY2;
+  GLfloat textWidth1;
+  GLfloat textHeight1;
+  GLfloat textWidth2;
+  GLfloat textHeight2;
   GLTtext *titleText = nullptr;
   GLTtext *option1Text = nullptr;
   GLFWwindow *m_window;
-
   GameStateManager &m_manager;
   float buttonScale = 1.0f;
   float titlePositionX;
@@ -47,7 +53,8 @@ private:
   float option1PositionY;
   float option2PositionX;
   float option2PositionY;
-
+  double xpos;
+  double ypos;
   float optionWidth;
   float optionHeight;
   bool mouseButtonPressed = false;

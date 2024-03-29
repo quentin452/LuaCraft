@@ -1,7 +1,8 @@
 
 #include "../../Globals.h"
-#include <glew.h>
 #include <GLFW/glfw3.h>
+#include <glew.h>
+
 #define GLT_IMPLEMENTATION
 
 #include <gltext.h>
@@ -23,7 +24,6 @@ void SettingsState::initializeGLText() {
   textWidth1 = gltGetTextWidth(titleText, buttonScale);
   textHeight1 = gltGetTextHeight(titleText, buttonScale);
 
-  
   textWidth2 = gltGetTextWidth(option1Text, buttonScale);
   textHeight2 = gltGetTextHeight(option1Text, buttonScale);
 }
@@ -43,37 +43,41 @@ void SettingsState::framebufferSizeCallbackWrapper(GLFWwindow *window,
 }
 
 void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
-  glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
-  titlePositionX = (_Global_WindowWidth - textWidth1) / 2;
-  titlePositionY = (_Global_WindowHeight - textHeight1) / 4;
+  glfwGetFramebufferSize(window, &Globals::_Global_WindowWidth,
+                         &Globals::_Global_WindowHeight);
+  titlePositionX = (Globals::_Global_WindowWidth - textWidth1) / 2;
+  titlePositionY = (Globals::_Global_WindowHeight - textHeight1) / 4;
 
-  option1PositionX = (_Global_WindowWidth - textWidth2) / 2;
-  option1PositionY = (_Global_WindowHeight - textHeight2) / 2 + 50.0f;
+  option1PositionX = (Globals::_Global_WindowWidth - textWidth2) / 2;
+  option1PositionY = (Globals::_Global_WindowHeight - textHeight2) / 2 + 50.0f;
 }
 
 SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
+  glfwGetFramebufferSize(window, &Globals::_Global_WindowWidth,
+                         &Globals::_Global_WindowHeight);
   calculateButtonPositionsAndSizes(window);
   glfwSetWindowUserPointer(window, this);
   glfwSetFramebufferSizeCallback(
       window, &SettingsState::framebufferSizeCallbackWrapper);
 }
 void SettingsState::handleInput(GLFWwindow *window) {
-  double xpos, ypos;
   glfwGetCursorPos(window, &xpos, &ypos);
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
     mouseButtonPressed = true;
-    glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
-    double normalizedX = 2.0 * xpos / _Global_WindowWidth - 1.0;
-    double normalizedY = 1.0 - 2.0 * ypos / _Global_WindowHeight;
-    int windowX = (int)((normalizedX + 1.0) * _Global_WindowWidth / 2.0);
-    int windowY = (int)((1.0 - normalizedY) * _Global_WindowHeight / 2.0);
+    glfwGetFramebufferSize(window, &Globals::_Global_WindowWidth,
+                           &Globals::_Global_WindowHeight);
+    double normalizedX = 2.0 * xpos / Globals::_Global_WindowWidth - 1.0;
+    double normalizedY = 1.0 - 2.0 * ypos / Globals::_Global_WindowHeight;
+    auto windowX =
+        (int)((normalizedX + 1.0) * Globals::_Global_WindowWidth / 2.0);
+    auto windowY =
+        (int)((1.0 - normalizedY) * Globals::_Global_WindowHeight / 2.0);
     if (isInsideForSettings(windowX, windowY, option1PositionX,
                             option1PositionY, textWidth1, textHeight1)) {
-      logMessageAsync(LogLevel::INFO, "Go To MainMenuState...");
+      Globals::_Global_LoggerInstance.logMessageAsync(LogLevel::INFO, "Go To MainMenuState...");
       m_manager.set(std::make_unique<MainMenuState>(window, m_manager));
     }
   } else if (mouseState == GLFW_RELEASE) {

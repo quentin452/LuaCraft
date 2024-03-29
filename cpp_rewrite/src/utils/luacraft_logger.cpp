@@ -1,16 +1,25 @@
 #include "luacraft_logger.h"
+#include "../Globals.h"
+LuaCraftLogger::LuaCraftLogger() : Done_Logger_Thread(false) {
+  std::thread workerThread(&LuaCraftLogger::logWorker, this);
+  workerThread.detach();
+}
 
-std::queue<std::function<void()>> tasks;
-std::mutex mtx;
-std::condition_variable cv;
-bool done = false;
+LuaCraftLogger::~LuaCraftLogger() {
+  {
+    std::unique_lock<std::mutex> lock(mtx);
+    Done_Logger_Thread = true;
+  }
+  Unlock_Logger_Thread.notify_one(); // Notify worker thread to stop
+}
 
-void logWorker() {
+void LuaCraftLogger::logWorker() {
   while (true) {
     std::function<void()> task;
     {
       std::unique_lock<std::mutex> lock(mtx);
-      cv.wait(lock, [] { return !tasks.empty() || done; });
+      Unlock_Logger_Thread.wait(
+          lock, [this] { return !tasks.empty() || Done_Logger_Thread; });
       if (tasks.empty()) {
         return;
       }
@@ -22,7 +31,7 @@ void logWorker() {
 }
 
 template <typename... Args>
-void logMessage(LogLevel level, const Args &...args) {
+void LuaCraftLogger::logMessage(LogLevel level, const Args &...args) {
   std::ostringstream oss;
   switch (level) {
   case LogLevel::INFO:
@@ -35,21 +44,34 @@ void logMessage(LogLevel level, const Args &...args) {
     oss << "[ERROR] ";
     break;
   }
-  append(oss, args...); // Concaténer tous les arguments à oss
+  append(oss, args...); // Concatenate all arguments to oss
   std::cout << oss.str() << std::endl;
 }
 
-void logMessageAsync(LogLevel level, const std::string &message) {
+void LuaCraftLogger::logMessageAsync(LogLevel level,
+                                     const std::string &message) {
   std::unique_lock<std::mutex> lock(mtx);
-  tasks.push([=] { logMessage(level, message); });
-  cv.notify_one();
+  tasks.emplace([=] { logMessage(level, message); });
+  Unlock_Logger_Thread.notify_one();
 }
-template <typename T> void append(std::ostringstream &oss, const T &arg) {
+
+template <typename T>
+void LuaCraftLogger::append(std::ostringstream &oss, const T &arg) {
   oss << arg;
 }
 
 template <typename T, typename... Args>
-void append(std::ostringstream &oss, const T &first, const Args &...args) {
+void LuaCraftLogger::append(std::ostringstream &oss, const T &first,
+                            const Args &...args) {
   oss << first;
   append(oss, args...);
+}
+
+void LuaCraftLogger::ExitLoggerThread() {
+  Done_Logger_Thread = true;
+  Unlock_Logger_Thread.notify_one();
+}
+
+void LuaCraftLogger::StartLoggerThread() {
+    Globals::_Global_LogThread = std::thread(&LuaCraftLogger::logWorker, this);
 }
