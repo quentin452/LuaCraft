@@ -65,7 +65,6 @@ int main() {
     }
     manager.get().update();
     manager.get().draw(window);
-    // TODO FIX glfwPollEvents causing lags when moving mouse
     glfwPollEvents();
   }
 
