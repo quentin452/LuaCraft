@@ -1,3 +1,5 @@
+// TODO MADE FILESYSTEM / SETTINGS SYSTEM / LOGGER WRITTER SYSTEM
+
 #include "luacraft_logger.h"
 #include "../LuaCraftGlobals.h"
 LuaCraftLogger::LuaCraftLogger() : Done_Logger_Thread(false) {
@@ -36,16 +38,24 @@ void LuaCraftLogger::logMessage(LogLevel level, const Args &...args) {
   switch (level) {
   case LogLevel::INFO:
     oss << "[INFO] ";
+    append(oss, args...);
+    std::cout << oss.str() << std::endl;
     break;
   case LogLevel::WARNING:
     oss << "[WARNING] ";
+    append(oss, args...);
+    std::cout << oss.str() << std::endl;
     break;
   case LogLevel::ERROR:
     oss << "[ERROR] ";
+    append(oss, args...);
+    std::cerr << oss.str() << std::endl;
+  case LogLevel::LOGICERROR:
+    oss << "[LOGIC ERROR] ";
+    append(oss, args...);
+    throw std::logic_error(oss.str());
     break;
   }
-  append(oss, args...); // Concatenate all arguments to oss
-  std::cout << oss.str() << std::endl;
 }
 
 void LuaCraftLogger::logMessageAsync(LogLevel level,

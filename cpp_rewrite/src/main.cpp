@@ -16,10 +16,10 @@ constexpr int WINDOW_HEIGHT = 720;
 void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
   if (LuaCraftGlobals::GameState_Manager) {
-    LuaCraftGlobals::GameState_Manager->get().framebufferSizeCallbackGameState(
-        window, width, height);
-    LuaCraftGlobals::GameState_Manager->get().calculateButtonPositionsAndSizes(
-        window);
+    LuaCraftGlobals::GameState_Manager->GetGameState()
+        .framebufferSizeCallbackGameState(window, width, height);
+    LuaCraftGlobals::GameState_Manager->GetGameState()
+        .calculateButtonPositionsAndSizes(window);
   }
 }
 
@@ -53,7 +53,9 @@ int main() {
     return 1;
   }
   GameStateManager manager;
-  manager.set(std::make_unique<MainMenuState>(window, manager));
+  LuaCraftGlobals::setGlobalGameStateManager(&manager);
+  manager.SetGameState(std::make_unique<MainMenuState>(window, manager),
+                       window);
   LuaCraftGlobals::GameState_Manager = &manager;
   glfwSwapInterval(0); // disable Vsync
 
@@ -62,10 +64,10 @@ int main() {
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     elapsedTime = glfwGetTime() - manager.getLastStateChangeTime();
     if (elapsedTime >= inputDelay) {
-      manager.get().handleInput(window);
+      manager.GetGameState().handleInput(window);
     }
-    manager.get().update();
-    manager.get().draw(window);
+    manager.GetGameState().update();
+    manager.GetGameState().draw(window);
     glfwPollEvents();
   }
   LuaCraftGlobals::LoggerInstance.ExitLoggerThread();

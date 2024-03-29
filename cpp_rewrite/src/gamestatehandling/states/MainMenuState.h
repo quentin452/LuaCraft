@@ -14,8 +14,6 @@
 class MainMenuState : public GameState {
 public:
   MainMenuState(GLFWwindow *window, GameStateManager &manager);
-  bool isInsideForMainMenu(double x, double y, double rectX, double rectY,
-                           double rectWidth, double rectHeight);
   void handleInput(GLFWwindow *window) override;
   void update() override;
   void draw(GLFWwindow *window) override;
@@ -28,11 +26,24 @@ public:
   void initializeGLText();
   static void framebufferSizeCallbackWrapper(GLFWwindow *window, int width,
                                              int height);
+  bool handleMouseInput(GLFWwindow *window, double xpos, double ypos,
+                        int button, bool &mouseButtonPressed)const;
+  GLTtext *CreateTextUsingGLText(const char *text, float buttonScale,
+                                 float &textWidth, float &textHeight);
 
 private:
-  GLfloat textPosX1, textPosY1, textPosX2, textPosY2, textWidth1, textHeight1,
-      textWidth2, textHeight2, textHeightForTitle, textWidthForTitle,
-      textPosXForTitle, textPosYForTitle;
+  GLfloat textPosX1;
+  GLfloat textPosY1;
+  GLfloat textPosX2;
+  GLfloat textPosY2;
+  GLfloat textWidth1;
+  GLfloat textHeight1;
+  GLfloat textWidth2;
+  GLfloat textHeight2;
+  GLfloat textHeightForTitle;
+  GLfloat textWidthForTitle;
+  GLfloat textPosXForTitle;
+  GLfloat textPosYForTitle;
   GLTtext *text1 = nullptr;
   GLTtext *text2 = nullptr;
   GLTtext *titlescreen = nullptr;
@@ -57,4 +68,6 @@ private:
   double textInteractionHeight1;
   double textInteractionWidth2;
   double textInteractionHeight2;
+  double xpos;
+  double ypos;
 };

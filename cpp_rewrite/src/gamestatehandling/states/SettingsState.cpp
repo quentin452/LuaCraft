@@ -10,9 +10,21 @@
 #include <vector>
 
 #include "../../utils/luacraft_logger.h"
+#include "../core/GameStatesUtils.h"
 #include "MainMenuState.h"
 #include "SettingsState.h"
 #include "VulkanGameState.h"
+
+SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
+    : m_window(window), m_manager(manager) {
+  initializeGLText();
+  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
+                         &LuaCraftGlobals::WindowHeight);
+  calculateButtonPositionsAndSizes(window);
+  glfwSetWindowUserPointer(window, this);
+  glfwSetFramebufferSizeCallback(
+      window, &SettingsState::framebufferSizeCallbackWrapper);
+}
 
 void SettingsState::initializeGLText() {
   gltInit();
@@ -35,8 +47,7 @@ void SettingsState::framebufferSizeCallbackGameState(GLFWwindow *window,
 
 void SettingsState::framebufferSizeCallbackWrapper(GLFWwindow *window,
                                                    int width, int height) {
-  SettingsState *state =
-      reinterpret_cast<SettingsState *>(glfwGetWindowUserPointer(window));
+  auto *state = static_cast<SettingsState *>(glfwGetWindowUserPointer(window));
   if (state != nullptr) {
     state->framebufferSizeCallbackGameState(window, width, height);
   }
@@ -45,23 +56,14 @@ void SettingsState::framebufferSizeCallbackWrapper(GLFWwindow *window,
 void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
   glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
                          &LuaCraftGlobals::WindowHeight);
-  titlePositionX = (LuaCraftGlobals::WindowWidth - textWidth1) / 2;
-  titlePositionY = (LuaCraftGlobals::WindowHeight - textHeight1) / 4;
+  titlePositionX = (float(LuaCraftGlobals::WindowWidth) - textWidth1) / 2.0f;
+  titlePositionY = (float(LuaCraftGlobals::WindowHeight) - textHeight1) / 4.0f;
 
-  option1PositionX = (LuaCraftGlobals::WindowWidth - textWidth2) / 2;
-  option1PositionY = (LuaCraftGlobals::WindowHeight - textHeight2) / 2 + 50.0f;
+  option1PositionX = (float(LuaCraftGlobals::WindowWidth) - textWidth2) / 2.0f;
+  option1PositionY =
+      (float(LuaCraftGlobals::WindowHeight) - textHeight2) / 2.0f + 50.0f;
 }
 
-SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
-    : m_window(window), m_manager(manager) {
-  initializeGLText();
-  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
-                         &LuaCraftGlobals::WindowHeight);
-  calculateButtonPositionsAndSizes(window);
-  glfwSetWindowUserPointer(window, this);
-  glfwSetFramebufferSizeCallback(
-      window, &SettingsState::framebufferSizeCallbackWrapper);
-}
 void SettingsState::handleInput(GLFWwindow *window) {
   glfwGetCursorPos(window, &xpos, &ypos);
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
@@ -75,11 +77,13 @@ void SettingsState::handleInput(GLFWwindow *window) {
         (int)((normalizedX + 1.0) * LuaCraftGlobals::WindowWidth / 2.0);
     auto windowY =
         (int)((1.0 - normalizedY) * LuaCraftGlobals::WindowHeight / 2.0);
-    if (isInsideForSettings(windowX, windowY, option1PositionX,
-                            option1PositionY, textWidth1, textHeight1)) {
+    if (LuaCraftGlobals::GameStateUtilsInstance.isMouseInsideButton(
+            windowX, windowY, option1PositionX, option1PositionY, textWidth1,
+            textHeight1)) {
       LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO,
                                                       "Go To MainMenuState...");
-      m_manager.set(std::make_unique<MainMenuState>(window, m_manager));
+      m_manager.SetGameState(std::make_unique<MainMenuState>(window, m_manager),
+                             window);
     }
   } else if (mouseState == GLFW_RELEASE) {
     mouseButtonPressed = false;
@@ -99,11 +103,4 @@ void SettingsState::draw(GLFWwindow *window) {
 
   gltEndDraw();
   glfwSwapBuffers(window);
-}
-
-bool SettingsState::isInsideForSettings(double x, double y, double rectX,
-                                        double rectY, double rectWidth,
-                                        double rectHeight) {
-  return x >= rectX && x <= rectX + rectWidth && y >= rectY &&
-         y <= rectY + rectHeight;
 }

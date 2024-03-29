@@ -2,6 +2,7 @@
 #ifndef LuaCraftGlobals_H
 #define LuaCraftGlobals_H
 #include "gamestatehandling/core/GameStateManager.h"
+#include "gamestatehandling/core/GameStatesUtils.h"
 #include "utils/luacraft_logger.h"
 #include <thread>
 
@@ -26,5 +27,6 @@ public:
   static LuaCraftLogger LoggerInstance;
   static int WindowWidth;
   static int WindowHeight;
+  static GameStatesUtils GameStateUtilsInstance;
 };
 #endif // LuaCraftGlobals_H

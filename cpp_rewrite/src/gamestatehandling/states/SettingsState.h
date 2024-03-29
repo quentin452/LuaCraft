@@ -16,10 +16,6 @@
 class SettingsState : public GameState {
 public:
   SettingsState(GLFWwindow *window, GameStateManager &manager);
-
-  bool isInsideForSettings(double x, double y, double rectX, double rectY,
-                           double rectWidth, double rectHeight);
-
   void handleInput(GLFWwindow *window) override;
   void update() override;
   void draw(GLFWwindow *window) override;

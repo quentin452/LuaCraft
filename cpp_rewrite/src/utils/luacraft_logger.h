@@ -11,7 +11,7 @@
 #include <thread>
 #include <vector>
 
-enum class LogLevel { INFO, WARNING, ERROR };
+enum class LogLevel { INFO, WARNING, ERROR, LOGICERROR };
 
 class LuaCraftLogger {
 public:
