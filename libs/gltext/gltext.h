@@ -52,6 +52,7 @@ extern "C" {
 #include <stdlib.h> /* malloc(), calloc(), free() */
 #include <string.h> /* memset(), memcpy(), strlen() */
 
+
 #if (defined(_DEBUG) || defined(DEBUG)) && !defined(GLT_DEBUG)
 #define GLT_DEBUG 1
 #endif
@@ -119,8 +120,8 @@ GLT_API const char *gltGetText(GLTtext *text);
 
 GLT_API void gltViewport(GLsizei width, GLsizei height);
 
-GLT_API void gltBeginDraw(void);
-GLT_API void gltEndDraw(void);
+GLT_API void gltBeginDraw();
+GLT_API void gltEndDraw();
 
 GLT_API void gltDrawText(GLTtext *text, const GLfloat mvp[16]);
 
@@ -387,14 +388,14 @@ GLT_API void gltViewport(GLsizei width, GLsizei height) {
   memcpy(_gltText2DProjectionMatrix, projection, 16 * sizeof(GLfloat));
 }
 
-GLT_API void gltBeginDraw(void) {
+GLT_API void gltBeginDraw() {
   glUseProgram(_gltText2DShader);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, _gltText2DFontTexture);
 }
 
-GLT_API void gltEndDraw(void) {}
+GLT_API void gltEndDraw() {}
 
 #define _gltDrawText()                                                         \
   glUniformMatrix4fv(_gltText2DShaderMVPUniformLocation, 1, GL_FALSE, mvp);    \
@@ -849,9 +850,7 @@ static const GLchar *_gltText2DFragmentShaderSource =
     "\n"
     "void main()\n"
     "{\n"
-    "	fragColor = texture(diffuse, fTexCoord);\n"
-    "	if(fragColor.a<0.5 || length(fragColor.rgb) < 0.5){discard;}\n"
-    "   	fragColor *= color;"
+    "	fragColor = texture(diffuse, fTexCoord) * color;\n"
     "}\n";
 
 GLT_API GLboolean _gltCreateText2DShader(void) {
