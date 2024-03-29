@@ -1,7 +1,7 @@
 # TODO OPTIMIZE THIS CODE TO REDUCE REDUDANCY AND IMPROVE readability
 
 cmake_minimum_required(VERSION 3.28)
-project(cpp_rewrite)
+project(LUACRAFT)
 
 # Enable LTO Optimizations(Link-Time Optimization) 
 option(ENABLE_LTO "Enable Link-Time Optimization" ON)
@@ -26,7 +26,7 @@ file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.h")
 
 set(SOURCES_FILES ${SOURCES})
 
-set(build_directory "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/cpp_rewrite/build/")
+set(build_directory "${CMAKE_CURRENT_BINARY_DIR}/")
 
 # External libraries
 set(FREETYPE_INCLUDE_DIR "${LIB_DIR}/freetype-2.8.1/include")
