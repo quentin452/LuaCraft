@@ -104,7 +104,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.dll"
     $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
-
+if(NOT DEFINED ENV{GITHUB_ACTIONS})
 # Convert the list to a string with spaces between the options
 string(REPLACE ";" " " common_compile_options_string "${common_compile_options}")
 
@@ -154,3 +154,4 @@ add_custom_target(generate_compile_commands
 
 # Déclarez une dépendance pour s'assurer que cela se produit avant la compilation
 add_dependencies(${PROJECT_NAME} generate_compile_commands)
+endif()
