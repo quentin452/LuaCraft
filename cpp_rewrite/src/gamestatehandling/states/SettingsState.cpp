@@ -1,6 +1,6 @@
 
+#include "../../Globals.h"
 #include <glew.h>
-
 #include <GLFW/glfw3.h>
 #define GLT_IMPLEMENTATION
 
@@ -43,20 +43,18 @@ void SettingsState::framebufferSizeCallbackWrapper(GLFWwindow *window,
 }
 
 void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
+  glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
+  titlePositionX = (_Global_WindowWidth - textWidth1) / 2;
+  titlePositionY = (_Global_WindowHeight - textHeight1) / 4;
 
-  int screenWidth, screenHeight;
-  glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
-  titlePositionX = (screenWidth - textWidth1) / 2;
-  titlePositionY = (screenHeight - textHeight1) / 4;
-
-  option1PositionX = (screenWidth - textWidth2) / 2;
-  option1PositionY = (screenHeight - textHeight2) / 2 + 50.0f;
+  option1PositionX = (_Global_WindowWidth - textWidth2) / 2;
+  option1PositionY = (_Global_WindowHeight - textHeight2) / 2 + 50.0f;
 }
 
 SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+  glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
   calculateButtonPositionsAndSizes(window);
   glfwSetWindowUserPointer(window, this);
   glfwSetFramebufferSizeCallback(
@@ -68,12 +66,11 @@ void SettingsState::handleInput(GLFWwindow *window) {
   int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
   if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
     mouseButtonPressed = true;
-    int screenWidth, screenHeight;
-    glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
-    double normalizedX = 2.0 * xpos / screenWidth - 1.0;
-    double normalizedY = 1.0 - 2.0 * ypos / screenHeight;
-    int windowX = (int)((normalizedX + 1.0) * screenWidth / 2.0);
-    int windowY = (int)((1.0 - normalizedY) * screenHeight / 2.0);
+    glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
+    double normalizedX = 2.0 * xpos / _Global_WindowWidth - 1.0;
+    double normalizedY = 1.0 - 2.0 * ypos / _Global_WindowHeight;
+    int windowX = (int)((normalizedX + 1.0) * _Global_WindowWidth / 2.0);
+    int windowY = (int)((1.0 - normalizedY) * _Global_WindowHeight / 2.0);
     if (isInsideForSettings(windowX, windowY, option1PositionX,
                             option1PositionY, textWidth1, textHeight1)) {
       logMessageAsync(LogLevel::INFO, "Go To MainMenuState...");

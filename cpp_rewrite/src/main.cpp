@@ -8,19 +8,16 @@
 #include "utils/luacraft_logger.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <thread> // Ajouter l'inclusion du header <thread>
-
+#include <thread> 
+#include "Globals.h"
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 720
 
-static GameStateManager *g_Manager;
-static std::thread logThread; // Déplacer la déclaration du thread ici
-
 void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
-  if (g_Manager) {
-    g_Manager->get().framebufferSizeCallbackGameState(window, width, height);
-    g_Manager->get().calculateButtonPositionsAndSizes(window);
+  if (_Global_GameState_Manager) {
+    _Global_GameState_Manager->get().framebufferSizeCallbackGameState(window, width, height);
+    _Global_GameState_Manager->get().calculateButtonPositionsAndSizes(window);
   }
 }
 
@@ -50,11 +47,11 @@ int main() {
   }
   GameStateManager manager;
   manager.set(std::make_unique<MainMenuState>(window, manager));
-  g_Manager = &manager;
+  _Global_GameState_Manager = &manager;
   glfwSwapInterval(0); // disable Vsync
 
   // Démarrer le thread de journalisation
-  logThread = std::thread(logWorker);
+  Global_LogThread = std::thread(logWorker);
 
   while (!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -72,7 +69,7 @@ int main() {
   done = true;     // Indiquer au thread de journalisation qu'il doit s'arrêter
   cv.notify_one(); // Débloquer le thread de journalisation pour qu'il puisse
                    // s'arrêter
-  logThread.join(); // Attendre que le thread de journalisation se termine
+  Global_LogThread.join(); // Attendre que le thread de journalisation se termine
   glfwDestroyWindow(window);
   glfwTerminate();
   return 0;

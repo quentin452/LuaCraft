@@ -1,3 +1,4 @@
+#include "../../Globals.h"
 #include <glew.h>
 
 #include <GLFW/glfw3.h>
@@ -43,20 +44,19 @@ void MainMenuState::framebufferSizeCallbackWrapper(GLFWwindow *window,
 }
 
 void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
-  int windowWidth, windowHeight;
-  glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
-  textPosX1 = (windowWidth - textWidth1) / 2;
-  textPosY1 = (windowHeight - textHeight1) / 2;
-  textPosX2 = (windowWidth - textWidth2) / 2;
+  glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
+  textPosX1 = (_Global_WindowWidth - textWidth1) / 2;
+  textPosY1 = (_Global_WindowHeight - textHeight1) / 2;
+  textPosX2 = (_Global_WindowWidth - textWidth2) / 2;
   textPosY2 = textPosY1 - textHeight2 - 10.0f;
-  textPosXForTitle = (windowWidth - textWidthForTitle) / 2;
-  textPosYForTitle = (windowHeight - textHeightForTitle) / 4;
+  textPosXForTitle = (_Global_WindowWidth - textWidthForTitle) / 2;
+  textPosYForTitle = (_Global_WindowHeight - textHeightForTitle) / 4;
 }
 
 MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
+  glfwGetFramebufferSize(window, &_Global_WindowWidth, &_Global_WindowHeight);
   calculateButtonPositionsAndSizes(window);
   glfwSetWindowUserPointer(window, this);
   glfwSetFramebufferSizeCallback(
