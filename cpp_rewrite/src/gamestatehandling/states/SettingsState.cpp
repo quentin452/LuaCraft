@@ -19,6 +19,13 @@ void SettingsState::initializeGLText() {
   gltSetText(titleText, "Paramètres");
   option1Text = gltCreateText();
   gltSetText(option1Text, "Go To Main Menu");
+
+  textWidth1 = gltGetTextWidth(titleText, buttonScale);
+  textHeight1 = gltGetTextHeight(titleText, buttonScale);
+
+  
+  textWidth2 = gltGetTextWidth(option1Text, buttonScale);
+  textHeight2 = gltGetTextHeight(option1Text, buttonScale);
 }
 
 void SettingsState::framebufferSizeCallbackGameState(GLFWwindow *window,
@@ -39,14 +46,9 @@ void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
 
   int screenWidth, screenHeight;
   glfwGetFramebufferSize(window, &screenWidth, &screenHeight);
-
-  textWidth1 = gltGetTextWidth(titleText, buttonScale);
-  textHeight1 = gltGetTextHeight(titleText, buttonScale);
   titlePositionX = (screenWidth - textWidth1) / 2;
   titlePositionY = (screenHeight - textHeight1) / 4;
 
-  GLfloat textWidth2 = gltGetTextWidth(option1Text, buttonScale);
-  GLfloat textHeight2 = gltGetTextHeight(option1Text, buttonScale);
   option1PositionX = (screenWidth - textWidth2) / 2;
   option1PositionY = (screenHeight - textHeight2) / 2 + 50.0f;
 }

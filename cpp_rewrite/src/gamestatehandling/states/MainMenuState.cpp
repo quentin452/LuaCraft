@@ -20,6 +20,13 @@ void MainMenuState::initializeGLText() {
   gltSetText(text1, "Option 1");
   text2 = gltCreateText();
   gltSetText(text2, "Play Game!");
+
+  textWidth1 = gltGetTextWidth(text1, buttonScale);
+  textHeight1 = gltGetTextHeight(text1, buttonScale);
+  textWidth2 = gltGetTextWidth(text2, buttonScale);
+  textHeight2 = gltGetTextHeight(text2, buttonScale);
+  textWidthForTitle = gltGetTextWidth(titlescreen, buttonScale);
+  textHeightForTitle = gltGetTextHeight(titlescreen, buttonScale);
 }
 void MainMenuState::framebufferSizeCallbackGameState(GLFWwindow *window,
                                                      int width, int height) {
@@ -38,18 +45,10 @@ void MainMenuState::framebufferSizeCallbackWrapper(GLFWwindow *window,
 void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
   int windowWidth, windowHeight;
   glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
-  textWidth1 = gltGetTextWidth(text1, buttonScale);
-  textHeight1 = gltGetTextHeight(text1, buttonScale);
   textPosX1 = (windowWidth - textWidth1) / 2;
   textPosY1 = (windowHeight - textHeight1) / 2;
-
-  textWidth2 = gltGetTextWidth(text2, buttonScale);
-  textHeight2 = gltGetTextHeight(text2, buttonScale);
   textPosX2 = (windowWidth - textWidth2) / 2;
   textPosY2 = textPosY1 - textHeight2 - 10.0f;
-
-  textWidthForTitle = gltGetTextWidth(titlescreen, buttonScale);
-  textHeightForTitle = gltGetTextHeight(titlescreen, buttonScale);
   textPosXForTitle = (windowWidth - textWidthForTitle) / 2;
   textPosYForTitle = (windowHeight - textHeightForTitle) / 4;
 }

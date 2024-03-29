@@ -34,7 +34,7 @@ public:
                                              int height);
 
 private:
-  GLfloat textPosX1, textPosY1, textPosX2, textPosY2, textWidth1, textHeight1;
+  GLfloat textPosX1, textPosY1, textPosX2, textPosY2, textWidth1, textHeight1,textWidth2,textHeight2;
   GLTtext *titleText = nullptr;
   GLTtext *option1Text = nullptr;
   GLFWwindow *m_window;
