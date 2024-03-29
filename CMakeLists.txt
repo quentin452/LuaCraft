@@ -29,7 +29,7 @@ set(SOURCES_FILES ${SOURCES})
 set(build_directory "${CMAKE_CURRENT_BINARY_DIR}/")
 
 # External libraries
-set(GLFW_INCLUDE_DIR "${LIB_DIR}/glfw-3.4/include")
+set(GLFW_INCLUDE_DIR "${LIB_DIR}/glfw-3.4.bin.WIN64/include")
 set(VULKAN_INCLUDE_DIRS "${LIB_DIR}/Vulkan-Headers-main/include/vulkan")
 set(VULKAN_INCLUDE_DIRSVKVideo "${LIB_DIR}/Vulkan-Headers-main/include/vk_video")
 set(GLAD_INCLUDE_DIR "${LIB_DIR}/glad/include/glad")
