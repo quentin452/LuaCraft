@@ -5,8 +5,8 @@
 #include "gamestatehandling/states/MainMenuState.h"
 #include "gamestatehandling/states/SettingsState.h"
 #include "gamestatehandling/states/VulkanGameState.h"
-#include "utils/luacraft_filesystem.h"
 #include "gltext.h"
+#include "utils/luacraft_filesystem.h"
 #include "utils/luacraft_logger.h"
 #include "utils/threads_starter.h"
 #include <GLFW/glfw3.h>
@@ -16,6 +16,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <thread>
+
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
 
@@ -31,12 +32,15 @@ void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 
 int main() {
   threads_starter::LuaCraftStartAllThreads();
-  luacraft_filesystem::createDirectories("C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
-                    "\\.LuaCraft\\cpp_rewrite\\");
-  luacraft_filesystem::createDirectories("C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
-                    "\\.LuaCraft\\cpp_rewrite\\LogBackup");
-  luacraft_filesystem::createFile("C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
-             "\\.LuaCraft\\cpp_rewrite\\LuaCraftCPP.log");
+  luacraft_filesystem::createDirectories("C:\\Users\\" +
+                                         LuaCraftGlobals::UsernameDirectory +
+                                         "\\.LuaCraft\\cpp_rewrite\\");
+  luacraft_filesystem::createDirectories("C:\\Users\\" +
+                                         LuaCraftGlobals::UsernameDirectory +
+                                         "\\.LuaCraft\\cpp_rewrite\\LogBackup");
+  luacraft_filesystem::createFile("C:\\Users\\" +
+                                  LuaCraftGlobals::UsernameDirectory +
+                                  "\\.LuaCraft\\cpp_rewrite\\LuaCraftCPP.log");
   double elapsedTime = 0.0;
   const double inputDelay = 0.1;
 
