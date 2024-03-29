@@ -3,6 +3,20 @@
 cmake_minimum_required(VERSION 3.28)
 project(cpp_rewrite)
 
+# Enable LTO Optimizations(Link-Time Optimization) 
+option(ENABLE_LTO "Enable Link-Time Optimization" ON)
+
+if(ENABLE_LTO)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT result)
+    if(result)
+        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+    else()
+        message(WARNING "IPO/LTO not supported: ${output}")
+    endif()
+endif()
+
+
 # Set common directories
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
