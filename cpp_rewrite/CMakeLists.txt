@@ -84,26 +84,30 @@ string(REPLACE ";" " " common_compile_options_string "${common_compile_options}"
 # Générer les entrées pour chaque fichier source
 set(compile_commands "")
 foreach(SOURCE_FILE ${SOURCES})
-    # Créer une chaîne JSON pour chaque fichier source
-    string(APPEND compile_commands
-        "    {\n"
-        "        \"directory\": \"${build_directory}\",\n"
-        "        \"command\": \"\\\"C:/Program Files/LLVM/bin/clang++.exe\\\" -x c++ \\\"${SOURCE_FILE}\\\""
-    )
+    # Vérifier si le fichier source est un fichier .cpp
+    string(REGEX MATCH "\\.cpp$" IS_CPP_FILE "${SOURCE_FILE}")
+    if (IS_CPP_FILE)
+        # Créer une chaîne JSON pour chaque fichier source .cpp
+        string(APPEND compile_commands
+            "    {\n"
+            "        \"directory\": \"${build_directory}\",\n"
+            "        \"command\": \"\\\"C:/Program Files/LLVM/bin/clang++.exe\\\" -x c++ \\\"${SOURCE_FILE}\\\""
+        )
 
-    # Ajouter les options de compilation communes
-    foreach(OPTION ${common_compile_options})
-    if(NOT OPTION STREQUAL "ignore\"")
-      string(APPEND compile_commands " ${OPTION}") 
+        # Ajouter les options de compilation communes
+        foreach(OPTION ${common_compile_options})
+            if(NOT OPTION STREQUAL "ignore\"")
+                string(APPEND compile_commands " ${OPTION}") 
+            endif()
+        endforeach()
+
+        # Ajouter le reste de la commande et les métadonnées JSON
+        string(APPEND compile_commands
+            ",\n"
+            "        \"file\": \"${SOURCE_FILE}\"\n"
+            "    },\n"
+        )
     endif()
-  endforeach()
-
-    # Ajouter le reste de la commande et les métadonnées JSON
-    string(APPEND compile_commands
-        ",\n"
-        "        \"file\": \"${SOURCE_FILE}\"\n"
-        "    },\n"
-    )
 endforeach()
 
 # Éliminer la virgule finale
