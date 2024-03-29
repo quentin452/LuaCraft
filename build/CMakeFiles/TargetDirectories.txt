@@ -1,4 +1,0 @@
-C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/LUACRAFT.dir
-C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/generate_compile_commands.dir
-C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/build/CMakeFiles/ZERO_CHECK.dir

@@ -1,3 +1,4 @@
+
 // Repository: https://github.com/vallentin/glText
 // License: https://github.com/vallentin/glText/blob/master/LICENSE.md
 //
@@ -35,6 +36,7 @@
 // are only intended for internal purposes. Which
 // additionally means they can be removed, renamed
 // or changed between minor updates without notice.
+
 #ifndef GL_TEXT_H
 #define GL_TEXT_H
 
@@ -117,8 +119,8 @@ GLT_API const char *gltGetText(GLTtext *text);
 
 GLT_API void gltViewport(GLsizei width, GLsizei height);
 
-GLT_API void gltBeginDraw();
-GLT_API void gltEndDraw();
+GLT_API void gltBeginDraw(void);
+GLT_API void gltEndDraw(void);
 
 GLT_API void gltDrawText(GLTtext *text, const GLfloat mvp[16]);
 
@@ -385,14 +387,14 @@ GLT_API void gltViewport(GLsizei width, GLsizei height) {
   memcpy(_gltText2DProjectionMatrix, projection, 16 * sizeof(GLfloat));
 }
 
-GLT_API void gltBeginDraw() {
+GLT_API void gltBeginDraw(void) {
   glUseProgram(_gltText2DShader);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, _gltText2DFontTexture);
 }
 
-GLT_API void gltEndDraw() {}
+GLT_API void gltEndDraw(void) {}
 
 #define _gltDrawText()                                                         \
   glUniformMatrix4fv(_gltText2DShaderMVPUniformLocation, 1, GL_FALSE, mvp);    \
@@ -847,7 +849,9 @@ static const GLchar *_gltText2DFragmentShaderSource =
     "\n"
     "void main()\n"
     "{\n"
-    "	fragColor = texture(diffuse, fTexCoord) * color;\n"
+    "	fragColor = texture(diffuse, fTexCoord);\n"
+    "	if(fragColor.a<0.5 || length(fragColor.rgb) < 0.5){discard;}\n"
+    "   	fragColor *= color;"
     "}\n";
 
 GLT_API GLboolean _gltCreateText2DShader(void) {
