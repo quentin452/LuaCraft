@@ -91,7 +91,7 @@ foreach(SOURCE_FILE ${SOURCES})
         string(APPEND compile_commands
             "    {\n"
             "        \"directory\": \"${build_directory}\",\n"
-            "        \"command\": \"\\\"C:/Program Files/LLVM/bin/clang++.exe\\\" -x c++ \\\"${SOURCE_FILE}\\\""
+            "        \"command\": \"\\\"${CMAKE_CXX_COMPILER}\\\" -x c++ \\\"${SOURCE_FILE}\\\""
         )
 
         # Ajouter les options de compilation communes
