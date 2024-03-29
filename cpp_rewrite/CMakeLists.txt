@@ -1,101 +1,122 @@
 cmake_minimum_required(VERSION 3.28)
 project(cpp_rewrite)
 
-# Définir le répertoire source
+# Set common directories
+set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
-# Trouver tous les fichiers source dans le répertoire source
+# Find source files
 file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.h")
 
-# Créer l'exécutable
+set(SOURCES_FILES ${SOURCES})
+
+set(build_directory "C:/Users/iamacatfr/Desktop/github-intellidea/LuaCraft/cpp_rewrite/build/")
+
+# External libraries
+set(FREETYPE_INCLUDE_DIR "${LIB_DIR}/freetype-2.8.1/include")
+set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
+set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
+set(GLFW_INCLUDE_DIR "${LIB_DIR}/glfw-3.4/include")
+set(GLFW_LIBRARY "${LIB_DIR}/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
+set(VULKAN_INCLUDE_DIRS "${LIB_DIR}/Vulkan-Headers-main/include/vulkan" "${LIB_DIR}/Vulkan-Headers-main/include/vk_video")
+set(NOISE_INCLUDE_DIR "${LIB_DIR}/noise")
+set(VULKAN_LIBRARY "${LIB_DIR}/vulkanlib/vulkan-1.lib")
+set(GLAD_INCLUDE_DIR "${LIB_DIR}/glad/include/glad")
+set(STB_INCLUDE_DIR "${LIB_DIR}/stb")
+set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include/GL")
+set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
+set(GLEW_LIBRARY "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.lib")
+
+# Common compilation options
+set(common_compile_options
+   -std=c++14 
+   -Wall 
+   -fms-compatibility-version=19.10 
+   -Wmicrosoft 
+   -Wno-invalid-token-paste 
+   -Wno-unknown-pragmas 
+   -Wno-unused-value 
+   -fsyntax-only 
+   "\\\"-D_MT\\\"" 
+   "\\\"-D_DLL\\\"" 
+   "\\\"-DWIN32\\\"" 
+   "\\\"-D_WINDOWS\\\"" 
+   "\\\"-DCMAKE_INTDIR=/\\\"Debug/\\\"\\\"" 
+   "\\\"-D_DEBUG_FUNCTIONAL_MACHINERY\\\""   
+   -isystem "\\\"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/include\\\""
+   -isystem "\\\"C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.39.33519/atlmfc/include\\\""
+   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/ucrt\\\""
+   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/um\\\""
+   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/shared\\\""
+   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/winrt\\\""
+   -isystem "\\\"C:/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/cppwinrt\\\""
+   -I\\\"${LIB_DIR}/freetype-2.8.1/include\\\"
+   -I\\\"${LIB_DIR}/glfw-3.4/include\\\"
+   -I\\\"${LIB_DIR}/Vulkan-Headers-main/include/vulkan\\\"
+   -I\\\"${LIB_DIR}/Vulkan-Headers-main/include/vk_video\\\"
+   -I\\\"${LIB_DIR}/glad/include/glad\\\"
+   -I\\\"${LIB_DIR}/noise\\\"
+   -I\\\"${LIB_DIR}/stb\\\"
+   -I\\\"${LIB_DIR}/glew-2.1.0/include/GL\\\"
+   -I\\\"${LIB_DIR}/gltext\\\"\"
+)
+
+# Add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
-# Spécifier le chemin d'accès aux en-têtes de FreeType
-set(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/libs/freetype-2.8.1/include")
+# Target include directories
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS} ${GLAD_INCLUDE_DIR} ${NOISE_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
 
-# Inclure les en-têtes de FreeType dans la cible exécutable
-include_directories(${FREETYPE_INCLUDE_DIRS})
+# Link libraries
+target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARY} ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY})
 
-set(OPENGL32_LIBRARY "${CMAKE_SOURCE_DIR}/libs/opengl/OpenGL32.lib")
-
-# Spécifier le chemin d'accès à la bibliothèque FreeType
-set(FREETYPE_LIBRARY "${CMAKE_SOURCE_DIR}/libs/freetype-2.8.1/freetypelib/freetype.lib")
-
-# Lier la bibliothèque FreeType à la cible exécutable
-target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARY})
-
-# Spécifier le chemin d'accès aux fichiers d'en-tête GLFW
-set(GLFW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/glfw-3.4/include")
-
-# Inclure les fichiers d'en-tête GLFW dans la cible exécutable
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR})
-
-# Spécifier le chemin d'accès aux bibliothèques GLFW
-set(GLFW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
-
-# Lier les bibliothèques GLFW à la cible exécutable
-target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY})
-
-# Spécifier le chemin d'accès aux en-têtes Vulkan
-set(VULKAN_INCLUDE_DIR 
-   "${CMAKE_SOURCE_DIR}/libs/Vulkan-Headers-main/include/vulkan"
-   "${CMAKE_SOURCE_DIR}/libs/Vulkan-Headers-main/include/vk_video"
-)
-
-# Inclure les fichiers d'en-tête Vulkan dans la cible exécutable
-include_directories(${VULKAN_INCLUDE_DIR})
-
-target_link_libraries(${PROJECT_NAME} ${OPENGL32_LIBRARY}) 
-# Spécifier le chemin d'accès à la bibliothèque Vulkan
-set(VULKAN_LIBRARY "${CMAKE_SOURCE_DIR}/libs/vulkanlib/vulkan-1.lib")
-
-# Lier la bibliothèque Vulkan à la cible exécutable
-target_link_libraries(${PROJECT_NAME} ${VULKAN_LIBRARY})
-
-# Spécifier le chemin d'accès aux en-têtes Glad
-set(GLAD_INCLUDE_DIR 
-   "${CMAKE_SOURCE_DIR}/libs/glad/include/glad"
-)
-
-# Inclure les fichiers d'en-tête Glad dans la cible exécutable
-include_directories(${GLAD_INCLUDE_DIR})
-
-# Spécifier le chemin d'accès aux en-têtes Noise
-set(NOISE_INCLUDE_DIR 
-   "${CMAKE_SOURCE_DIR}/libs/noise"
-)
-
-# Inclure les fichiers d'en-tête Noise dans la cible exécutable
-include_directories(${NOISE_INCLUDE_DIR})
-
-# Spécifier le chemin d'accès aux en-têtes STB
-set(STB_INCLUDE_DIR 
-   "${CMAKE_SOURCE_DIR}/libs/stb"
-)
-
-# Inclure les fichiers d'en-tête STB dans la cible exécutable
-include_directories(${STB_INCLUDE_DIR})
-
-# Spécifier le chemin d'accès aux fichiers d'en-tête GLEW
-set(GLEW_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/glew-2.1.0/include/GL")
-
-# Inclure les fichiers d'en-tête GLEW dans la cible exécutable
-include_directories(${GLEW_INCLUDE_DIR})
-
-# Spécifier le chemin d'accès à la bibliothèque GLEW
-set(GLEW_LIBRARY "${CMAKE_SOURCE_DIR}/libs/glew-2.1.0/lib/Release/x64/glew32.lib")
-
-# Lier la bibliothèque GLEW à la cible exécutable
-target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARY})
-
-# Spécifier le chemin d'accès aux fichiers d'en-tête GLEW
-set(GLTEXT_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/gltext")
-
-# Inclure les fichiers d'en-tête GLEW dans la cible exécutable
-
-include_directories(${GLTEXT_INCLUDE_DIR})
+# Copy glew32.dll after build
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    "${CMAKE_SOURCE_DIR}/libs/glew-2.1.0/lib/Release/x64/glew32.dll"
+    "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.dll"
     $<TARGET_FILE_DIR:${PROJECT_NAME}>
 )
+
+# Convert the list to a string with spaces between the options
+string(REPLACE ";" " " common_compile_options_string "${common_compile_options}")
+
+# Générer les entrées pour chaque fichier source
+set(compile_commands "")
+foreach(SOURCE_FILE ${SOURCES})
+    # Créer une chaîne JSON pour chaque fichier source
+    string(APPEND compile_commands
+        "    {\n"
+        "        \"directory\": \"${build_directory}\",\n"
+        "        \"command\": \"\\\"C:/Program Files/LLVM/bin/clang++.exe\\\" -x c++ \\\"${SOURCE_FILE}\\\""
+    )
+
+    # Ajouter les options de compilation communes
+    foreach(OPTION ${common_compile_options})
+        string(APPEND compile_commands " ${OPTION}")
+    endforeach()
+
+    # Ajouter le reste de la commande et les métadonnées JSON
+    string(APPEND compile_commands
+        ",\n"
+        "        \"file\": \"${SOURCE_FILE}\"\n"
+        "    },\n"
+    )
+endforeach()
+
+# Éliminer la virgule finale
+string(REGEX REPLACE ",\n$" "" compile_commands "${compile_commands}")
+
+# Ajouter les crochets pour former une liste JSON
+set(compile_commands "[\n${compile_commands}\n]")
+
+# Écrire les entrées dans un fichier JSON
+file(WRITE ${build_directory}/compile_commands.json "${compile_commands}")
+
+# Ajoutez la cible personnalisée pour générer compile_commands.json
+add_custom_target(generate_compile_commands
+    DEPENDS ${build_directory}/compile_commands.json
+    COMMENT "Generating compile_commands.json"
+)
+
+# Déclarez une dépendance pour s'assurer que cela se produit avant la compilation
+add_dependencies(${PROJECT_NAME} generate_compile_commands)

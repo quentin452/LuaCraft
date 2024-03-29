@@ -52,10 +52,10 @@ int main() {
   manager.set(std::make_unique<MainMenuState>(window, manager));
   g_Manager = &manager;
   glfwSwapInterval(0); // disable Vsync
-  
+
   // Démarrer le thread de journalisation
   logThread = std::thread(logWorker);
-  
+
   while (!glfwWindowShouldClose(window)) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
@@ -68,10 +68,11 @@ int main() {
     // TODO FIX glfwPollEvents causing lags when moving mouse
     glfwPollEvents();
   }
-  
+
   // Arrêter le thread de journalisation
-  done = true; // Indiquer au thread de journalisation qu'il doit s'arrêter
-  cv.notify_one(); // Débloquer le thread de journalisation pour qu'il puisse s'arrêter
+  done = true;     // Indiquer au thread de journalisation qu'il doit s'arrêter
+  cv.notify_one(); // Débloquer le thread de journalisation pour qu'il puisse
+                   // s'arrêter
   logThread.join(); // Attendre que le thread de journalisation se termine
   glfwDestroyWindow(window);
   glfwTerminate();
