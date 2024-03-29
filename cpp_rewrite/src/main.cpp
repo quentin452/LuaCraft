@@ -7,6 +7,7 @@
 #include "gamestatehandling/states/VulkanGameState.h"
 #include "gltext.h"
 #include "utils/luacraft_logger.h"
+#include "utils/threads_starter.h"
 #include <GLFW/glfw3.h>
 #include <cstdlib>
 #include <fstream>
@@ -14,7 +15,6 @@
 #include <string>
 #include <sys/stat.h>
 #include <thread>
-
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
 
@@ -64,16 +64,19 @@ bool createFile(const std::string &filename) {
   return true;
 }
 int main() {
-    LuaCraftGlobals::LoggerInstance.StartLoggerThread(); 
-  const char *username = std::getenv("USERNAME");
-  createDirectories("C:\\Users\\" + std::string(username) +
+  threads_starter::LuaCraftStartAllThreads();
+  createDirectories("C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
                     "\\.LuaCraft\\cpp_rewrite\\");
-  createDirectories("C:\\Users\\" + std::string(username) +
+  createDirectories("C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
                     "\\.LuaCraft\\cpp_rewrite\\LogBackup");
-  createFile("C:\\Users\\" + std::string(username) +
+  createFile("C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
              "\\.LuaCraft\\cpp_rewrite\\LuaCraftCPP.log");
   double elapsedTime = 0.0;
   const double inputDelay = 0.1;
+
+  LuaCraftGlobals::LoggerInstance.logMessageAsync(
+      LogLevel::INFO, "LuaCraftGlobals::UsernameDirectory:" +
+                          LuaCraftGlobals::UsernameDirectory);
   if (!glfwInit()) {
     LuaCraftGlobals::LoggerInstance.logMessageAsync(
         LogLevel::ERROR, "Error during GLFW Initializations");

@@ -6,6 +6,7 @@
 #include "utils/luacraft_logger.h"
 #include <thread>
 
+#include <string>
 class LuaCraftGlobals {
 public:
   static GameStateManager *getGlobalGameStateManager() {
@@ -28,5 +29,6 @@ public:
   static int WindowWidth;
   static int WindowHeight;
   static GameStatesUtils GameStateUtilsInstance;
+  static std::string UsernameDirectory;
 };
 #endif // LuaCraftGlobals_H

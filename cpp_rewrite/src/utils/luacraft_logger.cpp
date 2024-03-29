@@ -12,13 +12,13 @@
 #include <sstream>
 
 LuaCraftLogger::LuaCraftLogger() : Done_Logger_Thread(false) {
-  const char *username = std::getenv("USERNAME");
-  std::string logFilePath = "C:\\Users\\" + std::string(username) +
+  LuaCraftGlobals::UsernameDirectory = std::getenv("USERNAME");
+  std::string logFilePath = "C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
                             "\\.LuaCraft\\cpp_rewrite\\LuaCraftCPP.log";
+
   logFile.open(logFilePath, std::ios::trunc);
   logFile.close();
-  logFilePath_ =
-      logFilePath;
+  logFilePath_ = logFilePath;
   std::thread workerThread(&LuaCraftLogger::logWorker, this);
   workerThread.detach();
 }
@@ -51,29 +51,24 @@ template <typename... Args>
 void LuaCraftLogger::logMessage(LogLevel level, const Args &...args) {
   std::ostringstream oss;
   switch (level) {
-  case LogLevel::INFO:
-    oss << "[INFO] ";
-    append(oss, args...);
-    std::cout << oss.str() << std::endl;
-    break;
-  case LogLevel::WARNING:
-    oss << "[WARNING] ";
-    append(oss, args...);
-    std::cout << oss.str() << std::endl;
-    break;
-  case LogLevel::ERROR:
-    oss << "[ERROR] ";
-    append(oss, args...);
-    std::cerr << oss.str() << std::endl;
-  case LogLevel::LOGICERROR:
-    oss << "[LOGIC ERROR] ";
-    append(oss, args...);
-    throw std::logic_error(oss.str());
-    break;
+    case LogLevel::INFO:
+      oss << "[INFO] ";
+      break;
+    case LogLevel::WARNING:
+      oss << "[WARNING] ";
+      break;
+    case LogLevel::ERROR:
+      oss << "[ERROR] ";
+      break;
+    case LogLevel::LOGICERROR:
+      oss << "[LOGIC ERROR] ";
+      break;
   }
+  append(oss, args...);
+  std::string message = oss.str();
+  std::cout << message << std::endl;
   std::ofstream logFile(logFilePath_, std::ios::app);
-  logFile << oss.str() << std::endl;
-  logFile.close();
+  logFile << message << std::endl;
 }
 
 void LuaCraftLogger::logMessageAsync(LogLevel level,
@@ -137,11 +132,10 @@ std::string LuaCraftLogger::getTimestamp() {
 
 void LuaCraftLogger::ExitLoggerThread() {
   std::string timestamp = getTimestamp();
-  const char *username = std::getenv("USERNAME");
-  std::string src = "C:\\Users\\" + std::string(username) +
+  std::string src = "C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
                     "\\.LuaCraft\\cpp_rewrite\\LuaCraftCPP.log";
 
-  std::string dst = "C:\\Users\\" + std::string(username) +
+  std::string dst = "C:\\Users\\" + LuaCraftGlobals::UsernameDirectory +
                     "\\.LuaCraft\\cpp_rewrite\\LogBackup\\LuaCraftCPP-" +
                     timestamp + ".log";
   this->copyFile(src, dst);

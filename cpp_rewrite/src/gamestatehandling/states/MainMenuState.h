@@ -27,7 +27,7 @@ public:
   static void framebufferSizeCallbackWrapper(GLFWwindow *window, int width,
                                              int height);
   bool handleMouseInput(GLFWwindow *window, double xpos, double ypos,
-                        int button, bool &mouseButtonPressed)const;
+                        int button, bool &mouseButtonPressed) const;
   GLTtext *CreateTextUsingGLText(const char *text, float buttonScale,
                                  float &textWidth, float &textHeight);
 
