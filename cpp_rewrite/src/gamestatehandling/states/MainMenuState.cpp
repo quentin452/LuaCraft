@@ -79,7 +79,7 @@ void MainMenuState::handleInput(GLFWwindow *window) {
       m_manager.SetGameState(
           std::make_unique<OpenGLGameState>(window, m_manager), window);
       LuaCraftGlobals::LoggerInstance.logMessageAsync(
-          LogLevel::INFO, "Go To 3D Scene Using OpenGLOpenGLGameState...");
+          LogLevel::INFO, "Go To 3D Scene Using OpenGL...");
     }
   }
 }
