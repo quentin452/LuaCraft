@@ -11,7 +11,6 @@ freetype : https://github.com/ImageMagick/freetype
 glad : idk
 glew : https://github.com/nigels-com/glew
 glfw : https://github.com/glfw/glfw
-noise : idk
 openGL : OpenGL32.Lib
-stb : idk
+stb : https://github.com/nothings/stb
 Vulkan : https://github.com/KhronosGroup/Vulkan-Headers and https://github.com/KhronosGroup/Vulkan-Loader

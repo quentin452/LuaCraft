@@ -37,7 +37,6 @@ set(GLAD_INCLUDE_DIR "${LIB_DIR}/glad/include/glad")
 set(STB_INCLUDE_DIR "${LIB_DIR}/stb")
 set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include/GL")
 set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
-set(NOISE_INCLUDE_DIR "${LIB_DIR}/noise")
 
 set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
 set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
@@ -82,7 +81,6 @@ set(common_compile_options
    -I\\\"${VULKAN_INCLUDE_DIRS}\\\"
    -I\\\"${VULKAN_INCLUDE_DIRSVKVideo}\\\"
    -I\\\"${GLAD_INCLUDE_DIR}\\\"
-   -I\\\"${NOISE_INCLUDE_DIR}\\\"
    -I\\\"${STB_INCLUDE_DIR}\\\"
    -I\\\"${GLEW_INCLUDE_DIR}\\\"
    -I\\\"${GLTEXT_INCLUDE_DIR}\\\"\"
@@ -93,7 +91,7 @@ set(common_compile_options
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Target include directories
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS}  ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${NOISE_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${FREETYPE_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS}  ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARY} ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY})
