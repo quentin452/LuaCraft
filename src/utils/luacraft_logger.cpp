@@ -105,18 +105,10 @@ void LuaCraftLogger::copyFile(const std::string &source,
     src.close();
     return;
   }
-
   std::string line;
   while (std::getline(src, line)) {
     dst << line << std::endl;
   }
-
-  if (!src.eof() || src.fail()) {
-    std::cerr << "Error: Failed to copy the log file.\n";
-  } else {
-    std::cout << "File copied successfully.\n";
-  }
-
   src.close();
   dst.close();
 }
