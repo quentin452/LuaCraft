@@ -1,4 +1,4 @@
-#include <glew.h>
+#include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
 
@@ -13,7 +13,6 @@
 #include <gltext.h>
 #include <iostream>
 #include <vector>
-
 
 MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {

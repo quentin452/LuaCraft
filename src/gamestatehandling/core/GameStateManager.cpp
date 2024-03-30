@@ -1,4 +1,4 @@
-#include <glew.h>
+#include <GL/glew.h>
 
 #include "../../LuaCraftGlobals.h"
 #include "../../utils/luacraft_logger.h"

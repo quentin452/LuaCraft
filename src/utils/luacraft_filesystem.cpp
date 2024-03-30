@@ -1,9 +1,8 @@
-#include <glew.h>
-#include "luacraft_logger.h"
 #include "luacraft_filesystem.h"
+#include "luacraft_logger.h"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-
 
 bool luacraft_filesystem::directoryExists(const std::string &path) {
   struct stat info;

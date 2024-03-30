@@ -1,5 +1,5 @@
 #include "GameStatesUtils.h"
-#include <glew.h>
+#include <GL/glew.h>
 #define GLT_IMPLEMENTATION
 #include <gltext.h>
 bool GameStatesUtils::isMouseInsideButton(double x, double y, double rectX,

@@ -1,5 +1,5 @@
 #pragma once
-#include <glew.h>
+#include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
 
@@ -15,6 +15,6 @@ private:
 public:
   void SetGameState(std::unique_ptr<GameState> state, GLFWwindow *window);
   GameState &GetGameState();
-  
+
   double getLastStateChangeTime() const;
 };

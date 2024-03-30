@@ -1,4 +1,4 @@
-#include <glew.h>
+#include <GL/glew.h>
 #ifndef LuaCraftGlobals_H
 #define LuaCraftGlobals_H
 #include "gamestatehandling/core/GameStateManager.h"

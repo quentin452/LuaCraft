@@ -19,11 +19,11 @@
 #include <string>
 
 #include "gtc/matrix_transform.hpp"
+#include <GL/glew.h> //Rendering Dependencies
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
-#include <glew.h> //Rendering Dependencies
 #include <glm.hpp>
 
 // Include Utility Headers

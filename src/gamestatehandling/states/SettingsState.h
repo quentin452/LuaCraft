@@ -1,7 +1,7 @@
 #pragma once
 #include "../core/GameStateManager.h"
 
-#include <glew.h>
+#include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
 #define GLT_IMPLEMENTATION

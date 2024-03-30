@@ -1,5 +1,5 @@
 #pragma once
-#include <glew.h>
+#include <GL/glew.h>
 #define GLT_IMPLEMENTATION
 #include <gltext.h>
 class GameStatesUtils {
