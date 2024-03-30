@@ -24,6 +24,8 @@ BOOST : https://www.boost.org/
 
 GLM : https://github.com/g-truc/glm
 
+freetype : https://github.com/ImageMagick/freetype
+
 How To Compile? :
 
 1 : Open Visual Studio code

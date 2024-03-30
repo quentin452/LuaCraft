@@ -24,13 +24,14 @@ set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
 # Find source files
-file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.h")
+file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.h" "${SRC_DIR}/*.hpp")
 
 set(SOURCES_FILES ${SOURCES})
 
 set(build_directory "${CMAKE_CURRENT_BINARY_DIR}/")
 
 # External libraries
+set(FREETYPE_INCLUDE_DIR "${LIB_DIR}/freetype-2.8.1/include")
 set(GLFW_INCLUDE_DIR "${LIB_DIR}/glfw-3.4.bin.WIN64/include")
 set(VULKAN_INCLUDE_DIRS "${LIB_DIR}/Vulkan-Headers-main/include/vulkan")
 set(VULKAN_INCLUDE_DIRSVKVideo "${LIB_DIR}/Vulkan-Headers-main/include/vk_video")
@@ -38,13 +39,13 @@ set(GLAD_INCLUDE_DIR "${LIB_DIR}/glad/include/glad")
 set(STB_INCLUDE_DIR "${LIB_DIR}/stb")
 set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include")
 set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
-set(TINY_INCLUDE_DIR "${LIB_DIR}/TinyEngine-master")
 set(SDL2_INCLUDE_DIR "${LIB_DIR}/SDL2-2.30.1/include")
 set(SDL2_TTF_INCLUDE_DIR "${LIB_DIR}/SDL2_ttf-2.22.0")
 set(SDL2_IMAGE_INCLUDE_DIR "${LIB_DIR}/SDL2_image-2.8.2/include")
 set(SDL2_MIXER_INCLUDE_DIR "${LIB_DIR}/SDL2_mixer-2.8.0/include")
 set(BOOST_INCLUDE_DIR "${LIB_DIR}/boost_1_85_0")
 set(GLM_INCLUDE_DIR "${LIB_DIR}/glm-1.0.1-light/glm")
+set(EIGEN_INCLUDE_DIR "${LIB_DIR}/eigen-3.4.0")
 
 set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
 set(GLFW_LIBRARY "${LIB_DIR}/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
@@ -55,6 +56,7 @@ set(SDL2_TTF_LIBRARY "${LIB_DIR}/SDL2_image-2.8.2-win32-x64/SDL2_imaged.lib")
 set(SDL2_IMAGE_LIBRARY "${LIB_DIR}/SDL2_ttf-2.22.0-win32-x64/SDL2_ttfd.lib")
 set(SDL2_MIXER_LIBRARY "${LIB_DIR}/SDL2_mixer-2.8.0-win32-x64/SDL2_mixer.lib")
 set(IMGUI_LIBRARY "${LIB_DIR}/ImGuiLib/ImGui.lib")
+set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
 set(BOOST_LIBRARY_DIR "${LIB_DIR}/boost_1_85_0/stage/lib")
 get_directory_property(VS_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES) 
 get_directory_property(WIN_SDK_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES)
@@ -70,7 +72,7 @@ endif()
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Target include directories
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS}  ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${TINY_INCLUDE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOOST_INCLUDE_DIR} ${GLM_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOOST_INCLUDE_DIR} ${GLM_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
 
 # Create a list of DLLs to copy
 set(DLL_LIST
@@ -96,7 +98,7 @@ endforeach()
 file(GLOB BOOST_LIBRARIES "${BOOST_LIBRARY_DIR}/*")
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY} ${BOOST_LIBRARIES} ${IMGUI_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
+target_link_libraries(${PROJECT_NAME} PRIVATE ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${FREETYPE_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY} ${BOOST_LIBRARIES} ${IMGUI_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY})
 
 # Generate Compilations DataBase Section
 
@@ -124,18 +126,19 @@ set(common_compile_options
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//shared\\\""
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//winrt\\\""
    -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//cppwinrt\\\""
+   -I\\\"${FREETYPE_INCLUDE_DIR}\\\"
    -I\\\"${GLFW_INCLUDE_DIR}\\\"
    -I\\\"${VULKAN_INCLUDE_DIRS}\\\"
    -I\\\"${VULKAN_INCLUDE_DIRSVKVideo}\\\"
    -I\\\"${GLAD_INCLUDE_DIR}\\\"
    -I\\\"${STB_INCLUDE_DIR}\\\"
    -I\\\"${GLEW_INCLUDE_DIR}\\\"
-   -I\\\"${TINY_INCLUDE_DIR}\\\"
    -I\\\"${SDL2_INCLUDE_DIR}\\\"
    -I\\\"${SDL2_TTF_INCLUDE_DIR}\\\"
    -I\\\"${SDL2_IMAGE_INCLUDE_DIR}\\\"
    -I\\\"${SDL2_MIXER_INCLUDE_DIR}\\\"
    -I\\\"${BOOST_INCLUDE_DIR}\\\"
+   -I\\\"${EIGEN_INCLUDE_DIR}\\\"
    -I\\\"${GLM_INCLUDE_DIR}\\\"
    -I\\\"${GLTEXT_INCLUDE_DIR}\\\"\"
    ignore\"
@@ -144,13 +147,19 @@ set(common_compile_options
 # Convert the list to a string with spaces between the options
 string(REPLACE ";" " " common_compile_options_string "${common_compile_options}")
 
-# Générer les entrées pour chaque fichier source
+# Fonction pour vérifier le type de fichier
+function(check_file_type FILENAME TYPE_VARIABLE)
+    string(REGEX MATCH "\\.(cpp|hpp)$" IS_CPP_OR_HPP "${FILENAME}")
+    set(${TYPE_VARIABLE} ${IS_CPP_OR_HPP} PARENT_SCOPE)
+endfunction()
+
 set(compile_commands "")
 foreach(SOURCE_FILE ${SOURCES})
-    # Vérifier si le fichier source est un fichier .cpp
-    string(REGEX MATCH "\\.cpp$" IS_CPP_FILE "${SOURCE_FILE}")
-    if (IS_CPP_FILE)
-        # Créer une chaîne JSON pour chaque fichier source .cpp
+    # Vérifier le type de fichier
+    check_file_type(${SOURCE_FILE} IS_CPP_OR_HPP_FILE)
+
+    if (IS_CPP_OR_HPP_FILE)
+        # Créer une chaîne JSON pour chaque fichier source .cpp ou .hpp
         string(APPEND compile_commands
             "    {\n"
             "        \"directory\": \"${build_directory}\",\n"

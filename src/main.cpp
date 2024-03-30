@@ -17,6 +17,16 @@
 #include <sys/stat.h>
 #include <thread>
 
+//#include <SDL.h>
+//#include <SDL_image.h>
+//#include <SDL_mixer.h>
+//#include <SDL_ttf.h>
+
+//#include "utils/TinyEngine-master/TinyEngine/include/audio.hpp"
+//#include "utils/TinyEngine-master/TinyEngine/include/view.hpp"
+
+//#include "utils/TinyEngine-master/TinyEngine.hpp"
+
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
 
@@ -70,6 +80,56 @@ int main() {
     glfwTerminate();
     return 1;
   }
+  /*
+  // Initialize SDL
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
+        LogLevel::INFO,
+        "SDL could not initialize! Error: %s\n" + std::string(SDL_GetError()));
+    return 1;
+  }
+
+  // Initialize SDL_image
+  if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
+        LogLevel::INFO, "SDL_Image could not initialize! Error: %s\n" +
+                            std::string(IMG_GetError()));
+    SDL_Quit();
+    return 1;
+  }
+
+  // Initialize SDL_ttf
+  if (TTF_Init() == -1) {
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
+        LogLevel::INFO, "SDL_ttf could not initialize! Error: %s\n" +
+                            std::string(IMG_GetError()));
+    IMG_Quit();
+    SDL_Quit();
+    return 1;
+  }
+
+  // Initialize SDL_mixer
+  if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) < 0) {
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
+        LogLevel::INFO, "SDL_mixer could not initialize! Error: %s\n" +
+                            std::string(IMG_GetError()));
+    TTF_Quit();
+    IMG_Quit();
+    SDL_Quit();
+    return 1;
+  }
+
+  // Initialize TinyEngine
+  if (!Tiny::window("TinyEngine Window", WINDOW_WIDTH, WINDOW_HEIGHT)) {
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(
+        LogLevel::INFO, "Failed to initialize TinyEngine!\n");
+    Mix_CloseAudio();
+    TTF_Quit();
+    IMG_Quit();
+    SDL_Quit();
+    return 1;
+  }
+ */
   GameStateManager manager;
   LuaCraftGlobals::setGlobalGameStateManager(&manager);
   manager.SetGameState(std::make_unique<MainMenuState>(window, manager),
@@ -91,5 +151,12 @@ int main() {
   LuaCraftGlobals::LoggerInstance.ExitLoggerThread();
   glfwDestroyWindow(window);
   glfwTerminate();
+   /*
+  Tiny::quit();
+  Mix_CloseAudio();
+  TTF_Quit();
+  IMG_Quit();
+  SDL_Quit();
+   */
   return 0;
 }
