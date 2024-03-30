@@ -1,6 +1,12 @@
 #ifndef TINYENGINE_AUDIO
 #define TINYENGINE_AUDIO
 
+#include <unordered_map>
+#include <deque>
+#include <string>
+
+#include "SDL_mixer.h"
+
 class Audio{
 public:
   bool enabled = false;

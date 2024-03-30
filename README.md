@@ -1,9 +1,5 @@
 CPP_REWRITE is a try to rewrite LuaCraft in c++
 
-Voxel Engine Base :
-
-none
-
 libs :
 
 gltext : https://github.com/vallentin/glText
@@ -27,3 +23,9 @@ SDL2 : https://github.com/libsdl-org/SDL
 BOOST : https://www.boost.org/
 
 GLM : https://github.com/g-truc/glm
+
+How To Compile? :
+
+1 : Open Visual Studio code
+
+2 : use ctrl + shift + b shortcut and then got compiled LUACRAFT.exe into build/Release

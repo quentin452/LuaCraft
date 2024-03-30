@@ -1,7 +1,8 @@
 #include "OpenGLGameState.h"
-//#include <../../TinyEngine.hpp>
 #include <GLFW/glfw3.h>
+//#include <TinyEngine.hpp>
 #include <iostream>
+
 
 OpenGLGameState::OpenGLGameState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), manager(manager) {

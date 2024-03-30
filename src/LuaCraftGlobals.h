@@ -1,6 +1,7 @@
-#include <GL/glew.h>
 #ifndef LuaCraftGlobals_H
 #define LuaCraftGlobals_H
+#include <GL/glew.h>
+
 #include "gamestatehandling/core/GameStateManager.h"
 #include "gamestatehandling/core/GameStatesUtils.h"
 #include "utils/luacraft_logger.h"

@@ -1,11 +1,11 @@
 #include "event.hpp"
 
-void Event::input(){
-while(SDL_PollEvent(&in)){
+void Event::input() {
+  while (SDL_PollEvent(&in)) {
 
-  ImGui_ImplSDL2_ProcessEvent(&in);
+    ImGui_ImplSDL2_ProcessEvent(&in);
 
-  switch(in.type){
+    switch (in.type) {
     case SDL_QUIT:
       quit = true;
       break;
@@ -34,40 +34,43 @@ while(SDL_PollEvent(&in)){
       clicked.push_front(in.button.button);
       break;
     case SDL_WINDOWEVENT:
-      if(in.window.event == SDL_WINDOWEVENT_RESIZED){
+      if (in.window.event == SDL_WINDOWEVENT_RESIZED) {
         windowEvent = in;
         windowEventTrigger = true;
       }
       break;
     default:
       break;
+    }
   }
 }
-}
 
-void Event::handle(View &view){
+void Event::handle(View &view) {
 
-  if(windowEventTrigger){
+  if (windowEventTrigger) {
     view.WIDTH = windowEvent.window.data1;
     view.HEIGHT = windowEvent.window.data2;
   }
 
-  (handler)();  //Call user-defined handler
+  (handler)(); // Call user-defined handler
 
-  if(!press.empty()){
-    if(press.back() == SDLK_ESCAPE) //Toggle interface visibility
+  if (!press.empty()) {
+    if (press.back() == SDLK_ESCAPE) // Toggle interface visibility
       view.showInterface = !view.showInterface;
 
-    if(press.back() == SDLK_F11){   //Toggle fullscreen
+    if (press.back() == SDLK_F11) { // Toggle fullscreen
       view.fullscreen = !view.fullscreen;
-      if(!view.fullscreen) SDL_SetWindowFullscreen(view.gWindow, 0);
-      else SDL_SetWindowFullscreen(view.gWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+      if (!view.fullscreen)
+        SDL_SetWindowFullscreen(view.gWindow, 0);
+      else
+        SDL_SetWindowFullscreen(view.gWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
     }
 
     press.pop_back();
   }
 
-  if(!clicked.empty()) clicked.pop_back();  //Reset Event Triggers
+  if (!clicked.empty())
+    clicked.pop_back(); // Reset Event Triggers
   scroll.reset();
   mousemove = false;
   windowEventTrigger = false;

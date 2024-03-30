@@ -30,12 +30,12 @@
 #ifndef TINYENGINE_UTILITIES
 #define TINYENGINE_UTILITIES
 
-#include <utility/buffer.hpp>
-#include <utility/instance.hpp>
-#include <utility/model.hpp>
-#include <utility/shader.hpp>
-#include <utility/target.hpp>
-#include <utility/texture.hpp>
+#include <TinyEngine/include/utility/buffer.hpp>
+#include <TinyEngine/include/utility/instance.hpp>
+#include <TinyEngine/include/utility/model.hpp>
+#include <TinyEngine/include/utility/shader.hpp>
+#include <TinyEngine/include/utility/target.hpp>
+#include <TinyEngine/include/utility/texture.hpp>
 
 #endif
 
@@ -46,11 +46,11 @@ using Handle = std::function<void()>;
 #ifndef TINYENGINE_NAMESPACE
 #define TINYENGINE_NAMESPACE
 
-#include <audio.hpp>
-#include <event.hpp>
-#include <view.hpp>
+#include <TinyEngine/include/audio.hpp>
+#include <TinyEngine/include/event.hpp>
+#include <TinyEngine/include/view.hpp>
 
-#include <helpers/timer.hpp>
+#include <TinyEngine/include/helpers/timer.hpp>
 
 namespace Tiny {
 
