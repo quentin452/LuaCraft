@@ -83,7 +83,6 @@ void SettingsState::update() {}
 
 void SettingsState::draw(GLFWwindow *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
   gltBeginDraw();
   gltColor(1.0f, 1.0f, 1.0f, 1.0f);
 

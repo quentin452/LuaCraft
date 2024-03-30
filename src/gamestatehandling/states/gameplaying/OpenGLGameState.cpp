@@ -4,7 +4,8 @@
 
 OpenGLGameState::OpenGLGameState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), manager(manager) {
-  // Initialiser Vulkan et d'autres choses spécifiques à OpenGLGameState
+  // Initialiser OpenGL et d'autres choses spécifiques à OpenGLGameState
+  // Charger des modèles 3D, configurer des shaders, etc.
 }
 
 void OpenGLGameState::handleInput(GLFWwindow *window) {
@@ -16,8 +17,13 @@ void OpenGLGameState::update() {
 }
 
 void OpenGLGameState::draw(GLFWwindow *window) {
-  glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
+  // Effacer l'écran
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
+  // Mettre en place la vue de la caméra
+
+  // Dessiner les objets de la scène
+
+  // Échanger les tampons pour afficher la scène
   glfwSwapBuffers(window);
 }

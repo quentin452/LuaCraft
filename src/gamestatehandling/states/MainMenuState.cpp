@@ -103,7 +103,6 @@ void MainMenuState::update() {}
 
 void MainMenuState::draw(GLFWwindow *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT);
   gltBeginDraw();
   gltColor(1.0f, 1.0f, 1.0f, 1.0f);
   gltDrawText2D(titlescreen, textPosXForTitle, textPosYForTitle, buttonScale);
