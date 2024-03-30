@@ -1,3 +1,5 @@
 /build/
 /libs/boost_1_85_0/stage/lib/
 /libs/boost_1_85_0/bin.v2/
+
+c_cpp_properties.json
