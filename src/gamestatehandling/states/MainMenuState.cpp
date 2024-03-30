@@ -8,11 +8,12 @@
 #include "../core/GameStatesUtils.h"
 #include "MainMenuState.h"
 #include "SettingsState.h"
-#include "gameplaying/VulkanGameState.h"
 #include "gameplaying/OpenGLGameState.h"
+#include "gameplaying/VulkanGameState.h"
 #include <gltext.h>
 #include <iostream>
 #include <vector>
+
 
 MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {

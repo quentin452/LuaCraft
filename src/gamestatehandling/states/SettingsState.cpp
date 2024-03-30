@@ -20,7 +20,6 @@ SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
   initializeGLText();
   glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
                          &LuaCraftGlobals::WindowHeight);
-  calculateButtonPositionsAndSizes(window);
   glfwSetWindowUserPointer(window, this);
 }
 

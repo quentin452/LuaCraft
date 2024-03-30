@@ -25,8 +25,6 @@ void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
   if (LuaCraftGlobals::GameState_Manager) {
     LuaCraftGlobals::GameState_Manager->GetGameState()
         .framebufferSizeCallbackGameState(window, width, height);
-    LuaCraftGlobals::GameState_Manager->GetGameState()
-        .calculateButtonPositionsAndSizes(window);
   }
 }
 
