@@ -21,3 +21,9 @@ stb : https://github.com/nothings/stb
 Vulkan : https://github.com/KhronosGroup/Vulkan-Headers and https://github.com/KhronosGroup/Vulkan-Loader
 
 Tiny Engine : https://github.com/weigert/TinyEngine
+
+SDL2 : https://github.com/libsdl-org/SDL
+
+BOOST : https://www.boost.org/
+
+GLM : https://github.com/g-truc/glm

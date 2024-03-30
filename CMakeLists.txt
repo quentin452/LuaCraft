@@ -36,7 +36,13 @@ set(GLAD_INCLUDE_DIR "${LIB_DIR}/glad/include/glad")
 set(STB_INCLUDE_DIR "${LIB_DIR}/stb")
 set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include/GL")
 set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
-set(TINY_INCLUDE_DIR "${LIB_DIR}/TinyEngine-master/include")
+set(TINY_INCLUDE_DIR "${LIB_DIR}/TinyEngine-master/TinyEngine/include")
+set(SDL2_INCLUDE_DIR "${LIB_DIR}/SDL2-2.30.1/include")
+set(SDL2_TTF_INCLUDE_DIR "${LIB_DIR}/SDL2_ttf-2.22.0")
+set(SDL2_IMAGE_INCLUDE_DIR "${LIB_DIR}/SDL2_image-2.8.2/include")
+set(SDL2_MIXER_INCLUDE_DIR "${LIB_DIR}/SDL2_mixer-2.8.0/include")
+set(BOOST_INCLUDE_DIR "${LIB_DIR}/boost_1_85_0")
+set(GLM_INCLUDE_DIR "${LIB_DIR}/glm-1.0.1-light/glm")
 
 set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
 set(GLFW_LIBRARY "${LIB_DIR}/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
@@ -82,6 +88,12 @@ set(common_compile_options
    -I\\\"${STB_INCLUDE_DIR}\\\"
    -I\\\"${GLEW_INCLUDE_DIR}\\\"
    -I\\\"${TINY_INCLUDE_DIR}\\\"
+   -I\\\"${SDL2_INCLUDE_DIR}\\\"
+   -I\\\"${SDL2_TTF_INCLUDE_DIR}\\\"
+   -I\\\"${SDL2_IMAGE_INCLUDE_DIR}\\\"
+   -I\\\"${SDL2_MIXER_INCLUDE_DIR}\\\"
+   -I\\\"${BOOST_INCLUDE_DIR}\\\"
+   -I\\\"${GLM_INCLUDE_DIR}\\\"
    -I\\\"${GLTEXT_INCLUDE_DIR}\\\"\"
    ignore\"
 )
@@ -90,17 +102,10 @@ set(common_compile_options
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Target include directories
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS}  ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${TINY_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLFW_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS}  ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${TINY_INCLUDE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOOST_INCLUDE_DIR} ${GLM_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY})
-
-# Copy glew32.dll after build
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.dll"
-    $<TARGET_FILE_DIR:${PROJECT_NAME}>
-)
 
 # Convert the list to a string with spaces between the options
 string(REPLACE ";" " " common_compile_options_string "${common_compile_options}")
@@ -148,6 +153,24 @@ add_custom_target(generate_compile_commands
     DEPENDS ${build_directory}/compile_commands.json
     COMMENT "Generating compile_commands.json"
 )
+
+# Create a list of DLLs to copy
+set(DLL_LIST
+    "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.dll"
+    "${LIB_DIR}/SDL2-2.30.1-win32-x64/SDL2.dll"
+    "${LIB_DIR}/SDL2_image-2.8.2-win32-x64/SDL2_image.dll"
+    "${LIB_DIR}/SDL2_mixer-2.8.0-win32-x64/SDL2_mixer.dll"
+    "${LIB_DIR}/SDL2_ttf-2.22.0-win32-x64/SDL2_ttf.dll"
+)
+
+# Copy DLLs after build
+foreach(DLL ${DLL_LIST})
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${DLL}"
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>
+    )
+endforeach()
 
 # Déclarez une dépendance pour s'assurer que cela se produit avant la compilation
 add_dependencies(${PROJECT_NAME} generate_compile_commands)
