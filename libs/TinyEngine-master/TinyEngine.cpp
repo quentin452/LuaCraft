@@ -2,6 +2,6 @@
 #define TINYENGINE_UTILITIES
 #include "TinyEngine.hpp"
 
-#include "include/audio.cpp"
-#include "include/view.cpp"
-#include "include/event.cpp"
+#include "TinyEngine/include/audio.cpp"
+#include "TinyEngine/include/view.cpp"
+#include "TinyEngine/include/event.cpp"

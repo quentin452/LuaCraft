@@ -1,9 +1,9 @@
 #ifndef TINYENGINE_VIEW
 #define TINYENGINE_VIEW
 
-#include <TinyEngine/imgui>                    //Interface Dependencies
-#include <TinyEngine/imgui_impl_sdl>
-#include <TinyEngine/imgui_impl_opengl3>
+#include <imgui/imgui.h>                    //Interface Dependencies
+#include <imgui/imgui_impl_sdl.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 class View {
   public:

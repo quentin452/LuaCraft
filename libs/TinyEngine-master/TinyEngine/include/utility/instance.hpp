@@ -1,6 +1,6 @@
 #ifndef TINYENGINE_UTILITY_INSTANCE
 #define TINYENGINE_UTILITY_INSTANCE
-#include <TinyEngine/Model>
+#include <utility/model.hpp>
 
 class Instance{
 private:

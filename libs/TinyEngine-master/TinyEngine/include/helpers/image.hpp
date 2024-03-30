@@ -1,9 +1,9 @@
 #ifndef TINYENGINE_HELPER_IMAGE
 #define TINYENGINE_HELPER_IMAGE
 
-#include <glm/glm.hpp>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <glm.hpp>
+#include <SDL.h>
+#include <SDL_image.h>
 #include <functional>
 
 namespace image {

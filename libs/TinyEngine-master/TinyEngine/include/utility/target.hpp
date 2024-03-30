@@ -1,6 +1,6 @@
 #ifndef TINYENGINE_UTILITY_TARGET
 #define TINYENGINE_UTILITY_TARGET
-#include <TinyEngine/Texture>
+#include <utility/target.hpp>
 
 class Target {
 public:

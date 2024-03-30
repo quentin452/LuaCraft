@@ -1,7 +1,7 @@
 #ifndef TINYENGINE_HELPER_COLOR
 #define TINYENGINE_HELPER_COLOR
 
-#include <glm/glm.hpp>
+#include <glm.hpp>
 #include <vector>
 
 namespace color {
