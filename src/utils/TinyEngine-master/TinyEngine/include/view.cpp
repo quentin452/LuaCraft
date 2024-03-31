@@ -1,6 +1,9 @@
-#include <GL/glew.h>
 #include "view.hpp"
+#include "imgui-backend/backends/imgui_impl_opengl3.h"
+#include "imgui-backend/backends/imgui_impl_sdl2.h"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <imgui/imgui.h>
 #include <iostream>
 
 bool View::init(std::string _name, int W, int H) {
@@ -47,7 +50,7 @@ bool View::init(std::string _name, int W, int H) {
 #else
   ImGui_ImplOpenGL3_Init("#version 130");
 #endif
-  ImGui::StyleColorsCustom();
+  ImGui::StyleColorsClassic();
 
 #ifndef TINYENGINE_COMPATIBILITY
   if (antialias)
@@ -96,7 +99,7 @@ void View::render() {
 
 void View::drawInterface() {
   ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplSDL2_NewFrame(gWindow);
+  ImGui_ImplSDL2_NewFrame();
   ImGui::NewFrame();
 
   (interface)(); // Draw user-defined interface

@@ -6,26 +6,27 @@
 #include "gamestatehandling/states/SettingsState.h"
 #include "gamestatehandling/states/gameplaying/VulkanGameState.h"
 #include "gltext.h"
+#include "utils/TinyEngine-master/TinyEngine/include/imgui-backend/backends/imgui_impl_opengl3.h"
+#include "utils/TinyEngine-master/TinyEngine/include/imgui-backend/backends/imgui_impl_sdl2.h"
 #include "utils/luacraft_filesystem.h"
 #include "utils/luacraft_logger.h"
 #include "utils/threads_starter.h"
 #include <GLFW/glfw3.h>
 #include <cstdlib>
 #include <fstream>
+#include <imgui/imgui.h>
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
 #include <thread>
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
 
-//#include <SDL.h>
-//#include <SDL_image.h>
-//#include <SDL_mixer.h>
-//#include <SDL_ttf.h>
-
-//#include "utils/TinyEngine-master/TinyEngine/include/audio.hpp"
-//#include "utils/TinyEngine-master/TinyEngine/include/view.hpp"
-
-//#include "utils/TinyEngine-master/TinyEngine.hpp"
+#include "utils/TinyEngine-master/TinyEngine.hpp"
+#include "utils/TinyEngine-master/TinyEngine/include/audio.hpp"
 
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
@@ -151,12 +152,12 @@ int main() {
   LuaCraftGlobals::LoggerInstance.ExitLoggerThread();
   glfwDestroyWindow(window);
   glfwTerminate();
-   /*
-  Tiny::quit();
-  Mix_CloseAudio();
-  TTF_Quit();
-  IMG_Quit();
-  SDL_Quit();
-   */
+  /*
+ Tiny::quit();
+ Mix_CloseAudio();
+ TTF_Quit();
+ IMG_Quit();
+ SDL_Quit();
+  */
   return 0;
 }

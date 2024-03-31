@@ -4,9 +4,10 @@
 #include <SDL.h>
 #include <string>
 
+#include "imgui-backend/backends/imgui_impl_opengl3.h"
+#include "imgui-backend/backends/imgui_impl_sdl2.h"
 #include "imgui/imgui.h" // Interface Dependencies
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_impl_sdl.h"
+
 
 #include <functional>
 #include <glm.hpp>

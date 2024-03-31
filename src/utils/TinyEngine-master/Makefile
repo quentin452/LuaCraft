@@ -47,7 +47,7 @@ setup:
 			@cp include/utility/target.hpp $(INCPATH)/TinyEngine/Target
 			@cp include/imgui/imgui.h $(INCPATH)/TinyEngine/imgui
 			@cp include/imgui/imgui_impl_opengl3.h $(INCPATH)/TinyEngine/imgui_impl_opengl3
-			@cp include/imgui/imgui_impl_sdl.h $(INCPATH)/TinyEngine/imgui_impl_sdl
+			@cp include/imgui/backends/imgui_impl_sdl2.h $(INCPATH)/TinyEngine/imgui_impl_sdl
 			@cp include/imgui/imconfig.h $(INCPATH)/TinyEngine/imconfig.h
 			@echo "Done";
 

@@ -1,12 +1,8 @@
 #include "VulkanRenderer.h"
 
-VulkanRenderer::VulkanRenderer() {
-  // Initialisation des membres de la classe
-}
+VulkanRenderer::VulkanRenderer() {}
 
-VulkanRenderer::~VulkanRenderer() {
-  // Nettoyage des ressources Vulkan
-}
+VulkanRenderer::~VulkanRenderer() {}
 
 bool VulkanRenderer::init(GLFWwindow *window) {
   // Assigner la fenêtre GLFW

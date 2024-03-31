@@ -2,9 +2,14 @@
 #define TINYENGINE_EVENT
 
 #include "view.hpp"
-#include <deque>
 #include <SDL.h>
+#include <deque>
+#include <imgui/imgui.h>
 #include <iostream>
+
+#include "imgui-backend/backends/imgui_impl_opengl3.h"
+#include "imgui-backend/backends/imgui_impl_sdl2.h"
+
 struct Scroll {
   bool posx, posy, negx, negy;
   void reset() { posx = posy = negx = negy = false; }

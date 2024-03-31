@@ -1,4 +1,7 @@
 #include "event.hpp"
+#include "imgui-backend/backends/imgui_impl_opengl3.h"
+#include "imgui-backend/backends/imgui_impl_sdl2.h"
+#include <imgui/imgui.h>
 
 void Event::input() {
   while (SDL_PollEvent(&in)) {
