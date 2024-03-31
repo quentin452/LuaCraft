@@ -30,12 +30,12 @@
 #ifndef TINYENGINE_UTILITIES
 #define TINYENGINE_UTILITIES
 
-#include "TinyEngine/include/utility/buffer.hpp"
-#include "TinyEngine/include/utility/instance.hpp"
-#include "TinyEngine/include/utility/model.hpp"
-#include "TinyEngine/include/utility/shader.hpp"
-#include "TinyEngine/include/utility/target.hpp"
-#include "TinyEngine/include/utility/texture.hpp"
+#include <TinyEngine/include/utility/buffer.hpp>
+#include <TinyEngine/include/utility/instance.hpp>
+#include <TinyEngine/include/utility/model.hpp>
+#include <TinyEngine/include/utility/shader.hpp>
+#include <TinyEngine/include/utility/target.hpp>
+#include <TinyEngine/include/utility/texture.hpp>
 
 #endif
 
@@ -50,7 +50,7 @@ using Handle = std::function<void()>;
 #include "TinyEngine/include/event.hpp"
 #include "TinyEngine/include/view.hpp"
 
-#include "TinyEngine/include/helpers/timer.hpp"
+#include <TinyEngine/include/helpers/timer.hpp>
 
 namespace Tiny {
 
