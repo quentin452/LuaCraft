@@ -62,7 +62,7 @@ set(SDL2_MIXER_LIBRARY "${LIB_DIR}/SDL2_mixer-2.8.0-win32-x64/SDL2_mixer.lib")
 set(IMGUI_LIBRARY "${LIB_DIR}/ImGuiLib/ImGui.lib")
 set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
 set(BOOST_LIBRARY_DIR "${LIB_DIR}/boost_1_85_0/stage/lib")
-file(GLOB BOOST_LIBRARIES "${BOOST_LIBRARY_DIR}/*")
+file(GLOB BOOST_LIBRARIES "${BOOST_LIBRARY_DIR}/*.lib")
 
 get_directory_property(VS_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES) 
 get_directory_property(WIN_SDK_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES)
