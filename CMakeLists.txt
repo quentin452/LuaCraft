@@ -103,11 +103,10 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${GLFW_LIBRARY} ${OPENGL_LIBRARY} 
 # Generate Compilations DataBase Section
 
 # Common compilation options
-# TODO MADE -std=c++14 etc... not hardcoded
 set(common_compile_options
-   -std=c++14 
+   -std=c++${CMAKE_CXX_STANDARD}
    -Wall 
-   -fms-compatibility-version=19.10 
+   -compilerandversion=${CMAKE_CXX_COMPILER_ID}-${CMAKE_CXX_COMPILER_VERSION}
    -Wmicrosoft 
    -Wno-invalid-token-paste 
    -Wno-unknown-pragmas 
