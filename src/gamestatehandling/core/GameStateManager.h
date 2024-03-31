@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "GameState.h"
+#include "GameStateBase.h"
 #include <iostream>
 #include <memory>
 
