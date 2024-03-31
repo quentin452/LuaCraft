@@ -22,14 +22,7 @@ void GameStateManager::SetGameState(std::unique_ptr<GameState> state,
   }
 }
 
-GameState &GameStateManager::GetGameState() {
-  if (currentState) {
-    return *currentState;
-  } else {
-    LuaCraftGlobals::LoggerInstance.logMessageAsync(
-        LogLevel::LOGICERROR, "None GameState Are Defined");
-  }
-}
+GameState &GameStateManager::GetGameState() { return *currentState; }
 
 double GameStateManager::getLastStateChangeTime() const {
   return lastStateChangeTime;
