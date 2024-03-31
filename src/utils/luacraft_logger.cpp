@@ -37,8 +37,11 @@ void LuaCraftLogger::logWorker() {
       std::unique_lock<std::mutex> lock(mtx);
       Unlock_Logger_Thread.wait(
           lock, [this] { return !tasks.empty() || Done_Logger_Thread; });
+      if (Done_Logger_Thread && tasks.empty()) {
+        break;
+      }
       if (tasks.empty()) {
-        return;
+        continue;
       }
       task = std::move(tasks.front());
       tasks.pop();
