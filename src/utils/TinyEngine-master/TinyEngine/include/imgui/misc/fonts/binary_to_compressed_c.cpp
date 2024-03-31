@@ -38,7 +38,7 @@ static bool binary_to_compressed_c(const char *filename, const char *symbol,
                                    bool use_base85_encoding,
                                    bool use_compression);
 
-/*int main(int argc, char **argv) {
+int main(int argc, char **argv) {
   if (argc < 3) {
     printf("Syntax: %s [-base85] [-nocompress] <inputfile> <symbolname>\n",
            argv[0]);
@@ -67,7 +67,7 @@ static bool binary_to_compressed_c(const char *filename, const char *symbol,
     fprintf(stderr, "Error opening or reading file: '%s'\n", argv[argn]);
   return ret ? 0 : 1;
 }
-*/
+
 
 char Encode85Byte(unsigned int x) {
   x = (x % 85) + 35;
