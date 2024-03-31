@@ -64,16 +64,6 @@ set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
 set(BOOST_LIBRARY_DIR "${LIB_DIR}/boost_1_85_0/stage/lib")
 file(GLOB BOOST_LIBRARIES "${BOOST_LIBRARY_DIR}/*.lib")
 
-get_directory_property(VS_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES) 
-get_directory_property(WIN_SDK_INCLUDE_DIRECTORIES INCLUDE_DIRECTORIES)
-if(NOT DEFINED VS_INCLUDE_DIRECTORIES)
-  get_directory_property(...)
-endif()
-
-if(NOT DEFINED WIN_SDK_INCLUDE_DIRECTORIES)
-  get_directory_property(...)  
-endif()
-
 # Add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
@@ -118,13 +108,6 @@ set(common_compile_options
    "\\\"-D_WINDOWS\\\"" 
    "\\\"-DCMAKE_INTDIR=/\\\"Debug/\\\"\\\"" 
    "\\\"-D_DEBUG_FUNCTIONAL_MACHINERY\\\""   
-   -isystem "\\\"${VS_INCLUDE_DIRECTORIES}/include\\\""
-   -isystem "\\\"${VS_INCLUDE_DIRECTORIES}/atlmfc/include\\\""
-   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//ucrt\\\""
-   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//um\\\""
-   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//shared\\\""
-   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//winrt\\\""
-   -isystem "\\\"${WIN_SDK_INCLUDE_DIRECTORIES}//cppwinrt\\\""
    -I\\\"${FREETYPE_INCLUDE_DIR}\\\"
    -I\\\"${GLFW_INCLUDE_DIR}\\\"
    -I\\\"${VULKAN_INCLUDE_DIRS}\\\"
