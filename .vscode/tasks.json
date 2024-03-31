@@ -1,0 +1,23 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build-luacraft",
+            "type": "shell",
+            "command": "powershell.exe",
+            "args": [
+                "-Command",
+                "if (!(Test-Path \"${workspaceFolder}/!libsanddlls/libs-include/boost_1_85_0/stage\")) { cd \"${workspaceFolder}/!libsanddlls/libs-include/boost_1_85_0\"; .\\bootstrap; .\\b2 variant=release; }; ",
+                "if (!(Test-Path \"${workspaceFolder}/build\")) { mkdir \"${workspaceFolder}/build\" }; ",
+                "cd \"${workspaceFolder}\"; cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_CXX_STANDARD=17;",
+                "cmake --build build --config Release"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "silent",
+                "panel": "new"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

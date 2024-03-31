@@ -1,0 +1,7 @@
+
+.DS_Store
+*/Thumbs.db
+docs/*
+Thumbs.db
+report.txt
+/cpp_rewrite/build/

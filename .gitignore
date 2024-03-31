@@ -1,6 +1,5 @@
+/build/
+/!libsanddlls/libs-include/boost_1_85_0/stage/lib/
+/!libsanddlls/libs-include/boost_1_85_0/bin.v2/
 
-.DS_Store
-*/Thumbs.db
-docs/*
-Thumbs.db
-report.txt
+c_cpp_properties.json

@@ -1,18 +1,33 @@
-# LuaCraft
-Minecraft Like written in Lua using Love2D
+CPP_REWRITE is a try to rewrite LuaCraft in c++
 
-# libraries
+libs :
 
-Penlight : https://github.com/lunarmodules/Penlight
+gltext : https://github.com/vallentin/glText
 
-cpml : https://github.com/quentin452/cpml
+glad : idk
 
-jprof : https://github.com/pfirsich/jprof
+glew : https://github.com/nigels-com/glew
 
-# Voxel engine base
+glfw : https://github.com/glfw/glfw
 
-lovecraft : https://github.com/groverburger/lovecraft
+openGL : OpenGL32.Lib
 
-# TexturePack Creadit : 
+stb : https://github.com/nothings/stb
 
-Minetest Game : https://www.google.com/search?client=firefox-b-d&q=Minetest+game
+Vulkan : https://github.com/KhronosGroup/Vulkan-Headers and https://github.com/KhronosGroup/Vulkan-Loader
+
+Tiny Engine : https://github.com/weigert/TinyEngine
+
+SDL2 : https://github.com/libsdl-org/SDL
+
+BOOST : https://www.boost.org/
+
+GLM : https://github.com/g-truc/glm
+
+freetype : https://github.com/ImageMagick/freetype
+
+How To Compile? :
+
+1 : Open Visual Studio code
+
+2 : use ctrl + shift + b shortcut and then got compiled LUACRAFT.exe into build/Release
