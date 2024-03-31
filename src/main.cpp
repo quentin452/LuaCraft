@@ -81,7 +81,7 @@ int main() {
     glfwTerminate();
     return 1;
   }
-  /*
+
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
     LuaCraftGlobals::LoggerInstance.logMessageAsync(
@@ -120,17 +120,6 @@ int main() {
     return 1;
   }
 
-  // Initialize TinyEngine
-  if (!Tiny::window("TinyEngine Window", WINDOW_WIDTH, WINDOW_HEIGHT)) {
-    LuaCraftGlobals::LoggerInstance.logMessageAsync(
-        LogLevel::INFO, "Failed to initialize TinyEngine!\n");
-    Mix_CloseAudio();
-    TTF_Quit();
-    IMG_Quit();
-    SDL_Quit();
-    return 1;
-  }
- */
   GameStateManager manager;
   LuaCraftGlobals::setGlobalGameStateManager(&manager);
   manager.SetGameState(std::make_unique<MainMenuState>(window, manager),
@@ -152,12 +141,10 @@ int main() {
   LuaCraftGlobals::LoggerInstance.ExitLoggerThread();
   glfwDestroyWindow(window);
   glfwTerminate();
-  /*
- Tiny::quit();
- Mix_CloseAudio();
- TTF_Quit();
- IMG_Quit();
- SDL_Quit();
-  */
+  Tiny::quit();
+  Mix_CloseAudio();
+  TTF_Quit();
+  IMG_Quit();
+  SDL_Quit();
   return 0;
 }
