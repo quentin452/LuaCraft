@@ -1,6 +1,0 @@
-main
-imgui.ini
-*.dSYM
-.idea
-**/tmp
-tmp
