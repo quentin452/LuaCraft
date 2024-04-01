@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
-
+#include <sys/stat.h>
 
 bool luacraft_filesystem::directoryExists(const std::string &path) {
   struct stat info;
@@ -15,20 +15,24 @@ bool luacraft_filesystem::directoryExists(const std::string &path) {
     return false;
 }
 
-void luacraft_filesystem::createDirectories(const std::string &path) {
-  if (!directoryExists(path)) {
-    std::string command = "mkdir " + path;
-    std::system(command.c_str());
-  }
-}
 bool luacraft_filesystem::fileExists(const std::string &filename) {
   struct stat buffer;
   return (stat(filename.c_str(), &buffer) == 0);
 }
 
+bool luacraft_filesystem::createDirectories(const std::string &path) {
+  if (!directoryExists(path)) {
+    std::string command = "mkdir " + path;
+    if (system(command.c_str()) != 0) {
+      std::cerr << "Error: Unable to create directory " << path << ".\n";
+      return false;
+    }
+  }
+  return true;
+}
+
 bool luacraft_filesystem::createFile(const std::string &filename) {
   if (fileExists(filename)) {
-    std::cerr << "Error: File " << filename << " already exists.\n";
     return false;
   }
 

@@ -8,7 +8,7 @@ public:
   static bool fileExists(const std::string &filename);
   static bool createFile(const std::string &filename);
   static bool directoryExists(const std::string &path);
-  static void createDirectories(const std::string &path);
+  static bool createDirectories(const std::string &path);
 };
 
 #endif // LUACRAFT_FILESYSTEM_H
