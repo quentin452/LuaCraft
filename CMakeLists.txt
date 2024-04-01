@@ -1,4 +1,3 @@
-# TODO OPTIMIZE THIS CODE TO REDUCE REDUDANCY AND IMPROVE readability
 cmake_minimum_required(VERSION 3.28)
 project(LUACRAFT)
 
@@ -7,21 +6,12 @@ add_definitions(-D_ITERATOR_DEBUG_LEVEL=0)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRTD")
 
 # Enable LTO Optimizations(Link-Time Optimization) 
-option(ENABLE_LTO "Enable Link-Time Optimization" ON)
-
-if(ENABLE_LTO)
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT result)
-    if(result)
-        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
-    else()
-        message(WARNING "IPO/LTO not supported: ${output}")
-    endif()
-endif()
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 
 # Set common directories
-set(DLL_DIR "${CMAKE_SOURCE_DIR}/dlls")
-set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs")
+set(DLL_DIR "${CMAKE_SOURCE_DIR}/libsanddlls/dlls")
+set(LIB_DIR "${CMAKE_SOURCE_DIR}/libsanddlls/libs")
+set(LIBRAIRIES_DIR "${CMAKE_SOURCE_DIR}/libsanddlls/libs-include")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
 # Find source files
@@ -29,46 +19,39 @@ file(GLOB_RECURSE SOURCES "${SRC_DIR}/*.cpp" "${SRC_DIR}/*.h" "${SRC_DIR}/*.hpp"
 
 set(SOURCES_FILES ${SOURCES})
 
-set(build_directory "${CMAKE_CURRENT_BINARY_DIR}/")
+# External libraries include directories
+set(ALL_INCLUDE_DIR
+    "${LIBRAIRIES_DIR}/freetype-2.8.1/include"
+    "${LIBRAIRIES_DIR}/glfw-3.4.bin.WIN64/include"
+    "${LIBRAIRIES_DIR}/Vulkan-Headers-main/include/vulkan"
+    "${LIBRAIRIES_DIR}/Vulkan-Headers-main/include/vk_video"
+    "${LIBRAIRIES_DIR}/glad/include/glad"
+    "${LIBRAIRIES_DIR}/stb"
+    "${LIBRAIRIES_DIR}/glew-2.1.0/include"
+    "${LIBRAIRIES_DIR}/gltext"
+    "${LIBRAIRIES_DIR}/SDL2-2.30.1/include"
+    "${LIBRAIRIES_DIR}/SDL2_ttf-2.22.0"
+    "${LIBRAIRIES_DIR}/SDL2_image-2.8.2/include"
+    "${LIBRAIRIES_DIR}/SDL2_mixer-2.8.0/include"
+    "${LIBRAIRIES_DIR}/boost_1_85_0"
+    "${LIBRAIRIES_DIR}/TinyEngine-master"
+    "${LIBRAIRIES_DIR}/glm-1.0.1-light/glm"
+    "${LIBRAIRIES_DIR}/eigen-3.4.0"
+    "${LIBRAIRIES_DIR}/imgui-x"
+)
 
-# External libraries
-set(FREETYPE_INCLUDE_DIR "${LIB_DIR}/freetype-2.8.1/include")
-set(GLFW_INCLUDE_DIR "${LIB_DIR}/glfw-3.4.bin.WIN64/include")
-set(VULKAN_INCLUDE_DIRS "${LIB_DIR}/Vulkan-Headers-main/include/vulkan")
-set(VULKAN_INCLUDE_DIRSVKVideo "${LIB_DIR}/Vulkan-Headers-main/include/vk_video")
-set(GLAD_INCLUDE_DIR "${LIB_DIR}/glad/include/glad")
-set(STB_INCLUDE_DIR "${LIB_DIR}/stb")
-set(GLEW_INCLUDE_DIR "${LIB_DIR}/glew-2.1.0/include")
-set(GLTEXT_INCLUDE_DIR "${LIB_DIR}/gltext")
-set(SDL2_INCLUDE_DIR "${LIB_DIR}/SDL2-2.30.1/include")
-set(SDL2_TTF_INCLUDE_DIR "${LIB_DIR}/SDL2_ttf-2.22.0")
-set(SDL2_IMAGE_INCLUDE_DIR "${LIB_DIR}/SDL2_image-2.8.2/include")
-set(SDL2_MIXER_INCLUDE_DIR "${LIB_DIR}/SDL2_mixer-2.8.0/include")
-set(BOOST_INCLUDE_DIR "${LIB_DIR}/boost_1_85_0")
-set(TINYENGINE_INCLUDE_DIR "${LIB_DIR}/TinyEngine-master")
+# External libraries libraries directories
+file(GLOB ALL_LIBRARIES_DIR "${LIB_DIR}/*.lib")
 
-set(GLM_INCLUDE_DIR "${LIB_DIR}/glm-1.0.1-light/glm")
-set(EIGEN_INCLUDE_DIR "${LIB_DIR}/eigen-3.4.0")
-set(IMGUI_INCLUDE_DIR "${LIB_DIR}/imgui-x")
 
-set(OPENGL_LIBRARY "${LIB_DIR}/opengl/OpenGL32.lib")
-set(GLFW_LIBRARY "${LIB_DIR}/glfw-3.4.bin.WIN64/lib-vc2022/glfw3.lib")
-set(VULKAN_LIBRARY "${LIB_DIR}/vulkanlib/vulkan-1.lib")
-set(GLEW_LIBRARY "${LIB_DIR}/glew-2.1.0/lib/Release/x64/glew32.lib")
-set(SDL2_LIBRARY "${LIB_DIR}/SDL2-2.30.1-win32-x64/SDL2d.lib")
-set(SDL2_TTF_LIBRARY "${LIB_DIR}/SDL2_image-2.8.2-win32-x64/SDL2_imaged.lib")
-set(SDL2_IMAGE_LIBRARY "${LIB_DIR}/SDL2_ttf-2.22.0-win32-x64/SDL2_ttfd.lib")
-set(SDL2_MIXER_LIBRARY "${LIB_DIR}/SDL2_mixer-2.8.0-win32-x64/SDL2_mixer.lib")
-set(IMGUI_LIBRARY "${LIB_DIR}/ImGuiLib/ImGui.lib")
-set(FREETYPE_LIBRARY "${LIB_DIR}/freetype-2.8.1/freetypelib/freetype.lib")
-set(BOOST_LIBRARY_DIR "${LIB_DIR}/boost_1_85_0/stage/lib")
+set(BOOST_LIBRARY_DIR "${LIBRAIRIES_DIR}/boost_1_85_0/stage/lib")
 file(GLOB BOOST_LIBRARIES "${BOOST_LIBRARY_DIR}/*.lib")
 
 # Add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Target include directories
-target_include_directories(${PROJECT_NAME} PUBLIC ${TINYENGINE_INCLUDE_DIR} ${GLFW_INCLUDE_DIR} ${EIGEN_INCLUDE_DIR} ${IMGUI_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRS} ${FREETYPE_INCLUDE_DIR} ${VULKAN_INCLUDE_DIRSVKVideo} ${GLAD_INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOOST_INCLUDE_DIR} ${GLM_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR} ${GLTEXT_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${ALL_INCLUDE_DIR})
 
 # Create a list of DLLs to copy
 file(GLOB DLL_LIST "${DLL_DIR}/*.dll")
@@ -82,15 +65,12 @@ foreach(DLL ${DLL_LIST})
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "${NATIVE_DLL_PATH}"
         "${DESTINATION_PATH}"
-        COMMENT "Copying ${DLL_NAME} to output directory"
         VERBATIM
         )
 endforeach()
 
 # Link libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE ${GLFW_LIBRARY} ${OPENGL_LIBRARY} ${FREETYPE_LIBRARY} ${VULKAN_LIBRARY} ${GLEW_LIBRARY} ${BOOST_LIBRARIES} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_TTF_LIBRARY} ${SDL2_MIXER_LIBRARY} ${IMGUI_LIBRARY} )
-
-# Generate Compilations DataBase Section
+target_link_libraries(${PROJECT_NAME} PRIVATE ${ALL_LIBRARIES_DIR} ${BOOST_LIBRARIES})
 
 # Common compilation options
 set(common_compile_options
@@ -108,75 +88,60 @@ set(common_compile_options
    "\\\"-D_WINDOWS\\\"" 
    "\\\"-DCMAKE_INTDIR=/\\\"Debug/\\\"\\\"" 
    "\\\"-D_DEBUG_FUNCTIONAL_MACHINERY\\\""   
-   -I\\\"${FREETYPE_INCLUDE_DIR}\\\"
-   -I\\\"${GLFW_INCLUDE_DIR}\\\"
-   -I\\\"${VULKAN_INCLUDE_DIRS}\\\"
-   -I\\\"${VULKAN_INCLUDE_DIRSVKVideo}\\\"
-   -I\\\"${GLAD_INCLUDE_DIR}\\\"
-   -I\\\"${STB_INCLUDE_DIR}\\\"
-   -I\\\"${GLEW_INCLUDE_DIR}\\\"
-   -I\\\"${SDL2_INCLUDE_DIR}\\\"
-   -I\\\"${SDL2_TTF_INCLUDE_DIR}\\\"
-   -I\\\"${SDL2_IMAGE_INCLUDE_DIR}\\\"
-   -I\\\"${SDL2_MIXER_INCLUDE_DIR}\\\"
-   -I\\\"${BOOST_INCLUDE_DIR}\\\"
-   -I\\\"${TINYENGINE_INCLUDE_DIR}\\\"
-   -I\\\"${EIGEN_INCLUDE_DIR}\\\"
-   -I\\\"${IMGUI_INCLUDE_DIR}\\\"
-   -I\\\"${GLM_INCLUDE_DIR}\\\"
-   -I\\\"${GLTEXT_INCLUDE_DIR}\\\"\"
-   ignore\"
 )
+
+# Add each include directory to the compilation options
+foreach(INCLUDE_DIR ${ALL_INCLUDE_DIR})
+    list(APPEND common_compile_options -I\\\"${INCLUDE_DIR}\\\")
+endforeach()
+
+# Add an extra quote to the last element
+list(LENGTH ALL_INCLUDE_DIR INCLUDE_DIR_COUNT)
+math(EXPR LAST_INDEX "${INCLUDE_DIR_COUNT} - 1")
+list(GET ALL_INCLUDE_DIR ${LAST_INDEX} LAST_INCLUDE_DIR)
+string(CONCAT LAST_INCLUDE_DIR_WITH_QUOTE ${LAST_INCLUDE_DIR} "\"")
+list(POP_BACK common_compile_options)
+list(APPEND common_compile_options ${LAST_INCLUDE_DIR_WITH_QUOTE})
 
 # Convert the list to a string with spaces between the options
 string(REPLACE ";" " " common_compile_options_string "${common_compile_options}")
 
-# Fonction pour vérifier le type de fichier
-function(check_file_type FILENAME TYPE_VARIABLE)
-    string(REGEX MATCH "\\.(cpp|hpp)$" IS_CPP_OR_HPP "${FILENAME}")
-    set(${TYPE_VARIABLE} ${IS_CPP_OR_HPP} PARENT_SCOPE)
-endfunction()
+# Filter the source files to keep only .cpp and .hpp files
+list(FILTER SOURCES INCLUDE REGEX "\\.(cpp|hpp)$")
 
 set(compile_commands "")
 foreach(SOURCE_FILE ${SOURCES})
-    # Vérifier le type de fichier
-    check_file_type(${SOURCE_FILE} IS_CPP_OR_HPP_FILE)
+    # Create a JSON string for each .cpp or .hpp source file
+    string(APPEND compile_commands
+        "    {\n"
+        "        \"directory\": \"${CMAKE_CURRENT_BINARY_DIR}\",\n"
+        "        \"command\": \"\\\"${CMAKE_CXX_COMPILER}\\\" -x c++ \\\"${SOURCE_FILE}\\\""
+    )
 
-    if (IS_CPP_OR_HPP_FILE)
-        # Créer une chaîne JSON pour chaque fichier source .cpp ou .hpp
-        string(APPEND compile_commands
-            "    {\n"
-            "        \"directory\": \"${build_directory}\",\n"
-            "        \"command\": \"\\\"${CMAKE_CXX_COMPILER}\\\" -x c++ \\\"${SOURCE_FILE}\\\""
-        )
+    # Add the common compile options
+    foreach(OPTION ${common_compile_options})
+        string(APPEND compile_commands " ${OPTION}") 
+    endforeach()
 
-        # Ajouter les options de compilation communes
-        foreach(OPTION ${common_compile_options})
-            if(NOT OPTION STREQUAL "ignore\"")
-                string(APPEND compile_commands " ${OPTION}") 
-            endif()
-        endforeach()
-
-        # Ajouter le reste de la commande et les métadonnées JSON
-        string(APPEND compile_commands
-            ",\n"
-            "        \"file\": \"${SOURCE_FILE}\"\n"
-            "    },\n"
-        )
-    endif()
+    # Add the rest of the command and JSON metadata
+    string(APPEND compile_commands
+        ",\n"
+        "        \"file\": \"${SOURCE_FILE}\"\n"
+        "    },\n"
+    )
 endforeach()
 
-# Éliminer la virgule finale
+# Remove the final comma
 string(REGEX REPLACE ",\n$" "" compile_commands "${compile_commands}")
 
-# Ajouter les crochets pour former une liste JSON
+# Add brackets to form a JSON list
 set(compile_commands "[\n${compile_commands}\n]")
 
-# Écrire les entrées dans un fichier JSON
-file(WRITE ${build_directory}/compile_commands.json "${compile_commands}")
+# Write the entries to a JSON file
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json "${compile_commands}")
 
-# Ajoutez la cible personnalisée pour générer compile_commands.json
+# Add the custom target to generate compile_commands.json
 add_custom_target(generate_compile_commands
-    DEPENDS ${build_directory}/compile_commands.json
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json
     COMMENT "Generating compile_commands.json"
 )

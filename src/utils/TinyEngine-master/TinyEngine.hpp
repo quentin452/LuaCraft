@@ -26,6 +26,7 @@
 #include <SDL_ttf.h>
 #include <glm.hpp>
 
+
 // Include Utility Headers
 #ifndef TINYENGINE_UTILITIES
 #define TINYENGINE_UTILITIES

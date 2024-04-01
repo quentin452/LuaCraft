@@ -6,6 +6,7 @@
 #include <imgui/imgui.h>
 #include <iostream>
 
+
 bool View::init(std::string _name, int W, int H) {
   enabled = windowed;
   WIDTH = W;

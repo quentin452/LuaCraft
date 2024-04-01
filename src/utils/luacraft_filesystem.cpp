@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 
+
 bool luacraft_filesystem::directoryExists(const std::string &path) {
   struct stat info;
   if (stat(path.c_str(), &info) != 0)
