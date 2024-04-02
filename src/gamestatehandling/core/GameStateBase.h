@@ -1,14 +1,15 @@
 #pragma once
 #include <GLFW/glfw3.h>
+#include <SDL.h>
 
 class GameState {
 public:
-  virtual void handleInput(GLFWwindow *window) = 0;
+  virtual void handleInput(SDL_Window *window) = 0;
   virtual void update() = 0;
-  virtual void draw(GLFWwindow *window) = 0;
+  virtual void draw(SDL_Window *window) = 0;
   virtual ~GameState() {}
   virtual void cleanup() {}
-  virtual void framebufferSizeCallbackGameState(GLFWwindow *window, int width,
+  virtual void framebufferSizeCallbackGameState(SDL_Window *window, int width,
                                                 int height) {}
-  virtual void calculateButtonPositionsAndSizes(GLFWwindow *window) {}
+  virtual void calculateButtonPositionsAndSizes(SDL_Window *window) {}
 };

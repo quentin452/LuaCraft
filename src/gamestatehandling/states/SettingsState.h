@@ -15,18 +15,18 @@
 
 class SettingsState : public GameState {
 public:
-  SettingsState(GLFWwindow *window, GameStateManager &manager);
-  void handleInput(GLFWwindow *window) override;
+  SettingsState(SDL_Window *window, GameStateManager &manager);
+  void handleInput(SDL_Window *window) override;
   void update() override;
-  void draw(GLFWwindow *window) override;
+  void draw(SDL_Window *window) override;
   void initializeGLText();
-  void calculateButtonPositionsAndSizes(GLFWwindow *window) override;
-  void framebufferSizeCallbackGameState(GLFWwindow *window, int width,
+  void calculateButtonPositionsAndSizes(SDL_Window *window) override;
+  void framebufferSizeCallbackGameState(SDL_Window *window, int width,
                                         int height) override;
   void cleanup() override {
     gltDeleteText(titleText), gltDeleteText(option1Text);
   }
-  static void framebufferSizeCallbackWrapper(GLFWwindow *window, int width,
+  static void framebufferSizeCallbackWrapper(SDL_Window *window, int width,
                                              int height);
 
 private:
@@ -40,7 +40,7 @@ private:
   GLfloat textHeight2;
   GLTtext *titleText = nullptr;
   GLTtext *option1Text = nullptr;
-  GLFWwindow *m_window;
+  SDL_Window *m_window;
   GameStateManager &m_manager;
   float buttonScale = 1.0f;
   float titlePositionX;
@@ -53,7 +53,6 @@ private:
   double ypos;
   float optionWidth;
   float optionHeight;
-  bool mouseButtonPressed = false;
   int screenWidth;
   int screenHeight;
 };

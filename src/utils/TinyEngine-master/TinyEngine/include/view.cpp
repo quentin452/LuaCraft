@@ -6,7 +6,6 @@
 #include <imgui/imgui.h>
 #include <iostream>
 
-
 bool View::init(std::string _name, int W, int H) {
   enabled = windowed;
   WIDTH = W;
@@ -120,3 +119,9 @@ void View::target(glm::vec3 clearcolor, bool clearc, bool cleard) {
   if (cleard)
     glClear(GL_DEPTH_BUFFER_BIT);
 }
+
+void View::targetNoClear(glm::vec3 clearcolor, bool clearc, bool cleard) {
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glViewport(0, 0, WIDTH, HEIGHT);
+}
+SDL_Window *View::getSDLWindow() { return gWindow; }

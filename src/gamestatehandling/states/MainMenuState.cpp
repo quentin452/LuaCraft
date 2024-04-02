@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 
 #include <GLFW/glfw3.h>
+#include <SDL.h>
 
 #define GLT_IMPLEMENTATION
 #include "../../LuaCraftGlobals.h"
@@ -14,12 +15,12 @@
 #include <iostream>
 #include <vector>
 
-MainMenuState::MainMenuState(GLFWwindow *window, GameStateManager &manager)
+MainMenuState::MainMenuState(SDL_Window *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
+  SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
                          &LuaCraftGlobals::WindowHeight);
-  glfwSetWindowUserPointer(window, this);
+  SDL_SetWindowData(window, "userPointer", this);
 }
 
 void MainMenuState::initializeGLText() {
@@ -43,12 +44,12 @@ GLTtext *MainMenuState::CreateTextUsingGLText(const char *text,
   return newText;
 }
 
-void MainMenuState::framebufferSizeCallbackGameState(GLFWwindow *window,
+void MainMenuState::framebufferSizeCallbackGameState(SDL_Window *window,
                                                      int width, int height) {
   calculateButtonPositionsAndSizes(window);
 }
-void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
-  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
+void MainMenuState::calculateButtonPositionsAndSizes(SDL_Window *window) {
+  SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
                          &LuaCraftGlobals::WindowHeight);
   textPosX1 = (float(LuaCraftGlobals::WindowWidth) - textWidth1) / 2.0f;
   textPosY1 = (float(LuaCraftGlobals::WindowHeight) - textHeight1) / 2.0f;
@@ -60,10 +61,10 @@ void MainMenuState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
       (float(LuaCraftGlobals::WindowHeight) - textHeightForTitle) / 4.0f;
 }
 
-void MainMenuState::handleInput(GLFWwindow *window) {
-  glfwGetCursorPos(window, &xpos, &ypos);
-  bool mouseClicked = handleMouseInput(
-      window, xpos, ypos, GLFW_MOUSE_BUTTON_LEFT, mouseButtonPressed);
+void MainMenuState::handleInput(SDL_Window *window) {
+  int xpos, ypos;
+  SDL_GetMouseState(&xpos, &ypos);
+  bool mouseClicked = handleMouseInput(window, xpos, ypos, SDL_BUTTON_LEFT);
   if (mouseClicked) {
     auto windowX = static_cast<int>(xpos);
     auto windowY = static_cast<int>(ypos);
@@ -84,23 +85,22 @@ void MainMenuState::handleInput(GLFWwindow *window) {
   }
 }
 
-bool MainMenuState::handleMouseInput(GLFWwindow *window, double xpos,
-                                     double ypos, int button,
-                                     bool &mouseButtonPressed) const {
-  int mouseState = glfwGetMouseButton(window, button);
-  if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
-    mouseButtonPressed = true;
-    glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
-                           &LuaCraftGlobals::WindowHeight);
+bool MainMenuState::handleMouseInput(SDL_Window *window, double xpos,
+                                     double ypos, int button) const {
+  int x, y;
+  Uint32 mouseState = SDL_GetMouseState(&x, &y);
+  if (mouseState & SDL_BUTTON(button)) {
+    int width, height;
+    SDL_GL_GetDrawableSize(window, &width, &height);
+    LuaCraftGlobals::WindowWidth = width;
+    LuaCraftGlobals::WindowHeight = height;
     return true;
-  } else if (mouseState == GLFW_RELEASE) {
-    mouseButtonPressed = false;
   }
   return false;
 }
 void MainMenuState::update() {}
 
-void MainMenuState::draw(GLFWwindow *window) {
+void MainMenuState::draw(SDL_Window *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   gltBeginDraw();
   gltColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -108,5 +108,4 @@ void MainMenuState::draw(GLFWwindow *window) {
   gltDrawText2D(text1, textPosX1, textPosY1, buttonScale);
   gltDrawText2D(text2, textPosX2, textPosY2, buttonScale);
   gltEndDraw();
-  glfwSwapBuffers(window);
 }

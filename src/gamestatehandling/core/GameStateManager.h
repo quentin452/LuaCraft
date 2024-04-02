@@ -13,7 +13,7 @@ private:
   double lastStateChangeTime = 0.0;
 
 public:
-  void SetGameState(std::unique_ptr<GameState> state, GLFWwindow *window);
+  void SetGameState(std::unique_ptr<GameState> state, SDL_Window *window);
   GameState &GetGameState();
 
   double getLastStateChangeTime() const;

@@ -9,7 +9,7 @@ GLfloat vertices[] = {
     0.0f,  1.0f,  0.0f  // Vertex 3
 };
 
-OpenGLGameState::OpenGLGameState(GLFWwindow *window, GameStateManager &manager)
+OpenGLGameState::OpenGLGameState(SDL_Window *window, GameStateManager &manager)
     : m_window(window), manager(manager) {
   // Initialisation OpenGL
   glEnable(GL_DEPTH_TEST); // Activer le test de profondeur
@@ -36,7 +36,7 @@ OpenGLGameState::OpenGLGameState(GLFWwindow *window, GameStateManager &manager)
   glBindVertexArray(0);
 }
 
-void OpenGLGameState::handleInput(GLFWwindow *window) {
+void OpenGLGameState::handleInput(SDL_Window *window) {
   // Gérer les entrées utilisateur pour OpenGLGameState
 }
 
@@ -44,10 +44,7 @@ void OpenGLGameState::update() {
   // Mettre à jour l'état de OpenGLGameState
 }
 
-void OpenGLGameState::draw(GLFWwindow *window) {
-  // Effacer l'écran
-  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void OpenGLGameState::draw(SDL_Window *window) {
 
   // Utiliser le programme de shader
   glUseProgram(m_shaderProgram);
@@ -60,9 +57,6 @@ void OpenGLGameState::draw(GLFWwindow *window) {
 
   // Délier le VAO
   glBindVertexArray(0);
-
-  // Échanger les tampons avant et arrière
-  glfwSwapBuffers(window);
 }
 
 GLuint OpenGLGameState::compileAndLinkShaders() {

@@ -3,7 +3,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-
 #define GLT_IMPLEMENTATION
 #include "MainMenuState.h"
 #include "SettingsState.h"
@@ -14,21 +13,21 @@
 
 class MainMenuState : public GameState {
 public:
-  MainMenuState(GLFWwindow *window, GameStateManager &manager);
-  void handleInput(GLFWwindow *window) override;
+  MainMenuState(SDL_Window *window, GameStateManager &manager);
+  void handleInput(SDL_Window *window) override;
   void update() override;
-  void draw(GLFWwindow *window) override;
-  void calculateButtonPositionsAndSizes(GLFWwindow *window) override;
-  void framebufferSizeCallbackGameState(GLFWwindow *window, int width,
+  void draw(SDL_Window *window) override;
+  void calculateButtonPositionsAndSizes(SDL_Window *window) override;
+  void framebufferSizeCallbackGameState(SDL_Window *window, int width,
                                         int height) override;
   void cleanup() override {
     gltDeleteText(titlescreen), gltDeleteText(text1), gltDeleteText(text2);
   }
   void initializeGLText();
-  static void framebufferSizeCallbackWrapper(GLFWwindow *window, int width,
+  static void framebufferSizeCallbackWrapper(SDL_Window *window, int width,
                                              int height);
-  bool handleMouseInput(GLFWwindow *window, double xpos, double ypos,
-                        int button, bool &mouseButtonPressed) const;
+  bool handleMouseInput(SDL_Window *window, double xpos, double ypos,
+                        int button) const;
   GLTtext *CreateTextUsingGLText(const char *text, float buttonScale,
                                  float &textWidth, float &textHeight);
 
@@ -48,7 +47,7 @@ private:
   GLTtext *text1 = nullptr;
   GLTtext *text2 = nullptr;
   GLTtext *titlescreen = nullptr;
-  GLFWwindow *m_window;
+  SDL_Window *m_window;
   GameStateManager &m_manager;
   GLTtext *glText = nullptr;
   float buttonScale = 1.0f;
@@ -62,7 +61,6 @@ private:
   float optionHeight;
   int titleFontSize;
   int optionFontSize;
-  bool mouseButtonPressed = false;
   int screenWidth;
   int screenHeight;
   double textInteractionWidth1;

@@ -3,11 +3,11 @@
 #include <string>
 class OpenGLGameState : public GameState {
 public:
-  OpenGLGameState(GLFWwindow *window, GameStateManager &manager);
+  OpenGLGameState(SDL_Window *window, GameStateManager &manager);
 
-  void handleInput(GLFWwindow *window) override;
+  void handleInput(SDL_Window *window) override;
   void update() override;
-  void draw(GLFWwindow *window) override;
+  void draw(SDL_Window *window) override;
 
   void cleanup() override {
     glDeleteBuffers(1, &m_VBO);
@@ -17,7 +17,7 @@ public:
   }
 
 private:
-  GLFWwindow *m_window;
+  SDL_Window *m_window;
   GameStateManager &manager;
   GLuint m_shaderProgram;
   const char *vertexShaderSource =

@@ -8,7 +8,6 @@
 #include "imgui-backend/backends/imgui_impl_sdl2.h"
 #include "imgui/imgui.h" // Interface Dependencies
 
-
 #include <functional>
 #include <glm.hpp>
 
@@ -16,6 +15,7 @@ using Handle = std::function<void()>;
 
 class View {
 public:
+  SDL_Window *getSDLWindow();
   bool init(std::string windowName, int width, int height);
   void quit();
   bool enabled = false;
@@ -33,6 +33,8 @@ public:
   Handle pipeline = []() {}; // User defined Pipeline
   void render();
   void target(glm::vec3 clearcolor, bool clearc = true,
+              bool cleard = true); // Target main window for drawing
+  void targetNoClear(glm::vec3 clearcolor, bool clearc = true,
               bool cleard = true); // Target main window for drawing
 
   bool windowed = false;

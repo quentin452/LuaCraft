@@ -3,13 +3,13 @@
 #include <string>
 class VulkanGameState : public GameState {
 public:
-  VulkanGameState(GLFWwindow *window, GameStateManager &manager);
+  VulkanGameState(SDL_Window *window, GameStateManager &manager);
 
-  void handleInput(GLFWwindow *window) override;
+  void handleInput(SDL_Window *window) override;
   void update() override;
-  void draw(GLFWwindow *window) override;
+  void draw(SDL_Window *window) override;
 
 private:
-  GLFWwindow *m_window;
+  SDL_Window *m_window;
   GameStateManager &manager;
 };

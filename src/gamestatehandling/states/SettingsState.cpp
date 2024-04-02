@@ -2,7 +2,7 @@
 #include "../../LuaCraftGlobals.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
+#include <SDL.h>
 
 #define GLT_IMPLEMENTATION
 
@@ -16,12 +16,12 @@
 #include "SettingsState.h"
 #include "gameplaying/VulkanGameState.h"
 
-SettingsState::SettingsState(GLFWwindow *window, GameStateManager &manager)
+SettingsState::SettingsState(SDL_Window *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
+  SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
                          &LuaCraftGlobals::WindowHeight);
-  glfwSetWindowUserPointer(window, this);
+  SDL_SetWindowData(window, "userPointer", this);
 }
 
 void SettingsState::initializeGLText() {
@@ -38,13 +38,13 @@ void SettingsState::initializeGLText() {
   textHeight2 = gltGetTextHeight(option1Text, buttonScale);
 }
 
-void SettingsState::framebufferSizeCallbackGameState(GLFWwindow *window,
+void SettingsState::framebufferSizeCallbackGameState(SDL_Window *window,
                                                      int width, int height) {
   calculateButtonPositionsAndSizes(window);
 }
 
-void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
-  glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
+void SettingsState::calculateButtonPositionsAndSizes(SDL_Window *window) {
+  SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
                          &LuaCraftGlobals::WindowHeight);
   titlePositionX = (float(LuaCraftGlobals::WindowWidth) - textWidth1) / 2.0f;
   titlePositionY = (float(LuaCraftGlobals::WindowHeight) - textHeight1) / 4.0f;
@@ -53,14 +53,15 @@ void SettingsState::calculateButtonPositionsAndSizes(GLFWwindow *window) {
   option1PositionY =
       (float(LuaCraftGlobals::WindowHeight) - textHeight2) / 2.0f + 50.0f;
 }
-
-void SettingsState::handleInput(GLFWwindow *window) {
-  glfwGetCursorPos(window, &xpos, &ypos);
-  int mouseState = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-  if (mouseState == GLFW_PRESS && !mouseButtonPressed) {
-    mouseButtonPressed = true;
-    glfwGetFramebufferSize(window, &LuaCraftGlobals::WindowWidth,
-                           &LuaCraftGlobals::WindowHeight);
+void SettingsState::handleInput(SDL_Window *window) {
+  int xpos, ypos;
+  SDL_GetMouseState(&xpos, &ypos);
+  const Uint32 mouseState = SDL_GetMouseState(nullptr, nullptr);
+  if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+    int width, height;
+    SDL_GL_GetDrawableSize(window, &width, &height);
+    LuaCraftGlobals::WindowWidth = width;
+    LuaCraftGlobals::WindowHeight = height;
     double normalizedX = 2.0 * xpos / LuaCraftGlobals::WindowWidth - 1.0;
     double normalizedY = 1.0 - 2.0 * ypos / LuaCraftGlobals::WindowHeight;
     auto windowX =
@@ -75,14 +76,11 @@ void SettingsState::handleInput(GLFWwindow *window) {
       m_manager.SetGameState(std::make_unique<MainMenuState>(window, m_manager),
                              window);
     }
-  } else if (mouseState == GLFW_RELEASE) {
-    mouseButtonPressed = false;
   }
 }
-
 void SettingsState::update() {}
 
-void SettingsState::draw(GLFWwindow *window) {
+void SettingsState::draw(SDL_Window *window) {
   glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
   gltBeginDraw();
   gltColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -91,5 +89,4 @@ void SettingsState::draw(GLFWwindow *window) {
   gltDrawText2D(option1Text, option1PositionX, option1PositionY, buttonScale);
 
   gltEndDraw();
-  glfwSwapBuffers(window);
 }
