@@ -27,9 +27,7 @@
 #include "utils/TinyEngine-master/TinyEngine/include/audio.hpp"
 int WINDOW_WIDTH = 1280;
 int WINDOW_HEIGHT = 720;
-bool resizing = false;
 void framebufferSizeCallback(SDL_Window *window, int width, int height) {
-  std::cout << "framebufferSizeCallback call before" << std::endl;
   SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
                          &LuaCraftGlobals::WindowHeight);
   glViewport(0, 0, LuaCraftGlobals::WindowWidth, LuaCraftGlobals::WindowHeight);
@@ -87,9 +85,6 @@ int main(int argc, char *args[]) {
     SDL_GetWindowSize(window, &WINDOW_WIDTH, &WINDOW_HEIGHT);
     if (WINDOW_WIDTH != LuaCraftGlobals::WindowWidth ||
         WINDOW_HEIGHT != LuaCraftGlobals::WindowHeight) {
-      resizing = true;
-      std::cout << "Call framebufferSizeCallback: " << WINDOW_WIDTH << ", "
-                << WINDOW_HEIGHT << std::endl;
       framebufferSizeCallback(window, WINDOW_WIDTH, WINDOW_HEIGHT);
       LuaCraftGlobals::WindowWidth = WINDOW_WIDTH;
       LuaCraftGlobals::WindowHeight = WINDOW_HEIGHT;
