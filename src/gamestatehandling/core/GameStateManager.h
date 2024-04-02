@@ -11,6 +11,6 @@ class GameStateManager {
 private:
   static std::unique_ptr<GameState> currentState;
 public:
-  void SetGameState(std::unique_ptr<GameState> state, SDL_Window *window);
+  void SetGameState(std::unique_ptr<GameState> state, SDL_Window *window)const;
   GameState &GetGameState();
 };

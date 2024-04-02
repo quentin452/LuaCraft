@@ -8,7 +8,7 @@
 std::unique_ptr<GameState> GameStateManager::currentState = nullptr;
 
 void GameStateManager::SetGameState(std::unique_ptr<GameState> state,
-                                    SDL_Window *window) {
+                                    SDL_Window *window) const{
   if (currentState) {
     currentState->cleanup();
   }
