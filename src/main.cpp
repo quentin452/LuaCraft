@@ -11,6 +11,10 @@
 #include "utils/threads_starter.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include <cstdlib>
 #include <fstream>
 #include <imgui/imgui.h>
@@ -19,26 +23,24 @@
 #include <sys/stat.h>
 #include <thread>
 
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
-#include <SDL_ttf.h>
-
 #include "utils/TinyEngine-master/TinyEngine.hpp"
 #include "utils/TinyEngine-master/TinyEngine/include/audio.hpp"
-constexpr int WINDOW_WIDTH = 1280;
-constexpr int WINDOW_HEIGHT = 720;
+int WINDOW_WIDTH = 1280;
+int WINDOW_HEIGHT = 720;
+bool resizing = false;
 void framebufferSizeCallback(SDL_Window *window, int width, int height) {
-  glViewport(0, 0, width, height);
+  std::cout << "framebufferSizeCallback call before" << std::endl;
+  SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
+                         &LuaCraftGlobals::WindowHeight);
+  glViewport(0, 0, LuaCraftGlobals::WindowWidth, LuaCraftGlobals::WindowHeight);
   if (LuaCraftGlobals::GameState_Manager) {
     LuaCraftGlobals::GameState_Manager->GetGameState()
-        .framebufferSizeCallbackGameState(window, width, height);
+        .framebufferSizeCallbackGameState(window, LuaCraftGlobals::WindowWidth,
+                                          LuaCraftGlobals::WindowHeight);
   }
 }
 
 int main(int argc, char *args[]) {
-
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
   // Start LuaCraft threads
   threads_starter::LuaCraftStartAllThreads();
@@ -67,7 +69,11 @@ int main(int argc, char *args[]) {
   LuaCraftGlobals::GameState_Manager = &manager;
 
   // Add the Event Handler
-  Tiny::event.handler = [&]() {};
+  Tiny::event.handler = [&]() {
+    if (Tiny::event.click[SDL_BUTTON_LEFT]) {
+      manager.GetGameState().handleInput(window);
+    }
+  };
 
   // Set up an ImGUI Interface here
   Tiny::view.interface = [&]() {};
@@ -75,60 +81,24 @@ int main(int argc, char *args[]) {
   // Define the rendering pipeline
   Tiny::view.pipeline = []() { Tiny::view.targetNoClear(glm::vec3(1)); };
 
+  SDL_Event event;
   // Execute the render loop
   Tiny::loop([&]() {
-    // Vérifiez si la taille de la fenêtre a changé
-    int width, height;
-    SDL_GetWindowSize(window, &width, &height);
-    if (width != LuaCraftGlobals::WindowWidth ||
-        height != LuaCraftGlobals::WindowHeight) {
-      LuaCraftGlobals::WindowWidth = width;
-      LuaCraftGlobals::WindowHeight = height;
-      framebufferSizeCallback(window, width, height);
+    SDL_GetWindowSize(window, &WINDOW_WIDTH, &WINDOW_HEIGHT);
+    if (WINDOW_WIDTH != LuaCraftGlobals::WindowWidth ||
+        WINDOW_HEIGHT != LuaCraftGlobals::WindowHeight) {
+      resizing = true;
+      std::cout << "Call framebufferSizeCallback: " << WINDOW_WIDTH << ", "
+                << WINDOW_HEIGHT << std::endl;
+      framebufferSizeCallback(window, WINDOW_WIDTH, WINDOW_HEIGHT);
+      LuaCraftGlobals::WindowWidth = WINDOW_WIDTH;
+      LuaCraftGlobals::WindowHeight = WINDOW_HEIGHT;
     }
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     manager.GetGameState().update();
     manager.GetGameState().draw(window);
     SDL_GL_SwapWindow(window);
-
-    // Traitez tous les événements en attente
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-      switch (event.type) {
-      case SDL_MOUSEBUTTONDOWN:
-        if (event.button.button == SDL_BUTTON_LEFT) {
-          manager.GetGameState().handleInput(window);
-        }
-        break;
-      case SDL_MOUSEBUTTONUP:
-        break;
-      }
-    }
   });
-  /*bool mouseButtonPressed = false;
-
-  SDL_Event event;
-  while (SDL_PollEvent(&event)) {
-    switch (event.type) {
-    case SDL_MOUSEBUTTONDOWN:
-      if (event.button.button == SDL_BUTTON_LEFT) {
-        mouseButtonPressed = true;
-      }
-      break;
-    case SDL_MOUSEBUTTONUP:
-      if (event.button.button == SDL_BUTTON_LEFT) {
-        mouseButtonPressed = false;
-      }
-      break;
-    }
-  }
-
-  // Dans votre boucle de jeu
-  if (mouseButtonPressed) {
-    // Le bouton de la souris est enfoncé, exécutez votre fonction
-    manager.GetGameState().handleInput(window);
-  }
-  */
   // Clean up resources
   LuaCraftGlobals::LoggerInstance.ExitLoggerThread();
   SDL_DestroyWindow(window);

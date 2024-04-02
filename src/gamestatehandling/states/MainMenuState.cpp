@@ -18,8 +18,6 @@
 MainMenuState::MainMenuState(SDL_Window *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {
   initializeGLText();
-  SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
-                         &LuaCraftGlobals::WindowHeight);
   SDL_SetWindowData(window, "userPointer", this);
 }
 
@@ -49,8 +47,6 @@ void MainMenuState::framebufferSizeCallbackGameState(SDL_Window *window,
   calculateButtonPositionsAndSizes(window);
 }
 void MainMenuState::calculateButtonPositionsAndSizes(SDL_Window *window) {
-  SDL_GL_GetDrawableSize(window, &LuaCraftGlobals::WindowWidth,
-                         &LuaCraftGlobals::WindowHeight);
   textPosX1 = (float(LuaCraftGlobals::WindowWidth) - textWidth1) / 2.0f;
   textPosY1 = (float(LuaCraftGlobals::WindowHeight) - textHeight1) / 2.0f;
   textPosX2 = (float(LuaCraftGlobals::WindowWidth) - textWidth2) / 2.0f;
@@ -90,10 +86,6 @@ bool MainMenuState::handleMouseInput(SDL_Window *window, double xpos,
   int x, y;
   Uint32 mouseState = SDL_GetMouseState(&x, &y);
   if (mouseState & SDL_BUTTON(button)) {
-    int width, height;
-    SDL_GL_GetDrawableSize(window, &width, &height);
-    LuaCraftGlobals::WindowWidth = width;
-    LuaCraftGlobals::WindowHeight = height;
     return true;
   }
   return false;
