@@ -15,7 +15,6 @@ void GameStateManager::SetGameState(std::unique_ptr<GameState> state,
   currentState = std::move(state);
   if (window) {
     currentState->calculateButtonPositionsAndSizes(window);
-    lastStateChangeTime = SDL_GetTicks() / 1000.0;
   } else {
     LuaCraftGlobals::LoggerInstance.logMessageAsync(
         LogLevel::ERROR, "Trying to change GameState with no window");
@@ -23,7 +22,3 @@ void GameStateManager::SetGameState(std::unique_ptr<GameState> state,
 }
 
 GameState &GameStateManager::GetGameState() { return *currentState; }
-
-double GameStateManager::getLastStateChangeTime() const {
-  return lastStateChangeTime;
-}
