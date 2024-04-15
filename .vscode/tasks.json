@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build-ArkModIC-release",
+            "label": "build-LUACRAFT-release",
             "type": "shell",
             "command": "powershell.exe",
             "args": [
@@ -23,7 +23,7 @@
             "problemMatcher": []
         },
         {
-            "label": "build-ArkModIC-debug",
+            "label": "build-LUACRAFT-debug",
             "type": "shell",
             "command": "powershell.exe",
             "args": [
@@ -44,7 +44,7 @@
             "problemMatcher": []
         },
         {
-            "label": "run-ArkModIC-release",
+            "label": "run-LUACRAFT-release",
             "type": "process",
             "command": "${workspaceFolder}/build/Release/LUACRAFT.exe",
             "group": {
@@ -56,11 +56,11 @@
                 "panel": "shared"
             },
             "dependsOn": [
-                "build-ArkModIC-release"
+                "build-LUACRAFT-release"
             ]
         },
         {
-            "label": "run-ArkModIC-debug",
+            "label": "run-LUACRAFT-debug",
             "type": "process",
             "command": "${workspaceFolder}/build-debug/Debug/LUACRAFT.exe",
             "group": {
@@ -72,7 +72,7 @@
                 "panel": "shared"
             },
             "dependsOn": [
-                "build-ArkModIC-debug"
+                "build-LUACRAFT-debug"
             ]
         }
     ]
