@@ -6,15 +6,15 @@
 #include "gltext.h"
 #include "utils/TinyEngine-master/TinyEngine/include/imgui-backend/backends/imgui_impl_opengl3.h"
 #include "utils/TinyEngine-master/TinyEngine/include/imgui-backend/backends/imgui_impl_sdl2.h"
-#include "utils/luacraft_filesystem.h"
-#include "utils/luacraft_logger.h"
-#include "utils/threads_starter.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
+#include <ThreadedLoggerForCPP/LoggerFileSystem.hpp>
+#include <ThreadedLoggerForCPP/LoggerGlobals.hpp>
+#include <ThreadedLoggerForCPP/LoggerThread.hpp>
 #include <cstdlib>
 #include <fstream>
 #include <imgui/imgui.h>
@@ -22,6 +22,7 @@
 #include <string>
 #include <sys/stat.h>
 #include <thread>
+
 
 #include "utils/TinyEngine-master/TinyEngine.hpp"
 #include "utils/TinyEngine-master/TinyEngine/include/audio.hpp"
@@ -40,18 +41,25 @@ void framebufferSizeCallback(SDL_Window *window, int width, int height) {
 
 int main(int argc, char *args[]) {
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  // Start LuaCraft threads
-  threads_starter::LuaCraftStartAllThreads();
-  // Create necessary directories and files
-  luacraft_filesystem::createDirectories("C:\\Users\\" +
-                                         LuaCraftGlobals::UsernameDirectory +
-                                         "\\.LuaCraft\\cpp_rewrite\\");
-  luacraft_filesystem::createDirectories("C:\\Users\\" +
-                                         LuaCraftGlobals::UsernameDirectory +
-                                         "\\.LuaCraft\\cpp_rewrite\\LogBackup");
-  luacraft_filesystem::createFile("C:\\Users\\" +
-                                  LuaCraftGlobals::UsernameDirectory +
-                                  "\\.LuaCraft\\cpp_rewrite\\LuaCraftCPP.log");
+  LoggerGlobals::UsernameDirectory = std::getenv("USERNAME");
+
+  // Create Log File and folder
+  LoggerGlobals::LogFolderPath = "C:\\Users\\" +
+                                 LoggerGlobals::UsernameDirectory +
+                                 "\\.LuaCraft\\cpp_rewrite\\logging\\";
+  LoggerGlobals::LogFilePath =
+      "C:\\Users\\" + LoggerGlobals::UsernameDirectory +
+      "\\.LuaCraft\\cpp_rewrite\\logging\\LuaCraftCPP.log";
+  LoggerGlobals::LogFolderBackupPath =
+      "C:\\Users\\" + LoggerGlobals::UsernameDirectory +
+      "\\.LuaCraft\\cpp_rewrite\\logging\\LogBackup";
+  LoggerGlobals::LogFileBackupPath =
+      "C:\\Users\\" + LoggerGlobals::UsernameDirectory +
+      "\\.LuaCraft\\cpp_rewrite\\logging\\LogBackup\\LuaCraftCPP-";
+
+  LuaCraftGlobals::LoggerInstance.StartLoggerThread(
+      LoggerGlobals::LogFolderPath, LoggerGlobals::LogFilePath,
+      LoggerGlobals::LogFolderBackupPath, LoggerGlobals::LogFileBackupPath);
 
   // Initialize Settings
   Tiny::view.vsync = false;

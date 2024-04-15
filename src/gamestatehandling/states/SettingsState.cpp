@@ -10,11 +10,11 @@
 #include <iostream>
 #include <vector>
 
-#include "../../utils/luacraft_logger.h"
 #include "../core/GameStatesUtils.h"
 #include "MainMenuState.h"
 #include "SettingsState.h"
 #include "gameplaying/VulkanGameState.h"
+#include <ThreadedLoggerForCPP/LoggerGlobals.hpp>
 
 SettingsState::SettingsState(SDL_Window *window, GameStateManager &manager)
     : m_window(window), m_manager(manager) {

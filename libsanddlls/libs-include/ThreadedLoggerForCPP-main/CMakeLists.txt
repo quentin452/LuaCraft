@@ -1,7 +1,12 @@
 cmake_minimum_required(VERSION 3.28)
-project(LUACRAFT)
+project(ThreadedLoggerForCPP VERSION 0.1.0 LANGUAGES C CXX)
 
-add_definitions(-D_ITERATOR_DEBUG_LEVEL=0)
+include(CTest)
+enable_testing()
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
 
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRTD")
 
@@ -11,7 +16,7 @@ set(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
 # Set common directories
 set(DLL_DIR "${CMAKE_SOURCE_DIR}/libsanddlls/dlls")
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/libsanddlls/libs")
-set(LIBRAIRIES_DIR "${CMAKE_SOURCE_DIR}/libsanddlls/libs-include")
+set(LIBRAIRIES_DIR "${CMAKE_SOURCE_DIR}")
 set(SRC_DIR "${CMAKE_SOURCE_DIR}/src")
 
 # Find source files
@@ -21,32 +26,8 @@ set(SOURCES_FILES ${SOURCES})
 
 # External libraries include directories
 set(ALL_INCLUDE_DIR
-    "${LIBRAIRIES_DIR}/ThreadedLoggerForCPP-main/libs/include"
-    "${LIBRAIRIES_DIR}/freetype-2.8.1/include"
-    "${LIBRAIRIES_DIR}/glfw-3.4.bin.WIN64/include"
-    "${LIBRAIRIES_DIR}/Vulkan-Headers-main/include/vulkan"
-    "${LIBRAIRIES_DIR}/Vulkan-Headers-main/include/vk_video"
-    "${LIBRAIRIES_DIR}/glad/include/glad"
-    "${LIBRAIRIES_DIR}/stb"
-    "${LIBRAIRIES_DIR}/glew-2.1.0/include"
-    "${LIBRAIRIES_DIR}/gltext"
-    "${LIBRAIRIES_DIR}/SDL2-2.30.1/include"
-    "${LIBRAIRIES_DIR}/SDL2_ttf-2.22.0"
-    "${LIBRAIRIES_DIR}/SDL2_image-2.8.2/include"
-    "${LIBRAIRIES_DIR}/SDL2_mixer-2.8.0/include"
-    "${LIBRAIRIES_DIR}/boost_1_85_0"
-    "${LIBRAIRIES_DIR}/TinyEngine-master"
-    "${LIBRAIRIES_DIR}/glm-1.0.1-light/glm"
-    "${LIBRAIRIES_DIR}/eigen-3.4.0"
-    "${LIBRAIRIES_DIR}/imgui-x"
+"${LIBRAIRIES_DIR}/libs/include"
 )
-
-# External libraries libraries directories
-file(GLOB ALL_LIBRARIES_DIR "${LIB_DIR}/*.lib")
-
-
-set(BOOST_LIBRARY_DIR "${LIBRAIRIES_DIR}/boost_1_85_0/stage/lib")
-file(GLOB BOOST_LIBRARIES "${BOOST_LIBRARY_DIR}/*.lib")
 
 # Add executable
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -54,24 +35,6 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 # Target include directories
 target_include_directories(${PROJECT_NAME} PUBLIC ${ALL_INCLUDE_DIR})
 
-# Create a list of DLLs to copy
-file(GLOB DLL_LIST "${DLL_DIR}/*.dll")
-
-# Copy DLLs after build if they don't exist already
-foreach(DLL ${DLL_LIST})
-    file(TO_NATIVE_PATH "${DLL}" NATIVE_DLL_PATH)
-    get_filename_component(DLL_NAME "${DLL}" NAME)
-    set(DESTINATION_PATH "$<TARGET_FILE_DIR:${PROJECT_NAME}>/${DLL_NAME}")
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${NATIVE_DLL_PATH}"
-        "${DESTINATION_PATH}"
-        VERBATIM
-        )
-endforeach()
-
-# Link libraries
-target_link_libraries(${PROJECT_NAME} PRIVATE ${ALL_LIBRARIES_DIR} ${BOOST_LIBRARIES})
 
 # Common compilation options
 set(common_compile_options

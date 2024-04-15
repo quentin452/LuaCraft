@@ -5,12 +5,12 @@
 
 #define GLT_IMPLEMENTATION
 #include "../../LuaCraftGlobals.h"
-#include "../../utils/luacraft_logger.h"
 #include "../core/GameStatesUtils.h"
 #include "MainMenuState.h"
 #include "SettingsState.h"
 #include "gameplaying/OpenGLGameState.h"
 #include "gameplaying/VulkanGameState.h"
+#include <ThreadedLoggerForCPP/LoggerGlobals.hpp>
 #include <gltext.h>
 #include <iostream>
 #include <vector>

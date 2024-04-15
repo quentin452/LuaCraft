@@ -1,7 +1,8 @@
 #include <GL/glew.h>
 
 #include "../../LuaCraftGlobals.h"
-#include "../../utils/luacraft_logger.h"
+#include <ThreadedLoggerForCPP/LoggerGlobals.hpp>
+#include <ThreadedLoggerForCPP/LoggerThread.hpp>
 #include "GameStateManager.h"
 #include <GLFW/glfw3.h>
 #include <SDL.h>

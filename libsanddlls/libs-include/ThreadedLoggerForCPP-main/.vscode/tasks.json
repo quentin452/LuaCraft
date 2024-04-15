@@ -46,7 +46,7 @@
         {
             "label": "run-ArkModIC-release",
             "type": "process",
-            "command": "${workspaceFolder}/build/Release/LUACRAFT.exe",
+            "command": "${workspaceFolder}/build/Release/ThreadedLoggerForCPP.exe",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -62,7 +62,7 @@
         {
             "label": "run-ArkModIC-debug",
             "type": "process",
-            "command": "${workspaceFolder}/build-debug/Debug/LUACRAFT.exe",
+            "command": "${workspaceFolder}/build-debug/Debug/ThreadedLoggerForCPP.exe",
             "group": {
                 "kind": "build",
                 "isDefault": true
