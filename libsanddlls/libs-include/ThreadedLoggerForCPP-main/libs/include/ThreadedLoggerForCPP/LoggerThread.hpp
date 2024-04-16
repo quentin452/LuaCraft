@@ -24,8 +24,6 @@ enum class LogLevel { INFO, WARNING, ERROR, LOGICERROR };
 class LoggerThread {
 public:
   LoggerThread() : Done_Logger_Thread(false) {
-    logFile.open(LogFilePathForTheThread, std::ios::trunc);
-    logFile.close();
     std::thread workerThread(&LoggerThread::logWorker, this);
     workerThread.detach();
   }
@@ -38,9 +36,10 @@ public:
     Unlock_Logger_Thread.notify_one(); // Notify worker thread to stop
   }
 
-  void logMessageAsync(LogLevel level, const std::string &message) {
+  void logMessageAsync(LogLevel level, const std::string &sourceFile, int line,
+                       const std::string &message) {
     std::unique_lock<std::mutex> lock(mtx);
-    tasks.emplace([=] { logMessage(level, message); });
+    tasks.emplace([=] { logMessage(level, sourceFile, line, message); });
     Unlock_Logger_Thread.notify_one();
   }
 
@@ -106,9 +105,9 @@ private:
   }
 
   template <typename... Args>
-  void logMessage(LogLevel level, const Args &...args) {
+  void logMessage(LogLevel level, const std::string &sourceFile, int line,
+                  const Args &...args) {
     std::ostringstream oss;
-    oss << getTimestamp() << " ";
     switch (level) {
     case LogLevel::INFO:
       oss << "[INFO] ";
@@ -123,11 +122,30 @@ private:
       oss << "[LOGIC ERROR] ";
       break;
     }
+    oss << getTimestamp() << " [" << extractRelativePath(sourceFile) << ":"
+        << line << "] ";
     append(oss, args...);
     std::string message = oss.str();
     std::cout << message << std::endl;
     std::ofstream logFile(logFilePath_, std::ios::app);
-    logFile << message << std::endl;
+    logFile << message << std::endl; // Write to file
+  }
+
+  std::string extractRelativePath(const std::string &filePath) {
+    std::string relativePath;
+    size_t found = filePath.find_last_of("/\\");
+    if (found != std::string::npos) {
+      std::string folder = filePath.substr(0, found);
+      size_t srcIndex = folder.rfind(LoggerGlobals::SrcProjectDirectory);
+      if (srcIndex != std::string::npos) {
+        relativePath = folder.substr(srcIndex) + filePath.substr(found);
+      } else {
+        relativePath = filePath.substr(found);
+      }
+    } else {
+      relativePath = filePath;
+    }
+    return relativePath;
   }
 
   template <typename T> void append(std::ostringstream &oss, const T &arg) {
@@ -153,11 +171,8 @@ private:
                 << ".\n";
       src.close();
       return;
-    }
-    std::string line;
-    while (std::getline(src, line)) {
-      dst << line << std::endl;
-    }
+    };
+    dst << src.rdbuf(); // Efficiently copy file
     src.close();
     dst.close();
   }

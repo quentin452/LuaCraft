@@ -37,8 +37,8 @@ int main(int argc, char *args[]) {
   while (true) {
     // Log messages
     LuaCraftGlobals::LoggerInstance.logMessageAsync(
-        LogLevel::INFO, "Test Value: " + std::to_string(test));
-    LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO,
+        LogLevel::INFO,  __FILE__, __LINE__,"Test Value: " + std::to_string(test));
+    LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO, __FILE__, __LINE__,
                                                     "Finish Loop...");
 
     // Wait for some time before checking again

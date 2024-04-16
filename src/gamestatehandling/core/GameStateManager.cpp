@@ -18,7 +18,7 @@ void GameStateManager::SetGameState(std::unique_ptr<GameState> state,
     currentState->calculateButtonPositionsAndSizes(window);
   } else {
     LuaCraftGlobals::LoggerInstance.logMessageAsync(
-        LogLevel::ERROR, "Trying to change GameState with no window");
+        LogLevel::ERROR, __FILE__, __LINE__, "Trying to change GameState with no window");
   }
 }
 

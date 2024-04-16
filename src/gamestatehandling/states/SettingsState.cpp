@@ -63,7 +63,7 @@ void SettingsState::handleInput(SDL_Window *window) {
     if (LuaCraftGlobals::GameStateUtilsInstance.isMouseInsideButton(
             windowX, windowY, option1PositionX, option1PositionY, textWidth1,
             textHeight1)) {
-      LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO,
+      LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO, __FILE__, __LINE__,
                                                       "Go To MainMenuState...");
       m_manager.SetGameState(std::make_unique<MainMenuState>(window, m_manager),
                              window);

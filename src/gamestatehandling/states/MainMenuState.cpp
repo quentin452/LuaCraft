@@ -68,7 +68,7 @@ void MainMenuState::handleInput(SDL_Window *window) {
             windowX, windowY, textPosX1, textPosY1, textWidth1, textHeight1)) {
       m_manager.SetGameState(std::make_unique<SettingsState>(window, m_manager),
                              window);
-      LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO,
+      LuaCraftGlobals::LoggerInstance.logMessageAsync(LogLevel::INFO, __FILE__, __LINE__,
                                                       "Go To SettingsState...");
     } else if (LuaCraftGlobals::GameStateUtilsInstance.isMouseInsideButton(
                    windowX, windowY, textPosX2, textPosY2, textWidth2,
@@ -76,7 +76,7 @@ void MainMenuState::handleInput(SDL_Window *window) {
       m_manager.SetGameState(
           std::make_unique<OpenGLGameState>(window, m_manager), window);
       LuaCraftGlobals::LoggerInstance.logMessageAsync(
-          LogLevel::INFO, "Go To 3D Scene Using OpenGL...");
+          LogLevel::INFO, __FILE__, __LINE__, "Go To 3D Scene Using OpenGL...");
     }
   }
 }
