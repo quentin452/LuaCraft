@@ -1,10 +1,8 @@
 #ifndef LOGGER_THREAD_HPP
 #define LOGGER_THREAD_HPP
-#include <ThreadedLoggerForCPP/LoggerGlobals.hpp>
 
 #include <ThreadedLoggerForCPP/LoggerFileSystem.hpp>
-
-#include <chrono>
+#include <ThreadedLoggerForCPP/LoggerGlobals.hpp>
 #include <condition_variable>
 #include <cstdio>
 #include <cstdlib>
@@ -51,7 +49,6 @@ public:
     std::string src = LogFilePathForTheThread;
     std::string dst = LogFileBackupPathForTheThread + TimeStamp + ".log";
     this->copyFile(src, dst);
-    std::remove(LogFilePathForTheThread.c_str());
     Done_Logger_Thread = true;
     Unlock_Logger_Thread.notify_one();
   }
@@ -65,6 +62,7 @@ public:
     this->logFilePath_ = LogFilePath;
     this->LogFolderBackupPathForTheThread = LogFolderBackupPath;
     this->LogFileBackupPathForTheThread = LogFileBackupPath;
+    std::remove(LogFilePathForTheThread.c_str());
     LoggerFileSystem::createDirectories(LogFolderBackupPathForTheThread);
     LoggerFileSystem::createDirectories(LogFolderPathForTheThread);
     LoggerFileSystem::createFile(LogFilePathForTheThread);
