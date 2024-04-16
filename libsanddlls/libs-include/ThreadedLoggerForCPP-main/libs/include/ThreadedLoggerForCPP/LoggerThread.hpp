@@ -108,6 +108,7 @@ private:
   template <typename... Args>
   void logMessage(LogLevel level, const Args &...args) {
     std::ostringstream oss;
+    oss << getTimestamp() << " ";
     switch (level) {
     case LogLevel::INFO:
       oss << "[INFO] ";
