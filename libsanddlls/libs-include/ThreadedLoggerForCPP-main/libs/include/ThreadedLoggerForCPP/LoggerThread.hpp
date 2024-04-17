@@ -19,7 +19,7 @@
 #include <thread>
 #include <vector>
 
-enum class LogLevel { INFO, WARNING, ERROR, LOGICERROR };
+enum class LogLevel { INFO, WARNING, ERRORING, LOGICERROR };
 
 class LoggerThread {
 public:
@@ -34,6 +34,9 @@ public:
       Done_Logger_Thread = true;
     }
     Unlock_Logger_Thread.notify_one(); // Notify worker thread to stop
+    if (LogThread.joinable()) {
+      LogThread.join(); // Wait for the worker thread to finish
+    }
   }
 
   void logMessageAsync(LogLevel level, const std::string &sourceFile, int line,
@@ -50,6 +53,9 @@ public:
     this->copyFile(src, dst);
     Done_Logger_Thread = true;
     Unlock_Logger_Thread.notify_one();
+    if (LogThread.joinable()) {
+      LogThread.join(); // Wait for the worker thread to finish
+    }
   }
 
   void StartLoggerThread(const std::string &LogFolderPath,
@@ -115,7 +121,7 @@ private:
     case LogLevel::WARNING:
       oss << "[WARNING] ";
       break;
-    case LogLevel::ERROR:
+    case LogLevel::ERRORING:
       oss << "[ERROR] ";
       break;
     case LogLevel::LOGICERROR:
